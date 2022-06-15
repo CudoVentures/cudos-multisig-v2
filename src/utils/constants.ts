@@ -1,0 +1,7 @@
+export const RPC_ADDRESS = import.meta.env.VITE_APP_RPC || ""
+export const API_ADDRESS = import.meta.env.VITE_APP_API || ""
+export const EXPLORER_PUBLIC_ADDRESS = import.meta.env.VITE_APP_EXPLORER_PUBLIC_ADDRESS || ""
+export const CHAIN_NAME = import.meta.env.VITE_APP_CHAIN_NAME || ""
+export const CHAIN_ID = import.meta.env.VITE_APP_CHAIN_ID || ""
+export const GAS_PRICE = import.meta.env.VITE_APP_GAS_PRICE || ""
+export const GAS_PRICE_DENOM = import.meta.env.VITE_APP_GAS_PRICE_DENOM || ""
