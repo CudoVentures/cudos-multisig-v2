@@ -1,4 +1,4 @@
-# Cudos-MultiSend dApp
+# Cudos-MultiSig Wallet dApp
 
 ## running in Docker
  - `docker build -t cudos-multisig . `
