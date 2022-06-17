@@ -8,3 +8,6 @@
  - `yarn install`
  - `yarn build`
  - `yarn dev`
+
+## running Tests
+- `yarn test`

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { GET_BALANCE_URL } from './endpoints';
 
-const getWalletBalance = async (walletAccount: string) => {
+const getAcountBalance = async (walletAccount: string) => {
     const url: string = `${GET_BALANCE_URL(walletAccount)}`
     return axios.get(url)
                 .then(response => {
@@ -18,4 +18,4 @@ const getWalletBalance = async (walletAccount: string) => {
                     return { balances }
                 })
 }
-export default getWalletBalance
+export default getAcountBalance
