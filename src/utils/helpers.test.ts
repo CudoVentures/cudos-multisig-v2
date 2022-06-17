@@ -1,8 +1,8 @@
-import getAcountBalance from './getBalance'
 import { 
     VALID_CUDOS_ADDRESS,
     INVALID_CUDOS_ADDRESS
 } from '../utils/testEnvironments'
+import { getAccountBalances } from './helpers'
 
 describe("Testing getAcountBalance", () => {
     const userAddress = VALID_CUDOS_ADDRESS()
@@ -10,15 +10,14 @@ describe("Testing getAcountBalance", () => {
     const expectedBalance: any[] = []
 
     it('should pass and return empty balance', async () => {
-        const { balances } = await getAcountBalance(userAddress)
-        expect(balances).toEqual(expectedBalance)
+        expect(await getAccountBalances(userAddress)).toEqual(expectedBalance)
     })
 
     it('should be chain rejected on query with wrong format address', async () => {
         try {
-            await getAcountBalance(invalidAddress)
+            await getAccountBalances(invalidAddress)
         } catch (e: any) {
-            expect(e.message).toBe("Request failed with status code 500");
+            expect(e.message).toContain("invalid request");
         }
     })
 })
