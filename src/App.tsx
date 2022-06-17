@@ -1,14 +1,19 @@
-import { useState } from 'react'
+import { ThemeProvider } from '@mui/material/styles'
+import { useDispatch, useSelector } from 'react-redux'
+import { CssBaseline } from '@mui/material'
+import theme from './theme'
+import { RootState } from './store'
 
-function App() {
-  const [count, setCount] = useState(0)
+import '@fontsource/poppins'
+
+const App = () => {
+  const themeColor = useSelector((state: RootState) => state.settings.theme)
+  const dispatch = useDispatch()
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>MultiSig Initial</p>
-      </header>
-    </div>
+        <ThemeProvider theme={theme[themeColor]}>
+          <CssBaseline />
+        </ThemeProvider>
   )
 }
 
