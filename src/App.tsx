@@ -5,6 +5,7 @@ import theme from './theme'
 import { RootState } from './store'
 
 import '@fontsource/poppins'
+import Footer from './components/Layout/Footer'
 
 const App = () => {
   const themeColor = useSelector((state: RootState) => state.settings.theme)
@@ -13,6 +14,8 @@ const App = () => {
     <Container maxWidth='xl' style={{display: 'contents', height: '100vh', width: '100vw', overflow: 'auto'}}>
         <ThemeProvider theme={theme[themeColor]}>
           <CssBaseline />
+          
+          <Footer />
         </ThemeProvider>
     </Container>
   )
