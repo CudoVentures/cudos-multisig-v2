@@ -56,7 +56,10 @@ const config = {
 }
 
 export const ConnectLedger = async () => {
-    window.keplr.defaultOptions = {
+  
+  if (!window.keplr) { throw new Error("Keplr extension not found")}
+
+  window.keplr.defaultOptions = {
         sign: {
             preferNoSetFee: true,
         }
