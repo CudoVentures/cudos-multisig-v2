@@ -1,6 +1,6 @@
 
 import { bech32 } from 'bech32';
-import { randomBytes, randomInt} from 'crypto';
+import { randomBytes, randomInt } from 'node:crypto';
 
 const wordsOne = randomBytes(20)
 const words = bech32.toWords(wordsOne)

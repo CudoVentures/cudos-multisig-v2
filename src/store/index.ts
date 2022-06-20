@@ -2,10 +2,11 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
 import settingsReducer from './settings'
-
+import modalStateReducer from './modals'
 
 const rootReducer = combineReducers({
     settings: settingsReducer,
+    modalState: modalStateReducer
 })
 
 const persistConfig = {

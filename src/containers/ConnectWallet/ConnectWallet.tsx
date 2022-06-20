@@ -4,11 +4,31 @@ import KeplrLogo from 'assets/vectors/keplr-logo.svg'
 import BackgroundImage from 'assets/vectors/background.svg'
 
 import { styles } from './styles'
+import { getAccountBalances } from 'utils/helpers'
+import { ConnectLedger } from 'ledgers/KeplrLedger'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { updateModalState } from 'store/modals'
+import Dialog from 'components/Dialog'
 
 const ConnectWallet = () => {
 
-  const connect = async () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
+  const connect = async () => {
+    try {
+      const { address } = await ConnectLedger()
+      const balances = await getAccountBalances(address)
+      // navigate('welcome') // TO BE IMPLEMENTED
+
+    } catch (error: any) {
+      dispatch(updateModalState({
+        failure: true, 
+        title: 'Login Failed ', 
+        message: error.message
+      }))
+    }
   }
 
   return (
@@ -19,6 +39,7 @@ const ConnectWallet = () => {
         backgroundRepeat: 'no-repeat', 
         backgroundSize: 'cover', 
         backgroundImage: 'url(' + BackgroundImage + ')'}}>
+      <Dialog />
       <Box>
         <Box sx={styles.connectContainer}>
           <Box>

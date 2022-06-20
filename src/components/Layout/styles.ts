@@ -1,9 +1,12 @@
 export const styles: SxMap = {
   footerContainer: {
-    position: "fixed",
-    left: "50%",
-    bottom: "20px",
-    transform: "translate(-50%, -50%)",
-    margin: "0 auto"
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: 'inherit',
+    padding: '2rem'
   },
 }
