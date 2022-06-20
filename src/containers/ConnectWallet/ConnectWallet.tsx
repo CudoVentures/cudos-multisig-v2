@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@mui/material'
-import InfoIcon from '../../assets/vectors/info-icon.svg'
-import KeplrLogo from '../../assets/vectors/keplr-logo.svg'
-import BackgroundImage from '../../assets/vectors/background.svg'
+import InfoIcon from 'assets/vectors/info-icon.svg'
+import KeplrLogo from 'assets/vectors/keplr-logo.svg'
+import BackgroundImage from 'assets/vectors/background.svg'
 
 import { styles } from './styles'
 
