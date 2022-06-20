@@ -20,18 +20,3 @@ export const COLORS_DARK_THEME = {
   }
   
   export const COLORS_LIGHT_THEME = {}
-  
-  export const CONDITIONS = {
-    GREY: '#E8E8E8',
-    GREEN: '#1EC490',
-    YELLOW: '#FF961B',
-    RED: '#FC6A8A'
-  }
-  
-  export const STATUSES = {
-    ACTIVE: '#65B48F',
-    JAILED: '#2460FA',
-    TOMBSTONED: '2460FA',
-    UNBONDING: '#E79720',
-    UNBONDED: '#E8E8E8'
-  }
