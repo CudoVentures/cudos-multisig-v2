@@ -9,7 +9,7 @@ export interface modalState {
     dataObject?: Object
 }
 
-const initialState: modalState = {
+export const initialState: modalState = {
     title: '',
     message: '',
     loading: false,

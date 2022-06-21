@@ -14,31 +14,23 @@ const NoWallet = () => {
             <img src={noWalletLogo} alt="Welcome logo" />
         </Box>
         <Box>
-            <h2 style={{marginBottom: '2px'}}>Seems like there are no connected accounts yet</h2>
+            <h2 style={{marginBottom: '2px'}}>Seems like there are no connected wallets yet</h2>
         </Box>
         <Box>
             <Typography style={{marginBottom: '20px'}} variant="subtitle1" color="text.secondary">
-                Create your first MultiSig account from the button below.
+                Create your first MultiSig wallet from the button below.
             </Typography>
         </Box>
         <Box>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => alert("Create account")}
-              sx={styles.connectButton}
-            >
-              <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
-              Create account
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => alert("Add existing account")}
-              sx={styles.connectButton}
-            >
-              Add existing account
-            </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => alert("Create account")}
+            sx={styles.connectButton}
+          >
+            <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
+            Create wallet
+          </Button>
         </Box>
     </div>
   )

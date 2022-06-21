@@ -7,20 +7,11 @@ import { CancelRoundedIcon, ModalContainer } from './styles'
 import SuccessIcon from 'assets/vectors/success.svg'
 import { modalState, updateModalState } from 'store/modals'
 import { useNavigate } from 'react-router-dom'
+import { initialState } from 'store/modals'
 
 
 const Success = () => {
 
-    const initialState: modalState = {
-        title: '',
-        message: '',
-        loading: false,
-        success: false,
-        failure: false,
-        dataObject: {}
-      }
-      
-      const navigate = useNavigate()
       const dispatch = useDispatch()
 
     const { 

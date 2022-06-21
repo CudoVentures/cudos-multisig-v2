@@ -45,7 +45,7 @@ const ConnectWallet = () => {
       dispatch(updateModalState({
         loading: false,
         success: false,
-        failure: true, 
+        failure: true,
         title: 'Login Failed ', 
         message: error.message
       }))

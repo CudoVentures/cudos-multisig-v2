@@ -1,29 +1,17 @@
 import { CircularProgress, Typography, Dialog as MuiDialog } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { RootState } from 'store'
-import { modalState, updateModalState } from 'store/modals'
+import { updateModalState } from 'store/modals'
 import { ModalContainer } from './styles'
+import { initialState } from 'store/modals'
 
 const Loading = () => {
-
-    const initialState: modalState = {
-        title: '',
-        message: '',
-        loading: false,
-        success: false,
-        failure: false,
-        dataObject: {}
-      }
       
-      const navigate = useNavigate()
-      const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
     const { 
-        loading, 
-        title, 
-        message,
-        dataObject 
+        loading,
+        message
     } = useSelector((state: RootState) => state.modalState)
 
     const handleModalClose = () => {

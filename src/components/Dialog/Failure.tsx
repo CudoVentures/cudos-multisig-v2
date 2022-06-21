@@ -5,19 +5,11 @@ import { RootState } from 'store'
 import { CancelRoundedIcon, ModalContainer } from './styles'
 import FailureIcon from 'assets/vectors/failure.svg'
 import { useNavigate } from 'react-router-dom'
-import { modalState, updateModalState } from 'store/modals'
+import { updateModalState } from 'store/modals'
+import { initialState } from 'store/modals'
 
 
 const Failure = () => {
-
-    const initialState: modalState = {
-        title: '',
-        message: '',
-        loading: false,
-        success: false,
-        failure: false,
-        dataObject: {}
-      }
       
       const navigate = useNavigate()
       const dispatch = useDispatch()
@@ -25,8 +17,7 @@ const Failure = () => {
     const { 
         failure, 
         title, 
-        message,
-        dataObject 
+        message
     } = useSelector((state: RootState) => state.modalState)
 
     const handleModalClose = () => {
