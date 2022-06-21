@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface modalState {
     title: string
@@ -22,7 +22,7 @@ export const modalStateSlice = createSlice({
   name: 'modalState',
   initialState,
   reducers: {
-    updateModalState: (state, action) => {
+    updateModalState: (state, action: PayloadAction<modalState>) => {
       return { ...state, ...action.payload }
     }
   }

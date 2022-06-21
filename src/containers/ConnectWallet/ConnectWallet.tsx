@@ -4,26 +4,42 @@ import KeplrLogo from 'assets/vectors/keplr-logo.svg'
 import BackgroundImage from 'assets/vectors/background.svg'
 
 import { styles } from './styles'
-import { getAccountBalances } from 'utils/helpers'
+import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 import { ConnectLedger } from 'ledgers/KeplrLedger'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateModalState } from 'store/modals'
 import Dialog from 'components/Dialog'
+import { updateUser } from 'store/user'
+import { RootState } from 'store'
+import { NATIVE_TOKEN_DENOM } from 'utils/constants'
+import BigNumber from 'bignumber.js'
 
 const ConnectWallet = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { address } = useSelector((state: RootState) => state.userState)
 
   const connect = async () => {
     try {
       const { address } = await ConnectLedger()
       const balances = await getAccountBalances(address)
-      // navigate('welcome') // TO BE IMPLEMENTED
+      const isAdmin = checkForAdminToken(balances)
+      const nativeBalance = getNativeBalance(balances)
+      
+      dispatch(updateUser({ 
+        address, 
+        balances,
+        isAdmin,
+        nativeBalance }))
+      navigate('welcome')
 
     } catch (error: any) {
       dispatch(updateModalState({
+        loading: false,
+        success: false,
         failure: true, 
         title: 'Login Failed ', 
         message: error.message
@@ -31,7 +47,10 @@ const ConnectWallet = () => {
     }
   }
 
-  return (
+  return address ?
+  (<Navigate to="/welcome" state={{ from: location }} replace />)
+  : 
+  (
     // Inline styles required to fix building issues established with the background img while using imported styles.
     <Box style={{
         height: '100vh', 

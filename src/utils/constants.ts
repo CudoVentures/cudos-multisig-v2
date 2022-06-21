@@ -5,3 +5,5 @@ export const CHAIN_NAME = import.meta.env.VITE_APP_CHAIN_NAME || process.env.VIT
 export const CHAIN_ID = import.meta.env.VITE_APP_CHAIN_ID || process.env.VITE_APP_CHAIN_ID || ""
 export const GAS_PRICE = import.meta.env.VITE_APP_GAS_PRICE || process.env.VITE_APP_GAS_PRICE || ""
 export const GAS_PRICE_DENOM = import.meta.env.VITE_APP_GAS_PRICE_DENOM || process.env.VITE_APP_GAS_PRICE_DENOM || ""
+export const ADMIN_TOKEN_DENOM = 'cudosAdmin'
+export const NATIVE_TOKEN_DENOM = 'acudos'

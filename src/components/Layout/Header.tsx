@@ -1,6 +1,8 @@
 import { Box } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 import LogoHeader from 'assets/vectors/logo-header.svg'
+import UserInfo from './Userinfo'
+import NetworkInfo from './Networkinfo'
 // import NetworkInfo from './NetworkInfo'
 // import UserInfo from './UserInfo'
 
@@ -22,8 +24,8 @@ const Header = () => {
               flex: '1'
             }}
           >
-            {/* <NetworkInfo />
-            <UserInfo /> */}
+            <NetworkInfo />
+            <UserInfo />
           </Box>
         )}
       </Box>
