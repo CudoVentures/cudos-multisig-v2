@@ -50,7 +50,8 @@ const UserInfo = () => {
       address: '', 
       balances: [], 
       nativeBalance: '', 
-      isAdmin: false 
+      isAdmin: false ,
+      wallets: []
     }))
     navigate("/")
   }

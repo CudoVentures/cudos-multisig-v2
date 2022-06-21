@@ -4,7 +4,7 @@ import KeplrLogo from 'assets/vectors/keplr-logo.svg'
 import BackgroundImage from 'assets/vectors/background.svg'
 
 import { styles } from './styles'
-import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
+import { checkForAdminToken, getAccountBalances, getAccountWallets, getNativeBalance } from 'utils/helpers'
 import { ConnectLedger } from 'ledgers/KeplrLedger'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,15 +26,19 @@ const ConnectWallet = () => {
   const connect = async () => {
     try {
       const { address } = await ConnectLedger()
-      const balances = await getAccountBalances(address)
-      const isAdmin = checkForAdminToken(balances)
-      const nativeBalance = getNativeBalance(balances)
+      const currentBalances = await getAccountBalances(address)
+      const userWallets = await getAccountWallets(address)
+      const admin = checkForAdminToken(currentBalances)
+      const userBalance = getNativeBalance(currentBalances)
       
       dispatch(updateUser({ 
-        address, 
-        balances,
-        isAdmin,
-        nativeBalance }))
+        address: address, 
+        balances: currentBalances, 
+        nativeBalance: userBalance, 
+        isAdmin: admin,
+        wallets: userWallets
+      }))
+      
       navigate('welcome')
 
     } catch (error: any) {

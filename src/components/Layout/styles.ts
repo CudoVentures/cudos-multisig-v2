@@ -58,7 +58,7 @@ export const styles = {
     right: 0,
     left: 0,
     width: 'inherit',
-    padding: '2rem'
+    padding: '20px 0 10px 0'
   }
 } as const
 

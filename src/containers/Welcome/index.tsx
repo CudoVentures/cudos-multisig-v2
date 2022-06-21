@@ -1,13 +1,16 @@
-// @ts-nocheck
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { store } from '../../store'
-import { persistStore } from 'redux-persist'
+//@ts-nocheck
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
+import { Box, Typography, Button } from '@mui/material'
+import Card from 'components/Card/Card'
+import { styles } from './styles'
+import NoWallet from 'components/NoWallets/NoWallet'
+import addressBookIcon from 'assets/vectors/address-book-icon.svg'
 
 const Welcome = () => {
   
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const { wallets } = useSelector((state: RootState) => state.userState)
+  const userHaveWallets = wallets.length > 0
   
   const renderStepOne = async () => {
     try {
@@ -35,37 +38,45 @@ const Welcome = () => {
       // navigate('/') TO DO
 
     } catch (error: any) {
-      alert(error.message)
+      console.debug(error.message)
     }
   }
 
   return (
-    <div></div>
-      // <Box style={styles.holder}>
-      //   <Card id='resizable-card-left' style={styles.leftSteps}></Card>
+    <Box style={styles.holder}>
+      <div>
+        <Box style={{margin: '10px'}}>
+          <h2 style={{margin: '0'}}>Welcome to CUDOS MultiSig Wallet!</h2>
+          <Typography variant="subtitle2" color="text.secondary">
+            CUDOS MultiSig Wallet is a digital wallet that is controlled by one or multiple owners.
+          </Typography>
+        </Box>
         
-      //   <Card id='resizable-card-right' style={styles.Card}>
-      //     <div id='content-dissapear' style={styles.contentDissapear}>
-      //     <Box>
-      //       <img src={WelcomeGroupLogo} alt="Welcome logo" />
-      //     </Box>
-      //     <Box>
-      //         <h2>Welcome to CUDOS MultiSend!</h2>
-      //     </Box>
-      //     <Box>
-      //         <Typography variant="subtitle1" color="text.secondary">
-      //           MultiSend allows you to batch send tokens to multiple addresses in one transaction.
-      //         </Typography>
-      //     </Box>
-      //     <Box>
-      //       <Button style={styles.connectButton} onClick={() => renderStepOne()}>
-      //           <img style={styles.plusIcon} src={PlusIcon} alt="Keplr Logo" />
-      //           Multisend tokens
-      //       </Button>
-      //     </Box>
-      //     </div>
-      //   </Card>
-      // </Box>
+        {/* ////////// */}
+
+        <Card id='resizable-card-left' style={styles.leftSteps} children={undefined}></Card>
+        
+        {/* ////////// */}
+
+        <Card id='resizable-card-right' style={styles.Card}>
+          {userHaveWallets?
+            null
+            ////// TO BE IMPLEMENTED ///////
+          :
+          <Box style={{display: 'grid', height: '100%'}}>
+            <div style={{display: 'flex', justifyContent: "flex-end", width: '100%'}}>
+              <Button disableRipple style={styles.addressBookBtn} onClick={() => alert("Address book")}>
+                <img style={styles.addressBookIcon} src={addressBookIcon} alt="Address Book Logo" />
+                Address Book
+              </Button>
+            </div>
+            <NoWallet />
+          </Box>
+
+          }
+        </Card>
+      </div> 
+    </Box>
   )
 }
 

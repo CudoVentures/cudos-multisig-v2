@@ -8,7 +8,7 @@ import {
 } from '../regexFormatting'
 import { useEffect } from 'react'
 import { updateUser } from '../../store/user'
-import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
+import { checkForAdminToken, getAccountBalances, getAccountWallets, getNativeBalance } from 'utils/helpers'
 
 const AccountBalance = (): JSX.Element => {
 
@@ -21,13 +21,18 @@ const AccountBalance = (): JSX.Element => {
     const fetchData = async () => {
       try {
         const currentBalances = await getAccountBalances(address)
+        const userWallets = await getAccountWallets(address)
         const admin = checkForAdminToken(currentBalances)
         const userBalance = getNativeBalance(currentBalances)
+
         dispatch(updateUser({ 
           address: address, 
           balances: currentBalances, 
           nativeBalance: userBalance, 
-          isAdmin: admin }))
+          isAdmin: admin,
+          wallets: userWallets 
+        }))
+
       } catch (error: any) {
         console.debug(error.message)
       }

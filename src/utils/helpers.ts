@@ -7,6 +7,12 @@ export const getAccountBalances = async (accountAddress: string): Promise<any> =
     return await (await queryClient).getAllBalances(accountAddress)
 }
 
+export const getAccountWallets = async (accountAddress: string): Promise<any> => {
+    return []
+    // Waiting for a CUDOS JS method for returning all wallets 
+    // associated with an address on the Query Client
+}
+
 export const checkForAdminToken = (balances: any[]): boolean => {
     let isAdmin = false
     balances.map((balance) => {

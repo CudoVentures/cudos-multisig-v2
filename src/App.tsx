@@ -3,18 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CssBaseline, Container } from '@mui/material'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 
-import Layout from './components/Layout'
-import RequireKeplr from './components/RequireKeplr/RequireKeplr'
-import ConnectWallet from './containers/ConnectWallet/ConnectWallet'
-import Welcome from './containers/Welcome'
-import theme from './theme'
-import { RootState } from './store'
+import Layout from 'components/Layout'
+import RequireKeplr from 'components/RequireKeplr/RequireKeplr'
+import ConnectWallet from 'containers/ConnectWallet/ConnectWallet'
+import Welcome from 'containers/Welcome'
+import theme from 'theme'
+import { RootState } from 'store'
 import { useCallback, useEffect } from 'react'
-import { ConnectLedger } from './ledgers/KeplrLedger'
+import { ConnectLedger } from 'ledgers/KeplrLedger'
 
 import '@fontsource/poppins'
-import { updateUser } from './store/user'
-import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
+import { updateUser } from 'store/user'
+import { checkForAdminToken, getAccountBalances, getNativeBalance, getAccountWallets } from 'utils/helpers'
 
 const App = () => {
   const location = useLocation()
@@ -25,13 +25,17 @@ const App = () => {
     try {
       const { address } = await ConnectLedger()
       const currentBalances = await getAccountBalances(address)
+      const userWallets = await getAccountWallets(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
+      
       dispatch(updateUser({ 
         address: address, 
         balances: currentBalances, 
         nativeBalance: userBalance, 
-        isAdmin: admin }))
+        isAdmin: admin,
+        wallets: userWallets
+      }))
         
     } catch (error: any) {
       console.debug(error.message)

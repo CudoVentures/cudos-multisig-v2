@@ -5,13 +5,15 @@ export interface userState {
   address: string
   nativeBalance: string
   balances: any[]
+  wallets: any[]
 }
 
 const initialState: userState = {
   isAdmin: false,
   address: '',
   nativeBalance: '',
-  balances: []
+  balances: [],
+  wallets: []
 }
 
 export const userStateSlice = createSlice({
