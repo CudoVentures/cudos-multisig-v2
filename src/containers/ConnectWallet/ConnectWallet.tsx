@@ -14,6 +14,7 @@ import { updateUser } from 'store/user'
 import { RootState } from 'store'
 import { NATIVE_TOKEN_DENOM } from 'utils/constants'
 import BigNumber from 'bignumber.js'
+import Header from 'components/Layout/Header'
 
 const ConnectWallet = () => {
 
@@ -59,6 +60,7 @@ const ConnectWallet = () => {
         backgroundSize: 'cover', 
         backgroundImage: 'url(' + BackgroundImage + ')'}}>
       <Dialog />
+      <Header />
       <Box>
         <Box sx={styles.connectContainer}>
           <Box>
