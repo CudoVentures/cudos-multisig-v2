@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { updateModalState } from 'store/modals'
 import { ModalContainer } from './styles'
-import { initialState } from 'store/modals'
+import { initialState as initialModalState } from 'store/modals'
 
 const Loading = () => {
       
@@ -15,7 +15,7 @@ const Loading = () => {
     } = useSelector((state: RootState) => state.modalState)
 
     const handleModalClose = () => {
-        dispatch(updateModalState({ ...initialState }))
+        dispatch(updateModalState({ ...initialModalState }))
     }
       
     const closeModal = (ev: any, reason: string) => {
@@ -26,7 +26,7 @@ const Loading = () => {
 
     return (
         <MuiDialog
-          open={loading}
+          open={loading!}
           onClose={closeModal}
           PaperProps={{
             sx: {

@@ -7,7 +7,7 @@ import { CancelRoundedIcon, ModalContainer } from './styles'
 import SuccessIcon from 'assets/vectors/success.svg'
 import { modalState, updateModalState } from 'store/modals'
 import { useNavigate } from 'react-router-dom'
-import { initialState } from 'store/modals'
+import { initialState as initialModalState } from 'store/modals'
 
 
 const Success = () => {
@@ -22,7 +22,7 @@ const Success = () => {
     } = useSelector((state: RootState) => state.modalState)
 
     const handleModalClose = () => {
-        dispatch(updateModalState({ ...initialState }))
+        dispatch(updateModalState({ ...initialModalState }))
     }
       
     const closeModal = (ev: any, reason: string) => {
@@ -33,7 +33,7 @@ const Success = () => {
 
     return (
         <MuiDialog
-          open={success}
+          open={success!}
           onClose={closeModal}
           PaperProps={{
             sx: {

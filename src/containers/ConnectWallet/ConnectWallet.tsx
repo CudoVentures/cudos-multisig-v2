@@ -12,39 +12,41 @@ import { updateModalState } from 'store/modals'
 import Dialog from 'components/Dialog'
 import { updateUser } from 'store/user'
 import { RootState } from 'store'
-import { NATIVE_TOKEN_DENOM } from 'utils/constants'
-import BigNumber from 'bignumber.js'
 import Header from 'components/Layout/Header'
+import { initialState as initialUserState } from 'store/user'
 
 const ConnectWallet = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { address } = useSelector((state: RootState) => state.userState)
+  const { address, lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
 
   const connect = async () => {
     try {
       const { address } = await ConnectLedger()
+      if (address !== lastLoggedAddress) {
+        dispatch(updateUser({ ...initialUserState }))
+      }
       const currentBalances = await getAccountBalances(address)
       const userWallets = await getAccountWallets(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
       
       dispatch(updateUser({ 
-        address: address, 
+        address: address,
+        lastLoggedAddress: address,
         balances: currentBalances, 
         nativeBalance: userBalance, 
         isAdmin: admin,
-        wallets: userWallets
+        wallets: userWallets,
+        addressBook
       }))
       
       navigate('welcome')
 
     } catch (error: any) {
       dispatch(updateModalState({
-        loading: false,
-        success: false,
         failure: true,
         title: 'Login Failed ', 
         message: error.message

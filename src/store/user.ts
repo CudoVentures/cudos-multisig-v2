@@ -1,19 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface userState {
-  isAdmin: boolean
-  address: string
-  nativeBalance: string
-  balances: any[]
-  wallets: any[]
+  isAdmin?: boolean
+  address?: string
+  lastLoggedAddress?: string
+  nativeBalance?: string
+  balances?: any[]
+  wallets?: any[]
+  addressBook?: Object
 }
 
-const initialState: userState = {
+export const initialState: userState = {
   isAdmin: false,
   address: '',
+  lastLoggedAddress: '',
   nativeBalance: '',
   balances: [],
-  wallets: []
+  wallets: [],
+  addressBook: {}
 }
 
 export const userStateSlice = createSlice({

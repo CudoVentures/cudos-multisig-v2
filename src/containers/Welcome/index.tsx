@@ -1,38 +1,40 @@
-//@ts-nocheck
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { Box, Typography, Button } from '@mui/material'
 import Card from 'components/Card/Card'
 import { styles } from './styles'
 import NoWallet from 'components/NoWallets/NoWallet'
-import addressBookIcon from 'assets/vectors/address-book-icon.svg'
+import addressBookIcon from 'assets/vectors/small-address-book-icon.svg'
+import { updateModalState } from 'store/modals'
+import Dialog from 'components/Dialog'
 
 const Welcome = () => {
   
+  const dispatch = useDispatch()
   const { wallets } = useSelector((state: RootState) => state.userState)
-  const userHaveWallets = wallets.length > 0
+  const userHaveWallets = wallets!.length > 0
   
   const renderStepOne = async () => {
     try {
       // REMOVING CONTENT FROM RIGHT CARD
-      document.getElementById("content-dissapear").style.opacity = '0'
+      document.getElementById("content-dissapear")!.style.opacity = '0'
 
       // RESIZING RIGHT CARD
-      document.getElementById("resizable-card-right").style.justifyContent = 'center'
-      document.getElementById("resizable-card-right").style.flexDirection = 'column'
-      document.getElementById("resizable-card-right").style.display = 'flex'
-      document.getElementById("resizable-card-right").style.textAlign = 'center'
-      document.getElementById("resizable-card-right").style.width = '1030px'
-      document.getElementById("resizable-card-right").style.height = '600px'
+      document.getElementById("resizable-card-right")!.style.justifyContent = 'center'
+      document.getElementById("resizable-card-right")!.style.flexDirection = 'column'
+      document.getElementById("resizable-card-right")!.style.display = 'flex'
+      document.getElementById("resizable-card-right")!.style.textAlign = 'center'
+      document.getElementById("resizable-card-right")!.style.width = '1030px'
+      document.getElementById("resizable-card-right")!.style.height = '600px'
       
       // RESIZING LEFT CARD
-      document.getElementById("resizable-card-left").style.display = 'flex'
-      document.getElementById("resizable-card-left").style.justifyContent = 'center'
-      document.getElementById("resizable-card-left").style.width = '240px'
-      document.getElementById("resizable-card-left").style.textAlign = 'center'
-      document.getElementById("resizable-card-left").style.height = '600px'
-      document.getElementById("resizable-card-left").style.pading = '0 40px'
-      document.getElementById("resizable-card-left").style.marginRight = '40px'
+      document.getElementById("resizable-card-left")!.style.display = 'flex'
+      document.getElementById("resizable-card-left")!.style.justifyContent = 'center'
+      document.getElementById("resizable-card-left")!.style.width = '240px'
+      document.getElementById("resizable-card-left")!.style.textAlign = 'center'
+      document.getElementById("resizable-card-left")!.style.height = '600px'
+      document.getElementById("resizable-card-left")!.style.padding = '0 40px'
+      document.getElementById("resizable-card-left")!.style.marginRight = '40px'
 
       await new Promise(resolve => setTimeout(resolve, 1000))
       // navigate('/') TO DO
@@ -42,8 +44,13 @@ const Welcome = () => {
     }
   }
 
+  const handleAddressBookOpen = () => {
+    dispatch(updateModalState({ openAddressBook: true }))
+  }
+
   return (
     <Box style={styles.holder}>
+      <Dialog />
       <div>
         <Box style={{margin: '10px'}}>
           <h2 style={{margin: '0'}}>Welcome to CUDOS MultiSig Wallet!</h2>
@@ -65,7 +72,7 @@ const Welcome = () => {
           :
           <Box style={{display: 'grid', height: '100%'}}>
             <div style={{display: 'flex', justifyContent: "flex-end", width: '100%'}}>
-              <Button disableRipple style={styles.addressBookBtn} onClick={() => alert("Address book")}>
+              <Button disableRipple style={styles.addressBookBtn} onClick={() => handleAddressBookOpen()}>
                 <img style={styles.addressBookIcon} src={addressBookIcon} alt="Address Book Logo" />
                 Address Book
               </Button>
