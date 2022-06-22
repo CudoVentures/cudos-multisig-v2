@@ -1,17 +1,19 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { Dialog as MuiDialog } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { CancelRoundedIcon, ModalContainer, styles } from '../styles'
-import { useNavigate } from 'react-router-dom'
 import { updateModalState } from 'store/modals'
 import { initialState as initialModalState } from 'store/modals'
 import NoAddress from './NoAddress'
+import AddressBookTable from './AddressBookTable'
+import AddAddressButtons from './AddAddressButtons'
+import AddressInput from './AddressInput'
 
 const AddressBook = () => {
       
     const dispatch = useDispatch()
-    const { openAddressBook } = useSelector((state: RootState) => state.modalState)
+    const { openAddressBook, addNewAddress } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
 
     const addressesInAddressBook = Object.keys(addressBook!).length
@@ -55,25 +57,24 @@ const AddressBook = () => {
                         :null}
                     </div>
                     <Typography style={{float: 'left'}} variant="subtitle2" color="text.secondary">
-                        Here is a list of all your addresses
+                        {addNewAddress?"Here you can add new account to your address book":"Here is a list of all your addresses"}
                     </Typography>
                 </div>
-
                 <Box
                     width='650px'
-                    height='300px'
+                    height='250px'
                     display="block"
                     flexDirection="column"
                     alignItems="center"
                     textAlign="center"
                     gap={1}>
-
-                    {userHaveAddressBook?
-                    null
-                    :
-                    <NoAddress />
-                    }
+                    <div>
+                        {addNewAddress?<AddressInput />
+                        :userHaveAddressBook?<AddressBookTable />
+                        :<NoAddress />}
+                    </div>
                 </Box>
+                <AddAddressButtons />
             </ModalContainer>
         </MuiDialog>
     )

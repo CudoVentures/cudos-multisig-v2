@@ -2,6 +2,19 @@ import { styled, Box } from '@mui/material'
 import { CancelRounded } from '@mui/icons-material'
 
 export const styles = {
+  inputGroup: {
+    display: "flex", 
+    flexDirection: "column", 
+    alignItems: "center"
+},
+  addressInput: {
+    width: '550px', 
+    height: '50px', 
+    backgroundColor: '#28314E', 
+    fontSize: '90%', 
+    paddingLeft: '20px',
+    borderRadius: '5px'
+},
   btnLogo: {
     marginRight: '15px'
   },
@@ -14,7 +27,12 @@ export const styles = {
     width: '100%'
   },
   csvBtn: {
-    background: 'none'
+    background: 'none',
+  },
+  trashbin: {
+    position: "absolute",
+    right: "-180px",
+    top: "-15px"
   },
   btn: {
     borderRadius: "12px",

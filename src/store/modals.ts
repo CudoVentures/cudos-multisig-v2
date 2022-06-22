@@ -7,6 +7,7 @@ export interface modalState {
     success?: boolean
     failure?: boolean
     openAddressBook?: boolean
+    addNewAddress?: boolean
     dataObject?: Object
 }
 
@@ -16,6 +17,7 @@ export const initialState: modalState = {
     loading: false,
     success: false,
     failure: false,
+    addNewAddress: false,
     openAddressBook: false,
     dataObject: {}
 }

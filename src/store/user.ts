@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+interface addressBook {
+  [key: string]: string;
+}
+
 export interface userState {
   isAdmin?: boolean
   address?: string
@@ -7,7 +11,7 @@ export interface userState {
   nativeBalance?: string
   balances?: any[]
   wallets?: any[]
-  addressBook?: Object
+  addressBook?: addressBook
 }
 
 export const initialState: userState = {
