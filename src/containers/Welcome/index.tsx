@@ -7,71 +7,58 @@ import NoWallet from 'components/NoWallets/NoWallet'
 import addressBookIcon from 'assets/vectors/small-address-book-icon.svg'
 import { updateModalState } from 'store/modals'
 import Dialog from 'components/Dialog'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 const Welcome = () => {
   
   const dispatch = useDispatch()
   const { wallets } = useSelector((state: RootState) => state.userState)
   const userHaveWallets = wallets!.length > 0
-  
-  const renderStepOne = async () => {
-    try {
-      // REMOVING CONTENT FROM RIGHT CARD
-      document.getElementById("content-dissapear")!.style.opacity = '0'
-
-      // RESIZING RIGHT CARD
-      document.getElementById("resizable-card-right")!.style.justifyContent = 'center'
-      document.getElementById("resizable-card-right")!.style.flexDirection = 'column'
-      document.getElementById("resizable-card-right")!.style.display = 'flex'
-      document.getElementById("resizable-card-right")!.style.textAlign = 'center'
-      document.getElementById("resizable-card-right")!.style.width = '1030px'
-      document.getElementById("resizable-card-right")!.style.height = '600px'
-      
-      // RESIZING LEFT CARD
-      document.getElementById("resizable-card-left")!.style.display = 'flex'
-      document.getElementById("resizable-card-left")!.style.justifyContent = 'center'
-      document.getElementById("resizable-card-left")!.style.width = '240px'
-      document.getElementById("resizable-card-left")!.style.textAlign = 'center'
-      document.getElementById("resizable-card-left")!.style.height = '600px'
-      document.getElementById("resizable-card-left")!.style.padding = '0 40px'
-      document.getElementById("resizable-card-left")!.style.marginRight = '40px'
-
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      // navigate('/') TO DO
-
-    } catch (error: any) {
-      console.debug(error.message)
-    }
-  }
 
   const handleAddressBookOpen = () => {
     dispatch(updateModalState({ openAddressBook: true }))
   }
 
-  return (
-    <Box style={styles.holder}>
-      <Dialog />
-      <div>
-        <Box style={{margin: '10px'}}>
-          <h2 style={{margin: '0'}}>Welcome to CUDOS MultiSig Wallet!</h2>
-          <Typography variant="subtitle2" color="text.secondary">
-            CUDOS MultiSig Wallet is a digital wallet that is controlled by one or multiple owners.
-          </Typography>
-        </Box>
-        
-        {/* ////////// */}
+  useEffect(() => {
+    setTimeout(() => 
+        document.getElementById("entire-welcome-page-dissapear")!.style.opacity = '1', 
+        200
+    )
+    setTimeout(() => 
+        document.getElementById("welcome-no-wallet-main-info-dissapear")!.style.opacity = '1', 
+        200
+    )
+    setTimeout(() => 
+      document.getElementById("welcome-address-book-dissapear")!.style.opacity = '1', 
+      200
+    )
+  }, [])
 
+  return (
+    <Box id="entire-welcome-page-dissapear" style={{...styles.holder, ...styles.contentDissapear}}>
+      <Dialog />
+        {/* ////TOP WELCOME INFO///// */}
+        <div id='welcome-no-wallet-main-info-dissapear' style={{width:'100%',...styles.contentDissapear}}>
+          <Box style={{float:'left', marginBottom: '20px'}}>
+            <h2 style={{margin: '0'}}>Welcome to CUDOS MultiSig Wallet!</h2>
+            <Typography variant="subtitle2" color="text.secondary">
+              CUDOS MultiSig Wallet is a digital wallet that is controlled by one or multiple owners.
+            </Typography>
+          </Box>
+        </div>
+        
+        {/* ////LEFT CARD - HIDDEN////// */}
         <Card id='resizable-card-left' style={styles.leftSteps} children={undefined}></Card>
         
-        {/* ////////// */}
-
+        {/* /////RIGHT CARD - MAIN WELCOME SCREEN///// */}
         <Card id='resizable-card-right' style={styles.Card}>
           {userHaveWallets?
             null
             ////// TO BE IMPLEMENTED ///////
           :
           <Box style={{display: 'grid', height: '100%'}}>
-            <div style={{display: 'flex', justifyContent: "flex-end", width: '100%'}}>
+            <div id='welcome-address-book-dissapear' style={{display: 'flex', justifyContent: "flex-end", width: '100%', ...styles.contentDissapear}}>
               <Button disableRipple style={styles.addressBookBtn} onClick={() => handleAddressBookOpen()}>
                 <img style={styles.addressBookIcon} src={addressBookIcon} alt="Address Book Logo" />
                 Address Book
@@ -79,10 +66,8 @@ const Welcome = () => {
             </div>
             <NoWallet />
           </Box>
-
           }
         </Card>
-      </div> 
     </Box>
   )
 }

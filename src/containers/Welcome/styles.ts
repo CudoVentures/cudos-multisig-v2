@@ -20,13 +20,13 @@ export const styles = {
     height: 'fit-content'
   },
   contentDissapear: {
-    opacity: '1', 
+    opacity: '0', 
     transition: 'opacity 0.5s', 
     WebkitTransition: 'opacity 0.5s'
   },
   Card: {
     textAlign: "center",
-    width: '1250px',
+    width: '100%',
     height: '500px',
     transition: "all 1s",
   },
@@ -43,6 +43,8 @@ export const styles = {
     display: 'flex', 
     height: '100%',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    padding: '0 100px 0 100px',
+    flexDirection: 'column'
   }
 } as const

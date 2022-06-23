@@ -7,6 +7,7 @@ import Layout from 'components/Layout'
 import RequireKeplr from 'components/RequireKeplr/RequireKeplr'
 import ConnectWallet from 'containers/ConnectWallet/ConnectWallet'
 import Welcome from 'containers/Welcome'
+import CreateWallet from 'containers/CreateWallet'
 import theme from 'theme'
 import { RootState } from 'store'
 import { useCallback, useEffect } from 'react'
@@ -69,6 +70,9 @@ const App = () => {
               <Route element={<RequireKeplr />}>
                 <Route path="welcome">
                   <Route index element={<Welcome />} />
+                </Route>
+                <Route path="create-wallet">
+                  <Route index element={<CreateWallet />} />
                 </Route>
               </Route>
               <Route path="*" element={<Navigate to="/" state={{ from: location }} />} />
