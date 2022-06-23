@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import { Box, Typography, Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
@@ -9,14 +9,18 @@ import Steps, { getCurrentStep, StepInfo, StringStep } from 'components/Steps'
 import { useNavigate } from 'react-router-dom'
 import { updateSteps } from 'store/steps'
 import StepOne from 'components/Steps/StepOne'
+import StepTwo from 'components/Steps/StepTwo'
+import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
 
 const CreateWallet = () => {
     
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const currentStep = parseInt(getCurrentStep())
+    const { groupMetadata } = useSelector((state: RootState) => state.walletObject)
 
     const goHome = () => {
+        dispatch(updateWalletObjectState({ ...initialWalletObject }))
         navigate("/welcome")
     }
 
@@ -48,6 +52,12 @@ const CreateWallet = () => {
         setTimeout(() => document.getElementById("right-card-appear")!.style.opacity = '1', 800)
       }, [])
 
+      let validData = 
+        currentStep === 1?true:
+        currentStep === 2?groupMetadata?.walletName !== ''
+        :
+        false
+
     return (
         <Box id='entire-create-wallet-page-appear' style={{...styles.holder, ...styles.contentAppear}}>
             <Dialog/>
@@ -69,7 +79,7 @@ const CreateWallet = () => {
                     
                     <Box id='dynamic-content-holder' style={{width: '100%', height: '320px'}}>{
                         currentStep === 1?<StepOne />:
-                        // currentStep === 2? <whatever/>:
+                        currentStep === 2?<StepTwo />:
                         // currentStep === 3? <whatever/>:
                         // currentStep === 4? <whatever/>:
                         // currentStep === 5? <whatever/>:
@@ -93,6 +103,7 @@ const CreateWallet = () => {
                             {currentStep === 1?"Cancel":"Back"}
                         </Button>
                         <Button
+                            disabled={!validData}
                             variant="contained"
                             color="primary"
                             sx={() => ({

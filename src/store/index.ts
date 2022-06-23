@@ -5,12 +5,14 @@ import settingsReducer from './settings'
 import modalStateReducer from './modals'
 import userStateReducer from './user'
 import stepsReducer from './steps'
+import walletObjectReducer from './walletObject'
 
 const rootReducer = combineReducers({
     settings: settingsReducer,
     modalState: modalStateReducer,
     userState: userStateReducer,
     steps: stepsReducer,
+    walletObject: walletObjectReducer
 })
 
 const persistConfig = {

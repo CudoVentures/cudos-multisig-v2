@@ -92,6 +92,8 @@ const AddAddressButtons = () => {
                 dispatch(updateUser({
                     addressBook: {...addressBook, [userAddress]: userName}
                 }))
+                localStorage.removeItem('addressBookAccountName')
+                localStorage.removeItem('addressBookAccountAddress')
                 dispatch(updateModalState({ addNewAddress: false }))
                 break
 
