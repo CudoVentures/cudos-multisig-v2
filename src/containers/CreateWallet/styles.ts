@@ -30,6 +30,7 @@ export const styles = {
       height: '580px',
       marginLeft: '0',
       transition: "all 1s",
+      padding: '60px'
     },
     leftSteps: {
         display: 'flex',
@@ -41,6 +42,7 @@ export const styles = {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: 'center',
+        paddingBottom: '50px',
         transition: "all 1s",
     },
     holder: {
@@ -49,10 +51,15 @@ export const styles = {
         justifyContent: 'center',
         width: '100%',
       },
-      contentAppear: {
-        opacity: '0', 
-        transition: 'opacity 0.5s', 
-        WebkitTransition: 'opacity 0.5s'
-      },
+    contentAppear: {
+      opacity: '0', 
+      transition: 'opacity 0.5s', 
+      WebkitTransition: 'opacity 0.5s'
+    },
+    informativeBlock: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start"
+    },
   } as const
   

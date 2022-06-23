@@ -1,6 +1,4 @@
 import BigNumber from "bignumber.js"
-import { useDispatch } from "react-redux"
-import { updateSteps } from "store/steps"
 import { queryClient } from "./config"
 import { ADMIN_TOKEN_DENOM, NATIVE_TOKEN_DENOM } from "./constants"
 
@@ -43,8 +41,3 @@ export const getNativeBalance = (balances: any[]): string => {
     })
     return nativeBalance
 }
-
-export const renderStep = (step: string) => {
-    const dispatch = useDispatch()
-    dispatch(updateSteps({ currentStep: step }))
-  }
