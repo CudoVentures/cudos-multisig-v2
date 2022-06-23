@@ -105,6 +105,12 @@ const dark = createTheme({
             {
               display: 'none'
             },
+            '& input:-internal-autofill-selected':
+            {
+              '-webkit-box-shadow': '0 0 0 30px rgb(40, 49, 78) inset !important',
+              '-webkit-text-fill-color': 'white !important',
+              'caret-color': 'white !important'
+            },
           '& input[type=number]': {
             MozAppearance: 'textfield'
           }

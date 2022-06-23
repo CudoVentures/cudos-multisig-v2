@@ -1,20 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface modalState {
-    title: string
-    message: string
-    loading: boolean
-    success: boolean
-    failure: boolean
+    title?: string
+    message?: string
+    loading?: boolean
+    success?: boolean
+    failure?: boolean
+    openAddressBook?: boolean
+    addNewAddress?: boolean
     dataObject?: Object
 }
 
-const initialState: modalState = {
+export const initialState: modalState = {
     title: '',
     message: '',
     loading: false,
     success: false,
     failure: false,
+    addNewAddress: false,
+    openAddressBook: false,
     dataObject: {}
 }
 

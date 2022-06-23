@@ -21,6 +21,7 @@ import { formatAddress } from 'utils/helpers'
 import { EXPLORER_ADDRESS_DETAILS } from '../../api/endpoints'
 import AccountBalance from 'utils/subscriptions/accountBalance'
 import { updateUser } from 'store/user'
+import { initialState as initialUserState } from 'store/user'
 
 const UserInfo = () => {
   const navigate = useNavigate()
@@ -46,12 +47,7 @@ const UserInfo = () => {
   const handleDisconnect = () => {
     sessionStorage.clear()
     localStorage.clear()
-    dispatch(updateUser({ 
-      address: '', 
-      balances: [], 
-      nativeBalance: '', 
-      isAdmin: false 
-    }))
+    dispatch(updateUser({ ...initialUserState }))
     navigate("/")
   }
 
@@ -73,7 +69,7 @@ const UserInfo = () => {
               alt="Wallet Logo"
             />
           </Box>
-          <Typography>{formatAddress(address, 10)}</Typography>
+          <Typography>{formatAddress(address!, 10)}</Typography>
           <Box style={{ marginLeft: '15px' }}>
             <img
               style={{
@@ -115,13 +111,13 @@ const UserInfo = () => {
                   sx={{ fontSize: '13px', marginBottom: '10px' }}
                   
                 >
-                  {formatAddress(address, 20)}
+                  {formatAddress(address!, 20)}
                 </Typography>
               </Box>
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'center' }}>
               <Tooltip
-                onClick={() => handleCopy(address)}
+                onClick={() => handleCopy(address!)}
                 title={copied ? 'Copied' : 'Copy to clipboard'}
               >
                 <img
@@ -131,7 +127,7 @@ const UserInfo = () => {
                 />
               </Tooltip>
               <Tooltip title="Go to Explorer">
-                <a href={EXPLORER_ADDRESS_DETAILS(address)} target='_blank'>
+                <a href={EXPLORER_ADDRESS_DETAILS(address!)} target='_blank'>
                   <img
                     style={{ marginLeft: '10px', cursor: 'pointer' }}
                     src={LinkIcon}

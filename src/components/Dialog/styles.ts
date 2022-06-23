@@ -1,6 +1,50 @@
 import { styled, Box } from '@mui/material'
 import { CancelRounded } from '@mui/icons-material'
 
+export const styles = {
+  inputGroup: {
+    display: "flex", 
+    flexDirection: "column", 
+    alignItems: "center"
+},
+  addressInput: {
+    width: '550px', 
+    height: '50px', 
+    backgroundColor: '#28314E', 
+    fontSize: '90%', 
+    paddingLeft: '20px',
+    borderRadius: '5px'
+},
+  btnLogo: {
+    marginRight: '15px'
+  },
+  addressBookIcon: {
+    margin: '35px 0 20px 0'
+  },
+  infoHolder: {
+    display: "flex",  
+    alignItems: "flex-start",
+    width: '100%'
+  },
+  csvBtn: {
+    background: 'none',
+  },
+  trashbin: {
+    position: "absolute",
+    right: "-180px",
+    top: "-15px"
+  },
+  btn: {
+    borderRadius: "12px",
+    padding: '5px',
+    display: "grid",
+    placeItems: "center",
+    heigth: '35px',
+    width: '40px',
+    background: 'rgba(82, 166, 248, 1)',
+  }
+}
+
 export const ModalContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',

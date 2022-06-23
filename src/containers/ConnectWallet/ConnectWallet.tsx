@@ -4,7 +4,7 @@ import KeplrLogo from 'assets/vectors/keplr-logo.svg'
 import BackgroundImage from 'assets/vectors/background.svg'
 
 import { styles } from './styles'
-import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
+import { checkForAdminToken, getAccountBalances, getAccountWallets, getNativeBalance } from 'utils/helpers'
 import { ConnectLedger } from 'ledgers/KeplrLedger'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,36 +12,42 @@ import { updateModalState } from 'store/modals'
 import Dialog from 'components/Dialog'
 import { updateUser } from 'store/user'
 import { RootState } from 'store'
-import { NATIVE_TOKEN_DENOM } from 'utils/constants'
-import BigNumber from 'bignumber.js'
 import Header from 'components/Layout/Header'
+import { initialState as initialUserState } from 'store/user'
 
 const ConnectWallet = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { address } = useSelector((state: RootState) => state.userState)
+  const { address, lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
 
   const connect = async () => {
     try {
       const { address } = await ConnectLedger()
-      const balances = await getAccountBalances(address)
-      const isAdmin = checkForAdminToken(balances)
-      const nativeBalance = getNativeBalance(balances)
+      if (address !== lastLoggedAddress) {
+        dispatch(updateUser({ ...initialUserState }))
+      }
+      const currentBalances = await getAccountBalances(address)
+      const userWallets = await getAccountWallets(address)
+      const admin = checkForAdminToken(currentBalances)
+      const userBalance = getNativeBalance(currentBalances)
       
       dispatch(updateUser({ 
-        address, 
-        balances,
-        isAdmin,
-        nativeBalance }))
+        address: address,
+        lastLoggedAddress: address,
+        balances: currentBalances, 
+        nativeBalance: userBalance, 
+        isAdmin: admin,
+        wallets: userWallets,
+        addressBook
+      }))
+      
       navigate('welcome')
 
     } catch (error: any) {
       dispatch(updateModalState({
-        loading: false,
-        success: false,
-        failure: true, 
+        failure: true,
         title: 'Login Failed ', 
         message: error.message
       }))

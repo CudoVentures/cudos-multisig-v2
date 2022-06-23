@@ -9,6 +9,16 @@ export const styles = {
   plusIcon: {
     marginRight: '20px'
   },
+  addressBookIcon: {
+    marginRight: '10px'
+  },
+  addressBookBtn: {
+    background: 'none',
+    textDecoration: 'none',
+    position: 'relative',
+    marginRight: '10px',
+    height: 'fit-content'
+  },
   contentDissapear: {
     opacity: '1', 
     transition: 'opacity 0.5s', 
@@ -16,11 +26,8 @@ export const styles = {
   },
   Card: {
     textAlign: "center",
-    width: '900px',
-    height: '600px',
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
+    width: '1250px',
+    height: '500px',
     transition: "all 1s",
   },
   leftSteps: {
@@ -28,14 +35,13 @@ export const styles = {
     margin: '0',
     width: '0',
     textAlign: "center",
-    height: '600px',
     flexDirection: "column",
     justifyContent: "center",
     transition: "all 1s",
   },
   holder: {
     display: 'flex', 
-    height: '600px',
+    height: '100%',
     justifyContent: 'center',
     width: '100%'
   }
