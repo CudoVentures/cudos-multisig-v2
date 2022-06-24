@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Box, Button, Typography } from '@mui/material'
 import { styles } from './styles'
 import noWalletLogo from 'assets/vectors/no-wallet-welcome-logo.svg'
-import PlusIcon from '../../assets/vectors/plus-icon.svg'
+import PlusIcon from 'assets/vectors/plus-icon.svg'
 
 const NoWallet = () => {
   

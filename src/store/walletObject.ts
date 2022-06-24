@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface members {
+export interface member {
     address: string;
     weight: string;
     metadata: string;
@@ -18,7 +18,7 @@ interface votingPeriod {
 
 export interface walletObjectState {
   admin?: string
-  members?: members[]
+  members?: member[]
   groupMetadata?: groupMetadata
   threshold?: string
   votingPeriod?: votingPeriod

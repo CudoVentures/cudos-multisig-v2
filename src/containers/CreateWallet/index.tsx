@@ -11,13 +11,14 @@ import { updateSteps } from 'store/steps'
 import StepOne from 'components/Steps/StepOne'
 import StepTwo from 'components/Steps/StepTwo'
 import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
+import StepThree from 'components/Steps/StepThree'
 
 const CreateWallet = () => {
     
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const currentStep = parseInt(getCurrentStep())
-    const { groupMetadata } = useSelector((state: RootState) => state.walletObject)
+    const { groupMetadata, members } = useSelector((state: RootState) => state.walletObject)
 
     const goHome = () => {
         dispatch(updateWalletObjectState({ ...initialWalletObject }))
@@ -54,7 +55,8 @@ const CreateWallet = () => {
 
       let validData = 
         currentStep === 1?true:
-        currentStep === 2?groupMetadata?.walletName !== ''
+        currentStep === 2?groupMetadata?.walletName !== '':
+        currentStep === 3?members?.length! > 0
         :
         false
 
@@ -80,7 +82,7 @@ const CreateWallet = () => {
                     <Box id='dynamic-content-holder' style={{width: '100%', height: '320px'}}>{
                         currentStep === 1?<StepOne />:
                         currentStep === 2?<StepTwo />:
-                        // currentStep === 3? <whatever/>:
+                        currentStep === 3?<StepThree />:
                         // currentStep === 4? <whatever/>:
                         // currentStep === 5? <whatever/>:
                         null}

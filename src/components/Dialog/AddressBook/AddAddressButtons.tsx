@@ -9,6 +9,8 @@ import React, { useEffect, useState } from 'react'
 import { isValidCudosAddress } from 'utils/validation'
 import { updateUser } from 'store/user'
 import { RootState } from 'store'
+import { getCurrentStep } from 'components/Steps'
+import { initialState as initialModalState } from 'store/modals'
 
 const AddAddressButtons = () => {
     const dispatch = useDispatch()
@@ -16,10 +18,14 @@ const AddAddressButtons = () => {
     const [userAddress, setUserAddress] = useState('')
     const { addNewAddress } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
+    const currentStep = parseInt(getCurrentStep())
     
     let fileReader: any
     let invdalidData: boolean = false
 
+    const handleModalClose = () => {
+        dispatch(updateModalState({ ...initialModalState }))
+    }
       
     const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
         <Tooltip {...props} classes={{ popper: className }} />
@@ -95,12 +101,11 @@ const AddAddressButtons = () => {
                 localStorage.removeItem('addressBookAccountName')
                 localStorage.removeItem('addressBookAccountAddress')
                 dispatch(updateModalState({ addNewAddress: false }))
+                if (currentStep === 3) { handleModalClose() }
                 break
 
             default:
-                dispatch(updateModalState({
-                    addNewAddress: true
-                }))
+                dispatch(updateModalState({ addNewAddress: true }))
         }
     }
 
@@ -141,9 +146,9 @@ const AddAddressButtons = () => {
                     marginRight: '10px',
                     fontWeight: 700
                     })}
-                    onClick={handleBackToAddressBook}
+                    onClick={currentStep === 3?handleModalClose:handleBackToAddressBook}
                 >
-                    Back to Address Book
+                     {currentStep === 3?"Close":"Back to Address Book"}
                 </Button>
                 <Tooltip title={validInput?"":"Please provide valid name and address"}>
                     <div className='tooltip-base'>
@@ -160,7 +165,7 @@ const AddAddressButtons = () => {
                             onClick={handleAddNewAddress}
                         >
                             <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
-                            Add to Address Book
+                            {currentStep === 3?"Add address":"Add to Address Book"}
                         </Button>
                     </div>
                 </Tooltip>

@@ -7,8 +7,8 @@ import NoWallet from 'components/NoWallets/NoWallet'
 import addressBookIcon from 'assets/vectors/small-address-book-icon.svg'
 import { updateModalState } from 'store/modals'
 import Dialog from 'components/Dialog'
-import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { updateSteps } from 'store/steps'
 
 const Welcome = () => {
   
@@ -17,6 +17,7 @@ const Welcome = () => {
   const userHaveWallets = wallets!.length > 0
 
   const handleAddressBookOpen = () => {
+    dispatch(updateSteps({currentStep: ''}))
     dispatch(updateModalState({ openAddressBook: true }))
   }
 

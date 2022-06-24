@@ -1,5 +1,54 @@
 /* eslint-disable import/prefer-default-export */
 export const styles = {
+  spanHolder: {
+    width: '20px',
+    margin: '0 10px', 
+    float: 'left', 
+    color: "rgb(82, 166, 248)", 
+    fontSize: "16px", 
+    fontWeight: "600"
+  },
+  tableInfo: {
+    marginBottom: '10px', 
+    float: 'left', 
+    display: "flex", 
+    flexDirection: "column", 
+    alignItems: "flex-start"
+  },
+  infoHolder: {
+    display: "flex",  
+    alignItems: "flex-start",
+    width: '100%'
+  },
+  connectButton: {
+    height: '35px',
+    width: '150px',
+    margin: '10px',
+    float: 'right'
+  },
+btnLogo: {
+  marginRight: '10px'
+},
+  tableContainer: {
+    display: "flex", 
+    justifyContent: "center"
+  },
+  tableBody: {
+    display: 'block', 
+    height: '150px', 
+    overflow: 'scroll'
+  },
+  table: {
+    backgroundColor: '#28314E', 
+    minWidth: 530, 
+    width: '100%', 
+    height: '100%'
+  },
+  tableContainerHolder: {
+    backgroundColor: '#28314E', 
+    borderRadius: '20px', 
+    padding: '20px'
+  },
     stepInfoStyler: {
       color:'#52A6F8', 
       fontSize: '12px', 
@@ -21,7 +70,7 @@ export const styles = {
       height: '100%'
     },
     addressInput: {
-      width: '550px', 
+      width: '830px', 
       height: '50px', 
       backgroundColor: '#28314E', 
       fontSize: '90%', 
@@ -29,7 +78,7 @@ export const styles = {
       borderRadius: '5px'
   },
   textArea: {
-    width: '550px', 
+    width: '830px', 
     height: '100px',
     resize: 'none',
     backgroundColor: '#28314E', 
@@ -45,15 +94,14 @@ export const styles = {
       height: '190px',
       display: 'flex',
       borderRadius: '20px', 
-      backgroundColor: "#1f2d6754",
+      backgroundColor: "#28314E" ,
       flexDirection: "column",
       alignItems: "flex-start",
-      padding: "20px",
-      blend: 'pass-through'
+      padding: "20px"
     },
     connectedAccountInfo: {
       borderRadius: '10px', 
-      backgroundColor: '#141a2fbd', 
+      backgroundColor: '#20273E', 
       display: 'flex', 
       marginTop: '15px',
       padding: '10px 20px'

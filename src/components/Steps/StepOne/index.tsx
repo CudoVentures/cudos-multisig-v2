@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux'
-import { Box, Card, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { styles } from '../styles'
 import KeplrLogo from 'assets/vectors/small-keplr-logo.svg'
 import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
 import { RootState } from 'store'
 import { CHAIN_NAME } from 'utils/constants'
+import Card from 'components/Card/Card'
 
 const StepOne = () => {
 

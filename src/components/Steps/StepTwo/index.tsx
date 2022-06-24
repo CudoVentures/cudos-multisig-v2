@@ -1,4 +1,4 @@
-import { Box, Input } from '@mui/material'
+import { Box, Input, Paper } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { updateWalletObjectState } from 'store/walletObject'
@@ -31,9 +31,10 @@ const StepTwo = () => {
     }
 
     return (
-        <Box id='step-one-holder' style={styles.stepOneHolder}>
-            <div id='wallet-name-group' style={{display: 'grid', justifyItems: 'start'}}>
-                    <span style={{margin: '13px 0 10px 0'}}>Name</span>
+        <Box id='step-two-holder' style={styles.stepOneHolder}>
+            <div id='wallet-info-group' style={{display: 'grid', justifyItems: 'start'}}>
+                <span style={{margin: '13px 0 10px 0'}}>Name</span> 
+                <Paper elevation={1}>
                     <Input
                         disableUnderline
                         style={styles.addressInput}
@@ -43,8 +44,9 @@ const StepTwo = () => {
                         placeholder="e.g Cudos Wallet"
                         onChange={handleChange}
                     />
-
-                    <span style={{margin: '20px 0 10px 0'}}>General information</span>
+                </Paper>
+                <span style={{margin: '20px 0 10px 0'}}>General information</span>
+                <Paper style={{height: '100px'}} elevation={1}>
                     <textarea
                         name="generalInfo"
                         value={groupMetadata?.generalInfo}
@@ -52,6 +54,7 @@ const StepTwo = () => {
                         style={{...styles.textArea}}
                         onChange={handleChange}
                     />
+                </Paper>
             </div>
         </Box>
     )

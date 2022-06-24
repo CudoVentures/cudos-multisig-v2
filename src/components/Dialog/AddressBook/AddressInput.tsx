@@ -12,7 +12,7 @@ const AddressInput = () => {
     return (
         <div className='input-group' style={styles.inputGroup}>
             <div id='account-name-group' style={{display: 'grid', justifyItems: 'start'}}>
-                <span style={{margin: '20px 0 10px 0'}}>Owner name</span>
+                <span style={{margin: '20px 0 10px 0'}}>Member name</span>
                 <Input
                     disableUnderline
                     style={styles.addressInput}

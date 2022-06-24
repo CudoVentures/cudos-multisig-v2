@@ -2,6 +2,15 @@ import { styled, Box } from '@mui/material'
 import { CancelRounded } from '@mui/icons-material'
 
 export const styles = {
+  alertInfo: {
+    display: 'flex',
+    justifyContent: "flex-start", 
+    alignItems: "center", 
+    marginTop: '-20px', 
+    height: '50px', 
+    borderRadius: '10px', 
+    backgroundColor: "rgba(245, 185, 94, 0.1)"
+  },
   inputGroup: {
     display: "flex", 
     flexDirection: "column", 

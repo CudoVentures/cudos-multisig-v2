@@ -7,3 +7,5 @@ export const GAS_PRICE = import.meta.env.VITE_APP_GAS_PRICE || process.env.VITE_
 export const GAS_PRICE_DENOM = import.meta.env.VITE_APP_GAS_PRICE_DENOM || process.env.VITE_APP_GAS_PRICE_DENOM || ""
 export const ADMIN_TOKEN_DENOM = 'cudosAdmin'
 export const NATIVE_TOKEN_DENOM = 'acudos'
+export const DEFAULT_USER_META_DATA = 'default-user-metadata'
+export const DEFAULT_VOTING_WEIGHT = '1'
