@@ -77,6 +77,20 @@ btnLogo: {
       paddingLeft: '20px',
       borderRadius: '5px'
   },
+  thresholdInput: {
+    width: '160px', 
+    height: '55px', 
+    backgroundColor: '#28314E', 
+    fontSize: '90%', 
+    paddingLeft: '20px',
+    borderRadius: '5px'
+},
+stepFourHolder: {
+  display: "flex", 
+  flexDirection: "column", 
+  alignItems: "center", 
+  justifyContent: 'center'
+},
   textArea: {
     width: '830px', 
     height: '100px',

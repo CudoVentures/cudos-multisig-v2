@@ -11,7 +11,7 @@ interface groupMetadata {
     generalInfo?: string
 }
 
-interface votingPeriod {
+export interface votingPeriod {
     seconds: number,
     nanos: number
 }

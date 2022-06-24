@@ -83,7 +83,7 @@ const Steps = () => {
     <div>
         <div style={{marginBottom: '30px'}}>
           <Box>
-            <h3 style={{margin: '0 auto'}}>Multisig Wallet</h3>
+            <h3 style={{margin: '0 auto'}}>MultiSig Wallet</h3>
           </Box>
           <Box>
             <Typography variant="subtitle2" color="text.secondary">

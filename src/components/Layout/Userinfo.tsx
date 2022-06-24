@@ -22,6 +22,9 @@ import { EXPLORER_ADDRESS_DETAILS } from '../../api/endpoints'
 import AccountBalance from 'utils/subscriptions/accountBalance'
 import { updateUser } from 'store/user'
 import { initialState as initialUserState } from 'store/user'
+import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
+import { initialState as initialModalState, updateModalState } from 'store/modals'
+import { updateSteps } from 'store/steps'
 
 const UserInfo = () => {
   const navigate = useNavigate()
@@ -48,6 +51,9 @@ const UserInfo = () => {
     sessionStorage.clear()
     localStorage.clear()
     dispatch(updateUser({ ...initialUserState }))
+    dispatch(updateWalletObjectState({ ...initialWalletObject }))
+    dispatch(updateModalState({ ...initialModalState }))
+    dispatch(updateSteps({ currentStep: ''}))
     navigate("/")
   }
 
