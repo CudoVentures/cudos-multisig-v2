@@ -13,6 +13,7 @@ import StepTwo from 'components/Steps/StepTwo'
 import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
 import StepThree from 'components/Steps/StepThree'
 import StepFour from 'components/Steps/StepFour'
+import StepFfive from 'components/Steps/StepFive'
 
 const CreateWallet = () => {
     
@@ -58,8 +59,8 @@ const CreateWallet = () => {
         currentStep === 1?true:
         currentStep === 2?groupMetadata?.walletName !== '':
         currentStep === 3?members?.length! > 0:
-        currentStep === 4? threshold !== '' && votingPeriod?.seconds !== 0
-        :
+        currentStep === 4?threshold !== '' && votingPeriod?.seconds !== 0:
+        currentStep === 5?true:
         false
 
     return (
@@ -86,7 +87,7 @@ const CreateWallet = () => {
                         currentStep === 2?<StepTwo />:
                         currentStep === 3?<StepThree />:
                         currentStep === 4?<StepFour />:
-                        // currentStep === 5? <whatever/>:
+                        currentStep === 5?<StepFfive />:
                         null}
                     </Box>
 
@@ -121,7 +122,7 @@ const CreateWallet = () => {
                                 currentStep < 5?renderNextStep:
                                 renderPreviousStep}
                         >
-                            {currentStep === 5?"Finish":"Next Step"}
+                            {currentStep === 5?"Create":"Next Step"}
                         </Button>
                     </Box>
                 </div>    

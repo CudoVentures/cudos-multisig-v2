@@ -45,7 +45,7 @@ const StepTwo = () => {
                         onChange={handleChange}
                     />
                 </Paper>
-                <span style={{margin: '20px 0 10px 0'}}>General information</span>
+                <span style={{margin: '20px 0 10px 0'}}>Optional wallet information</span>
                 <Paper style={{height: '100px'}} elevation={1}>
                     <textarea
                         name="generalInfo"

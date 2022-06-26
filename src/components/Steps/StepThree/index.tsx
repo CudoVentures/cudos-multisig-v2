@@ -3,7 +3,7 @@ import { alpha } from '@mui/material/styles'
 import { visuallyHidden } from '@mui/utils';
 import { styles } from '../styles'
 import { RootState } from 'store'
-import { DEFAULT_USER_META_DATA, DEFAULT_VOTING_WEIGHT } from 'utils/constants'
+import { DEFAULT_VOTING_WEIGHT } from 'utils/constants'
 import Dialog from 'components/Dialog'
 import { formatAddress } from 'utils/helpers'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
@@ -205,10 +205,11 @@ const StepThree = () => {
     const addSelectedMembersToWalletObject = (addresses: string[]) => {
       let newMembers: member[] = []
       addresses.map((address) => {
+        const metaData = `{memberName: ${addressBook![address]}}`
         newMembers.push({
           address: address,
           weight: DEFAULT_VOTING_WEIGHT,
-          metadata: DEFAULT_USER_META_DATA
+          metadata: metaData
         })
       })
       dispatch(updateWalletObjectState({ members: newMembers }))

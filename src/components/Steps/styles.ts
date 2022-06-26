@@ -8,6 +8,13 @@ export const styles = {
     fontSize: "16px", 
     fontWeight: "600"
   },
+  spanHolderSummary: {
+    width: '20px',
+    margin: '0 10px', 
+    color: "rgb(82, 166, 248)", 
+    fontSize: "14px", 
+    fontWeight: "600"
+  },
   tableInfo: {
     marginBottom: '10px', 
     float: 'left', 
@@ -38,6 +45,25 @@ btnLogo: {
     height: '150px', 
     overflow: 'scroll'
   },
+  summaryCard: {
+    backgroundColor:'#28314E', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'flex-start', 
+    padding: '15px'
+  },
+  summaryCardBoxes: {
+    backgroundColor:'#28314E', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'flex-start', 
+    margin: '6px 0'
+  },
+  summaryTableBody: {
+    display: 'block', 
+    height: '220px', 
+    overflow: 'scroll'
+  },
   table: {
     backgroundColor: '#28314E', 
     minWidth: 530, 
@@ -66,6 +92,11 @@ btnLogo: {
     },
     stepOneHolder: {
       padding: '30px 0 30px 0', 
+      width: '100%', 
+      height: '100%'
+    },
+    stepFiveHolder: {
+      padding: '15px 0 10px 0', 
       width: '100%', 
       height: '100%'
     },
