@@ -39,12 +39,19 @@ export const styles = {
     justifyContent: "center",
     transition: "all 1s",
   },
-  holder: {
+  welcomeHolder: {
     display: 'flex', 
     height: '100%',
     justifyContent: 'center',
     width: '100%',
-    padding: '0 100px 0 100px',
-    flexDirection: 'column'
+    padding: '0 100px',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  contentHolder: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '50%',
+    height: 'inherit'
   }
 } as const

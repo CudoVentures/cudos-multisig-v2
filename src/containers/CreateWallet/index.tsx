@@ -4,7 +4,7 @@ import { Box, Button } from '@mui/material'
 import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Steps, { getCurrentStep, StepInfo, StringStep } from 'components/Steps'
 import { useNavigate } from 'react-router-dom'
 import { updateSteps } from 'store/steps'
@@ -14,17 +14,79 @@ import { initialState as initialWalletObject, updateWalletObjectState } from 'st
 import StepThree from 'components/Steps/StepThree'
 import StepFour from 'components/Steps/StepFour'
 import StepFfive from 'components/Steps/StepFive'
+import { signingClient } from 'utils/config'
+import { DEFAULT_MEMO, DEFAULT_META_DATA, DEFAULT_MULTIPLIER, GAS_PRICE, NATIVE_TOKEN_DENOM } from 'utils/constants'
+import { assertIsDeliverTxSuccess, EncodeObject, GasPrice } from 'cudosjs'
+import { updateModalState } from 'store/modals'
 
 const CreateWallet = () => {
     
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const currentStep = parseInt(getCurrentStep())
-    const { groupMetadata, members, threshold, votingPeriod } = useSelector((state: RootState) => state.walletObject)
+    const { groupMetadata, members, threshold, votingPeriod, feeForCreation } = useSelector((state: RootState) => state.walletObject)
+    const { address } = useSelector((state: RootState) => state.userState)
+    const [msg, setMsg] = useState<EncodeObject>({typeUrl: '', value: ''})
 
     const goHome = () => {
         dispatch(updateWalletObjectState({ ...initialWalletObject }))
+        dispatch(updateSteps({currentStep: ''}))
         navigate("/welcome")
+    }
+
+    const broadcasCreateWallettMsg = async () => {
+        
+        dispatch(updateModalState({
+            loading: true,
+            title: 'Creating MultiSig Account...',
+            message: 'Waiting for transaction confirmation...'
+        }))
+
+        window.keplr.defaultOptions = {
+            sign: {
+                preferNoSetFee: true,
+            }
+          }
+
+        try {
+            const result = await (await signingClient).signAndBroadcast(address!, [msg], feeForCreation!, DEFAULT_MEMO)
+            assertIsDeliverTxSuccess(result)
+
+            // TO DO Extend handling here
+            dispatch(updateModalState({
+                loading: false,
+                success: true,
+            }))
+
+        } catch (e: any){
+            dispatch(updateModalState({
+                loading: false,
+                failure: true,
+                title: 'Creating Failed!', 
+                message: 'Seems like something went wrong with creating your account. Try again or check your wallet balance.'
+            }))
+            console.debug(e.message)
+        }
+    }
+
+    const getCreateWalletMsgAndFees = async () => {
+       return await (await signingClient).groupModule.msgCreateGroupWithPolicy(
+            address!,
+            members!,
+            JSON.stringify(groupMetadata!),
+            DEFAULT_META_DATA,
+            true,
+            {
+                threshold: threshold!,
+                votingPeriod: votingPeriod?.seconds!,
+                minExecutionPeriod: 0
+            },
+
+            // TO DO - Gas Eetimation should be able to handle larger values
+            GasPrice.fromString(GAS_PRICE+NATIVE_TOKEN_DENOM),
+            DEFAULT_MULTIPLIER,
+            DEFAULT_MEMO
+        )
     }
 
     const renderStep = (step: string) => {
@@ -40,7 +102,13 @@ const CreateWallet = () => {
         renderStep(stepToRender)
     }
 
-    const renderNextStep = () => {
+    const renderNextStep = async () => {
+
+        if (currentStep === 4) {
+            const { msg, fee } = await getCreateWalletMsgAndFees()
+            dispatch(updateWalletObjectState({feeForCreation: fee}))
+            setMsg(msg)
+        }
         const stepToRender = (currentStep + 1).toString()
         renderStep(stepToRender)
     }
@@ -59,7 +127,7 @@ const CreateWallet = () => {
         currentStep === 1?true:
         currentStep === 2?groupMetadata?.walletName !== '':
         currentStep === 3?members?.length! > 0:
-        currentStep === 4?threshold !== '' && votingPeriod?.seconds !== 0:
+        currentStep === 4?threshold !== 0 && votingPeriod?.seconds !== 0:
         currentStep === 5?true:
         false
 
@@ -120,7 +188,7 @@ const CreateWallet = () => {
                             })}
                             onClick={
                                 currentStep < 5?renderNextStep:
-                                renderPreviousStep}
+                                broadcasCreateWallettMsg}
                         >
                             {currentStep === 5?"Create":"Next Step"}
                         </Button>

@@ -37,7 +37,8 @@ const Welcome = () => {
   }, [])
 
   return (
-    <Box id="entire-welcome-page-dissapear" style={{...styles.holder, ...styles.contentDissapear}}>
+    <Box id="entire-welcome-page-dissapear" style={{...styles.welcomeHolder, ...styles.contentDissapear}}>
+      <Box style={styles.contentHolder}>
       <Dialog />
         {/* ////TOP WELCOME INFO///// */}
         <div id='welcome-no-wallet-main-info-dissapear' style={{width:'100%',...styles.contentDissapear}}>
@@ -69,6 +70,7 @@ const Welcome = () => {
           </Box>
           }
         </Card>
+      </Box>
     </Box>
   )
 }

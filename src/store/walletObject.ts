@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { StdFee } from 'cudosjs'
 
 export interface member {
     address: string;
-    weight: string;
+    weight: number;
     metadata: string;
-}[]
+}
 
 interface groupMetadata {
     walletName?: string
@@ -20,18 +21,20 @@ export interface walletObjectState {
   admin?: string
   members?: member[]
   groupMetadata?: groupMetadata
-  threshold?: string
+  threshold?: number
   votingPeriod?: votingPeriod
   validContent?: boolean
+  feeForCreation?: StdFee
 }
 
 export const initialState: walletObjectState = {
     admin: '',
     members: [],
     groupMetadata: {walletName: '', generalInfo: ''},
-    threshold: '',
+    threshold: 0,
     votingPeriod: {seconds: 0, nanos: 0},
-    validContent: false
+    validContent: false,
+    feeForCreation: {amount: [], gas: '0'}
 }
 
 export const walletObjectStateSlice = createSlice({

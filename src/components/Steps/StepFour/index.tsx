@@ -36,7 +36,7 @@ const StepFour = () => {
         switch(e.target.name){
             case "threshold":
                 setThreshold(e.target.value)
-                dispatch(updateWalletObjectState({threshold: e.target.value.toString()}))
+                dispatch(updateWalletObjectState({threshold: e.target.value}))
                 break
 
             case "selectedVotingPeriod":
@@ -51,7 +51,7 @@ const StepFour = () => {
 
     useEffect(() => {
         dispatch(updateWalletObjectState({
-            threshold: threshold,
+            threshold: parseInt(threshold),
             votingPeriod: {
                 seconds: 0,
                 nanos: 0

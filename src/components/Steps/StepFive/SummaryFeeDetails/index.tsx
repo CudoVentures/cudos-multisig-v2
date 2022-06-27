@@ -2,8 +2,17 @@ import { Tooltip, Typography } from '@mui/material'
 import { styles } from '../../styles'
 import Card from 'components/Card/Card'
 import smallInfoIcon from 'assets/vectors/small-info-icon.svg'
+import { RootState } from 'store'
+import { useSelector } from 'react-redux'
+import { BigNumber } from 'bignumber.js'
+import { cutTrailingZeroes, separateDecimals, separateFractions } from 'utils/regexFormatting'
 
 const SummaryFeeDetails = () => {
+
+    const { feeForCreation } = useSelector((state: RootState) => state.walletObject)
+    const tempFee = new BigNumber(feeForCreation!.amount[0]?feeForCreation!.amount[0].amount:'0')
+    // X.XX CUDOS format
+    const displayWorthyFee = cutTrailingZeroes(separateDecimals(separateFractions(tempFee.valueOf())))
 
     return (
         <Card style={styles.summaryCard}>
@@ -14,8 +23,7 @@ const SummaryFeeDetails = () => {
                 </Tooltip>
             </Typography>
             <Typography variant="inherit" color="text.primary">
-                0.00024 CUDOS
-                {/* TO DO */}
+                {displayWorthyFee + ' CUDOS'}
             </Typography>
         </Card>
     )
