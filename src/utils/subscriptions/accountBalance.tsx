@@ -12,7 +12,7 @@ import { checkForAdminToken, getAccountBalances, getAccountWallets, getNativeBal
 
 const AccountBalance = (): JSX.Element => {
 
-  const { address, nativeBalance, addressBook, lastLoggedAddress } = useSelector((state: RootState) => state.userState)
+  const { address, nativeBalance, addressBook, lastLoggedAddress, wallets } = useSelector((state: RootState) => state.userState)
   const fullBalance = separateDecimals(separateFractions(nativeBalance?nativeBalance.toString():'0'))
   const displayBalance = cutFractions(fullBalance)
   const dispatch = useDispatch()
@@ -21,7 +21,7 @@ const AccountBalance = (): JSX.Element => {
     const fetchData = async () => {
       try {
         const currentBalances = await getAccountBalances(address!)
-        const userWallets = await getAccountWallets(address!)
+        // const userWallets = await getAccountWallets(address!)
         const admin = checkForAdminToken(currentBalances)
         const userBalance = getNativeBalance(currentBalances)
 
@@ -31,7 +31,8 @@ const AccountBalance = (): JSX.Element => {
           balances: currentBalances, 
           nativeBalance: userBalance, 
           isAdmin: admin,
-          wallets: userWallets,
+          wallets: wallets,
+          addressBook
         }))
 
       } catch (error: any) {
@@ -45,7 +46,7 @@ const AccountBalance = (): JSX.Element => {
     return () => {
       clearInterval(timer)
     }
-  }, [nativeBalance, addressBook])
+  }, [nativeBalance, addressBook, wallets])
 
   return (
     <Tooltip title={fullBalance + ' CUDOS'}>

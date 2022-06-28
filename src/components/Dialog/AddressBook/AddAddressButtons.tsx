@@ -5,12 +5,14 @@ import { styles } from '../styles'
 import { updateModalState } from 'store/modals'
 import PlusIcon from 'assets/vectors/plus-icon.svg'
 import UploadFromCsv from 'assets/vectors/csv-upload.svg'
+import DownloadToCsv from 'assets/vectors/csv-download.svg'
 import React, { useEffect, useState } from 'react'
 import { isValidCudosAddress } from 'utils/validation'
 import { updateUser } from 'store/user'
 import { RootState } from 'store'
 import { getCurrentStep } from 'components/Steps'
 import { initialState as initialModalState } from 'store/modals'
+import { CSVLink } from "react-csv"
 
 const AddAddressButtons = () => {
     const dispatch = useDispatch()
@@ -131,6 +133,14 @@ const AddAddressButtons = () => {
         }
       }, [])
 
+    const CsvData: any[] = []
+    Object.entries(addressBook!).forEach(
+        ([address, name]) => CsvData.push([
+            name,
+            address
+        ])
+    )
+    
     const validInput = isValidCudosAddress(userAddress) && userName !== ''
     return (
         <div>
@@ -188,26 +198,41 @@ const AddAddressButtons = () => {
                 <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
                 Add New Address
             </Button>
-            <HtmlTooltip
-                style={{marginTop: '10px'}}
-                title={
-                    <React.Fragment>
-                    <Typography color="inherit">CSV file format</Typography>
-                    <em>{"<name>"}</em><b>{','}</b> <em>{"<address>"}</em><br/> 
-                    <em>{"<name>"}</em><b>{','}</b> <em>{"<address>"}</em><br/> 
-                    <small>{'*Each pair should be comma separated and on a new line.'}</small>
-                    </React.Fragment>}
-                >
-            <div className='tooltip-base'>
+            <div id='csv-btns-holder' style={{display: 'flex'}}>
+                <HtmlTooltip
+                    style={{marginTop: '10px'}}
+                    title={
+                        <React.Fragment>
+                        <Typography color="inherit">CSV file format</Typography>
+                        <em>{"<name>"}</em><b>{','}</b> <em>{"<address>"}</em><br/>
+                        <em>{"<name>"}</em><b>{','}</b> <em>{"<address>"}</em><br/>
+                        <small>{'*Each pair should be comma separated and on a new line.'}</small>
+                        </React.Fragment>}
+                    >
+                <div className='tooltip-base'>
+                    <Button
+                        disableRipple
+                        style={styles.csvBtn}
+                        onClick={handleCsvClick}
+                    >
+                        <img src={UploadFromCsv} alt="Upload from CSV file" />
+                    </Button>
+                </div>
+                </HtmlTooltip>
                 <Button 
                     disableRipple 
-                    style={styles.csvBtn}
-                    onClick={handleCsvClick}
+                    style={{marginTop:'10px',...styles.csvBtn}}
                 >
-                    <img src={UploadFromCsv} alt="Upload from CSV file" />
+                    <CSVLink
+                        data={CsvData} 
+                        filename={"MultiSig-address-book.csv"}
+                        className="btn btn-primary"
+                        target="_blank"
+                    >
+                        <img src={DownloadToCsv} alt="Download to CSV file" />
+                    </CSVLink>
                 </Button>
             </div>
-            </HtmlTooltip>
             <input
                 name="multiSigCsv"
                 type='file'

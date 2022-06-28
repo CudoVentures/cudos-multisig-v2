@@ -12,6 +12,18 @@ export const styles = {
   addressBookIcon: {
     marginRight: '10px'
   },
+  btnLogo: {
+    marginRight: '10px'
+  },
+  btn: {
+    borderRadius: "12px",
+    padding: '5px',
+    display: "grid",
+    placeItems: "center",
+    heigth: '35px',
+    width: '40px',
+    background: 'rgba(82, 166, 248, 1)',
+  },
   addressBookBtn: {
     background: 'none',
     textDecoration: 'none',
@@ -44,14 +56,13 @@ export const styles = {
     height: '100%',
     justifyContent: 'center',
     width: '100%',
-    padding: '0 100px',
     flexDirection: 'column',
     alignItems: 'center',
   },
   contentHolder: {
     display: 'flex',
     flexDirection: 'column',
-    width: '50%',
+    width: '1250px',
     height: 'inherit'
   }
 } as const

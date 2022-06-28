@@ -20,7 +20,7 @@ const ConnectWallet = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { address, lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
+  const { address, lastLoggedAddress, addressBook, wallets } = useSelector((state: RootState) => state.userState)
 
   const connect = async () => {
     try {
@@ -29,7 +29,7 @@ const ConnectWallet = () => {
         dispatch(updateUser({ ...initialUserState }))
       }
       const currentBalances = await getAccountBalances(address)
-      const userWallets = await getAccountWallets(address)
+      // const userWallets = await getAccountWallets(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
       
@@ -39,7 +39,7 @@ const ConnectWallet = () => {
         balances: currentBalances, 
         nativeBalance: userBalance, 
         isAdmin: admin,
-        wallets: userWallets,
+        wallets: wallets,
         addressBook
       }))
       

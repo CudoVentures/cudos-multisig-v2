@@ -1,6 +1,5 @@
 
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { Box, Button, Typography } from '@mui/material'
 import { styles } from './styles'
 import noWalletLogo from 'assets/vectors/no-wallet-welcome-logo.svg'
@@ -8,7 +7,6 @@ import PlusIcon from 'assets/vectors/plus-icon.svg'
 
 const NoWallet = () => {
   
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const renderStepOne = async () => {
@@ -24,7 +22,8 @@ const NoWallet = () => {
   }
   
   return (
-    <div id='welcome-no-wallet-top-info-dissapear' style={styles.contentDissapear}>
+    <div style={{height: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+      <div id='welcome-no-wallet-top-info-dissapear' style={styles.contentDissapear}>
         <Box>
             <img src={noWalletLogo} alt="Welcome logo" />
         </Box>
@@ -47,6 +46,7 @@ const NoWallet = () => {
             Create wallet
           </Button>
         </Box>
+      </div>
     </div>
   )
 }

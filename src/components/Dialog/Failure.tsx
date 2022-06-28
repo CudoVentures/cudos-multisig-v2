@@ -7,21 +7,45 @@ import FailureIcon from 'assets/vectors/failure.svg'
 import { useNavigate } from 'react-router-dom'
 import { updateModalState } from 'store/modals'
 import { initialState as initialModalState } from 'store/modals'
+import { WALLET_CREATION_BECH32_FAILURE } from 'utils/constants'
+import { updateSteps } from 'store/steps'
+import { updateWalletObjectState } from 'store/walletObject'
+import { initialState as initialWalletObject } from 'store/walletObject'
 
 
 const Failure = () => {
       
-      const navigate = useNavigate()
-      const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const clearState = async () => {
+      dispatch(updateSteps({currentStep: ''}))
+      dispatch(updateWalletObjectState({ ...initialWalletObject }))
+    }
+
+    const goHome = () => {
+        clearState()
+        navigate("/welcome")
+    }
 
     const { 
         failure, 
         title, 
-        message
+        message,
+        msgType, 
     } = useSelector((state: RootState) => state.modalState)
 
     const handleModalClose = () => {
-        dispatch(updateModalState({ ...initialModalState }))
+      switch(msgType) {
+        case WALLET_CREATION_BECH32_FAILURE:
+          dispatch(updateModalState({ ...initialModalState }))
+          goHome()
+          break
+  
+        default:
+          dispatch(updateModalState({ ...initialModalState }))
+          break
+      }
     }
       
     const closeModal = (ev: any, reason: string) => {

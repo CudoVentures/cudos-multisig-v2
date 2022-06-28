@@ -15,9 +15,12 @@ import StepThree from 'components/Steps/StepThree'
 import StepFour from 'components/Steps/StepFour'
 import StepFfive from 'components/Steps/StepFive'
 import { signingClient } from 'utils/config'
-import { DEFAULT_MEMO, DEFAULT_META_DATA, DEFAULT_MULTIPLIER, GAS_PRICE, NATIVE_TOKEN_DENOM } from 'utils/constants'
+import { DEFAULT_MEMO, DEFAULT_META_DATA, DEFAULT_MULTIPLIER, GAS_PRICE, WALLET_CREATION_SUCCESS, NATIVE_TOKEN_DENOM, WALLET_CREATION_BECH32_FAILURE } from 'utils/constants'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice } from 'cudosjs'
 import { updateModalState } from 'store/modals'
+import { updateUser, wallet } from 'store/user'
+import { BigNumber } from 'bignumber.js'
+import { cutTrailingZeroes, separateDecimals, separateFractions } from 'utils/regexFormatting'
 
 const CreateWallet = () => {
     
@@ -25,12 +28,16 @@ const CreateWallet = () => {
     const navigate = useNavigate()
     const currentStep = parseInt(getCurrentStep())
     const { groupMetadata, members, threshold, votingPeriod, feeForCreation } = useSelector((state: RootState) => state.walletObject)
-    const { address } = useSelector((state: RootState) => state.userState)
+    const { address, wallets } = useSelector((state: RootState) => state.userState)
     const [msg, setMsg] = useState<EncodeObject>({typeUrl: '', value: ''})
 
-    const goHome = () => {
-        dispatch(updateWalletObjectState({ ...initialWalletObject }))
+    const clearState = async () => {
         dispatch(updateSteps({currentStep: ''}))
+        dispatch(updateWalletObjectState({ ...initialWalletObject }))
+      }
+
+    const goHome = () => {
+        clearState()
         navigate("/welcome")
     }
 
@@ -52,10 +59,44 @@ const CreateWallet = () => {
             const result = await (await signingClient).signAndBroadcast(address!, [msg], feeForCreation!, DEFAULT_MEMO)
             assertIsDeliverTxSuccess(result)
 
-            // TO DO Extend handling here
+            // Highly doubtfull that the user is charged the actual gasUsed. 
+            // I'd say it is always charged with gasWanted, but anyways...
+            const tempFee = new BigNumber(GAS_PRICE).multipliedBy(new BigNumber(result.gasUsed)).valueOf()
+            const displayWorthyFee = cutTrailingZeroes(separateDecimals(separateFractions(tempFee.valueOf())))
+            
+            const walletID = JSON.parse(result.rawLog!)[0]
+            .events.find((e: any) => e.type === 'cosmos.group.v1.EventCreateGroup')
+            .attributes[0].value.replaceAll('"', '')
+
+            const walletAddress = JSON.parse(result.rawLog!)[0]
+            .events.find((e: any) => e.type === 'cosmos.group.v1.EventCreateGroupPolicy')
+            .attributes[0].value.replaceAll('"', '')
+
+            const dataObjectForSuccessModal = {
+                walletAddress: walletAddress,
+                walletName: groupMetadata?.walletName,
+                txHash: result.transactionHash,
+                txFee: displayWorthyFee
+            }
+
+            const newUserWalletsState: wallet =  {
+                walletID: walletID,
+                walletAddress: walletAddress,
+                walletName: groupMetadata?.walletName!,
+                members: members!,
+                memberCount: members?.length!,
+                threshold: threshold!,
+            }
+
+            dispatch(updateUser({ wallets: [...wallets!, newUserWalletsState] }))
+
+            clearState()
             dispatch(updateModalState({
                 loading: false,
                 success: true,
+                msgType: WALLET_CREATION_SUCCESS,
+                dataObject: dataObjectForSuccessModal,
+                message: 'Your MultiSig account was successfully created!'
             }))
 
         } catch (e: any){
@@ -81,8 +122,6 @@ const CreateWallet = () => {
                 votingPeriod: votingPeriod?.seconds!,
                 minExecutionPeriod: 0
             },
-
-            // TO DO - Gas Eetimation should be able to handle larger values
             GasPrice.fromString(GAS_PRICE+NATIVE_TOKEN_DENOM),
             DEFAULT_MULTIPLIER,
             DEFAULT_MEMO
@@ -105,9 +144,21 @@ const CreateWallet = () => {
     const renderNextStep = async () => {
 
         if (currentStep === 4) {
-            const { msg, fee } = await getCreateWalletMsgAndFees()
-            dispatch(updateWalletObjectState({feeForCreation: fee}))
-            setMsg(msg)
+            try {
+                const { msg, fee } = await getCreateWalletMsgAndFees()
+                dispatch(updateWalletObjectState({feeForCreation: fee}))
+                setMsg(msg)
+            } catch (error: any) {
+                if (error.message.includes('decoding bech32 failed')) {
+                    dispatch(updateModalState({
+                        failure: true, 
+                        title: 'Address Error',
+                        msgType: WALLET_CREATION_BECH32_FAILURE,
+                        message: 'Please check the given addresses'
+                    }))
+                }
+                console.debug(error.message)
+            }
         }
         const stepToRender = (currentStep + 1).toString()
         renderStep(stepToRender)

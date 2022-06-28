@@ -1,7 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { member } from './walletObject'
 
 interface addressBook {
   [key: string]: string;
+}
+
+export interface wallet {
+  walletName: string;
+  walletAddress: string;
+  walletID: string;
+  members: member[];
+  memberCount: number;
+  threshold: number;
 }
 
 export interface userState {
@@ -10,7 +20,7 @@ export interface userState {
   lastLoggedAddress?: string
   nativeBalance?: string
   balances?: any[]
-  wallets?: any[]
+  wallets?: wallet[]
   addressBook?: addressBook
 }
 

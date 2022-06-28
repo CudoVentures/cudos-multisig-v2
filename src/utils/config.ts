@@ -8,7 +8,7 @@ export const queryClient = (async (): Promise<StargateClient> => {
   })()
 
 export const signingClient = (async (): Promise<SigningStargateClient> => {
-  const offlineSigner = await window.getOfflineSignerOnlyAmino(CHAIN_ID)
+  const offlineSigner = await window.getOfflineSigner(CHAIN_ID)
   const client = await SigningStargateClient.connectWithSigner(RPC_ADDRESS, offlineSigner)
   return client
 })()
