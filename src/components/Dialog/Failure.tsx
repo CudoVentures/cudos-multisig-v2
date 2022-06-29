@@ -7,10 +7,10 @@ import FailureIcon from 'assets/vectors/failure.svg'
 import { useNavigate } from 'react-router-dom'
 import { updateModalState } from 'store/modals'
 import { initialState as initialModalState } from 'store/modals'
-import { WALLET_CREATION_BECH32_FAILURE } from 'utils/constants'
 import { updateSteps } from 'store/steps'
 import { updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialWalletObject } from 'store/walletObject'
+import { WALLET_CORRUPTED_PROCESS_TYPE } from 'utils/constants'
 
 
 const Failure = () => {
@@ -37,7 +37,7 @@ const Failure = () => {
 
     const handleModalClose = () => {
       switch(msgType) {
-        case WALLET_CREATION_BECH32_FAILURE:
+        case WALLET_CORRUPTED_PROCESS_TYPE:
           dispatch(updateModalState({ ...initialModalState }))
           goHome()
           break

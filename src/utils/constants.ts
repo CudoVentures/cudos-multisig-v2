@@ -14,6 +14,20 @@ export const DEFAULT_MEMO = 'Created with CUDOS MultiSig'
 export const DEFAULT_VOTING_WEIGHT = 1
 export const DEFAULT_MULTIPLIER = 1.3
 
+// Modal Msg Titles
+export const FILE_ERROR_TITLE = 'File Error'
+export const LOGIN_FAIL_TITLE = 'Login Failed'
+export const WALLET_PROCESS_FAIL_TITLE = 'Process Failed!'
+export const WALLET_CREATION_FAILURE_TITLE = 'Creating Failed!'
+export const WALLET_CREATION_LOADING_TITLE = 'Creating MultiSig Wallet...'
+
 // Modal Msg Types
-export const WALLET_CREATION_SUCCESS = 'Wallet Creation Success'
-export const WALLET_CREATION_BECH32_FAILURE = 'Wrong Bech32 address'
+export const WALLET_CREATION_SUCCESS_TYPE = 'Wallet Creation Success'
+export const WALLET_CREATION_FAILURE_TYPE = 'Wallet Creation Failure'
+export const WALLET_CORRUPTED_PROCESS_TYPE = 'Wallet Corrupted Process'
+
+// General Modal Msgs
+export const FILE_ERROR_MSG = 'File is in wrong format or contains invalid data'
+export const WALLET_CREATION_FAILURE_MSG = 'Seems like something went wrong. Try again or check your account balance.'
+export const WALLET_CREATION_SUCCESS_MSG = 'Your MultiSig account was successfully created!'
+export const DEFAULT_LOADING_MODAL_MSG = 'Waiting for transaction confirmation...'

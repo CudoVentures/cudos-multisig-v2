@@ -15,7 +15,7 @@ import StepThree from 'components/Steps/StepThree'
 import StepFour from 'components/Steps/StepFour'
 import StepFfive from 'components/Steps/StepFive'
 import { signingClient } from 'utils/config'
-import { DEFAULT_MEMO, DEFAULT_META_DATA, DEFAULT_MULTIPLIER, GAS_PRICE, WALLET_CREATION_SUCCESS, NATIVE_TOKEN_DENOM, WALLET_CREATION_BECH32_FAILURE } from 'utils/constants'
+import { DEFAULT_MEMO, DEFAULT_META_DATA, DEFAULT_MULTIPLIER, GAS_PRICE, WALLET_PROCESS_FAIL_TITLE, NATIVE_TOKEN_DENOM, WALLET_CORRUPTED_PROCESS_TYPE, WALLET_CREATION_FAILURE_MSG, WALLET_CREATION_FAILURE_TYPE, WALLET_CREATION_SUCCESS_MSG, WALLET_CREATION_SUCCESS_TYPE, WALLET_CREATION_FAILURE_TITLE, WALLET_CREATION_LOADING_TITLE, DEFAULT_LOADING_MODAL_MSG } from 'utils/constants'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice } from 'cudosjs'
 import { updateModalState } from 'store/modals'
 import { updateUser, wallet } from 'store/user'
@@ -45,8 +45,8 @@ const CreateWallet = () => {
         
         dispatch(updateModalState({
             loading: true,
-            title: 'Creating MultiSig Account...',
-            message: 'Waiting for transaction confirmation...'
+            title: WALLET_CREATION_LOADING_TITLE,
+            message: DEFAULT_LOADING_MODAL_MSG
         }))
 
         window.keplr.defaultOptions = {
@@ -94,17 +94,17 @@ const CreateWallet = () => {
             dispatch(updateModalState({
                 loading: false,
                 success: true,
-                msgType: WALLET_CREATION_SUCCESS,
+                msgType: WALLET_CREATION_SUCCESS_TYPE,
                 dataObject: dataObjectForSuccessModal,
-                message: 'Your MultiSig account was successfully created!'
+                message: WALLET_CREATION_SUCCESS_MSG
             }))
 
         } catch (e: any){
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
-                title: 'Creating Failed!', 
-                message: 'Seems like something went wrong with creating your account. Try again or check your wallet balance.'
+                title: WALLET_CREATION_FAILURE_TITLE, 
+                message: WALLET_CREATION_FAILURE_MSG
             }))
             console.debug(e.message)
         }
@@ -149,14 +149,12 @@ const CreateWallet = () => {
                 dispatch(updateWalletObjectState({feeForCreation: fee}))
                 setMsg(msg)
             } catch (error: any) {
-                if (error.message.includes('decoding bech32 failed')) {
-                    dispatch(updateModalState({
-                        failure: true, 
-                        title: 'Address Error',
-                        msgType: WALLET_CREATION_BECH32_FAILURE,
-                        message: 'Please check the given addresses'
-                    }))
-                }
+                dispatch(updateModalState({
+                    failure: true, 
+                    title: WALLET_PROCESS_FAIL_TITLE,
+                    msgType: WALLET_CORRUPTED_PROCESS_TYPE,
+                    message: WALLET_CREATION_FAILURE_MSG
+                }))
                 console.debug(error.message)
             }
         }

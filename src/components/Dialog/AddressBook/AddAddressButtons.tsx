@@ -13,6 +13,7 @@ import { RootState } from 'store'
 import { getCurrentStep } from 'components/Steps'
 import { initialState as initialModalState } from 'store/modals'
 import { CSVLink } from "react-csv"
+import { FILE_ERROR_MSG, FILE_ERROR_TITLE } from 'utils/constants'
 
 const AddAddressButtons = () => {
     const dispatch = useDispatch()
@@ -74,8 +75,8 @@ const AddAddressButtons = () => {
         if (invdalidData) {
             dispatch(updateModalState({
                 failure: true, 
-                title: 'File Error', 
-                message: 'Uploaded file is in wrong format or contains invalid data'
+                title: FILE_ERROR_TITLE, 
+                message: FILE_ERROR_MSG
             }))
         } else {
             dispatch(updateUser({ addressBook: txBatch }))

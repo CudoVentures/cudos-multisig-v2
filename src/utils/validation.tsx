@@ -1,7 +1,16 @@
+import { bech32 } from "bech32";
+
 export const isValidCudosAddress = (addr: string) => {
     if (addr === '' || addr === undefined) return false
-    const addressCheck = addr.replace(/^cudos[0-9a-z]{39}$/gm, 'OK');
-    return addressCheck === 'OK'
+    // const addressCheck = addr.replace(/^cudos[0-9a-z]{39}$/gm, 'OK');
+    try {
+        const { prefix: decodedPrefix } = bech32.decode(addr)
+        return decodedPrefix === "cudos"
+
+      } catch {
+        // invalid checksum
+        return false
+      }
 }
 
 // Handling whole numbers at the moment
