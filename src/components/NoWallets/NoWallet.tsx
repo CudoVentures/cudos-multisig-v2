@@ -1,15 +1,29 @@
 
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { Box, Button, Typography } from '@mui/material'
 import { styles } from './styles'
 import noWalletLogo from 'assets/vectors/no-wallet-welcome-logo.svg'
-import PlusIcon from '../../assets/vectors/plus-icon.svg'
+import PlusIcon from 'assets/vectors/plus-icon.svg'
 
 const NoWallet = () => {
   
+  const navigate = useNavigate()
+
+  const renderStepOne = async () => {
+    try {
+      // REMOVING CONTENT FROM WELCOME CARD
+      document.getElementById("entire-welcome-page-dissapear")!.style.opacity = '0' 
+      await new Promise(resolve => setTimeout(resolve, 500))
+      navigate('/create-wallet')
+  
+    } catch (error: any) {
+      console.debug(error.message)
+    }
+  }
+  
   return (
-    <div id='content-dissapear' style={styles.contentDissapear}>
+    <div style={{height: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+      <div id='welcome-no-wallet-top-info-dissapear' style={styles.contentDissapear}>
         <Box>
             <img src={noWalletLogo} alt="Welcome logo" />
         </Box>
@@ -25,13 +39,14 @@ const NoWallet = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => alert("Create account")}
+            onClick={() => renderStepOne()}
             sx={styles.connectButton}
           >
             <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
             Create wallet
           </Button>
         </Box>
+      </div>
     </div>
   )
 }

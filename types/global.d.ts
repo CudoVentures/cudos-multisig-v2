@@ -80,7 +80,6 @@ declare global {
     VITE_APP_GAS_PRICE: number
     VITE_APP_CHAIN_NAME: string
     VITE_APP_EXPLORER_PUBLIC_ADDRESS: string
-    VITE_APP_GAS_PRICE_DENOM: string
     VITE_APP_FEE_MULTIPLIER: number
   }
 

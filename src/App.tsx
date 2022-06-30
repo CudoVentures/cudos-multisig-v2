@@ -7,6 +7,7 @@ import Layout from 'components/Layout'
 import RequireKeplr from 'components/RequireKeplr/RequireKeplr'
 import ConnectWallet from 'containers/ConnectWallet/ConnectWallet'
 import Welcome from 'containers/Welcome'
+import CreateWallet from 'containers/CreateWallet'
 import theme from 'theme'
 import { RootState } from 'store'
 import { useCallback, useEffect } from 'react'
@@ -20,7 +21,7 @@ import { checkForAdminToken, getAccountBalances, getNativeBalance, getAccountWal
 const App = () => {
   const location = useLocation()
   const themeColor = useSelector((state: RootState) => state.settings.theme)
-  const { lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
+  const { lastLoggedAddress, addressBook, wallets } = useSelector((state: RootState) => state.userState)
   const dispatch = useDispatch()
 
   const connectAccount = useCallback(async () => {
@@ -31,7 +32,7 @@ const App = () => {
         )
       }
       const currentBalances = await getAccountBalances(address)
-      const userWallets = await getAccountWallets(address)
+      // const userWallets = await getAccountWallets(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
 
@@ -41,7 +42,7 @@ const App = () => {
         balances: currentBalances, 
         nativeBalance: userBalance, 
         isAdmin: admin,
-        wallets: userWallets,
+        wallets: wallets,
         addressBook
       }))
         
@@ -69,6 +70,9 @@ const App = () => {
               <Route element={<RequireKeplr />}>
                 <Route path="welcome">
                   <Route index element={<Welcome />} />
+                </Route>
+                <Route path="create-wallet">
+                  <Route index element={<CreateWallet />} />
                 </Route>
               </Route>
               <Route path="*" element={<Navigate to="/" state={{ from: location }} />} />

@@ -12,6 +12,18 @@ export const styles = {
   addressBookIcon: {
     marginRight: '10px'
   },
+  btnLogo: {
+    marginRight: '10px'
+  },
+  btn: {
+    borderRadius: "12px",
+    padding: '5px',
+    display: "grid",
+    placeItems: "center",
+    heigth: '35px',
+    width: '40px',
+    background: 'rgba(82, 166, 248, 1)',
+  },
   addressBookBtn: {
     background: 'none',
     textDecoration: 'none',
@@ -20,13 +32,13 @@ export const styles = {
     height: 'fit-content'
   },
   contentDissapear: {
-    opacity: '1', 
+    opacity: '0', 
     transition: 'opacity 0.5s', 
     WebkitTransition: 'opacity 0.5s'
   },
   Card: {
     textAlign: "center",
-    width: '1250px',
+    width: '100%',
     height: '500px',
     transition: "all 1s",
   },
@@ -39,10 +51,18 @@ export const styles = {
     justifyContent: "center",
     transition: "all 1s",
   },
-  holder: {
+  welcomeHolder: {
     display: 'flex', 
     height: '100%',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  contentHolder: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '1250px',
+    height: 'inherit'
   }
 } as const

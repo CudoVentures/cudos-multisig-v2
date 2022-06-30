@@ -9,12 +9,16 @@ import NoAddress from './NoAddress'
 import AddressBookTable from './AddressBookTable'
 import AddAddressButtons from './AddAddressButtons'
 import AddressInput from './AddressInput'
+import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
+import { getCurrentStep } from 'components/Steps'
+import Card from 'components/Card/Card'
 
 const AddressBook = () => {
       
     const dispatch = useDispatch()
     const { openAddressBook, addNewAddress } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
+    const currentStep = parseInt(getCurrentStep())
 
     const addressesInAddressBook = Object.keys(addressBook!).length
     const userHaveAddressBook = addressesInAddressBook > 0
@@ -48,16 +52,16 @@ const AddressBook = () => {
                 <div style={{flexDirection: "column",...styles.infoHolder}}>
                     <div>
                     <Typography style={{marginBottom: '3px', marginRight: '10px', float: 'left'}} variant="h6" fontWeight={900} letterSpacing={2}>
-                        Address Book 
+                        {currentStep === 3?"Add New Address":"Address Book"}
                     </Typography>
-                        {userHaveAddressBook?
+                        {userHaveAddressBook && currentStep !== 3?
                             <div style={styles.btn}>
                                 {addressesInAddressBook}
                             </div>
                         :null}
                     </div>
                     <Typography style={{float: 'left'}} variant="subtitle2" color="text.secondary">
-                        {addNewAddress?"Here you can add new account to your address book":"Here is a list of all your addresses"}
+                        {currentStep === 3?"Fill the information about the new member you want to add":addNewAddress?"Here you can add new account to your address book":"Here is a list of all your addresses"}
                     </Typography>
                 </div>
                 <Box
@@ -74,6 +78,13 @@ const AddressBook = () => {
                         :<NoAddress />}
                     </div>
                 </Box>
+                {currentStep === 3?
+                <Card id='connected-account-alert-info-card' style={styles.alertInfo}>
+                    <img style={{margin:'0 15px 0 5px'}} src={ExclamationMark} alt="Exclamation-mark-icon" />
+                    <Typography style={{fontSize: '14px', color: '#F5B95E'}}>
+                        The new address will be automatically added to Address Book.
+                    </Typography>
+                </Card>:null}
                 <AddAddressButtons />
             </ModalContainer>
         </MuiDialog>

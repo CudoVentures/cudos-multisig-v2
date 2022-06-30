@@ -14,13 +14,14 @@ import { updateUser } from 'store/user'
 import { RootState } from 'store'
 import Header from 'components/Layout/Header'
 import { initialState as initialUserState } from 'store/user'
+import { LOGIN_FAIL_TITLE } from 'utils/constants'
 
 const ConnectWallet = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { address, lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
+  const { address, lastLoggedAddress, addressBook, wallets } = useSelector((state: RootState) => state.userState)
 
   const connect = async () => {
     try {
@@ -29,7 +30,7 @@ const ConnectWallet = () => {
         dispatch(updateUser({ ...initialUserState }))
       }
       const currentBalances = await getAccountBalances(address)
-      const userWallets = await getAccountWallets(address)
+      // const userWallets = await getAccountWallets(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
       
@@ -39,16 +40,16 @@ const ConnectWallet = () => {
         balances: currentBalances, 
         nativeBalance: userBalance, 
         isAdmin: admin,
-        wallets: userWallets,
+        wallets: wallets,
         addressBook
       }))
       
-      navigate('welcome')
+      navigate('/welcome')
 
     } catch (error: any) {
       dispatch(updateModalState({
         failure: true,
-        title: 'Login Failed ', 
+        title: LOGIN_FAIL_TITLE, 
         message: error.message
       }))
     }
