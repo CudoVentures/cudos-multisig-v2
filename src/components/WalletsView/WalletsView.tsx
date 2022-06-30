@@ -4,6 +4,7 @@ import { RootState } from 'store'
 import { styles } from './styles'
 import { formatAddress } from 'utils/helpers'
 import MembersIcon from 'assets/vectors/members-icon.svg'
+import { useNavigate } from 'react-router-dom'
 
 interface Data {
     walletName: string;
@@ -12,6 +13,7 @@ interface Data {
   }
 
 const WalletsView = () => {
+    const navigate = useNavigate()
     const { wallets } = useSelector((state: RootState) => state.userState)
     
     function createData(
@@ -29,14 +31,14 @@ const WalletsView = () => {
     const rows: Data[] = [];
       wallets!.forEach((wallet) =>
         rows.push(createData(
-            wallet.walletName, 
-            wallet.walletAddress,
-            wallet.memberCount
+            wallet.walletName!, 
+            wallet.walletAddress!,
+            wallet.memberCount!
         ))
     )
 
     const openDashboard = (walletAddress: string) => {
-        alert("COMING SOON")
+        navigate(`/wallet/${walletAddress}`)
     }
 
     return (
@@ -52,11 +54,11 @@ const WalletsView = () => {
                         padding: '5px 25px 5px 5px',
                         margin: '8px 10px'
                       })}>
-                        <TableCell style={{ fontWeight: '600', padding: '0px 10px 0px 40px', width: '220px'}} align='left'>
-                            {row.walletName.length > 20?
+                        <TableCell style={{ fontWeight: '600', padding: '0px 10px 0px 35px', width: '310px'}} align='left'>
+                            {row.walletName.length > 23?
                                 <Tooltip title={row.walletName}>
                                     <div>
-                                        {formatAddress(row.walletName, 15)}
+                                        {formatAddress(row.walletName, 5)}
                                     </div>
                                 </Tooltip>
                                 :row.walletName

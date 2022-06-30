@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Coin } from 'cudosjs'
 import { member } from './walletObject'
 
 interface addressBook {
@@ -6,12 +7,15 @@ interface addressBook {
 }
 
 export interface wallet {
-  walletName: string;
-  walletAddress: string;
-  walletID: string;
-  members: member[];
-  memberCount: number;
-  threshold: number;
+  walletName?: string;
+  isAdmin?: boolean;
+  walletAddress?: string;
+  walletID?: string;
+  members?: member[];
+  memberCount?: number;
+  threshold?: number;
+  walletBalances?: Coin[];
+  nativeBalance: string;
 }
 
 export interface userState {
@@ -19,9 +23,22 @@ export interface userState {
   address?: string
   lastLoggedAddress?: string
   nativeBalance?: string
-  balances?: any[]
+  balances?: Coin[]
   wallets?: wallet[]
+  selectedWallet?: wallet
   addressBook?: addressBook
+}
+
+export const emptyWallet: wallet = {  
+  walletName: '',
+  walletAddress: '',
+  walletID: '',
+  isAdmin: false,
+  members: [],
+  memberCount: 0,
+  threshold: 0,
+  walletBalances: [],
+  nativeBalance: ''
 }
 
 export const initialState: userState = {
@@ -31,7 +48,7 @@ export const initialState: userState = {
   nativeBalance: '',
   balances: [],
   wallets: [],
-  addressBook: {}
+  selectedWallet: emptyWallet
 }
 
 export const userStateSlice = createSlice({
@@ -40,11 +57,15 @@ export const userStateSlice = createSlice({
   reducers: {
     updateUser: (state, action: PayloadAction<userState>) => {
       return { ...state, ...action.payload }
+    },
+    updatedSelectedWallet: (state, action) => {
+      state.selectedWallet = action.payload
+      return state
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { updateUser } = userStateSlice.actions
+export const { updateUser, updatedSelectedWallet } = userStateSlice.actions
 
 export default userStateSlice.reducer

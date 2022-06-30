@@ -21,6 +21,7 @@ import { updateModalState } from 'store/modals'
 import { updateUser, wallet } from 'store/user'
 import { BigNumber } from 'bignumber.js'
 import { cutTrailingZeroes, separateDecimals, separateFractions } from 'utils/regexFormatting'
+import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 
 const CreateWallet = () => {
     
@@ -72,6 +73,10 @@ const CreateWallet = () => {
             .events.find((e: any) => e.type === 'cosmos.group.v1.EventCreateGroupPolicy')
             .attributes[0].value.replaceAll('"', '')
 
+            const walletBalances = await getAccountBalances(walletAddress)
+            const admin = checkForAdminToken(walletBalances)
+            const nativeBalance = getNativeBalance(walletBalances)
+
             const dataObjectForSuccessModal = {
                 walletAddress: walletAddress,
                 walletName: groupMetadata?.walletName,
@@ -83,9 +88,12 @@ const CreateWallet = () => {
                 walletID: walletID,
                 walletAddress: walletAddress,
                 walletName: groupMetadata?.walletName!,
+                isAdmin: admin,
                 members: members!,
                 memberCount: members?.length!,
                 threshold: threshold!,
+                walletBalances: walletBalances,
+                nativeBalance: nativeBalance
             }
 
             dispatch(updateUser({ wallets: [...wallets!, newUserWalletsState] }))

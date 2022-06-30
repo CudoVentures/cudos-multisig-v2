@@ -14,7 +14,7 @@ import { updateUser } from 'store/user'
 import { RootState } from 'store'
 import Header from 'components/Layout/Header'
 import { initialState as initialUserState } from 'store/user'
-import { LOGIN_FAIL_TITLE } from 'utils/constants'
+import { DEFAULT_LOGIN_FAILURE_MSG, LOGIN_FAIL_TITLE } from 'utils/constants'
 
 const ConnectWallet = () => {
 
@@ -50,8 +50,9 @@ const ConnectWallet = () => {
       dispatch(updateModalState({
         failure: true,
         title: LOGIN_FAIL_TITLE, 
-        message: error.message
+        message: DEFAULT_LOGIN_FAILURE_MSG
       }))
+      console.debug(error.message)
     }
   }
 

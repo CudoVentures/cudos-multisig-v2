@@ -10,7 +10,7 @@ export const styles = {
   summaryTableBody: {
     overflowY: 'scroll', 
     overflowX: 'clip', 
-    height: '415px',
+    height: '418px',
     width: "100%",
     display: 'flex',
     flexDirection: 'column',
