@@ -2,7 +2,7 @@
 import { Box, Button, Divider, Tooltip, Typography } from '@mui/material'
 import { styles } from './styles'
 import { RootState } from 'store'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { formatAddress, getCudosBalanceInUSD } from 'utils/helpers'
 import copy from 'copy-to-clipboard'
 import LinkIcon from 'assets/vectors/link-icon.svg'
@@ -10,8 +10,12 @@ import CopyIcon from 'assets/vectors/copy-icon.svg'
 import { useEffect, useState } from 'react'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
 import { cutFractions } from 'utils/regexFormatting'
+import { emptyWallet, updatedSelectedWallet, updateUser } from 'store/user'
+import { useNavigate } from 'react-router-dom'
 
 const LeftWalletSummary = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
     const [copied, setCopied] = useState<boolean>(false)
     const [usdValue, setUsdValue] = useState<string>('')
@@ -33,6 +37,18 @@ const LeftWalletSummary = () => {
 
           getCurrencies()
       }, [selectedWallet?.nativeBalance!])
+
+      const clearSelectedWalletState = async () => {
+        dispatch(updatedSelectedWallet(emptyWallet))
+      }
+
+      const backToWallets = () => {
+        document.getElementById("resizable-card-right")!.style.width = '0'
+        document.getElementById("resizable-card-left")!.style.width = '0'
+        document.getElementById("entire-create-wallet-page-appear")!.style.opacity = '0'
+        setTimeout(() => navigate("/welcome"), 350)
+        setTimeout(() => clearSelectedWalletState(), 360)
+      }
    
     return (
         <Box gap={1} style={styles.summaryHolder}>
@@ -40,6 +56,7 @@ const LeftWalletSummary = () => {
             <Box style={styles.boxHolder}>
                 <div style={{marginBottom: '10px', width: '100%'}}>
                     <Button disableRipple variant="text" style={{fontSize: '12px', float: 'right'}}> Switch </Button>
+                    <Button disableRipple onClick={() => backToWallets()} variant="text" style={{fontSize: '12px', float: 'left'}}> Logout </Button>
                 </div>
                 <div>
                     <Typography fontWeight={600} fontSize={14} >
