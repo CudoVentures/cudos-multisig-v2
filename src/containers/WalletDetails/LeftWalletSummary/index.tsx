@@ -1,4 +1,3 @@
-
 //@ts-nocheck
 import { Box, Button, Divider, Tooltip, Typography } from '@mui/material'
 import { styles } from './styles'
@@ -94,10 +93,12 @@ const LeftWalletSummary = ({
 
         if (toggled) {
             unlockBackround()
+            slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'auto'
             slidingHolder.current!.children[0].firstChild.style.opacity = '0'
             
         } else {
             lockBackround()
+            slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'none'
             setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '1', 600)
         }
     }
