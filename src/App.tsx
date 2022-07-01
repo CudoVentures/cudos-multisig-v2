@@ -28,7 +28,7 @@ const App = () => {
 
   const connectAccount = useCallback(async () => {
     try {
-      const { address } = await ConnectLedger()
+      const { address, keplrName  } = await ConnectLedger()
       if (address !== lastLoggedAddress) {
         dispatch(updateUser({ ...initialUserState })
         )
@@ -39,6 +39,7 @@ const App = () => {
       const userBalance = getNativeBalance(currentBalances)
 
       dispatch(updateUser({ 
+        keplrName: keplrName,
         address: address,
         lastLoggedAddress: address,
         balances: currentBalances, 

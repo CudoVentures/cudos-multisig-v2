@@ -46,30 +46,20 @@ const WalletsView = () => {
             <Table style={{width:'100%'}} aria-label="simple table">
                 <TableBody style={styles.summaryTableBody}>
                 {rows.map((row) => (
-                    <TableRow sx={() => ({
-                        backgroundColor: '#28314E',
-                        width: '100%',
-                        borderRadius: '20px',
-                        boxShadow: 5,
-                        padding: '5px 25px 5px 5px',
-                        margin: '8px 10px'
-                      })}>
-                        <TableCell style={{ fontWeight: '600', padding: '0px 10px 0px 35px', width: '310px'}} align='left'>
-                            {row.walletName.length > 23?
-                                <Tooltip title={row.walletName}>
-                                    <div>
-                                        {formatAddress(row.walletName, 5)}
-                                    </div>
-                                </Tooltip>
-                                :row.walletName
-                            }
+                    <TableRow sx={() => (styles.summaryTableRow)}>
+                        <TableCell style={styles.summaryTableCell} align='left'>
+                            <Tooltip title={row.walletName}>
+                                <div style={styles.textContainer}>
+                                    {row.walletName}
+                                </div>
+                            </Tooltip>
                         </TableCell>
-                        <TableCell style={{width: '600px'}} align="left">
+                        <TableCell style={{width: '580px'}} align="left">
                             <Typography style={{fontWeight:'600'}} variant="subtitle2" color="text.secondary">
                                 {row.walletAddress}
                             </Typography>
                         </TableCell>
-                        <TableCell style={{width: '200px'}} align="left">
+                        <TableCell style={{width: '150px'}} align="left">
                             <Box style={{fontWeight: '600', display: 'flex', alignItems: 'center'}}>
                                 <img src={MembersIcon} alt="Members Icon" />
                                 <Typography style={{margin: '0 10px'}} variant="inherit" color="text.secondary">

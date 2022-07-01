@@ -42,7 +42,6 @@ export const styles = {
     float: 'right',
     fontSize: '14px',
     height: '224px',
-    width: '224px',
     minWidth: '224px',
     fontWeight: '500',
     display: 'flex',

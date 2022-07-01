@@ -20,6 +20,7 @@ export interface wallet {
 
 export interface userState {
   isAdmin?: boolean
+  keplrName?: string
   address?: string
   lastLoggedAddress?: string
   nativeBalance?: string
@@ -44,6 +45,7 @@ export const emptyWallet: wallet = {
 export const initialState: userState = {
   isAdmin: false,
   address: '',
+  keplrName: '',
   lastLoggedAddress: '',
   nativeBalance: '',
   balances: [],

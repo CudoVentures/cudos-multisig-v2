@@ -29,7 +29,7 @@ import { updateSteps } from 'store/steps'
 const UserInfo = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { address, isAdmin } = useSelector((state: RootState) => state.userState)
+  const { address, isAdmin, keplrName } = useSelector((state: RootState) => state.userState)
 
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState<boolean>(false)
@@ -64,18 +64,23 @@ const UserInfo = () => {
           <img src={CudosLogo} alt="Cudos logo" />
           <AccountBalance />
           <hr style={styles.fancyLine}></hr>
-          <Box
-            sx={{
-              marginRight: '10px'
-            }}
-          >
-            <Avatar
-              style={styles.avatarStyling}
-              src={WalletIcon}
-              alt="Wallet Logo"
-            />
-          </Box>
-          <Typography>{formatAddress(address!, 10)}</Typography>
+          <div style={{display: 'contents'}}>
+            <Box
+              sx={{
+                marginRight: '10px'
+              }}
+            >
+              <Avatar
+                style={styles.avatarStyling}
+                src={WalletIcon}
+                alt="Wallet Logo"
+              />
+            </Box>
+            <Typography>
+              {`Hi, ${keplrName}`}
+              {/* {formatAddress(address!, 10)} */}
+            </Typography>
+          </div>
           <Box style={{ marginLeft: '15px' }}>
             <img
               style={{
@@ -90,11 +95,10 @@ const UserInfo = () => {
       </Box>
       <Collapse
         onMouseLeave={() => setOpen(false)}
-        style={{ marginTop: '-28px', zIndex: '-1' }}
+        style={{marginTop: '-28px', zIndex: '-1' }}
         in={open}
       >
         <Box style={styles.dropdownMenuContainer}>
-
           <Box style={{ marginTop: '40px' }}>
             <Box style={{ display: 'flex' }}>
               <Box

@@ -25,7 +25,7 @@ const ConnectWallet = () => {
 
   const connect = async () => {
     try {
-      const { address } = await ConnectLedger()
+      const { address, keplrName } = await ConnectLedger()
       if (address !== lastLoggedAddress) {
         dispatch(updateUser({ ...initialUserState }))
       }
@@ -35,6 +35,7 @@ const ConnectWallet = () => {
       const userBalance = getNativeBalance(currentBalances)
       
       dispatch(updateUser({ 
+        keplrName: keplrName,
         address: address,
         lastLoggedAddress: address,
         balances: currentBalances, 
