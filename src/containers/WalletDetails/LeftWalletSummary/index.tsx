@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Box, Button, Divider, Tooltip, Typography } from '@mui/material'
+import { Box, Button, ClickAwayListener, Divider, Tooltip, Typography } from '@mui/material'
 import { styles } from './styles'
 import { RootState } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -117,76 +117,78 @@ const LeftWalletSummary = ({
     }
 
     return (
-        <Box gap={1} style={styles.summaryHolder}>        
-            <Box ref={slidingHolder} style={styles.slidingHolder}>
-                <SlidingSwitchMenu />
-            </Box>  
-            <Box style={styles.boxHolder}>
-                <div style={{width: '100%'}}>
-                    <Button 
-                        disableRipple 
-                        disabled={disableButton} 
-                        onClick={handleSliderClick}
-                        variant="text" 
-                        style={styles.switchBtn}
-                    >
-                        {toggled?"Close":"Switch"}
-                    </Button>
-                    <Button 
-                        disableRipple 
-                        onClick={backToWallets} 
-                        variant="text" 
-                        style={styles.logoutBtn}
-                    > 
-                        Logout 
-                    </Button>
-                </div>
-                <div style= {styles.contentHolder}>
-                    <Typography fontWeight={600} fontSize={14} >
-                        <Tooltip title={selectedWallet?.walletName!}>
-                            <div style={styles.textContainer}>
-                                {selectedWallet?.walletName!}
-                            </div>
-                        </Tooltip> 
-                    </Typography>
-                    <Typography variant='subtitle2' color="text.secondary" fontWeight={500} fontSize={14} >
-                        {formatAddress(selectedWallet?.walletAddress!, 14)}
-                    </Typography>
-                    <Box style={{ display: 'flex', justifyContent: 'center'}}>
-                        <Tooltip
-                            onClick={() => handleCopy(selectedWallet?.walletAddress!)}
-                            title={copied ? 'Copied' : 'Copy to clipboard'}
+        <ClickAwayListener onClickAway={toggled?handleSliderClick:() => {}}>
+            <Box gap={1} style={styles.summaryHolder}>     
+                <Box ref={slidingHolder} style={styles.slidingHolder}>
+                    <SlidingSwitchMenu />
+                </Box>
+                <Box style={styles.boxHolder}>
+                    <div style={{width: '100%'}}>
+                        <Button
+                            disableRipple
+                            disabled={disableButton}
+                            onClick={handleSliderClick}
+                            variant="text"
+                            style={styles.switchBtn}
                         >
-                            <img
-                            style={{ marginLeft: '10px', cursor: 'pointer' }}
-                            src={CopyIcon}
-                            alt="Copy"
-                            />
-                        </Tooltip>
-                        <Tooltip title="Check address on explorer">
-                            <a href={EXPLORER_ADDRESS_DETAILS(selectedWallet?.walletAddress!)} target='_blank'>
-                            <img
-                                style={styles.linkIcon}
-                                src={LinkIcon}
-                                alt="Link"
-                            />
-                            </a>
-                        </Tooltip>
-                    </Box>
-                    <Divider style={{margin: '15px 0'}}/>
-                    <Typography variant='subtitle2' color="text.secondary" fontWeight={600} fontSize={14} >
-                        WALLET BALANCE
-                    </Typography>
-                    <Typography variant='h6' margin={1} fontWeight={600} >
-                        <Tooltip title={`$ ${usdValue}`}>
-                            <div>
-                                <span>$ {cutFractions(usdValue)}</span>
-                            </div>
-                        </Tooltip>
-                    </Typography>
-                </div>
+                            {toggled?"Close":"Switch"}
+                        </Button>
+                        <Button
+                            disableRipple
+                            onClick={backToWallets}
+                            variant="text"
+                            style={styles.logoutBtn}
+                        >
+                            Logout
+                        </Button>
+                    </div>
+                    <div style= {styles.contentHolder}>
+                        <Typography fontWeight={600} fontSize={14} >
+                            <Tooltip title={selectedWallet?.walletName!}>
+                                <div style={styles.textContainer}>
+                                    {selectedWallet?.walletName!}
+                                </div>
+                            </Tooltip> 
+                        </Typography>
+                        <Typography variant='subtitle2' color="text.secondary" fontWeight={500} fontSize={14} >
+                            {formatAddress(selectedWallet?.walletAddress!, 14)}
+                        </Typography>
+                        <Box style={{ display: 'flex', justifyContent: 'center'}}>
+                            <Tooltip
+                                onClick={() => handleCopy(selectedWallet?.walletAddress!)}
+                                title={copied ? 'Copied' : 'Copy to clipboard'}
+                            >
+                                <img
+                                style={{ marginLeft: '10px', cursor: 'pointer' }}
+                                src={CopyIcon}
+                                alt="Copy"
+                                />
+                            </Tooltip>
+                            <Tooltip title="Check address on explorer">
+                                <a href={EXPLORER_ADDRESS_DETAILS(selectedWallet?.walletAddress!)} target='_blank'>
+                                <img
+                                    style={styles.linkIcon}
+                                    src={LinkIcon}
+                                    alt="Link"
+                                />
+                                </a>
+                            </Tooltip>
+                        </Box>
+                        <Divider style={{margin: '15px 0'}}/>
+                        <Typography variant='subtitle2' color="text.secondary" fontWeight={600} fontSize={14} >
+                            WALLET BALANCE
+                        </Typography>
+                        <Typography variant='h6' margin={1} fontWeight={600} >
+                            <Tooltip title={`$ ${usdValue}`}>
+                                <div>
+                                    <span>$ {cutFractions(usdValue)}</span>
+                                </div>
+                            </Tooltip>
+                        </Typography>
+                    </div>
+                </Box>
             </Box>
-        </Box>
+        </ClickAwayListener>
     )
 }
 
