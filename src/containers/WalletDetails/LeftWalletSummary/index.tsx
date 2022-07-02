@@ -55,6 +55,15 @@ const LeftWalletSummary = ({
           getCurrencies()
     }, [selectedWallet?.nativeBalance!])
 
+    useEffect(() => {
+        setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '0', 400)
+        setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = ' #7d87aa21', 550)
+        setTimeout(() => slidingHolder.current!.children[0].style.width = '0', 600)
+        setTimeout(() => unlockBackround(), 600)
+        setTimeout(() => setToggled(false), 600)
+        slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'auto'
+    }, [selectedWallet])
+
     const clearSelectedWalletState = async () => {
         dispatch(updatedSelectedWallet(emptyWallet))
     }
@@ -89,16 +98,20 @@ const LeftWalletSummary = ({
         setToggled(!toggled)
         setDisableButton(true)
         setTimeout(() => setDisableButton(false), 600)
-        slidingHolder.current!.children[0].style.width = `${toggled?"0":"600"}px`
-
+        setTimeout(() => setDisableButton(false), 600)
+        
         if (toggled) {
             unlockBackround()
             slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'auto'
             slidingHolder.current!.children[0].firstChild.style.opacity = '0'
+            setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = ' #7d87aa21', 250)
+            setTimeout(() => slidingHolder.current!.children[0].style.width = "0px", 300)
             
         } else {
             lockBackround()
+            slidingHolder.current!.children[0].style.width = "600px"
             slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'none'
+            setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = '#20273E', 400)
             setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '1', 600)
         }
     }
@@ -160,9 +173,9 @@ const LeftWalletSummary = ({
                             </a>
                         </Tooltip>
                     </Box>
-                    <Divider style={{margin: '10px 0'}}/>
+                    <Divider style={{margin: '15px 0'}}/>
                     <Typography variant='subtitle2' color="text.secondary" fontWeight={600} fontSize={14} >
-                        ACCOUNT BALANCE
+                        WALLET BALANCE
                     </Typography>
                     <Typography variant='h6' margin={1} fontWeight={600} >
                         <Tooltip title={`$ ${usdValue}`}>

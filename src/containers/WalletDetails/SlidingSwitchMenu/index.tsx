@@ -4,6 +4,7 @@ import { styles } from './styles'
 import { useDispatch } from 'react-redux'
 import { emptyWallet, updatedSelectedWallet } from 'store/user'
 import { useNavigate } from 'react-router-dom'
+import SlidingMenuTable from './SlidingMenuTable'
 
 const SlidingSwitchMenu = () => {
 
@@ -19,7 +20,7 @@ const SlidingSwitchMenu = () => {
         <Box style={styles.menuHolder}>
             <Box style={styles.contentHolder}>
                 <Box style={styles.header}>
-                    <Typography style={styles.switchAccount} fontWeight={700} variant='h6'>
+                    <Typography style={styles.switchAccount} fontWeight={700} variant='inherit'>
                         Switch account
                     </Typography>
                     <Button
@@ -31,6 +32,7 @@ const SlidingSwitchMenu = () => {
                         Add New Wallet
                     </Button>
                 </Box>
+                <SlidingMenuTable />
             </Box>
         </Box>
     )

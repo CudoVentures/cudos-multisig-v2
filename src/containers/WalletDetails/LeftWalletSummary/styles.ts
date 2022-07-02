@@ -46,7 +46,7 @@ export const styles = {
       padding: '10px', 
       width: '100%', 
       borderRadius: '20px', 
-      height: '240px',
+      height: '250px',
       alignItems: 'center',
       position: 'absolute',
     },

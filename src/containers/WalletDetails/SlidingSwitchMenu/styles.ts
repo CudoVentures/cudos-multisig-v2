@@ -16,19 +16,19 @@ export const styles = {
         width: '100%', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        display: 'flex'
+        display: 'flex',
+        margin: '5px 0px 10px 0px',
     },
     contentHolder: {
         padding: '10px 10px 10px 50px', 
         height: '100%',
         width: '100%', 
-        transition: 'all 0.2s', 
+        transition: 'all 0.5s', 
         opacity: '0'
     },
     menuHolder: {
-        border: 'solid 2px red',
         padding: '0',
-        height: '240px',
+        height: '250px',
         width: '0px',
         opacity: '1',
         transition: "all 0.7s",
@@ -36,7 +36,7 @@ export const styles = {
         borderRadius: '20px',
         position: 'relative',
         zIndex: '1',
-        backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND,
+        backgroundColor: '#7d87aa21',
     }
   } as const
   
