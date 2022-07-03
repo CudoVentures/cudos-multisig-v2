@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface MenuState {
-  menuSelection: string
+  menuSelection: number
 }
 
 const initialState: MenuState = {
-    menuSelection: ''
+    menuSelection: 0
 }
 
 export const menuSlice = createSlice({

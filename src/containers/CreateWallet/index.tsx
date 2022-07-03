@@ -5,15 +5,15 @@ import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
 import { useEffect, useState } from 'react'
-import Steps, { getCurrentStep, StepInfo, StringStep } from 'components/Steps'
+import Steps, { getCurrentWalletCreationStep, StepInfo, StringStep } from 'components/WalletCreationSteps'
 import { useNavigate } from 'react-router-dom'
-import { updateSteps } from 'store/steps'
-import StepOne from 'components/Steps/StepOne'
-import StepTwo from 'components/Steps/StepTwo'
+import { updateWalletCreationSteps } from 'store/steps'
+import StepOne from 'components/WalletCreationSteps/StepOne'
+import StepTwo from 'components/WalletCreationSteps/StepTwo'
 import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
-import StepThree from 'components/Steps/StepThree'
-import StepFour from 'components/Steps/StepFour'
-import StepFfive from 'components/Steps/StepFive'
+import StepThree from 'components/WalletCreationSteps/StepThree'
+import StepFour from 'components/WalletCreationSteps/StepFour'
+import StepFfive from 'components/WalletCreationSteps/StepFive'
 import { signingClient } from 'utils/config'
 import { DEFAULT_MEMO, DEFAULT_META_DATA, DEFAULT_MULTIPLIER, GAS_PRICE, WALLET_PROCESS_FAIL_TITLE, NATIVE_TOKEN_DENOM, WALLET_CORRUPTED_PROCESS_TYPE, WALLET_CREATION_FAILURE_MSG, WALLET_CREATION_FAILURE_TYPE, WALLET_CREATION_SUCCESS_MSG, WALLET_CREATION_SUCCESS_TYPE, WALLET_CREATION_FAILURE_TITLE, WALLET_CREATION_LOADING_TITLE, DEFAULT_LOADING_MODAL_MSG } from 'utils/constants'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice } from 'cudosjs'
@@ -27,13 +27,13 @@ const CreateWallet = () => {
     
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const currentStep = parseInt(getCurrentStep())
+    const currentStep = parseInt(getCurrentWalletCreationStep())
     const { groupMetadata, members, threshold, votingPeriod, feeForCreation } = useSelector((state: RootState) => state.walletObject)
     const { address, wallets } = useSelector((state: RootState) => state.userState)
     const [msg, setMsg] = useState<EncodeObject>({typeUrl: '', value: ''})
 
     const clearState = async () => {
-        dispatch(updateSteps({currentStep: ''}))
+        dispatch(updateWalletCreationSteps({currentStep: ''}))
         dispatch(updateWalletObjectState({ ...initialWalletObject }))
       }
 
@@ -141,7 +141,7 @@ const CreateWallet = () => {
         if (tempStep < 1) {tempStep = 1}
         if (tempStep > 5) {tempStep = 5}
         const stepToSet = tempStep.toString()
-        dispatch(updateSteps({ currentStep: stepToSet }))
+        dispatch(updateWalletCreationSteps({ currentStep: stepToSet }))
       }
 
     const renderPreviousStep = () => {
@@ -171,7 +171,7 @@ const CreateWallet = () => {
     }
 
     useEffect(() => {
-        dispatch(updateSteps({ currentStep: '1' }))
+        dispatch(updateWalletCreationSteps({ currentStep: '1' }))
         setTimeout(() => document.getElementById("entire-create-wallet-page-appear")!.style.opacity = '1', 50)
         setTimeout(() => document.getElementById("resizable-card-right")!.style.width = '950px', 100)
         setTimeout(() => document.getElementById("resizable-card-left")!.style.width = '300px', 100)

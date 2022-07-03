@@ -3,8 +3,10 @@ import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
 import { Fragment, useEffect, useRef } from 'react'
-import LeftMenu from './LeftMenu'
-import LeftWalletSummary from './LeftWalletSummary'
+import LeftMenu from 'components/LeftMenu'
+import LeftWalletSummary from 'components/LeftWalletSummary'
+import { getCurrentMenuSelection, MenuSelectionInfo } from 'components/WalletOperations'
+import Dashboard from 'components/WalletOperations/Dashboard'
 
 const WalletDetails = () => {
     const defaultElement = document.createElement('div') as HTMLInputElement
@@ -42,16 +44,21 @@ const WalletDetails = () => {
             </Card>
             
             {/* /////RIGHT CARD - OPERATIONS///// */}
-            <Card ref={resizableCardRight} style={styles.Card}>
+            <Box ref={resizableCardRight} style={styles.Card}>
                 <Box ref={rightStepsContent} style={{...styles.contentAppear}}>
-                    <Fragment>
-                        TEST TEXT
-                    </Fragment>
-                    <Button>
-                        TEST BUTTON
-                    </Button>
+                    
+                    <Box style={{display: 'flex'}}>
+                        <MenuSelectionInfo />
+                    </Box>
+                    
+                    {
+                        getCurrentMenuSelection() === 0? <Dashboard />
+                        :
+                        null
+                    }
+
                 </Box>
-            </Card>
+            </Box>
         </Box>
     )
 }

@@ -24,7 +24,7 @@ import { updateUser } from 'store/user'
 import { initialState as initialUserState } from 'store/user'
 import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
-import { updateSteps } from 'store/steps'
+import { updateWalletCreationSteps } from 'store/steps'
 
 const UserInfo = () => {
   const navigate = useNavigate()
@@ -53,7 +53,7 @@ const UserInfo = () => {
     dispatch(updateUser({ ...initialUserState }))
     dispatch(updateWalletObjectState({ ...initialWalletObject }))
     dispatch(updateModalState({ ...initialModalState }))
-    dispatch(updateSteps({ currentStep: ''}))
+    dispatch(updateWalletCreationSteps({ currentStep: ''}))
     navigate("/")
   }
 

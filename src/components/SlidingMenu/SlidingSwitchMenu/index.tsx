@@ -4,7 +4,7 @@ import { styles } from './styles'
 import { useDispatch } from 'react-redux'
 import { emptyWallet, updatedSelectedWallet } from 'store/user'
 import { useNavigate } from 'react-router-dom'
-import SlidingMenuTable from './SlidingMenuTable'
+import SlidingMenuTable from '../SlidingMenuTable'
 
 const SlidingSwitchMenu = () => {
 

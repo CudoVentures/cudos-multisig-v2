@@ -8,7 +8,7 @@ import addressBookIcon from 'assets/vectors/small-address-book-icon.svg'
 import { updateModalState } from 'store/modals'
 import Dialog from 'components/Dialog'
 import { useEffect } from 'react'
-import { updateSteps } from 'store/steps'
+import { updateWalletCreationSteps } from 'store/steps'
 import { initialState as initialModalState } from 'store/modals'
 import { initialState as initialWalletObjectState, updateWalletObjectState } from 'store/walletObject'
 import WalletsView from 'components/WalletsView/WalletsView'
@@ -26,14 +26,14 @@ const Welcome = () => {
     navigate("/create-wallet")
   }
   const handleAddressBookOpen = () => {
-    dispatch(updateSteps({currentStep: ''}))
+    dispatch(updateWalletCreationSteps({currentStep: ''}))
     dispatch(updateModalState({ openAddressBook: true }))
   }
 
   const clearState = async () => {
     localStorage.clear()
     sessionStorage.clear()
-    dispatch(updateSteps({currentStep: ''}))
+    dispatch(updateWalletCreationSteps({currentStep: ''}))
     dispatch(updateModalState({ ...initialModalState }))
     dispatch(updateWalletObjectState({ ...initialWalletObjectState }))
   }

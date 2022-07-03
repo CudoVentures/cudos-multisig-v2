@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Box, Button } from '@mui/material'
 import { styles } from './styles'
 import { useDispatch } from 'react-redux'
-import { updateSteps } from 'store/steps'
 import { COLORS_DARK_THEME } from 'theme/colors'
 
 import ActiveDashboardIcon from 'assets/vectors/dashboard/active-dashboard.svg'
@@ -13,6 +12,7 @@ import ActiveMembersIcon from 'assets/vectors/dashboard/active-members.svg'
 import InactiveMembersIcon from 'assets/vectors/dashboard/inactive-members.svg'
 import ActiveSettingsIcon from 'assets/vectors/dashboard/active-settings.svg'
 import InactiveSettingsIcon from 'assets/vectors/dashboard/inactive-settings.svg'
+import { updateMenuSelectionState } from 'store/menu'
 
 const LeftMenu = () => {
 
@@ -27,7 +27,7 @@ const LeftMenu = () => {
   ]
 
   useEffect(() => {
-    dispatch(updateSteps({currentStep: '3'}))
+    dispatch(updateMenuSelectionState({menuSelection: selected}))
   }, [selected])
 
   return (

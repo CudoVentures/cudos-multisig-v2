@@ -27,10 +27,10 @@ export const styles = {
   Card: {
     textAlign: "center",
     width: '0',
-    height: '580px',
+    height: '100%',
     marginLeft: '0',
     transition: "all 1s",
-    padding: '60px'
+    backgroundColor: 'transparent'
   },
   leftSteps: {
       display: 'flex',
@@ -51,6 +51,7 @@ export const styles = {
       width: '100%',
     },
   contentAppear: {
+    height: '100%',
     opacity: '0', 
     transition: 'opacity 0.5s', 
     WebkitTransition: 'opacity 0.5s'

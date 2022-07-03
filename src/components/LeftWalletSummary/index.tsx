@@ -12,7 +12,7 @@ import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
 import { cutFractions } from 'utils/regexFormatting'
 import { emptyWallet, updatedSelectedWallet } from 'store/user'
 import { useNavigate } from 'react-router-dom'
-import SlidingSwitchMenu from '../SlidingSwitchMenu'
+import SlidingSwitchMenu from '../SlidingMenu/SlidingSwitchMenu'
 
 const LeftWalletSummary = ({ 
     resizableCardLeft, 
