@@ -7,7 +7,7 @@ import FailureIcon from 'assets/vectors/failure.svg'
 import { useNavigate } from 'react-router-dom'
 import { updateModalState } from 'store/modals'
 import { initialState as initialModalState } from 'store/modals'
-import { updateSteps } from 'store/steps'
+import { updateWalletCreationSteps } from 'store/steps'
 import { updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialWalletObject } from 'store/walletObject'
 import { WALLET_CORRUPTED_PROCESS_TYPE } from 'utils/constants'
@@ -19,7 +19,7 @@ const Failure = () => {
     const dispatch = useDispatch()
 
     const clearState = async () => {
-      dispatch(updateSteps({currentStep: ''}))
+      dispatch(updateWalletCreationSteps({currentStep: ''}))
       dispatch(updateWalletObjectState({ ...initialWalletObject }))
     }
 

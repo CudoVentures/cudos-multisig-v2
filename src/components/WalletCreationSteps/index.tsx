@@ -9,8 +9,8 @@ import stepThree from 'assets/vectors/steps/step-three.svg'
 import stepFour from 'assets/vectors/steps/step-four.svg'
 import stepFive from 'assets/vectors/steps/step-five.svg'
 
-export const getCurrentStep = () => {
-  const { currentStep } = useSelector((state: RootState) => state.steps)
+export const getCurrentWalletCreationStep = () => {
+  const { currentStep } = useSelector((state: RootState) => state.walletCreationSteps)
   return currentStep?currentStep:'1'
 }
 
@@ -19,7 +19,7 @@ export const StepInfo = () => {
   let title: string = 'Connected Account Information'
   let subTitle: string = "Your personal Keplr account and the Network on which you're going to create a MultiSig wallet."
 
-  switch (getCurrentStep()){
+  switch (getCurrentWalletCreationStep()){
     case '2':
       title = 'Personalise your MultiSig wallet'
       subTitle = 'Give a name to your MultiSig wallet that is recognisable to all owners'
@@ -56,13 +56,13 @@ export const StepInfo = () => {
 
 export const StringStep = () => {
   return (
-    <span style={styles.stepInfoStyler}>Step {getCurrentStep()}/5</span>
+    <span style={styles.stepInfoStyler}>Step {getCurrentWalletCreationStep()}/5</span>
   )
 }
 
 const Steps = () => {
   let stepPic: string = stepOne
-  switch (getCurrentStep()){
+  switch (getCurrentWalletCreationStep()){
     case '2':
       stepPic = stepTwo
       break

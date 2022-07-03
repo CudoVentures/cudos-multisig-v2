@@ -1,24 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-export interface StepsState {
+export interface WalletCreationStepsState {
   currentStep: string
 }
 
-const initialState: StepsState = {
+const initialState: WalletCreationStepsState = {
   currentStep: ''
 }
 
-export const stepsSlice = createSlice({
+export const WalletCreationStepsSlice = createSlice({
   name: 'steps',
   initialState,
   reducers: {
-    updateSteps: (state, action: PayloadAction<StepsState>) => {
+    updateWalletCreationSteps: (state, action: PayloadAction<WalletCreationStepsState>) => {
       return { ...state, ...action.payload }
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { updateSteps } = stepsSlice.actions
+export const { updateWalletCreationSteps } = WalletCreationStepsSlice.actions
 
-export default stepsSlice.reducer
+export default WalletCreationStepsSlice.reducer

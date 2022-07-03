@@ -10,7 +10,7 @@ import AddressBookTable from './AddressBookTable'
 import AddAddressButtons from './AddAddressButtons'
 import AddressInput from './AddressInput'
 import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
-import { getCurrentStep } from 'components/Steps'
+import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 import Card from 'components/Card/Card'
 
 const AddressBook = () => {
@@ -18,7 +18,7 @@ const AddressBook = () => {
     const dispatch = useDispatch()
     const { openAddressBook, addNewAddress } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
-    const currentStep = parseInt(getCurrentStep())
+    const currentStep = parseInt(getCurrentWalletCreationStep())
 
     const addressesInAddressBook = Object.keys(addressBook!).length
     const userHaveAddressBook = addressesInAddressBook > 0

@@ -1,10 +1,21 @@
+import { getCurrencyRate } from "api/calls"
 import BigNumber from "bignumber.js"
 import { queryClient } from "./config"
 import { ADMIN_TOKEN_DENOM, NATIVE_TOKEN_DENOM } from "./constants"
+import { separateDecimals, separateFractions } from "./regexFormatting"
 
 // The wrapper function is merely for the purpose of escaping the double await later in code.
 export const getAccountBalances = async (accountAddress: string): Promise<any> => {
     return await (await queryClient).getAllBalances(accountAddress)
+}
+
+// This will take acudos and return the USD value
+export const getCudosBalanceInUSD = async (balance: string): Promise<string> => {
+    const response = await getCurrencyRate('USD')
+    const rate = response.data.cudos.usd
+    const rawResult = new BigNumber(balance).multipliedBy(rate).toString(10).replace(/\.[0-9]+/gm, "")
+    const fullUsdBalance = separateDecimals(separateFractions(rawResult))
+    return fullUsdBalance
 }
 
 export const getAccountWallets = async (accountAddress: string): Promise<any> => {

@@ -68,9 +68,11 @@ export const ConnectLedger = async () => {
     await window.keplr.enable(config.chainId)
   
     const offlineSigner = await window.getOfflineSigner(config.chainId)
+    const { name } = await window.keplr.getKey(config.chainId)
+
     const accounts = await offlineSigner.getAccounts()
   
     const { address } = accounts[0]
   
-    return { address }
+    return { address, keplrName: name }
   }

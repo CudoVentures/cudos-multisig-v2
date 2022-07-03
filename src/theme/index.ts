@@ -135,6 +135,13 @@ const dark = createTheme({
         }
       }
     },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          minWidth: 'max-content',
+        }
+      }
+    },
     MuiTable: {
       styleOverrides: {
         root: {

@@ -27,6 +27,7 @@ export const WALLET_CREATION_FAILURE_TYPE = 'Wallet Creation Failure'
 export const WALLET_CORRUPTED_PROCESS_TYPE = 'Wallet Corrupted Process'
 
 // General Modal Msgs
+export const DEFAULT_LOGIN_FAILURE_MSG = 'Seems like something went wrong. Please try again later'
 export const FILE_ERROR_MSG = 'File is in wrong format or contains invalid data'
 export const WALLET_CREATION_FAILURE_MSG = 'Seems like something went wrong. Try again or check your account balance.'
 export const WALLET_CREATION_SUCCESS_MSG = 'Your MultiSig account was successfully created!'

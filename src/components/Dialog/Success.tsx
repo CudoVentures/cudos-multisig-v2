@@ -5,7 +5,7 @@ import { RootState } from 'store'
 import { CancelRoundedIcon, ModalContainer } from './styles'
 import SuccessIcon from 'assets/vectors/success.svg'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
-import { WALLET_CREATION_SUCCESS } from 'utils/constants'
+import { WALLET_CREATION_SUCCESS_TYPE } from 'utils/constants'
 import WalletCreationSuccess from './WalletCreationSuccess'
 import { useNavigate } from 'react-router-dom'
 
@@ -24,7 +24,7 @@ const Success = () => {
     let navPath: string = ""
 
     switch(msgType) {
-      case WALLET_CREATION_SUCCESS:
+      case WALLET_CREATION_SUCCESS_TYPE:
         contentComponent = <WalletCreationSuccess />
         navPath = '/welcome'
         break
