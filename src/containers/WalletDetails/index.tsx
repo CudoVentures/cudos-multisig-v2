@@ -32,7 +32,9 @@ const WalletDetails = () => {
             {/* ////LEFT CARD - STEPS////// */}
             <Card ref={resizableCardLeft}  style={styles.leftSteps}>
                 <div ref={leftStepsContent} style={{...styles.contentAppear}}>
-                    <LeftMenu />
+                    <LeftMenu 
+                        rightStepsContent={rightStepsContent}
+                    />
                     <LeftWalletSummary 
                         resizableCardLeft={resizableCardLeft}
                         resizableCardRight={resizableCardRight}

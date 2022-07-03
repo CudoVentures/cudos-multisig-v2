@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { Box, Button } from '@mui/material'
 import { styles } from './styles'
 import { useDispatch } from 'react-redux'
@@ -14,10 +14,16 @@ import ActiveSettingsIcon from 'assets/vectors/dashboard/active-settings.svg'
 import InactiveSettingsIcon from 'assets/vectors/dashboard/inactive-settings.svg'
 import { updateMenuSelectionState } from 'store/menu'
 
-const LeftMenu = () => {
+const LeftMenu = ({ 
+  rightStepsContent
+  }:{
+  rightStepsContent: MutableRefObject<HTMLInputElement>;
+  }) => {
 
   const dispatch = useDispatch()
   const [selected, setSelected] = useState<number>(0)
+  const defaultElement = document.createElement('div') as HTMLInputElement
+  const menuHolder = useRef<HTMLInputElement>(defaultElement)
 
   const MenuItems = [
     { active: ActiveDashboardIcon, inactive: InactiveDashboardIcon, text: 'Dashboard' },
@@ -27,11 +33,13 @@ const LeftMenu = () => {
   ]
 
   useEffect(() => {
-    dispatch(updateMenuSelectionState({menuSelection: selected}))
+    rightStepsContent.current.style.opacity = '0'
+    setTimeout(() => dispatch(updateMenuSelectionState({menuSelection: selected})), 400)
+    setTimeout(() => rightStepsContent.current.style.opacity = '1', 400)
   }, [selected])
 
   return (
-      <Box gap={1} style={styles.menuHolder}>
+      <Box ref={menuHolder} gap={1} style={styles.menuHolder}>
         {MenuItems.map((item, index) => (
           <Button
           disableRipple
