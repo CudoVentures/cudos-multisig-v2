@@ -222,10 +222,12 @@ export default function AddressBookTable() {
       }
 
     const rows: Data[] = [];
-    Object.entries(addressBook!).forEach(
-        ([address, name]) => rows.push(createData(name, address))
-    )
-
+    if (addressBook) {
+      Object.entries(addressBook!).forEach(
+          ([address, name]) => rows.push(createData(name, address))
+      )
+    }
+    
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
         property: keyof Data,

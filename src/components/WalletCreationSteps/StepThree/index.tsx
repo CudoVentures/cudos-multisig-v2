@@ -200,7 +200,11 @@ const StepThree = () => {
     const [orderBy, setOrderBy] = useState<keyof Data>('name');
     const [copied, setCopied] = useState<boolean>(false)
     const [selected, setSelected] = useState<readonly string[]>([]);
-    const addressesInAddressBook = Object.keys(addressBook!).length
+    let addressesInAddressBook: number = 0
+
+    if (addressBook) {
+      addressesInAddressBook = Object.keys(addressBook).length
+    } 
 
     const addSelectedMembersToWalletObject = (addresses: string[]) => {
       let newMembers: member[] = []
@@ -216,9 +220,11 @@ const StepThree = () => {
     }
 
     const rows: Data[] = [];
-    Object.entries(addressBook!).forEach(
-        ([address, name]) => rows.push(createData(name, address))
-    )
+    if (addressBook) {
+      Object.entries(addressBook!).forEach(
+          ([address, name]) => rows.push(createData(name, address))
+      )
+    }
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,

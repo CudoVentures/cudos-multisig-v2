@@ -50,7 +50,8 @@ export const initialState: userState = {
   nativeBalance: '',
   balances: [],
   wallets: [],
-  selectedWallet: emptyWallet
+  selectedWallet: emptyWallet,
+  addressBook: {},
 }
 
 export const userStateSlice = createSlice({

@@ -135,12 +135,14 @@ const AddAddressButtons = () => {
       }, [])
 
     const CsvData: any[] = []
-    Object.entries(addressBook!).forEach(
-        ([address, name]) => CsvData.push([
-            name,
-            address
-        ])
-    )
+    if (addressBook) {
+        Object.entries(addressBook!).forEach(
+            ([address, name]) => CsvData.push([
+                name,
+                address
+            ])
+        )
+    }
     
     const validInput = isValidCudosAddress(userAddress) && userName !== ''
     return (

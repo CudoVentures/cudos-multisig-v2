@@ -19,8 +19,12 @@ const AddressBook = () => {
     const { openAddressBook, addNewAddress } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
     const currentStep = parseInt(getCurrentWalletCreationStep())
+    let addressesInAddressBook: number = 0
 
-    const addressesInAddressBook = Object.keys(addressBook!).length
+    if (addressBook) {
+      addressesInAddressBook = Object.keys(addressBook).length
+    } 
+
     const userHaveAddressBook = addressesInAddressBook > 0
 
     const handleModalClose = () => {
