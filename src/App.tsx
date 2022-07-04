@@ -16,9 +16,8 @@ import { initialState as initialUserState } from 'store/user'
 
 import '@fontsource/poppins'
 import { updateUser } from 'store/user'
-import { checkForAdminToken, getAccountBalances, getNativeBalance, getAccountWallets } from 'utils/helpers'
+import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 import WalletDetails from 'containers/WalletDetails'
-import RequireValidWallet from 'components/RequireWallet/RequireWallet'
 
 const App = () => {
   const location = useLocation()
@@ -73,9 +72,10 @@ const App = () => {
               <Route element={<RequireKeplr />}>
                 <Route path="welcome" element={<Welcome />} />
                 <Route path="create-wallet" element={<CreateWallet />} />
-                <Route element={<RequireValidWallet />}>
-                  <Route path="wallet/:walletAddress" element={<WalletDetails />} />
-                </Route>
+                <Route path="dashboard" element={<WalletDetails />} />
+                <Route path="transactions" element={<WalletDetails />} />
+                <Route path="members" element={<WalletDetails />} />
+                <Route path="settings" element={<WalletDetails />} />
               </Route>
               <Route path="*" element={<Navigate to="/" state={{ from: location }} />} />
             </Routes>

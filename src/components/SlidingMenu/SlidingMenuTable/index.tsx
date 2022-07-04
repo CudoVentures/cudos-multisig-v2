@@ -1,10 +1,11 @@
 import { Button, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from './styles'
-import { formatAddress } from 'utils/helpers'
+import { findOneWallet, formatAddress } from 'utils/helpers'
 import { useNavigate } from 'react-router-dom'
 import { cutFractions, separateDecimals, separateFractions } from 'utils/regexFormatting'
+import { updatedSelectedWallet } from 'store/user'
 
 interface Data {
     walletName: string;
@@ -14,9 +15,10 @@ interface Data {
   }
 
 const SlidingMenuTable = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const { wallets, selectedWallet } = useSelector((state: RootState) => state.userState)
-    
+
     function createData(
         walletName: string,
         walletAddress: string,
@@ -30,19 +32,21 @@ const SlidingMenuTable = () => {
             walletDisplayBalance
         };
     }
-      
+
     const rows: Data[] = [];
-      wallets!.forEach((wallet) =>
+    wallets!.forEach((wallet) =>
         rows.push(createData(
             wallet.walletName!, 
             wallet.walletAddress!,
-            separateDecimals(separateFractions(wallet.nativeBalance)),
-            cutFractions(separateDecimals(separateFractions(wallet.nativeBalance)))
+            separateDecimals(separateFractions(wallet.nativeBalance!)),
+            cutFractions(separateDecimals(separateFractions(wallet.nativeBalance!)))
         ))
     )
 
     const navigateToSelected = (walletAddress: string) => {
-        navigate(`/wallet/${walletAddress}`)
+        const wallet = findOneWallet(wallets!, walletAddress)
+        dispatch(updatedSelectedWallet(wallet))
+        navigate(`/dashboard`)
     }
 
     return (

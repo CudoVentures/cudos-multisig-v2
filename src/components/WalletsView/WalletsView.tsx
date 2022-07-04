@@ -1,10 +1,11 @@
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from './styles'
-import { formatAddress } from 'utils/helpers'
 import MembersIcon from 'assets/vectors/members-icon.svg'
 import { useNavigate } from 'react-router-dom'
+import { updatedSelectedWallet } from 'store/user'
+import { findOneWallet } from 'utils/helpers'
 
 interface Data {
     walletName: string;
@@ -14,6 +15,7 @@ interface Data {
 
 const WalletsView = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const { wallets } = useSelector((state: RootState) => state.userState)
     
     function createData(
@@ -38,7 +40,9 @@ const WalletsView = () => {
     )
 
     const openDashboard = (walletAddress: string) => {
-        navigate(`/wallet/${walletAddress}`)
+        const wallet = findOneWallet({...wallets!}, walletAddress)
+        dispatch(updatedSelectedWallet(wallet))
+        navigate(`/dashboard`)
     }
 
     return (

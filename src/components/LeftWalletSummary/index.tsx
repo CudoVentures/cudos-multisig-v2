@@ -3,16 +3,16 @@ import { Box, Button, ClickAwayListener, Divider, Tooltip, Typography } from '@m
 import { styles } from './styles'
 import { RootState } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
-import { formatAddress, getCudosBalanceInUSD } from 'utils/helpers'
+import { checkForAdminToken, formatAddress, getAccountBalances, getCudosBalanceInUSD, getNativeBalance } from 'utils/helpers'
 import copy from 'copy-to-clipboard'
 import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
-import { cutFractions } from 'utils/regexFormatting'
-import { emptyWallet, updatedSelectedWallet } from 'store/user'
+import { emptyWallet, updatedSelectedWallet, updateUserWallets, wallet } from 'store/user'
 import { useNavigate } from 'react-router-dom'
 import SlidingSwitchMenu from '../SlidingMenu/SlidingSwitchMenu'
+import { cutFractions } from 'utils/regexFormatting'
 
 const LeftWalletSummary = ({ 
     resizableCardLeft, 
@@ -34,10 +34,55 @@ const LeftWalletSummary = ({
     const [usdValue, setUsdValue] = useState<string>('')
     const [toggled, setToggled] = useState<boolean>(false)
     const [disableButton, setDisableButton] = useState<boolean>(false)
-    const { selectedWallet } = useSelector((state: RootState) => state.userState)
+    const { selectedWallet, wallets } = useSelector((state: RootState) => state.userState)
     const defaultElement = document.createElement('div') as HTMLInputElement
     const slidingHolder = useRef<HTMLInputElement>(defaultElement)
+
+    const updateWallets = async () => {
+
+        let tempWallets: wallet[] = []
+        wallets!.forEach(async (wallet, idx) => {
+            const currentBalances = await getAccountBalances(wallet.walletAddress!)
+            const admin = checkForAdminToken(currentBalances)
+            const nativeBalance = getNativeBalance(currentBalances)
+
+            const updatedUserWalletState: wallet =  {
+                walletID: wallet.walletID,
+                walletAddress: wallet.walletAddress,
+                walletName: wallet.walletName,
+                isAdmin: admin,
+                members: wallet.members,
+                memberCount: wallet.memberCount,
+                threshold: wallet.threshold,
+                walletBalances: currentBalances,
+                nativeBalance: nativeBalance
+            }
+            tempWallets.push(updatedUserWalletState)
+        })
+
+        // TO DO
+        // Timing out due to nondetermined yet racing while setting the state
+        setTimeout(() => dispatch(updateUserWallets(tempWallets)), 200)
+    }
     
+    const updateSelectedWallet = async () => {
+        try {
+            let tempWallet = {...selectedWallet}
+            const currentBalances = await getAccountBalances(selectedWallet?.walletAddress!)
+            const admin = checkForAdminToken(currentBalances)
+            const nativeBalance = getNativeBalance(currentBalances)
+
+            tempWallet.walletBalances = currentBalances
+            tempWallet.isAdmin = admin
+            tempWallet.nativeBalance = nativeBalance
+
+            dispatch(updatedSelectedWallet(tempWallet))
+
+            } catch (error: any) {
+            console.debug(error.message)
+        }
+    }
+
     const handleCopy = (value: string) => {
         copy(value)
         setCopied(true)
@@ -53,7 +98,16 @@ const LeftWalletSummary = ({
             setUsdValue(usdValue)
           }
           getCurrencies()
-    }, [selectedWallet?.nativeBalance!])
+
+        const timer = setInterval(async () => {
+            await updateSelectedWallet()
+            }, 15000)
+
+        return () => {
+        clearInterval(timer)
+        }
+
+      }, [selectedWallet?.nativeBalance])
 
     useEffect(() => {
         setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '0', 400)
@@ -62,7 +116,8 @@ const LeftWalletSummary = ({
         setTimeout(() => unlockBackround(), 600)
         setTimeout(() => setToggled(false), 600)
         slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'auto'
-    }, [selectedWallet])
+        updateSelectedWallet()
+    }, [selectedWallet?.walletAddress])
 
     const clearSelectedWalletState = async () => {
         dispatch(updatedSelectedWallet(emptyWallet))
@@ -108,6 +163,7 @@ const LeftWalletSummary = ({
             setTimeout(() => slidingHolder.current!.children[0].style.width = "0px", 300)
             
         } else {
+            updateWallets()
             lockBackround()
             slidingHolder.current!.children[0].style.width = "600px"
             slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'none'

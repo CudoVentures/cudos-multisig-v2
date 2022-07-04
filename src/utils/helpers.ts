@@ -1,8 +1,31 @@
 import { getCurrencyRate } from "api/calls"
 import BigNumber from "bignumber.js"
+import { emptyWallet, wallet } from "store/user"
 import { queryClient } from "./config"
 import { ADMIN_TOKEN_DENOM, NATIVE_TOKEN_DENOM } from "./constants"
 import { separateDecimals, separateFractions } from "./regexFormatting"
+
+export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet | undefined => {
+    let walletfound: wallet = emptyWallet
+
+    try {
+        Object.entries(wallets!).forEach(([idx, currentWallet]) => {
+            if (currentWallet.walletAddress === givenAddress) {
+                walletfound = {...currentWallet}
+            }
+        })
+
+        if (walletfound.walletAddress) {
+            return walletfound
+
+        } else {
+            throw new Error('Wallet not found')
+        }
+
+    } catch (e: any) {
+        console.debug(e.message)
+    }
+}
 
 // The wrapper function is merely for the purpose of escaping the double await later in code.
 export const getAccountBalances = async (accountAddress: string): Promise<any> => {
