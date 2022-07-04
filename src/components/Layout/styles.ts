@@ -3,6 +3,12 @@ import { styled, Box } from '@mui/material'
 import theme from '../../theme'
 
 export const styles = {
+  networkInfoHolder: {
+    width: 'max-content', 
+    marginRight: '20px', 
+    display: 'flex', 
+    alignItems: 'center'
+  },
   avatarStyling: {
     borderRadius: "0px", 
     width: '18px', 

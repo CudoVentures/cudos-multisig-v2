@@ -15,7 +15,7 @@ export interface wallet {
   memberCount?: number;
   threshold?: number;
   walletBalances?: Coin[];
-  nativeBalance: string;
+  nativeBalance?: string;
 }
 
 export interface userState {
