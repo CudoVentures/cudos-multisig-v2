@@ -2,6 +2,10 @@ import { styled, Box } from '@mui/material'
 import { CancelRounded } from '@mui/icons-material'
 
 export const styles = {
+  icons: {
+    marginLeft: '10px', 
+    cursor: 'pointer'
+  },
   alertInfo: {
     display: 'flex',
     justifyContent: "flex-start", 

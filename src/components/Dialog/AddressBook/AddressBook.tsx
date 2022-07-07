@@ -12,11 +12,17 @@ import AddressInput from './AddressInput'
 import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
 import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 import Card from 'components/Card/Card'
+import AddressEdit from './AddressEdit'
 
 const AddressBook = () => {
       
     const dispatch = useDispatch()
-    const { openAddressBook, addNewAddress } = useSelector((state: RootState) => state.modalState)
+    const { 
+        openAddressBook, 
+        addNewAddress, 
+        editAddressBookRecord 
+    } = useSelector((state: RootState) => state.modalState)
+
     const { addressBook } = useSelector((state: RootState) => state.userState)
     const currentStep = parseInt(getCurrentWalletCreationStep())
     let addressesInAddressBook: number = 0
@@ -65,7 +71,12 @@ const AddressBook = () => {
                         :null}
                     </div>
                     <Typography style={{float: 'left'}} variant="subtitle2" color="text.secondary">
-                        {currentStep === 3?"Fill the information about the new member you want to add":addNewAddress?"Here you can add new account to your address book":"Here is a list of all your addresses"}
+                        {
+                            currentStep === 3?"Fill the information about the new member you want to add":
+                            addNewAddress?"Here you can add new account to your address book":
+                            editAddressBookRecord?"Here you can edit the chosen record from your address book":
+                            "Here is a list of all your addresses"
+                        }
                     </Typography>
                 </div>
                 <Box
@@ -78,6 +89,7 @@ const AddressBook = () => {
                     gap={1}>
                     <div>
                         {addNewAddress?<AddressInput />
+                        :editAddressBookRecord?<AddressEdit />
                         :userHaveAddressBook?<AddressBookTable />
                         :<NoAddress />}
                     </div>

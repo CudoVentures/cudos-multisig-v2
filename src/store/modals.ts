@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
 export interface modalState {
     title?: string
     message?: string
@@ -11,6 +10,7 @@ export interface modalState {
     openAssetsTable?: boolean
     openFundWallet?: boolean
     addNewAddress?: boolean
+    editAddressBookRecord?: boolean
     dataObject?: Object
 }
 
@@ -22,6 +22,7 @@ export const initialState: modalState = {
     success: false,
     failure: false,
     addNewAddress: false,
+    editAddressBookRecord: false,
     openAddressBook: false,
     openFundWallet: false,
     openAssetsTable: false,

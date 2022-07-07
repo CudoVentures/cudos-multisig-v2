@@ -84,7 +84,6 @@ const FundWallet = () => {
 
     const validInput = () => {
         return amountToSend != undefined &&
-            amountToSend != NaN &&
             amountToSend != null &&
             amountToSend > 0 &&
             new BigNumber(amountToSend).isLessThanOrEqualTo(

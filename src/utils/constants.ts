@@ -22,11 +22,13 @@ export const LOGIN_FAIL_TITLE = 'Login Failed'
 export const WALLET_PROCESS_FAIL_TITLE = 'Process Failed!'
 export const WALLET_CREATION_FAILURE_TITLE = 'Creating Failed!'
 export const WALLET_CREATION_LOADING_TITLE = 'Creating MultiSig Wallet...'
+export const DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE = 'Address book operation failed'
 
 // Modal Msg Types
 export const WALLET_CREATION_SUCCESS_TYPE = 'Wallet Creation Success'
 export const WALLET_CREATION_FAILURE_TYPE = 'Wallet Creation Failure'
 export const WALLET_CORRUPTED_PROCESS_TYPE = 'Wallet Corrupted Process'
+export const DUPLICATED_ADDRESS_TYPE = 'Duplicated address'
 
 // General Modal Msgs
 export const DEFAULT_LOGIN_FAILURE_MSG = 'Seems like something went wrong. Please try again later'
@@ -34,3 +36,4 @@ export const FILE_ERROR_MSG = 'File is in wrong format or contains invalid data'
 export const WALLET_CREATION_FAILURE_MSG = 'Seems like something went wrong. Try again or check your account balance.'
 export const WALLET_CREATION_SUCCESS_MSG = 'Your MultiSig account was successfully created!'
 export const DEFAULT_LOADING_MODAL_MSG = 'Waiting for transaction confirmation...'
+export const DUPLICATED_ADDRESS_MSG = "It seems the address already exists in your address book"

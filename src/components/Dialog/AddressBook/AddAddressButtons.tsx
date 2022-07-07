@@ -13,13 +13,25 @@ import { RootState } from 'store'
 import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 import { initialState as initialModalState } from 'store/modals'
 import { CSVLink } from "react-csv"
-import { FILE_ERROR_MSG, FILE_ERROR_TITLE } from 'utils/constants'
+
+import { 
+    DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE, 
+    DUPLICATED_ADDRESS_MSG, 
+    DUPLICATED_ADDRESS_TYPE, 
+    FILE_ERROR_MSG, 
+    FILE_ERROR_TITLE 
+} from 'utils/constants'
+
+interface addressBook {
+    [key: string]: string;
+  }
+  
 
 const AddAddressButtons = () => {
     const dispatch = useDispatch()
     const [userName, setUserName] = useState('')
     const [userAddress, setUserAddress] = useState('')
-    const { addNewAddress } = useSelector((state: RootState) => state.modalState)
+    const { addNewAddress, editAddressBookRecord, dataObject } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
     const currentStep = parseInt(getCurrentWalletCreationStep())
     
@@ -98,13 +110,53 @@ const AddAddressButtons = () => {
     const handleAddNewAddress = () => {
         switch(true) {
             case addNewAddress:
-                dispatch(updateUser({
-                    addressBook: {...addressBook, [userAddress]: userName}
-                }))
-                localStorage.removeItem('addressBookAccountName')
-                localStorage.removeItem('addressBookAccountAddress')
-                dispatch(updateModalState({ addNewAddress: false }))
-                if (currentStep === 3) { handleModalClose() }
+                let fail: boolean = false
+                Object.entries(addressBook!).forEach(([address, name], index) => {
+                    if (address === userAddress) {
+                        
+                        dispatch(updateModalState({
+                            failure: true,
+                            msgType: DUPLICATED_ADDRESS_TYPE,
+                            title: DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE,
+                            message: DUPLICATED_ADDRESS_MSG,
+                        }))
+                        return fail = true
+                    }
+                })
+
+                if (!fail) {
+                    dispatch(updateUser({
+                        addressBook: {...addressBook, [userAddress]: userName}
+                    }))
+    
+                    localStorage.removeItem('addressBookAccountName')
+                    localStorage.removeItem('addressBookAccountAddress')
+                    dispatch(updateModalState({ addNewAddress: false }))
+                    if (currentStep === 3) { handleModalClose() }
+                }
+                break
+
+            case editAddressBookRecord:
+                const tempBook: addressBook = { ...addressBook }
+                //@ts-ignore
+                const oldRecordIndex: number = dataObject.index
+                const updatedBook: addressBook = {}
+                
+                Object.entries(tempBook).forEach(([address, name], index) => {
+                    if (oldRecordIndex !== index) {
+                        if (address === userAddress) {
+                            dispatch(updateModalState({
+                                failure: true,
+                                msgType: DUPLICATED_ADDRESS_TYPE,
+                                title: DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE,
+                                message: DUPLICATED_ADDRESS_MSG,
+                            }))
+                        } else { updatedBook[address] = name }
+                    }
+                })
+
+                dispatch(updateUser({ addressBook: {...updatedBook, [userAddress]: userName} }))
+                dispatch(updateModalState({ editAddressBookRecord: false }))
                 break
 
             default:
@@ -114,7 +166,8 @@ const AddAddressButtons = () => {
 
     const handleBackToAddressBook = () => {
         dispatch(updateModalState({
-            addNewAddress: false
+            addNewAddress: false,
+            editAddressBookRecord: false
         }))
     }
 
@@ -185,7 +238,46 @@ const AddAddressButtons = () => {
                 </div>
                 <div id="clear-fix" style={{marginBottom: '108.5px'}}></div>
             </div>
-        :
+            :
+            editAddressBookRecord?
+            <div style={{display: "flex", alignItems: "flex-start"}}>
+                <div style={{display: 'flex', height: '80px', alignItems: "flex-end"}}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={() => ({
+                    width: '220px',
+                    height: '50px',
+                    marginRight: '10px',
+                    fontWeight: 700
+                    })}
+                    onClick={currentStep === 3?handleModalClose:handleBackToAddressBook}
+                >
+                     {currentStep === 3?"Close":"Back to Address Book"}
+                </Button>
+                <Tooltip title={validInput?"":"Please provide valid name and address"}>
+                    <div className='tooltip-base'>
+                        <Button
+                            disabled={!validInput}
+                            variant="contained"
+                            color="primary"
+                            sx={() => ({
+                            marginLeft: '10px',
+                            width: '220px',
+                            height: '50px',
+                            fontWeight: 700
+                            })}
+                            onClick={handleAddNewAddress}
+                        >
+                            <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
+                           Confirm change
+                        </Button>
+                    </div>
+                </Tooltip>
+                </div>
+                <div id="clear-fix" style={{marginBottom: '108.5px'}}></div>
+            </div>
+            :
             <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                 <Button
                 variant="contained"

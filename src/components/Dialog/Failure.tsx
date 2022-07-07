@@ -10,7 +10,7 @@ import { initialState as initialModalState } from 'store/modals'
 import { updateWalletCreationSteps } from 'store/steps'
 import { updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialWalletObject } from 'store/walletObject'
-import { WALLET_CORRUPTED_PROCESS_TYPE } from 'utils/constants'
+import { DUPLICATED_ADDRESS_TYPE, WALLET_CORRUPTED_PROCESS_TYPE } from 'utils/constants'
 
 
 const Failure = () => {
@@ -40,6 +40,13 @@ const Failure = () => {
         case WALLET_CORRUPTED_PROCESS_TYPE:
           dispatch(updateModalState({ ...initialModalState }))
           goHome()
+          break
+
+        case DUPLICATED_ADDRESS_TYPE:
+          dispatch(updateModalState({ ...initialModalState }))
+          dispatch(updateModalState({ openAddressBook: true }))
+          localStorage.removeItem('addressBookAccountName')
+          localStorage.removeItem('addressBookAccountAddress')
           break
   
         default:
