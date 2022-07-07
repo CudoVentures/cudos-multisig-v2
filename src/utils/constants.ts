@@ -5,6 +5,8 @@ export const EXPLORER_PUBLIC_ADDRESS = import.meta.env.VITE_APP_EXPLORER_PUBLIC_
 export const CHAIN_NAME = import.meta.env.VITE_APP_CHAIN_NAME || process.env.VITE_APP_CHAIN_NAME || ""
 export const CHAIN_ID = import.meta.env.VITE_APP_CHAIN_ID || process.env.VITE_APP_CHAIN_ID || ""
 export const GAS_PRICE = import.meta.env.VITE_APP_GAS_PRICE || process.env.VITE_APP_GAS_PRICE || ""
+export const GRAPHQL_URL = import.meta.env.VITE_APP_GRAPHQL_URL || process.env.VITE_APP_GRAPHQL_URL || ""
+export const GRAPHQL_WS = import.meta.env.VITE_APP_GRAPHQL_WS || process.env.VITE_APP_GRAPHQL_WS || ""
 
 // General config
 export const ADMIN_TOKEN_DENOM = 'cudosAdmin'

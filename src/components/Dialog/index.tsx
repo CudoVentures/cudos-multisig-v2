@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import AddressBook from './AddressBook/AddressBook'
 import Failure from './Failure'
+import FundWallet from './FundWallet/FundWallet'
 import Loading from './Loading'
 import Success from './Success'
 
@@ -11,7 +12,8 @@ const Dialog = () => {
     success,
     loading, 
     failure,
-    openAddressBook
+    openAddressBook,
+    openFundWallet
   } = useSelector((state: RootState) => state.modalState)
 
   switch(true) {
@@ -23,6 +25,8 @@ const Dialog = () => {
       return <Success />
     case openAddressBook:
       return <AddressBook />
+    case openFundWallet:
+      return <FundWallet />
     default:
       return <div></div>
   }

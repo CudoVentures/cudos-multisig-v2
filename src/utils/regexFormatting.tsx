@@ -25,5 +25,23 @@ export const cutTrailingZeroes = (amount: string) => {
 
 // 990,099.000364464660009000 => 990,099
 export const cutFractions = (amount: string) => {
-    return amount.replace(/\.[0-9]{18}/gm, "")
+    return amount.replace(/\.[0-9]+/gm, "")
+}
+
+// 990,099.000364464660009000 => 990,099.{precision}
+export const setDecimalPrecisionTo = (amount: string, precision: number): string => {
+    const tempString = amount.split('.')
+    if (tempString[0] && tempString[1]) {
+        return `${tempString[0]}.${tempString[1].slice(0, precision)}`
+    } else {
+        return "0"
+    }
+}
+
+export const handleFullBalanceToPrecision = (amount: string, precision: number, denom?: string): string => {
+    const isAdmin = denom?.toLowerCase().includes('admin')
+    const tempDenom = denom?.toLowerCase()==='acudos'?'CUDOS':denom
+    const tempAmount = isAdmin?amount:separateDecimals(separateFractions(amount))
+    const formatedAmount = isAdmin?tempAmount:setDecimalPrecisionTo(tempAmount, precision)
+    return tempDenom?`${formatedAmount} ${tempDenom.toUpperCase()}`:formatedAmount
 }

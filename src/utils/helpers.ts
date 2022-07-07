@@ -4,6 +4,8 @@ import { emptyWallet, wallet } from "store/user"
 import { queryClient } from "./config"
 import { ADMIN_TOKEN_DENOM, NATIVE_TOKEN_DENOM } from "./constants"
 import { separateDecimals, separateFractions } from "./regexFormatting"
+import cudosLogo from 'assets/vectors/balances/cudos.svg'
+import cudosAdminLogo from 'assets/vectors/balances/cudos-admin.svg'
 
 export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet | undefined => {
     let walletfound: wallet = emptyWallet
@@ -74,4 +76,15 @@ export const getNativeBalance = (balances: any[]): string => {
       }
     })
     return nativeBalance
+}
+
+export const denomToIcon = {
+    'acudos': cudosLogo,
+    'cudos': cudosLogo,
+    'cudosAdmin': cudosAdminLogo
+}
+
+export const denomToAlias = {
+    'acudos': "CUDOS",
+    'cudosAdmin': 'ADMIN TOKENS'
 }

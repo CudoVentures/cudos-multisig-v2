@@ -1,3 +1,4 @@
+
 //@ts-nocheck
 import { Box, Button, ClickAwayListener, Divider, Tooltip, Typography } from '@mui/material'
 import { styles } from './styles'
@@ -12,7 +13,7 @@ import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
 import { emptyWallet, updatedSelectedWallet, updateUserWallets, wallet } from 'store/user'
 import { useNavigate } from 'react-router-dom'
 import SlidingSwitchMenu from '../SlidingMenu/SlidingSwitchMenu'
-import { cutFractions } from 'utils/regexFormatting'
+import { setDecimalPrecisionTo } from 'utils/regexFormatting'
 
 const LeftWalletSummary = ({ 
     resizableCardLeft, 
@@ -107,11 +108,11 @@ const LeftWalletSummary = ({
         clearInterval(timer)
         }
 
-      }, [selectedWallet?.nativeBalance])
+      }, [selectedWallet?.walletBalances])
 
     useEffect(() => {
         setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '0', 400)
-        setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = ' #7d87aa21', 550)
+        setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = '#7d87aa21', 550)
         setTimeout(() => slidingHolder.current!.children[0].style.width = '0', 600)
         setTimeout(() => unlockBackround(), 600)
         setTimeout(() => setToggled(false), 600)
@@ -124,14 +125,14 @@ const LeftWalletSummary = ({
     }
 
     const shrinkAndRemoveContent = () => {
-        resizableCardLeft.current.style.width = '0'
-        resizableCardRight.current.style.width = '0'
+        setTimeout(() => resizableCardLeft.current.style.width = '0', 100)
+        setTimeout(() => resizableCardRight.current.style.width = '0', 100)
         leftStepsContent.current.style.opacity = '0'
         rightStepsContent.current.style.opacity = '0'
         entireDashboardPage.current.style.opacity = '0'
     }
       
-    const backToWallets = () => {
+    const backToWallets = async () => {
         shrinkAndRemoveContent()
         setTimeout(() => navigate("/welcome"), 350)
         setTimeout(() => clearSelectedWalletState(), 360)
@@ -237,7 +238,7 @@ const LeftWalletSummary = ({
                         <Typography variant='h6' margin={1} fontWeight={600} >
                             <Tooltip title={`$ ${usdValue}`}>
                                 <div>
-                                    <span>$ {cutFractions(usdValue)}</span>
+                                    <span>$ {setDecimalPrecisionTo(usdValue, 2)}</span>
                                 </div>
                             </Tooltip>
                         </Typography>

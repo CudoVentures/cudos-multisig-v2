@@ -31,7 +31,7 @@ export const styles = {
         height: '250px',
         width: '0px',
         opacity: '1',
-        transition: "all 0.7s",
+        transition: "all 0.5s",
         left: '170px',
         borderRadius: '20px',
         position: 'relative',

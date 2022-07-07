@@ -43,8 +43,8 @@ export const styles = {
       },
     contentDissapear: {
       opacity: '1', 
-      transition: 'opacity 0.5s', 
-      WebkitTransition: 'opacity 0.5s'
+      transition: 'all 0.5s', 
+      WebkitTransition: 'all 0.5s'
     },
     btnLogo: {
       marginRight: '10px'

@@ -28,6 +28,7 @@ export interface userState {
   wallets?: wallet[]
   selectedWallet?: wallet
   addressBook?: addressBook
+  chosenBalance?: Coin
 }
 
 export const emptyWallet: wallet = {  
@@ -52,6 +53,7 @@ export const initialState: userState = {
   wallets: [],
   selectedWallet: emptyWallet,
   addressBook: {},
+  chosenBalance: { denom: '', amount: ''}
 }
 
 export const userStateSlice = createSlice({

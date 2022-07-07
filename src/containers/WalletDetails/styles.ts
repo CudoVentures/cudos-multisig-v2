@@ -1,5 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 export const styles = {
+  btnLogo: {
+    marginRight: '10px'
+  },
   connectButton: {
     height: '50px',
     width: '220px',
@@ -21,15 +24,15 @@ export const styles = {
   },
   contentDissapear: {
     opacity: '1', 
-    transition: 'opacity 0.5s', 
-    WebkitTransition: 'opacity 0.5s'
+    transition: 'all 0.5s', 
+    WebkitTransition: 'all 0.5s'
   },
   Card: {
     textAlign: "center",
     width: '0',
     height: '100%',
     marginLeft: '0',
-    transition: "all 1s",
+    transition: "all 0.5s",
     backgroundColor: 'transparent'
   },
   leftSteps: {
@@ -42,7 +45,7 @@ export const styles = {
       flexDirection: "column",
       justifyContent: "center",
       alignItems: 'center',
-      transition: "all 1s",
+      transition: "all 0.5s",
   },
   holder: {
       display: 'flex', 
@@ -51,10 +54,9 @@ export const styles = {
       width: '100%',
     },
   contentAppear: {
-    height: '100%',
     opacity: '0', 
-    transition: 'opacity 0.5s', 
-    WebkitTransition: 'opacity 0.5s'
+    transition: 'all 0.5s', 
+    WebkitTransition: 'all 0.5s'
   },
   informativeBlock: {
     display: "flex",

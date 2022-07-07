@@ -4,15 +4,17 @@ import Card from 'components/Card/Card'
 import smallInfoIcon from 'assets/vectors/small-info-icon.svg'
 import { RootState } from 'store'
 import { useSelector } from 'react-redux'
-import { BigNumber } from 'bignumber.js'
-import { cutTrailingZeroes, separateDecimals, separateFractions } from 'utils/regexFormatting'
+import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
 
 const SummaryFeeDetails = () => {
 
     const { feeForCreation } = useSelector((state: RootState) => state.walletObject)
-    const tempFee = new BigNumber(feeForCreation!.amount[0]?feeForCreation!.amount[0].amount:'0')
-    // X.XX CUDOS format
-    const displayWorthyFee = cutTrailingZeroes(separateDecimals(separateFractions(tempFee.valueOf())))
+    // X.{precision} {denom} format
+    const displayWorthyFee = handleFullBalanceToPrecision(
+        feeForCreation!.amount[0].amount || '0', 
+        4, 
+        feeForCreation!.amount[0].denom
+    )
 
     return (
         <Card style={styles.summaryCard}>
@@ -23,7 +25,7 @@ const SummaryFeeDetails = () => {
                 </Tooltip>
             </Typography>
             <Typography variant="inherit" color="text.primary">
-                {displayWorthyFee + ' CUDOS'}
+                {displayWorthyFee}
             </Typography>
         </Card>
     )
