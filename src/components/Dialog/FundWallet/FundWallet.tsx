@@ -1,10 +1,10 @@
-import { Coin } from 'cudosjs'
+import { assertIsDeliverTxSuccess, Coin, EncodeObject, GasPrice, StdFee } from 'cudosjs'
 import { RootState } from 'store'
 import { styles } from './styles'
 import BigNumber from 'bignumber.js'
 import Card from 'components/Card/Card'
 import { updateUser } from 'store/user'
-import { formatAddress } from 'utils/helpers'
+import { calculateFeeFromGas, enforceCustomFeesOverKeplr, formatAddress } from 'utils/helpers'
 import { updateModalState } from 'store/modals'
 import { COLORS_DARK_THEME } from 'theme/colors'
 import { Dialog as MuiDialog } from '@mui/material'
@@ -17,9 +17,25 @@ import { denomToIcon, denomToAlias } from 'utils/helpers'
 import AssetsTable from 'components/AssetsTable/AssetsTable'
 import { CancelRoundedIcon, ModalContainer } from '../styles'
 import { initialState as initialModalState } from 'store/modals'
-import { CHAIN_NAME, NATIVE_TOKEN_DENOM } from 'utils/constants'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
 import { handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
+import { signingClient } from 'utils/config'
+
+import { 
+    CHAIN_NAME, 
+    DEFAULT_LOADING_MODAL_MSG, 
+    DEFAULT_MEMO, DEFAULT_MULTIPLIER, 
+    FEE_ESTIMATION_ERROR, 
+    GAS_PRICE, 
+    GENERAL_FAILURE_MSG, 
+    GENERAL_FAILURE_TITLE, 
+    INSUFFICIENT_BALANCE, 
+    NATIVE_TOKEN_DENOM, 
+    WALLET_FUNDING_FAILURE_TITLE, 
+    WALLET_FUNDING_LOADING_TITLE,
+     WALLET_FUNDING_SUCCESS_MSG, 
+     WALLET_FUNDING_SUCCESS_TYPE 
+} from 'utils/constants'
 
 const FundWallet = () => {
 
@@ -27,29 +43,47 @@ const FundWallet = () => {
     const [amountToSend, setAmountToSend] = useState<number>(0)
     const [maxOut, setMaxOut] = useState<boolean>(false)
     const [toggled, setToggled] = useState<boolean>(false)
+    const [msg, setMsg] = useState<EncodeObject>({typeUrl: '', value: ''})
+    const [fees, setFees] = useState<StdFee>({gas: '', amount: []})
     const defaultElement = document.createElement('div') as HTMLInputElement
     const detailsDropdown = useRef<HTMLInputElement>(defaultElement)
     const dialog = useRef<HTMLInputElement>(defaultElement)
+    const input = useRef<HTMLInputElement>(defaultElement)
     const contentToAppear = useRef<HTMLInputElement>(defaultElement)
     const { openFundWallet, openAssetsTable} = useSelector((state: RootState) => state.modalState)
     const { selectedWallet, address, nativeBalance, chosenBalance } = useSelector((state: RootState) => state.userState)
+    
+    const defaultBalance: Coin = {
+        denom: NATIVE_TOKEN_DENOM,
+        amount: nativeBalance!
+    }
 
     useEffect(() => {
         setAmountToSend(0)
+
     }, [openAssetsTable])
 
     useEffect(() => {
-        const defaultBalance: Coin = {
-            denom: NATIVE_TOKEN_DENOM,
-            amount: nativeBalance!
-        }
         dispatch(updateUser({chosenBalance: defaultBalance}))
+
     }, [])
 
-    const handleModalClose = () => {
+    useEffect(() => {
+        if (maxOut) { generateFundWalletMsg() }
+        if (fees.gas !== '') { showDropdownDetails() }
+
+    }, [fees.gas, maxOut])
+
+    const clean = () => {
         setAmountToSend(0)
         hideDropdownDetails()
         setToggled(false)
+        setMaxOut(false)
+        setFees({gas: '', amount: []})
+    }
+
+    const handleModalClose = () => {
+        clean()
         dispatch(updateModalState({ ...initialModalState }))
     }
       
@@ -59,8 +93,24 @@ const FundWallet = () => {
         }
     }
 
-    const showDropdownDetails = () => {
-        // TODO add GET MULTISEND MSG and FEES HERE
+    const generateFundWalletMsg = async () => {
+        try {
+            const { msg, fee } = await getFundWalletMsgAndFees()
+            setMsg(msg)
+            setFees(fee)
+
+        } catch (error: any) {
+            dispatch(updateModalState({
+                failure: true, 
+                title: GENERAL_FAILURE_TITLE,
+                msgType: FEE_ESTIMATION_ERROR,
+                message: GENERAL_FAILURE_MSG
+            }))
+            console.debug(error.message)
+        }
+    }
+
+    const showDropdownDetails = async () => {
         setToggled(true)
         detailsDropdown.current.style.display = 'block'
         setTimeout(() => detailsDropdown.current.style.height = '230px', 50)
@@ -69,8 +119,6 @@ const FundWallet = () => {
     }
 
     const hideDropdownDetails = () => {
-        setMaxOut(false)
-        setToggled(false)
         contentToAppear.current.style.opacity = '0'
         detailsDropdown.current.style.backgroundColor = '#7d87aa21'
         setTimeout(() => detailsDropdown.current.style.height = '0px', 350)
@@ -78,7 +126,7 @@ const FundWallet = () => {
     }
 
     const handleChange = (event: any) => {
-        hideDropdownDetails()
+        if (toggled) { clean() }
         setAmountToSend(event.target.value as number)
     }
 
@@ -93,34 +141,157 @@ const FundWallet = () => {
     }
 
     const showFee = (): string => {
+        const feesAmount = fees.gas?fees.amount[0].amount:'0'
         const displayWorthyFee = handleFullBalanceToPrecision(
-            '100000000000000000' || '0', 4, 'CUDOS'
+            feesAmount || '0', 4, 'CUDOS'
         )
         return displayWorthyFee
     }
 
+    const clearState = async () => {
+        clean()
+        dispatch(updateUser({chosenBalance: defaultBalance}))
+      }
+
     const handleChangeAsset = () => {
         detailsDropdown.current.style.display = 'none'
-        hideDropdownDetails()
+        clean()
         dispatch(updateModalState({
             openAssetsTable: true
         }))
     }
 
-    const signAndBroadcast = () => {
-        // TO DO
+    const signAndBroadcast = async () => {
+        
+        dispatch(updateModalState({
+            openFundWallet: false,
+            loading: true,
+            title: WALLET_FUNDING_LOADING_TITLE,
+            message: DEFAULT_LOADING_MODAL_MSG
+        }))
+
+        enforceCustomFeesOverKeplr()
+
+        try {
+            const result = await (await signingClient).signAndBroadcast(
+                address!, 
+                [msg], 
+                fees, 
+                DEFAULT_MEMO
+            )
+            assertIsDeliverTxSuccess(result)
+
+            const tempFee = calculateFeeFromGas(result.gasUsed)
+            const displayWorthyFee = handleFullBalanceToPrecision(tempFee, 4, 'CUDOS')
+
+            const dataObjectForSuccessModal = {
+                from: address,
+                to: selectedWallet?.walletAddress,
+                amount: `${amountToSend.toString()} ${denomToAlias[chosenBalance!.denom as keyof typeof denomToAlias]}`,
+                txHash: result.transactionHash,
+                txFee: displayWorthyFee,
+            }
+
+            clearState()
+
+            dispatch(updateModalState({
+                loading: false,
+                success: true,
+                msgType: WALLET_FUNDING_SUCCESS_TYPE,
+                dataObject: dataObjectForSuccessModal,
+                message: WALLET_FUNDING_SUCCESS_MSG
+            }))
+
+        } catch (e: any){
+            dispatch(updateModalState({
+                loading: false,
+                failure: true,
+                title: WALLET_FUNDING_FAILURE_TITLE, 
+                message: GENERAL_FAILURE_MSG
+            }))
+            console.debug(e.message)
+        }
     }
 
     const maxingOut = () => {
         setMaxOut(true)
-        setAmountToSend(parseFloat(handleFullBalanceToPrecision(chosenBalance!.amount!, 2, chosenBalance!.denom!)))
-        showDropdownDetails()
+        const tempAmount = parseFloat(handleFullBalanceToPrecision(
+            chosenBalance!.amount!, 
+            2, 
+            chosenBalance!.denom!
+        ))
+        setAmountToSend(tempAmount)
+    }
+
+    const isAdminTransfer = () => {
+       return chosenBalance?.denom === 'cudosAdmin'
     }
 
     const enoughBalance = (): boolean => {
-        return false
-        // Apply logic to check if users balance is > 0 after deducting fees and amountToSend from it
+        const accountBalance = new BigNumber(chosenBalance?.amount!)
+        const neededFees = new BigNumber(fees.amount[0].amount)
+        const cudosBalance = new BigNumber(nativeBalance!)
+        let result: boolean = false
+
+        const transferAmount = 
+            isAdminTransfer()?
+            amountToSend.toString():
+            (amountToSend * 10 ** 18).toLocaleString('fullwide', {useGrouping:false})
+
+        switch(true) {
+            case isAdminTransfer():
+                result = new BigNumber(transferAmount).isLessThanOrEqualTo(accountBalance) &&
+                        neededFees.isLessThanOrEqualTo(cudosBalance)
+                break
+
+            default:
+                result = new BigNumber(transferAmount).plus(neededFees).isLessThanOrEqualTo(accountBalance)
+                break
+        }
+        return result
     }
+
+    const handleIsAdminTransfer = (): string => {
+        const isAdminTransfer = chosenBalance?.denom === 'cudosAdmin'
+        const transferAmount = 
+            isAdminTransfer?
+            amountToSend.toString():
+            (amountToSend * 10 ** 18).toLocaleString('fullwide', {useGrouping:false})
+        return transferAmount
+    }
+
+    const getFundWalletMsgAndFees = async () => {
+        interface MultiSendUser {
+            address: string;
+            coins: Coin[];
+        }
+
+        const transferAmount = handleIsAdminTransfer()
+
+        const sender: MultiSendUser[] = [{
+            address: address!,
+            coins: [{
+                denom: chosenBalance?.denom || '',
+                amount: transferAmount || '0',
+            }]
+        }]
+
+        const recipient: MultiSendUser[] = [{
+            address: selectedWallet?.walletAddress!,
+            coins: [{
+                denom: chosenBalance?.denom || '',
+                amount: transferAmount || '0',
+            }]
+        }]
+
+        return await (await signingClient).msgMultisend(
+            sender,
+            recipient,
+            GasPrice.fromString(GAS_PRICE+NATIVE_TOKEN_DENOM),
+            DEFAULT_MULTIPLIER,
+            DEFAULT_MEMO
+         )
+     }
 
     return (
         <MuiDialog
@@ -238,7 +409,8 @@ const FundWallet = () => {
                                 disableUnderline
                                 placeholder='enter amount'
                                 type="number"
-                                value={amountToSend?amountToSend:null}
+                                ref={input}
+                                value={amountToSend?amountToSend:""}
                                 onKeyDown={event => {
                                     const forbiddenSymbols = 
                                         chosenBalance!.denom === 'cudosAdmin'?
@@ -278,19 +450,23 @@ const FundWallet = () => {
                             variant="contained"
                             color="secondary"
                             sx={styles.mainBtns}
-                            onClick={toggled?hideDropdownDetails:handleModalClose}
+                            onClick={toggled?clean:handleModalClose}
                         >
                             {toggled?"Back":"Cancel"}
                         </Button>
-                        <Button
-                            disabled={toggled?!enoughBalance():!validInput()}
-                            variant="contained"
-                            color="primary"
-                            sx={styles.mainBtns}
-                            onClick={toggled?signAndBroadcast:showDropdownDetails}
-                        >
-                            {toggled?"Fund":"Preview"}
-                        </Button>
+                        <Tooltip title={toggled?!enoughBalance()?INSUFFICIENT_BALANCE:'':''}>
+                        <div>
+                            <Button
+                                disabled={toggled?!enoughBalance():!validInput()}
+                                variant="contained"
+                                color="primary"
+                                sx={styles.mainBtns}
+                                onClick={toggled?signAndBroadcast:generateFundWalletMsg}
+                            >
+                                {toggled?!enoughBalance()?'Insufficient balance':"Fund":"Preview"}
+                            </Button>
+                        </div>
+                        </Tooltip>
                     </Box>
                 </div>}
             </ModalContainer>
@@ -336,7 +512,7 @@ const FundWallet = () => {
                                         </Tooltip>
                                     </Typography>
                                     <Typography variant='subtitle2' color={"text.primary"}>
-                                        {showFee()}
+                                        {toggled?showFee():null}
                                     </Typography>
                                 </Box>
                             </Box>

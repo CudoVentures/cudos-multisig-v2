@@ -2,10 +2,22 @@ import { getCurrencyRate } from "api/calls"
 import BigNumber from "bignumber.js"
 import { emptyWallet, wallet } from "store/user"
 import { queryClient } from "./config"
-import { ADMIN_TOKEN_DENOM, NATIVE_TOKEN_DENOM } from "./constants"
+import { ADMIN_TOKEN_DENOM, GAS_PRICE, NATIVE_TOKEN_DENOM } from "./constants"
 import { separateDecimals, separateFractions } from "./regexFormatting"
 import cudosLogo from 'assets/vectors/balances/cudos.svg'
 import cudosAdminLogo from 'assets/vectors/balances/cudos-admin.svg'
+
+export const enforceCustomFeesOverKeplr = () => {
+    return window.keplr.defaultOptions = {
+        sign: {
+            preferNoSetFee: true,
+        }
+      }
+}
+
+export const calculateFeeFromGas = (gasAmount: number): string => {
+    return new BigNumber(GAS_PRICE).multipliedBy(new BigNumber(gasAmount)).valueOf()
+}
 
 export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet | undefined => {
     let walletfound: wallet = emptyWallet

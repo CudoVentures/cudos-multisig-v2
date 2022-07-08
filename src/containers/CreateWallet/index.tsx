@@ -15,13 +15,13 @@ import StepThree from 'components/WalletCreationSteps/StepThree'
 import StepFour from 'components/WalletCreationSteps/StepFour'
 import StepFfive from 'components/WalletCreationSteps/StepFive'
 import { signingClient } from 'utils/config'
-import { DEFAULT_MEMO, DEFAULT_META_DATA, DEFAULT_MULTIPLIER, GAS_PRICE, WALLET_PROCESS_FAIL_TITLE, NATIVE_TOKEN_DENOM, WALLET_CORRUPTED_PROCESS_TYPE, WALLET_CREATION_FAILURE_MSG, WALLET_CREATION_FAILURE_TYPE, WALLET_CREATION_SUCCESS_MSG, WALLET_CREATION_SUCCESS_TYPE, WALLET_CREATION_FAILURE_TITLE, WALLET_CREATION_LOADING_TITLE, DEFAULT_LOADING_MODAL_MSG } from 'utils/constants'
+import { DEFAULT_MEMO, DEFAULT_META_DATA, DEFAULT_MULTIPLIER, GAS_PRICE, WALLET_PROCESS_FAIL_TITLE, NATIVE_TOKEN_DENOM, WALLET_CORRUPTED_PROCESS_TYPE, GENERAL_FAILURE_MSG, WALLET_CREATION_FAILURE_TYPE, WALLET_CREATION_SUCCESS_MSG, WALLET_CREATION_SUCCESS_TYPE, WALLET_CREATION_FAILURE_TITLE, WALLET_CREATION_LOADING_TITLE, DEFAULT_LOADING_MODAL_MSG } from 'utils/constants'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice } from 'cudosjs'
 import { updateModalState } from 'store/modals'
 import { updateUser, wallet } from 'store/user'
 import { BigNumber } from 'bignumber.js'
-import { cutTrailingZeroes, separateDecimals, separateFractions } from 'utils/regexFormatting'
-import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
+import { cutTrailingZeroes, handleFullBalanceToPrecision, separateDecimals, separateFractions } from 'utils/regexFormatting'
+import { calculateFeeFromGas, checkForAdminToken, enforceCustomFeesOverKeplr, getAccountBalances, getNativeBalance } from 'utils/helpers'
 
 const CreateWallet = () => {
     
@@ -50,11 +50,7 @@ const CreateWallet = () => {
             message: DEFAULT_LOADING_MODAL_MSG
         }))
 
-        window.keplr.defaultOptions = {
-            sign: {
-                preferNoSetFee: true,
-            }
-          }
+        enforceCustomFeesOverKeplr()
 
         try {
             const result = await (await signingClient).signAndBroadcast(address!, [msg], feeForCreation!, DEFAULT_MEMO)
@@ -62,8 +58,8 @@ const CreateWallet = () => {
 
             // Highly doubtfull that the user is charged the actual gasUsed. 
             // I'd say it is always charged with gasWanted, but anyways...
-            const tempFee = new BigNumber(GAS_PRICE).multipliedBy(new BigNumber(result.gasUsed)).valueOf()
-            const displayWorthyFee = cutTrailingZeroes(separateDecimals(separateFractions(tempFee.valueOf())))
+            const tempFee = calculateFeeFromGas(result.gasUsed)
+            const displayWorthyFee = handleFullBalanceToPrecision(tempFee, 4, 'CUDOS')
             
             const walletID = JSON.parse(result.rawLog!)[0]
             .events.find((e: any) => e.type === 'cosmos.group.v1.EventCreateGroup')
@@ -112,7 +108,7 @@ const CreateWallet = () => {
                 loading: false,
                 failure: true,
                 title: WALLET_CREATION_FAILURE_TITLE, 
-                message: WALLET_CREATION_FAILURE_MSG
+                message: GENERAL_FAILURE_MSG
             }))
             console.debug(e.message)
         }
@@ -124,7 +120,6 @@ const CreateWallet = () => {
             members!,
             JSON.stringify(groupMetadata!),
             DEFAULT_META_DATA,
-            true,
             {
                 threshold: threshold!,
                 votingPeriod: votingPeriod?.seconds!,
@@ -161,7 +156,7 @@ const CreateWallet = () => {
                     failure: true, 
                     title: WALLET_PROCESS_FAIL_TITLE,
                     msgType: WALLET_CORRUPTED_PROCESS_TYPE,
-                    message: WALLET_CREATION_FAILURE_MSG
+                    message: GENERAL_FAILURE_MSG
                 }))
                 console.debug(error.message)
             }

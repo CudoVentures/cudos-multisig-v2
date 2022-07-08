@@ -3,78 +3,63 @@ import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { OpenInNewRounded as OpenInNewRoundedIcon } from '@mui/icons-material'
 import { EXPLORER_ADDRESS_DETAILS, TX_HASH_DETAILS } from 'api/endpoints'
-import { useState } from 'react'
 import { formatAddress } from 'utils/helpers'
-import LinkIcon from 'assets/vectors/link-icon.svg'
-import CopyIcon from 'assets/vectors/copy-icon.svg'
-import copy from 'copy-to-clipboard'
+import ArrowIcon from 'assets/vectors/arrow-right.svg'
+import { styles } from './styles'
 
-interface WalletCreation {
-    walletAddress: string,
-    walletName: string,
+interface WalletFunding {
+    from: string,
+    to: string,
+    amount: string,
     txHash: string,
     txFee: string,
   }
 
-const WalletCreationSuccess = () => {
+const WalletFundingSuccess = () => {
       
     const { dataObject } = useSelector((state: RootState) => state.modalState)
-    const [copied, setCopied] = useState<boolean>(false)
-    const successData: WalletCreation = new Object(dataObject) as WalletCreation;
-
-    const handleCopy = (value: string) => {
-        copy(value)
-        setCopied(true)
-    
-        setTimeout(() => {
-          setCopied(false)
-        }, 3000)
-      }
+    const successData: WalletFunding = new Object(dataObject) as WalletFunding;
 
     return (
         <Box padding='0px 10px 0 10px' width='100%' display="flex" flexDirection="column" gap={2}>
-
+          <Box style={{display: 'flex', justifyContent: 'space-between'}}>
             <Box>
               <Typography margin='10px 0 5px 0' color="text.secondary" variant="body2">
-                Wallet Name
+                From
               </Typography>
-              <Typography variant="body2">{successData.walletName}</Typography>
+              <Typography variant="body2">
+                <a style={styles.links} href={EXPLORER_ADDRESS_DETAILS(successData.from)} target='_blank'>
+                  {formatAddress(successData.from, 10)}
+                 </a>
+                </Typography>
             </Box>
-
+            <img src={ArrowIcon} alt="arrow-icon" />
             <Box>
               <Typography margin='10px 0 5px 0' color="text.secondary" variant="body2">
-                Wallet Address
+                To
               </Typography>
-              
               <Box style={{display: 'flex', alignItems: 'center'}}>
-              <Typography variant="body2">{formatAddress(successData.walletAddress, 40)}</Typography>
-              <Tooltip
-                    onClick={() => handleCopy(successData.walletAddress)}
-                    title={copied ? 'Copied' : 'Copy to clipboard'}
-                >
-                    <img
-                    style={{ marginLeft: '10px', cursor: 'pointer' }}
-                    src={CopyIcon}
-                    alt="Copy"
-                    />
-                </Tooltip>
-                <Tooltip title="Check address on explorer">
-                    <a style={{marginTop: '5px'}} href={EXPLORER_ADDRESS_DETAILS(successData.walletAddress)} target='_blank'>
-                    <img
-                        style={{ marginLeft: '10px', cursor: 'pointer' }}
-                        src={LinkIcon}
-                        alt="Link"
-                    />
-                    </a>
-                </Tooltip>
+              <Typography variant="body2">
+                <a style={styles.links} href={EXPLORER_ADDRESS_DETAILS(successData.to)} target='_blank'>
+                  {formatAddress(successData.to, 10)}
+                 </a>
+                </Typography>
               </Box>
+            </Box>
+          </Box>
+            <Box>
+              <Typography margin='10px 0 5px 0' color="text.secondary" variant="body2">
+                Amount
+              </Typography>
+              <Typography variant="body2">
+                {successData.amount}
+              </Typography>
             </Box>
 
             <Divider />
 
             <Box display="flex" alignItems="center" gap={1} padding="0.5rem 0">
               <Typography variant="body2">Fee</Typography>
-
               <Typography
                 variant="body2"
                 color="primary.main"
@@ -85,7 +70,9 @@ const WalletCreationSuccess = () => {
                 {successData.txFee}
               </Typography>
             </Box>
+
             <Divider />
+
             <Box>
               <Typography variant="body2">Transaction</Typography>
               <Tooltip title="Go to Explorer">
@@ -113,13 +100,10 @@ const WalletCreationSuccess = () => {
               </Stack>
               </a>
             </Tooltip>
-            </Box>
           </Box>
+        </Box>
     )
 }
 
-export default WalletCreationSuccess
-
-
-
+export default WalletFundingSuccess
             

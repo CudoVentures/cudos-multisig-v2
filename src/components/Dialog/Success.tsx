@@ -5,9 +5,10 @@ import { RootState } from 'store'
 import { CancelRoundedIcon, ModalContainer } from './styles'
 import SuccessIcon from 'assets/vectors/success.svg'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
-import { WALLET_CREATION_SUCCESS_TYPE } from 'utils/constants'
+import { WALLET_CREATION_SUCCESS_TYPE, WALLET_FUNDING_SUCCESS_TYPE } from 'utils/constants'
 import WalletCreationSuccess from './WalletCreationSuccess'
 import { useNavigate } from 'react-router-dom'
+import WalletFundingSuccess from './WalletFundingSuccess'
 
 
 const Success = () => {
@@ -29,6 +30,11 @@ const Success = () => {
         navPath = '/welcome'
         break
 
+      case WALLET_FUNDING_SUCCESS_TYPE:
+        contentComponent = <WalletFundingSuccess />  
+        navPath = '/dashboard'
+        break
+        
       default:
         break
     }

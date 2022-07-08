@@ -37,6 +37,7 @@ const Failure = () => {
 
     const handleModalClose = () => {
       switch(msgType) {
+        
         case WALLET_CORRUPTED_PROCESS_TYPE:
           dispatch(updateModalState({ ...initialModalState }))
           goHome()
