@@ -34,6 +34,14 @@ const Dashboard = () => {
         dispatch(updateModalState({ openFundWallet: true }))
     }
 
+    const showAllAssets = () => {
+        dispatch(updateModalState({
+            walletRelated: true,
+            openFundWallet: true,
+            openAssetsTable: true
+        }))
+    }
+
     return (
         <Box>
             <Dialog />
@@ -108,10 +116,12 @@ const Dashboard = () => {
                             </Typography>
                             <Box style={styles.balanceAssetsBtnHolder}>
                                 {selectedWallet!.walletBalances!.length > 2?
+                                // BUTTON VISIBLE ONLY IF MORE THAN 2 ASSETS ARE PRESENT
                                 <Button
                                     disableRipple
                                     variant="text"
                                     style={{textDecoration: 'none'}}
+                                    onClick={showAllAssets}
                                     >
                                     <span>{"All assets"}</span>
                                 </Button>:null}

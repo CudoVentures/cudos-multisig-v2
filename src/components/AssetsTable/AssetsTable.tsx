@@ -9,24 +9,32 @@ import { CancelRoundedIcon } from 'components/Dialog/styles'
 const AssetsTable = () => {
 
     const dispatch = useDispatch()
-    const { balances } = useSelector((state: RootState) => state.userState)
-    const { openFundWallet } = useSelector((state: RootState) => state.modalState)
+    const { balances, selectedWallet } = useSelector((state: RootState) => state.userState)
+    const { openFundWallet, walletRelated, openAssetsTable } = useSelector((state: RootState) => state.modalState)
   
-
     const handleModalClose = () => {
-        dispatch(updateModalState({
-            openAssetsTable: false,
-            openFundWallet: true
-        }))
+        if (walletRelated) {
+            dispatch(updateModalState({
+                openFundWallet: false,
+                openAssetsTable: false,
+                walletRelated: false
+            }))
+        } else {
+            dispatch(updateModalState({
+                openAssetsTable: false,
+                openFundWallet: true
+            }))
+        }
     }
 
+    const balancesToWorkWith = walletRelated?selectedWallet?.walletBalances:balances
     return (
-        <ClickAwayListener onClickAway={openFundWallet?handleModalClose:() => {}}>
+        <ClickAwayListener onClickAway={openAssetsTable?handleModalClose:() => {}}>
             <Box style={{height: '125px', width: '100%'}}>
                 {openFundWallet?<CancelRoundedIcon style={styles.customIcon} onClick={handleModalClose} />:null}
-                {balances!.length === 0?<AssetIconComponent denom={'noBalance'} amount={'0'} selectable={false}/>:
-                    balances!.map((balance, idx) => (
-                        <AssetIconComponent denom={balance.denom} amount={balance.amount} selectable={true}/>
+                {balancesToWorkWith!.length === 0?<AssetIconComponent denom={'noBalance'} amount={'0'} selectable={false}/>:
+                    balancesToWorkWith!.map((balance, idx) => (
+                        <AssetIconComponent denom={balance.denom} amount={balance.amount} selectable={walletRelated?false:true}/>
                 ))}
             </Box>
         </ClickAwayListener>

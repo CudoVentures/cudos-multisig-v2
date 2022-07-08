@@ -8,6 +8,7 @@ export interface modalState {
     failure?: boolean
     openAddressBook?: boolean
     openAssetsTable?: boolean
+    walletRelated?: boolean
     openFundWallet?: boolean
     addNewAddress?: boolean
     editAddressBookRecord?: boolean
@@ -23,6 +24,7 @@ export const initialState: modalState = {
     failure: false,
     addNewAddress: false,
     editAddressBookRecord: false,
+    walletRelated: false,
     openAddressBook: false,
     openFundWallet: false,
     openAssetsTable: false,
