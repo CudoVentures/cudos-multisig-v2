@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from '../../styles'
 import Card from 'components/Card/Card'
+import { convertSecondsToDisplay } from 'utils/helpers'
 
 const SummaryAccInfo = () => {
     const { threshold, groupMetadata, votingPeriod } = useSelector((state: RootState) => state.walletObject)
-    const timeForVoting = Math.floor(votingPeriod?.seconds! / (3600 * 24))
-    const stringTimeForVoting = timeForVoting + 1 > 2?`${timeForVoting} DAYS`: `${timeForVoting} DAY`
+    const timeForVoting = convertSecondsToDisplay(votingPeriod?.seconds!, 'days')
     
     return (
         <Card style={styles.summaryCard}>
@@ -32,7 +32,7 @@ const SummaryAccInfo = () => {
                     Time for voting
                 </Typography>
                 <Typography variant="inherit" color="text.primary">
-                    {stringTimeForVoting}
+                    {timeForVoting}
                 </Typography>
             </Box>
         </Card>

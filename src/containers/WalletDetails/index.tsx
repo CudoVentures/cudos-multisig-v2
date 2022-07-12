@@ -5,12 +5,13 @@ import Dialog from 'components/Dialog'
 import { useEffect, useRef } from 'react'
 import LeftMenu from 'components/LeftMenu'
 import LeftWalletSummary from 'components/LeftWalletSummary'
-import { getCurrentMenuSelection, MenuSelectionInfo } from 'components/WalletOperations'
+import { MenuSelectionInfo } from 'components/WalletOperations'
 import Dashboard from 'components/WalletOperations/Dashboard'
 import PlusIcon from 'assets/vectors/plus-icon.svg'
 import { updateModalState } from 'store/modals'
 import { initialState as initialModalState } from 'store/modals'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from 'store'
 
 const WalletDetails = () => {
     const dispatch = useDispatch()
@@ -20,16 +21,17 @@ const WalletDetails = () => {
     const leftStepsContent = useRef<HTMLInputElement>(defaultElement)
     const rightStepsContent = useRef<HTMLInputElement>(defaultElement)
     const entireDashboardPage = useRef<HTMLInputElement>(defaultElement)
+    const { menuSelection } = useSelector((state: RootState) => state.menu)
 
     useEffect(() => {
-        dispatch(updateModalState({ ...initialModalState }))
-        setTimeout(() => entireDashboardPage.current.style.opacity = '1', 10)
-        setTimeout(() => resizableCardRight.current.style.width = '1000px', 10)
-        setTimeout(() => resizableCardLeft.current.style.width = '250px', 10)
-        setTimeout(() => resizableCardRight.current.style.marginLeft = '40px', 10)
-        setTimeout(() => leftStepsContent.current.style.opacity = '1', 400)
-        // setTimeout(() => rightStepsContent.current.style.opacity = '1', 400)
+        dispatch(updateModalState({ loading: true, loadingType: true }))
+        setTimeout(() => dispatch(updateModalState({ ...initialModalState })), 500)
+        setTimeout(() => resizableCardLeft.current.style.opacity = '1', 400)
       }, [])
+
+    const handleNewTxClick = () => {
+        dispatch(updateModalState({ transactionSelector: true }))
+    }
 
     return (
         <Box ref={entireDashboardPage} style={{...styles.holder, ...styles.contentAppear}}>
@@ -42,11 +44,7 @@ const WalletDetails = () => {
                         rightStepsContent={rightStepsContent}
                     />
                     <LeftWalletSummary 
-                        resizableCardLeft={resizableCardLeft}
                         resizableCardRight={resizableCardRight}
-                        leftStepsContent={leftStepsContent}
-                        rightStepsContent={rightStepsContent}
-                        entireDashboardPage={entireDashboardPage}
                     />
                 </div> 
             </Card>
@@ -61,13 +59,14 @@ const WalletDetails = () => {
                             variant="contained"
                             color="primary"
                             style={{width: '210px', height: '45px'}}
+                            onClick={handleNewTxClick}
                         >
                             <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
                             New Transaction
                         </Button>
                     </Box>
                     {
-                        getCurrentMenuSelection() === 0? <Dashboard />
+                        menuSelection === 0? <Dashboard />
                         :
                         null
                     }

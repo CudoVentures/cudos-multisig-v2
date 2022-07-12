@@ -36,6 +36,12 @@ export const styles = {
     transition: 'all 0.5s', 
     WebkitTransition: 'all 0.5s'
   },
+  cardContentDissapear: {
+    paddingBottom:'5px', 
+    display: 'flex', 
+    justifyContent: "flex-end", 
+    width: '100%'
+  },
   Card: {
     textAlign: "center",
     width: '100%',

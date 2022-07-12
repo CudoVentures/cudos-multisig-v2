@@ -1,29 +1,25 @@
-import { Box, FormControl, Input, MenuItem, Select, Tooltip, tooltipClasses, TooltipProps, Typography } from '@mui/material'
 import { Fragment, useEffect, useState } from 'react'
-import { styled } from '@mui/material/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { member, updateWalletObjectState, votingPeriod } from 'store/walletObject'
 import { styles } from '../styles'
 import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
+import { HtmlTooltip } from 'utils/multiSendTableHelper'
+
+import { 
+    Box, 
+    FormControl, 
+    Input, 
+    MenuItem, 
+    Select, 
+    Typography 
+} from '@mui/material'
 
 const StepFour = () => {
     
     const dispatch = useDispatch()
     const [threshold, setThreshold] = useState('')
     const { members } = useSelector((state: RootState) => state.walletObject)
-
-    const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
-        <Tooltip {...props} classes={{ popper: className }} />
-        ))(({ theme }) => ({
-        [`& .${tooltipClasses.tooltip}`]: {
-            backgroundColor: '#28314E',
-            color: 'white',
-            width: 'fit-content',
-            fontSize: theme.typography.pxToRem(12),
-            border: '1px solid #dadde9',
-        },
-    }))
 
     const convertVotingPeriodToSeconds = (selectedVotingPeriod: number): votingPeriod => {
         return {

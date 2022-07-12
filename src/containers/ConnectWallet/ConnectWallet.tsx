@@ -4,7 +4,7 @@ import KeplrLogo from 'assets/vectors/keplr-logo.svg'
 import BackgroundImage from 'assets/vectors/background.svg'
 
 import { styles } from './styles'
-import { checkForAdminToken, getAccountBalances, getAccountWallets, getNativeBalance } from 'utils/helpers'
+import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 import { ConnectLedger } from 'ledgers/KeplrLedger'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,7 +21,7 @@ const ConnectWallet = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { address, lastLoggedAddress, addressBook, wallets } = useSelector((state: RootState) => state.userState)
+  const { address, lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
 
   const connect = async () => {
     try {
@@ -30,7 +30,6 @@ const ConnectWallet = () => {
         dispatch(updateUser({ ...initialUserState }))
       }
       const currentBalances = await getAccountBalances(address)
-      // const userWallets = await getAccountWallets(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
       
@@ -41,7 +40,6 @@ const ConnectWallet = () => {
         balances: currentBalances, 
         nativeBalance: userBalance, 
         isAdmin: admin,
-        wallets: wallets,
         addressBook
       }))
       

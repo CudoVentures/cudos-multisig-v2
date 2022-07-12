@@ -13,16 +13,23 @@ import { updateModalState } from 'store/modals'
 const AssetIconComponent = ({ 
         denom, 
         amount,
-        selectable = false
+        selectable = false,
+        smaller = false
     }:{ 
         denom: string, 
-        amount: string, 
+        amount: string,
+        smaller?: boolean,
         selectable?: boolean })
     : JSX.Element => {
 
     const dispatch = useDispatch()
     const [usdValue, setUsdValue] = useState<string>('')
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
+    const iconImg = denomToIcon[denom as keyof typeof denomToIcon]
+    const denomToDisplay = denomToAlias[denom as keyof typeof denomToAlias]
+    const tooltipTitle = denom === 'cudosAdmin'?amount:separateDecimals(separateFractions(amount))
+    const amountToDisplay  = denom === 'cudosAdmin'?amount:cutFractions(separateDecimals(separateFractions(amount)))
+    const usdPriceToDisplay = denom ==='cudosAdmin'?'Priceless':`$ ${setDecimalPrecisionTo(usdValue, 2)}`
 
     const setSelected = () => {
         dispatch(updateUser({ chosenBalance: {
@@ -56,7 +63,7 @@ const AssetIconComponent = ({
         clearInterval(timer)
         }
 
-      }, [selectedWallet?.walletBalances])
+    }, [selectedWallet?.walletBalances])
 
     return denom === 'noBalance'? (
         <Box style={{...styles.assetsIconHolder, justifyContent: 'center', height: '110%'}}>
@@ -69,26 +76,26 @@ const AssetIconComponent = ({
             <Box
             sx={selectableBox}
             onClick={selectable?() => setSelected():undefined} 
-            style={styles.assetsIconHolder}
+            style={{...styles.assetsIconHolder}}
             >
-                <img style={{marginRight:'15px'}} src={denomToIcon[denom as keyof typeof denomToIcon]} alt={`${denom} logo`}/>
-                <Typography style= {{float: 'left'}} variant="h6" fontWeight={600} color="text.primary">
-                <Tooltip title={denom === 'cudosAdmin'?amount:separateDecimals(separateFractions(amount))}>
-                    <div>
-                        {denom === 'cudosAdmin'?amount:cutFractions(separateDecimals(separateFractions(amount)))}
-                    </div>
-                </Tooltip>
-                </Typography>
-                <Typography style= {{margin: '0 10px', float: 'left'}} variant="h6" fontWeight={600} color="text.secondary">
-                    {denomToAlias[denom as keyof typeof denomToAlias]}
-                </Typography>
-                <Typography style= {{marginLeft: '20px', float: 'left'}} variant="subtitle1" fontWeight={600} color={COLORS_DARK_THEME.PRIMARY_BLUE}>
-                    <Tooltip title={usdValue}>
-                        <div>
-                            <span>{denom==='cudosAdmin'?'Priceless':`$ ${setDecimalPrecisionTo(usdValue, 2)}`}</span>
-                        </div>
+                <div style={{width: '20px', height: '20px', marginRight:'15px'}}>
+                    <img src={iconImg} alt={`${denom} logo`}/>
+                </div>
+                <Typography style= {{float: 'left'}} variant={smaller?"subtitle2":"h6"} fontWeight={600} color="text.primary">
+                    <Tooltip title={tooltipTitle}>
+                        <div>{amountToDisplay}</div>
                     </Tooltip>
                 </Typography>
+                <Typography style= {{margin: '0 10px', float: 'left'}} variant={smaller?"subtitle2":"h6"} fontWeight={600} color="text.secondary">
+                    {denomToDisplay}
+                </Typography>
+                {smaller?null:
+                <Typography style= {{marginLeft: '20px', float: 'left'}} variant={smaller?"subtitle2":"subtitle1"} fontWeight={600} color={COLORS_DARK_THEME.PRIMARY_BLUE}>
+                    <Tooltip title={usdValue}>
+                        <div>{usdPriceToDisplay}</div>
+                    </Tooltip>
+                </Typography>
+                }
             </Box>
         </div>
     )

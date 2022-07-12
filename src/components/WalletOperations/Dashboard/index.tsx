@@ -15,6 +15,8 @@ import TxsSummaryTable from './TxsSummaryTable'
 import Dialog from 'components/Dialog'
 import { updateModalState } from 'store/modals'
 import { styles } from './styles'
+import { updateMenuSelectionState } from 'store/menu'
+import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
     const [copied, setCopied] = useState<boolean>(false)
@@ -40,6 +42,10 @@ const Dashboard = () => {
             openFundWallet: true,
             openAssetsTable: true
         }))
+    }
+
+    const seeAllTxs = () => {
+        dispatch(updateMenuSelectionState({menuSelection: 1}))
     }
 
     return (
@@ -161,6 +167,7 @@ const Dashboard = () => {
                         disableRipple
                         variant="text"
                         style={{textDecoration: 'none'}}
+                        onClick={seeAllTxs}
                         >
                         <span>{"See all"}</span>
                     </Button>

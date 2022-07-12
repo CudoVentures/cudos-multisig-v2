@@ -29,16 +29,17 @@ export const styles = {
   },
   Card: {
     textAlign: "center",
-    width: '0',
+    width: '1000px',
     height: '100%',
-    marginLeft: '0',
+    marginLeft: '40px',
     transition: "all 0.5s",
     backgroundColor: 'transparent'
   },
   leftSteps: {
       display: 'flex',
+      opacity: '0',
       margin: '0',
-      width: '0',
+      width: '250px',
       minWidth: '0',
       height: '580px',
       textAlign: "center",
@@ -54,7 +55,7 @@ export const styles = {
       width: '100%',
     },
   contentAppear: {
-    opacity: '0', 
+    opacity: '1', 
     transition: 'all 0.5s', 
     WebkitTransition: 'all 0.5s'
   },

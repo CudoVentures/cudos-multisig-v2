@@ -1,13 +1,23 @@
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from './styles'
 import MembersIcon from 'assets/vectors/members-icon.svg'
 import { useNavigate } from 'react-router-dom'
 import { updatedSelectedWallet } from 'store/user'
-import { findOneWallet } from 'utils/helpers'
+import { findOneWallet, formatAddress } from 'utils/helpers'
 
-interface Data {
+import { 
+    Box, 
+    Button, 
+    Table, 
+    TableBody, 
+    TableCell, 
+    TableContainer, 
+    TableRow, 
+    Tooltip, 
+    Typography 
+} from '@mui/material'
+interface tableData {
     walletName: string;
     walletAddress: string;
     membersCount: number;
@@ -18,21 +28,21 @@ const WalletsView = () => {
     const dispatch = useDispatch()
     const { wallets } = useSelector((state: RootState) => state.userState)
     
-    function createData(
+    function createTableData(
         walletName: string,
         walletAddress: string,
         membersCount: number
-        ): Data {
+        ): tableData {
         return {
             walletName,
             walletAddress,
             membersCount
-        };
+        }
     }
-      
-    const rows: Data[] = [];
-      wallets!.forEach((wallet) =>
-        rows.push(createData(
+
+    const rows: tableData[] = []
+    wallets!.forEach((wallet) =>
+        rows.push(createTableData(
             wallet.walletName!, 
             wallet.walletAddress!,
             wallet.memberCount!
@@ -40,7 +50,7 @@ const WalletsView = () => {
     )
 
     const openDashboard = (walletAddress: string) => {
-        const wallet = findOneWallet({...wallets!}, walletAddress)
+        const wallet = findOneWallet(wallets!, walletAddress)
         dispatch(updatedSelectedWallet(wallet))
         navigate(`/dashboard`)
     }
@@ -60,7 +70,11 @@ const WalletsView = () => {
                         </TableCell>
                         <TableCell style={{width: '580px'}} align="left">
                             <Typography style={{fontWeight:'600'}} variant="subtitle2" color="text.secondary">
-                                {row.walletAddress}
+                                <Tooltip title={row.walletAddress}>
+                                    <div>
+                                        {formatAddress(row.walletAddress, 55)}
+                                    </div>
+                                </Tooltip>
                             </Typography>
                         </TableCell>
                         <TableCell style={{width: '150px'}} align="left">

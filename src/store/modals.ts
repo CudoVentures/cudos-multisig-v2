@@ -4,10 +4,12 @@ export interface modalState {
     message?: string
     msgType?: string
     loading?: boolean
+    loadingType?: boolean
     success?: boolean
     failure?: boolean
     openAddressBook?: boolean
     openAssetsTable?: boolean
+    transactionSelector?: boolean
     walletRelated?: boolean
     openFundWallet?: boolean
     addNewAddress?: boolean
@@ -21,9 +23,11 @@ export const initialState: modalState = {
     msgType: '',
     loading: false,
     success: false,
+    loadingType: false,
     failure: false,
     addNewAddress: false,
     editAddressBookRecord: false,
+    transactionSelector: false,
     walletRelated: false,
     openAddressBook: false,
     openFundWallet: false,

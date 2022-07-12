@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { cutFractions, separateDecimals, separateFractions } from 'utils/regexFormatting'
 import { updatedSelectedWallet } from 'store/user'
 
-interface Data {
+interface tableData {
     walletName: string;
     walletAddress: string;
     walletBalance: string;
@@ -24,7 +24,7 @@ const SlidingMenuTable = () => {
         walletAddress: string,
         walletBalance: string,
         walletDisplayBalance: string
-        ): Data {
+        ): tableData {
         return {
             walletName,
             walletAddress,
@@ -33,19 +33,21 @@ const SlidingMenuTable = () => {
         };
     }
 
-    const rows: Data[] = [];
-    wallets!.forEach((wallet) =>
-        rows.push(createData(
-            wallet.walletName!, 
-            wallet.walletAddress!,
-            separateDecimals(separateFractions(wallet.nativeBalance!)),
-            cutFractions(separateDecimals(separateFractions(wallet.nativeBalance!)))
-        ))
-    )
+    const rows: tableData[] = [];
+    if (wallets!.length>0) {
+        wallets!.forEach((wallet) =>
+            rows.push(createData(
+                wallet.walletName!,
+                wallet.walletAddress!,
+                separateDecimals(separateFractions(wallet.nativeBalance!)),
+                cutFractions(separateDecimals(separateFractions(wallet.nativeBalance!)))
+            ))
+        )
+    }
 
     const navigateToSelected = (walletAddress: string) => {
-        const wallet = findOneWallet(wallets!, walletAddress)
-        dispatch(updatedSelectedWallet(wallet))
+        const walletFound = findOneWallet(wallets!, walletAddress)
+        dispatch(updatedSelectedWallet(walletFound))
         navigate(`/dashboard`)
     }
 

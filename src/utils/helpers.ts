@@ -7,38 +7,83 @@ import { separateDecimals, separateFractions } from "./regexFormatting"
 import cudosLogo from 'assets/vectors/balances/cudos.svg'
 import cudosAdminLogo from 'assets/vectors/balances/cudos-admin.svg'
 
+export const convertSecondsToDisplay = (seconds: number, desiredFormat: string): string => {
+    let result: number = seconds
+    switch (desiredFormat.toLowerCase()) {
+        case 'seconds':
+            break
+        case 'minutes':
+            result = Math.floor(result / 60)
+            break
+        case 'hours':
+            result = Math.floor(result / 3600)
+            break
+        case 'days':
+            result = Math.floor(result / (3600 * 24))
+            break
+        default:
+            break
+    }
+    const format = result + 1 > 2?`${desiredFormat}`: `${desiredFormat.slice(0, -1)}`
+    
+    return `${result.toString()} ${format.toUpperCase()}`
+}
+
 export const enforceCustomFeesOverKeplr = () => {
     return window.keplr.defaultOptions = {
         sign: {
             preferNoSetFee: true,
         }
-      }
+    }
 }
 
 export const calculateFeeFromGas = (gasAmount: number): string => {
     return new BigNumber(GAS_PRICE).multipliedBy(new BigNumber(gasAmount)).valueOf()
 }
 
-export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet | undefined => {
-    let walletfound: wallet = emptyWallet
-
-    try {
-        Object.entries(wallets!).forEach(([idx, currentWallet]) => {
-            if (currentWallet.walletAddress === givenAddress) {
-                walletfound = {...currentWallet}
-            }
-        })
-
-        if (walletfound.walletAddress) {
-            return walletfound
-
-        } else {
-            throw new Error('Wallet not found')
-        }
-
-    } catch (e: any) {
-        console.debug(e.message)
+export const updatedWalletsBalances = async (wallets: wallet[]): Promise<wallet[]> => {
+    
+    let tempWallets: wallet[] = []
+    for await (const obj of wallets!) {
+        const updatedWallet = await updateWalletBalances(obj)
+        tempWallets.push(updatedWallet)
     }
+    return tempWallets
+}
+
+export const updateWalletBalances = async (wallet: wallet): Promise<wallet> => {
+
+    let tempWallet = {...wallet}
+    const currentWalletBalances = await getAccountBalances(tempWallet.walletAddress)
+    let isAdmin: boolean = false
+    let nativeBalance: string = ''
+
+    if (currentWalletBalances.length > 0) {
+        isAdmin = checkForAdminToken(currentWalletBalances)
+        nativeBalance = getNativeBalance(currentWalletBalances)
+    }
+
+    const updatedWallet: wallet = {
+        ...tempWallet,
+        isAdmin: isAdmin,
+        walletBalances: currentWalletBalances,
+        nativeBalance: nativeBalance
+    }
+
+    return updatedWallet
+}
+
+export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet => {
+    
+    let walletfound: wallet = emptyWallet
+    for (let i = 0; i < wallets.length; i++) {
+        if (wallets[i].walletAddress === givenAddress) {
+            walletfound = {...wallets[i]}
+            break 
+        }
+        console.debug('Wallet not found')
+    }
+    return walletfound
 }
 
 // The wrapper function is merely for the purpose of escaping the double await later in code.
@@ -53,12 +98,6 @@ export const getCudosBalanceInUSD = async (balance: string): Promise<string> => 
     const rawResult = new BigNumber(balance).multipliedBy(rate).toString(10).replace(/\.[0-9]+/gm, "")
     const fullUsdBalance = separateDecimals(separateFractions(rawResult))
     return fullUsdBalance
-}
-
-export const getAccountWallets = async (accountAddress: string): Promise<any> => {
-    return []
-    // Waiting for a CUDOS JS method for returning all wallets 
-    // associated with an address on the Query Client
 }
 
 export const checkForAdminToken = (balances: any[]): boolean => {

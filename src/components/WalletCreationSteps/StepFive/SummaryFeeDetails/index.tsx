@@ -9,12 +9,14 @@ import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
 const SummaryFeeDetails = () => {
 
     const { feeForCreation } = useSelector((state: RootState) => state.walletObject)
-    // X.{precision} {denom} format
-    const displayWorthyFee = handleFullBalanceToPrecision(
-        feeForCreation!.amount[0].amount || '0', 
-        4, 
-        feeForCreation!.amount[0].denom
-    )
+    let displayWorthyFee: string = ''
+    if(feeForCreation!.amount[0]) {
+        displayWorthyFee = handleFullBalanceToPrecision(
+            feeForCreation!.amount[0].amount || '0',
+            4,
+            feeForCreation!.amount[0].denom
+        )
+    }
 
     return (
         <Card style={styles.summaryCard}>

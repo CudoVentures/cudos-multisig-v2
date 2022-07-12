@@ -14460,7 +14460,7 @@ export type GetWalletsQueryVariables = Exact<{
 }>;
 
 
-export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, id: number, group_metadata?: string | null, min_execution_period: any, threshold: number, voting_period: any, group_members: Array<{ __typename?: 'group_member', address: string, member_metadata?: string | null }>, group_proposals: Array<{ __typename?: 'group_proposal', id: number, executor_result: any, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', proposal_id: number, submit_time: any, vote_metadata?: string | null, vote_option: any, voter: string }> }> } }> };
+export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, group_members: Array<{ __typename?: 'group_member', address: string, member_metadata?: string | null }> } }> };
 
 
 export const GetWalletsDocument = gql`
@@ -14468,25 +14468,13 @@ export const GetWalletsDocument = gql`
   group_member(where: {address: {_eq: $_eq}}) {
     group_with_policy {
       address
-      id
       group_metadata
-      min_execution_period
       threshold
       voting_period
+      id
       group_members {
         address
         member_metadata
-      }
-      group_proposals {
-        id
-        executor_result
-        group_proposal_votes {
-          proposal_id
-          submit_time
-          vote_metadata
-          vote_option
-          voter
-        }
       }
     }
   }

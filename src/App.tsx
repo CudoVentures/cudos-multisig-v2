@@ -20,12 +20,14 @@ import '@fontsource/poppins'
 import { updateUser } from 'store/user'
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 import WalletDetails from 'containers/WalletDetails'
+import SendFundsProposal from 'containers/SendFundsProposal'
+import RequireWalletFunds from 'components/RequireWalletFunds/RequireWalletFunds'
 
 const App = () => {
   const location = useLocation()
   const apolloClient = useApollo(null)
   const themeColor = useSelector((state: RootState) => state.settings.theme)
-  const { lastLoggedAddress, addressBook, wallets } = useSelector((state: RootState) => state.userState)
+  const { lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
   const dispatch = useDispatch()
 
   const connectAccount = useCallback(async () => {
@@ -36,7 +38,6 @@ const App = () => {
         )
       }
       const currentBalances = await getAccountBalances(address)
-      // const userWallets = await getAccountWallets(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
 
@@ -47,7 +48,6 @@ const App = () => {
         balances: currentBalances, 
         nativeBalance: userBalance, 
         isAdmin: admin,
-        wallets: wallets,
         addressBook
       }))
         
@@ -76,6 +76,9 @@ const App = () => {
                 <Route element={<RequireKeplr />}>
                   <Route path="welcome" element={<Welcome />} />
                   <Route path="create-wallet" element={<CreateWallet />} />
+                  <Route element={<RequireWalletFunds />}>
+                    <Route path="send-funds" element={<SendFundsProposal />} />
+                  </Route>
                   <Route path="dashboard" element={<WalletDetails />} />
                   <Route path="transactions" element={<WalletDetails />} />
                   <Route path="members" element={<WalletDetails />} />

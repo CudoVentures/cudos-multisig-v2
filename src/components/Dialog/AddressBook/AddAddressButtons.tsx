@@ -1,7 +1,6 @@
-import { Button, Tooltip, tooltipClasses, TooltipProps, Typography } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { Button, Tooltip, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { styles } from '../styles'
+import { styles } from './styles'
 import { updateModalState } from 'store/modals'
 import PlusIcon from 'assets/vectors/plus-icon.svg'
 import UploadFromCsv from 'assets/vectors/csv-upload.svg'
@@ -13,6 +12,7 @@ import { RootState } from 'store'
 import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 import { initialState as initialModalState } from 'store/modals'
 import { CSVLink } from "react-csv"
+import { HtmlTooltip } from 'utils/multiSendTableHelper'
 
 import { 
     DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE, 
@@ -22,10 +22,12 @@ import {
     FILE_ERROR_TITLE 
 } from 'utils/constants'
 
+interface DataObject {
+    index: number
+}
 interface addressBook {
     [key: string]: string;
   }
-  
 
 const AddAddressButtons = () => {
     const dispatch = useDispatch()
@@ -34,6 +36,7 @@ const AddAddressButtons = () => {
     const { addNewAddress, editAddressBookRecord, dataObject } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
     const currentStep = parseInt(getCurrentWalletCreationStep())
+    const dataFromObject: DataObject = new Object(dataObject) as DataObject
     
     let fileReader: any
     let invdalidData: boolean = false
@@ -41,18 +44,6 @@ const AddAddressButtons = () => {
     const handleModalClose = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
-      
-    const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
-        <Tooltip {...props} classes={{ popper: className }} />
-        ))(({ theme }) => ({
-        [`& .${tooltipClasses.tooltip}`]: {
-            backgroundColor: '#f5f5f9',
-            color: 'rgba(0, 0, 0, 0.87)',
-            maxWidth: 'max-content',
-            fontSize: theme.typography.pxToRem(12),
-            border: '1px solid #dadde9',
-        },
-    }))
 
     const handleFileRead = (e: any) => {
         const content = fileReader.result.split('\n')
@@ -80,7 +71,6 @@ const AddAddressButtons = () => {
                     break 
                 }
 
-            // Avoiding duplicates by keeping the address as unique key-constraint
             txBatch = {...txBatch, [address]: name}
         }
         
@@ -138,8 +128,7 @@ const AddAddressButtons = () => {
 
             case editAddressBookRecord:
                 const tempBook: addressBook = { ...addressBook }
-                //@ts-ignore
-                const oldRecordIndex: number = dataObject.index
+                const oldRecordIndex: number = dataFromObject.index
                 const updatedBook: addressBook = {}
                 
                 Object.entries(tempBook).forEach(([address, name], index) => {
@@ -202,16 +191,11 @@ const AddAddressButtons = () => {
         <div>
             {addNewAddress?
             <div style={{display: "flex", alignItems: "flex-start"}}>
-                <div style={{display: 'flex', height: '80px', alignItems: "flex-end"}}>
+                <div style={styles.btnHolder}>
                 <Button
                     variant="contained"
                     color="secondary"
-                    sx={() => ({
-                    width: '220px',
-                    height: '50px',
-                    marginRight: '10px',
-                    fontWeight: 700
-                    })}
+                    sx={styles.leftOrientedBtn}
                     onClick={currentStep === 3?handleModalClose:handleBackToAddressBook}
                 >
                      {currentStep === 3?"Close":"Back to Address Book"}
@@ -222,12 +206,7 @@ const AddAddressButtons = () => {
                             disabled={!validInput}
                             variant="contained"
                             color="primary"
-                            sx={() => ({
-                            marginLeft: '10px',
-                            width: '220px',
-                            height: '50px',
-                            fontWeight: 700
-                            })}
+                            sx={styles.rightOrientedBtn}
                             onClick={handleAddNewAddress}
                         >
                             <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
@@ -241,16 +220,11 @@ const AddAddressButtons = () => {
             :
             editAddressBookRecord?
             <div style={{display: "flex", alignItems: "flex-start"}}>
-                <div style={{display: 'flex', height: '80px', alignItems: "flex-end"}}>
+                <div style={styles.btnHolder}>
                 <Button
                     variant="contained"
                     color="secondary"
-                    sx={() => ({
-                    width: '220px',
-                    height: '50px',
-                    marginRight: '10px',
-                    fontWeight: 700
-                    })}
+                    sx={styles.leftOrientedBtn}
                     onClick={currentStep === 3?handleModalClose:handleBackToAddressBook}
                 >
                      {currentStep === 3?"Close":"Back to Address Book"}
@@ -261,12 +235,7 @@ const AddAddressButtons = () => {
                             disabled={!validInput}
                             variant="contained"
                             color="primary"
-                            sx={() => ({
-                            marginLeft: '10px',
-                            width: '220px',
-                            height: '50px',
-                            fontWeight: 700
-                            })}
+                            sx={styles.rightOrientedBtn}
                             onClick={handleAddNewAddress}
                         >
                             <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />

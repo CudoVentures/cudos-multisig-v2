@@ -5,6 +5,7 @@ import Failure from './Failure'
 import FundWallet from './FundWallet/FundWallet'
 import Loading from './Loading'
 import Success from './Success'
+import TransactionSelector from './TransactionSelector/TransactionSelector'
 
 const Dialog = () => {
 
@@ -13,7 +14,8 @@ const Dialog = () => {
     loading, 
     failure,
     openAddressBook,
-    openFundWallet
+    openFundWallet,
+    transactionSelector
   } = useSelector((state: RootState) => state.modalState)
 
   switch(true) {
@@ -27,6 +29,8 @@ const Dialog = () => {
       return <AddressBook />
     case openFundWallet:
       return <FundWallet />
+    case transactionSelector:
+      return <TransactionSelector />
     default:
       return <div></div>
   }

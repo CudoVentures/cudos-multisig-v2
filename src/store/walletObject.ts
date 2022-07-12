@@ -3,8 +3,8 @@ import { StdFee } from 'cudosjs'
 
 export interface member {
     address: string;
-    weight: number;
-    metadata: string;
+    weight?: number;
+    metadata?: string;
 }
 
 interface groupMetadata {

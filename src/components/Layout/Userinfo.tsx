@@ -1,14 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Typography,
-  Avatar,
-  Box,
-  Collapse,
-  Button,
-  Tooltip
-} from '@mui/material'
 import { RootState } from '../../store'
 import { StyledUser, styles } from './styles'
 import WalletIcon from 'assets/vectors/wallet-icon.svg'
@@ -22,9 +14,20 @@ import { EXPLORER_ADDRESS_DETAILS } from '../../api/endpoints'
 import AccountBalance from 'utils/subscriptions/accountBalance'
 import { updateUser } from 'store/user'
 import { initialState as initialUserState } from 'store/user'
+import { initialState as initialSendFundsState } from 'store/sendFunds'
 import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
-import { updateWalletCreationSteps } from 'store/steps'
+import { updateWalletCreationSteps } from 'store/walletCreation'
+import { updateSendFunds } from 'store/sendFunds'
+
+import {
+  Typography,
+  Avatar,
+  Box,
+  Collapse,
+  Button,
+  Tooltip
+} from '@mui/material'
 
 const UserInfo = () => {
   const navigate = useNavigate()
@@ -54,6 +57,7 @@ const UserInfo = () => {
     dispatch(updateWalletObjectState({ ...initialWalletObject }))
     dispatch(updateModalState({ ...initialModalState }))
     dispatch(updateWalletCreationSteps({ currentStep: ''}))
+    dispatch(updateSendFunds({ ...initialSendFundsState }))
     navigate("/")
   }
 

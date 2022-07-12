@@ -8,11 +8,11 @@ import {
 } from '../regexFormatting'
 import { useEffect } from 'react'
 import { updateUser } from '../../store/user'
-import { checkForAdminToken, getAccountBalances, getAccountWallets, getNativeBalance } from 'utils/helpers'
+import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 
 const AccountBalance = (): JSX.Element => {
 
-  const { address, nativeBalance, addressBook, lastLoggedAddress, wallets } = useSelector((state: RootState) => state.userState)
+  const { address, nativeBalance, addressBook, lastLoggedAddress } = useSelector((state: RootState) => state.userState)
   const fullBalance = separateDecimals(separateFractions(nativeBalance?nativeBalance.toString():'0'))
   const displayBalance = cutFractions(fullBalance)
   const dispatch = useDispatch()
@@ -21,7 +21,6 @@ const AccountBalance = (): JSX.Element => {
     const fetchData = async () => {
       try {
         const currentBalances = await getAccountBalances(address!)
-        // const userWallets = await getAccountWallets(address!)
         const admin = checkForAdminToken(currentBalances)
         const userBalance = getNativeBalance(currentBalances)
 
@@ -31,7 +30,6 @@ const AccountBalance = (): JSX.Element => {
           balances: currentBalances, 
           nativeBalance: userBalance, 
           isAdmin: admin,
-          wallets: wallets,
           addressBook
         }))
 
@@ -46,7 +44,7 @@ const AccountBalance = (): JSX.Element => {
     return () => {
       clearInterval(timer)
     }
-  }, [nativeBalance, addressBook, wallets])
+  }, [nativeBalance, addressBook])
 
   return (
     <Tooltip title={fullBalance + ' CUDOS'}>

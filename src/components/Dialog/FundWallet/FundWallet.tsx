@@ -20,6 +20,7 @@ import { initialState as initialModalState } from 'store/modals'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
 import { handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
 import { signingClient } from 'utils/config'
+import { MultiSendUser } from 'utils/multiSendTableHelper'
 
 import { 
     CHAIN_NAME, 
@@ -261,11 +262,6 @@ const FundWallet = () => {
     }
 
     const getFundWalletMsgAndFees = async () => {
-        interface MultiSendUser {
-            address: string;
-            coins: Coin[];
-        }
-
         const transferAmount = handleIsAdminTransfer()
 
         const sender: MultiSendUser[] = [{

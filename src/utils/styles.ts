@@ -6,7 +6,7 @@ export const styles = {
         marginTop: '3px',
         marginBottom: '10px', 
         display: 'flex', 
-        height: '50%', 
+        height: '10%', 
         alignItems: 'center', 
         borderRadius: '10px', 
         width: '100%',

@@ -7,10 +7,11 @@ import FailureIcon from 'assets/vectors/failure.svg'
 import { useNavigate } from 'react-router-dom'
 import { updateModalState } from 'store/modals'
 import { initialState as initialModalState } from 'store/modals'
-import { updateWalletCreationSteps } from 'store/steps'
+import { updateWalletCreationSteps } from 'store/walletCreation'
 import { updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialWalletObject } from 'store/walletObject'
-import { DUPLICATED_ADDRESS_TYPE, WALLET_CORRUPTED_PROCESS_TYPE } from 'utils/constants'
+import { initialState as initialSendFundsState, updateSendFunds } from 'store/sendFunds'
+import { DUPLICATED_ADDRESS_TYPE, FEE_ESTIMATION_ERROR, PROPOSAL_CREATION_FAILURE_TYPE, WALLET_CORRUPTED_PROCESS_TYPE } from 'utils/constants'
 
 
 const Failure = () => {
@@ -20,6 +21,7 @@ const Failure = () => {
 
     const clearState = async () => {
       dispatch(updateWalletCreationSteps({currentStep: ''}))
+      dispatch(updateSendFunds({ ...initialSendFundsState }))
       dispatch(updateWalletObjectState({ ...initialWalletObject }))
     }
 
@@ -37,7 +39,9 @@ const Failure = () => {
 
     const handleModalClose = () => {
       switch(msgType) {
-        
+
+        case FEE_ESTIMATION_ERROR:
+        case PROPOSAL_CREATION_FAILURE_TYPE:
         case WALLET_CORRUPTED_PROCESS_TYPE:
           dispatch(updateModalState({ ...initialModalState }))
           goHome()
