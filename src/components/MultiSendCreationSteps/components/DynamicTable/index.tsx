@@ -101,17 +101,17 @@ const DynamicTable = () => {
                     break 
                 }
 
-            if (txBatch[recipient]) {
-                if (txBatch[recipient][denom]) {
-                    txBatch[recipient][denom] += amount
-                } else {
-                    txBatch[recipient][denom] = amount
-                }
-            } else {
-                txBatch[recipient] = {
-                    [denom]: amount
-                }
+            if (!txBatch[recipient]) {
+                txBatch[recipient] = { [denom]: amount }
+                continue
             }
+    
+            if (!txBatch[recipient][denom]) {
+                txBatch[recipient][denom] = amount
+                continue
+            } 
+
+            txBatch[recipient][denom] += amount
         }
         
         if (invdalidData) {
