@@ -134,7 +134,7 @@ const SendFundsProposal = () => {
             coins: totalCoinsDue
         }]
 
-        return await (await signingClient).groupModule.msgMultiSendProposal(
+        return (await signingClient).groupModule.msgMultiSendProposal(
             sender,
             recipients,
             selectedWallet!.walletAddress!,
