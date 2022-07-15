@@ -58,11 +58,13 @@ const SendFundsProposal = () => {
 
     const goHome = () => {
         clearState()
+
         if(selectedWallet) {
             navigate("/dashboard")
-        } else {
-            navigate("/welcome")
+            return
         }
+
+        navigate("/welcome")
     }
 
     const broadcastMsg = async () => {
