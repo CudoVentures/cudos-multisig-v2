@@ -33,9 +33,8 @@ export const setDecimalPrecisionTo = (amount: string, precision: number): string
     const tempString = amount.split('.')
     if (tempString[0] && tempString[1]) {
         return `${tempString[0]}.${tempString[1].slice(0, precision)}`
-    } else {
-        return "0"
-    }
+    } 
+    return "0"
 }
 
 export const handleFullBalanceToPrecision = (amount: string, precision: number, denom?: string): string => {
