@@ -120,12 +120,11 @@ const DynamicTable = () => {
                 title: FILE_ERROR_TITLE, 
                 message: FILE_ERROR_MSG
             }))
-        } else {
+            return
+        } 
 
-            const updatedData = mergeData(multisendRows!, txBatch)
-            dispatch(updateSendFunds({multisendRows: updatedData}))
-        }
-        
+        const updatedData = mergeData(multisendRows!, txBatch)
+        dispatch(updateSendFunds({multisendRows: updatedData}))        
     }
     
     const handleFileChosen = (e: any) => {
