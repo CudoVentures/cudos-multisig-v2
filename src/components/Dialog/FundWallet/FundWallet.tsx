@@ -143,9 +143,7 @@ const FundWallet = () => {
 
     const showFee = (): string => {
         const feesAmount = fees.gas?fees.amount[0].amount:'0'
-        const displayWorthyFee = handleFullBalanceToPrecision(
-            feesAmount || '0', 4, 'CUDOS'
-        )
+        const displayWorthyFee = handleFullBalanceToPrecision(feesAmount, 4, 'CUDOS')
         return displayWorthyFee
     }
 
