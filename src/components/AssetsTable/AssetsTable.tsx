@@ -19,12 +19,13 @@ const AssetsTable = () => {
                 openAssetsTable: false,
                 walletRelated: false
             }))
-        } else {
-            dispatch(updateModalState({
-                openAssetsTable: false,
-                openFundWallet: true
-            }))
+            return
         }
+
+        dispatch(updateModalState({
+            openAssetsTable: false,
+            openFundWallet: true
+        }))
     }
 
     const balancesToWorkWith = walletRelated?selectedWallet?.walletBalances:balances
