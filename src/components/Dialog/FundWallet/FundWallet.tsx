@@ -230,24 +230,18 @@ const FundWallet = () => {
         const accountBalance = new BigNumber(chosenBalance?.amount!)
         const neededFees = new BigNumber(fees.amount[0].amount)
         const cudosBalance = new BigNumber(nativeBalance!)
-        let result: boolean = false
 
         const transferAmount = 
             isAdminTransfer()?
             amountToSend.toString():
-            (amountToSend * 10 ** 18).toLocaleString('fullwide', {useGrouping:false})
+            amountToAcudos(amountToSend)
 
-        switch(true) {
-            case isAdminTransfer():
-                result = new BigNumber(transferAmount).isLessThanOrEqualTo(accountBalance) &&
-                        neededFees.isLessThanOrEqualTo(cudosBalance)
-                break
-
-            default:
-                result = new BigNumber(transferAmount).plus(neededFees).isLessThanOrEqualTo(accountBalance)
-                break
+        if (isAdminTransfer()) {
+            return new BigNumber(transferAmount).isLessThanOrEqualTo(accountBalance) &&
+            neededFees.isLessThanOrEqualTo(cudosBalance)
         }
-        return result
+
+        return new BigNumber(transferAmount).plus(neededFees).isLessThanOrEqualTo(accountBalance)
     }
 
     const handleIsAdminTransfer = (): string => {
