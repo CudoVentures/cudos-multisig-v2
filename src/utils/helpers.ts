@@ -40,6 +40,7 @@ export const convertSecondsToDisplay = (seconds: number, desiredFormat: string):
             break
     }
 
+    // This will cut the S if no plural form is needed as in this example: HOURS -> HOUR
     const format: string = result + 1 > 2 ? `${desiredFormat}` : `${desiredFormat.slice(0, -1)}`
 
     return `${result.toString()} ${format.toUpperCase()}`

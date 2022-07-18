@@ -13,7 +13,7 @@ import { initialState as initialModalState } from 'store/modals'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import Members from 'components/WalletOperations/Members'
-import { CommingSoonWrapper } from 'utils/wrappers'
+import { ComingSoonWrapper } from 'utils/wrappers'
 
 const WalletDetails = () => {
     const dispatch = useDispatch()
@@ -62,7 +62,7 @@ const WalletDetails = () => {
                     <Box style={{ width: '100%', justifyContent: 'space-between', alignItems: 'end', display: 'flex' }}>
                         <MenuSelectionInfo />
                         {menuSelection === 2 ?
-                            <CommingSoonWrapper>
+                            <ComingSoonWrapper>
                                 <Button
                                     disabled={true}
                                     variant="contained"
@@ -73,7 +73,7 @@ const WalletDetails = () => {
                                     <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
                                     Add New Member
                                 </Button>
-                            </CommingSoonWrapper>
+                            </ComingSoonWrapper>
                             : menuSelection === 3 ? null :
                                 <Button
                                     variant="contained"

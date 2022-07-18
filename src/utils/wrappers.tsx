@@ -7,7 +7,7 @@ import { Tooltip, Button } from '@mui/material'
 import DownloadToCsv from 'assets/vectors/csv-download.svg'
 import addressBookIcon from 'assets/vectors/small-address-book-icon.svg'
 
-export const CommingSoonWrapper = ({ children }: {children: ReactNode}): JSX.Element => {
+export const ComingSoonWrapper = ({ children }: {children: ReactNode}): JSX.Element => {
     return (
         <Tooltip title="Coming Soon">
             <div>
