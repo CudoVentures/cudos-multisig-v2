@@ -32,20 +32,20 @@ export const determineStatus = (userAddress: string, proposal: any): string => {
     let proposalStatus: string = proposal.status
     const proposalVotes: any[] = proposal.group_proposal_votes
     const executionStatus: string = proposal.executor_result
-    const proposalIsNotExecuted: boolean = isNotExecuted(executionStatus)
+    const proposalIsExecuted: boolean = isExecuted(executionStatus)
     const userVoted: boolean = isVoted(userAddress, proposalVotes)
 
     if (proposalStatus === PROPOSAL_STATUS_SUBMITTED && userVoted) {
         proposalStatus = PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED
     }
 
-    proposalStatus = proposalIsNotExecuted ? proposalStatus : executionStatus
+    proposalStatus = !proposalIsExecuted ? proposalStatus : executionStatus
 
     return proposalStatus
 }
 
-export const isNotExecuted = (executionStatus: string): boolean => {
-    return executionStatus === PROPOSAL_EXECUTOR_RESULT_NOT_RUN
+export const isExecuted = (executionStatus: string): boolean => {
+    return executionStatus !== PROPOSAL_EXECUTOR_RESULT_NOT_RUN
 }
 
 export const ProposalStatusComponent = ({ status }: { status: string }): JSX.Element => {
