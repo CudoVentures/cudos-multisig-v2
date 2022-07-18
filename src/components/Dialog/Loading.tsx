@@ -2,7 +2,7 @@ import { CircularProgress, Typography, Dialog as MuiDialog } from '@mui/material
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { updateModalState } from 'store/modals'
-import { ModalContainer } from './styles'
+import { ModalContainer, styles } from './styles'
 import { initialState as initialModalState } from 'store/modals'
 
 const Loading = () => {
@@ -11,6 +11,8 @@ const Loading = () => {
 
     const { 
         loading,
+        title,
+        loadingType,
         message
     } = useSelector((state: RootState) => state.modalState)
 
@@ -38,10 +40,13 @@ const Loading = () => {
             }
           }}
         >
-          <ModalContainer sx={{ minWidth: '600px', minHeight:'300px', padding: '4rem' }}>
+          <ModalContainer sx={{ 
+            backgroundColor: loadingType?'transparent':"default",
+            ...styles.loadingModalContainer 
+          }}>
             <CircularProgress thickness={5} sx={{ borderRadius: '20px' }} />
             <Typography style={{margin: '20px 0 20px 0'}} variant="h4" fontWeight={900} letterSpacing={2}>
-              Processing...
+              {loadingType?"Loading...":title?title:"Processing..."}
             </Typography>
             {message?
             <Typography color="primary.main" fontWeight={900} letterSpacing={1}>

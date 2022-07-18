@@ -3,11 +3,11 @@ import { Box, Typography  } from '@mui/material'
 import { styles } from './styles'
 import { RootState } from '../../store'
 import { useSelector } from 'react-redux'
-import stepOne from 'assets/vectors/steps/step-one.svg'
-import stepTwo from 'assets/vectors/steps/step-two.svg'
-import stepThree from 'assets/vectors/steps/step-three.svg'
-import stepFour from 'assets/vectors/steps/step-four.svg'
-import stepFive from 'assets/vectors/steps/step-five.svg'
+import stepOne from 'assets/vectors/walletCreationSteps/step-one.svg'
+import stepTwo from 'assets/vectors/walletCreationSteps/step-two.svg'
+import stepThree from 'assets/vectors/walletCreationSteps/step-three.svg'
+import stepFour from 'assets/vectors/walletCreationSteps/step-four.svg'
+import stepFive from 'assets/vectors/walletCreationSteps/step-five.svg'
 
 export const getCurrentWalletCreationStep = () => {
   const { currentStep } = useSelector((state: RootState) => state.walletCreationSteps)

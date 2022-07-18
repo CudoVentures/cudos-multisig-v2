@@ -4,9 +4,10 @@ import { persistReducer } from 'redux-persist'
 import settingsReducer from './settings'
 import modalStateReducer from './modals'
 import userStateReducer from './user'
-import walletCreationStepsReducer from './steps'
+import walletCreationStepsReducer from './walletCreation'
 import walletObjectReducer from './walletObject'
 import menuSelectionReducer from './menu'
+import sendFundsReducer from './sendFunds'
 
 const rootReducer = combineReducers({
     settings: settingsReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     userState: userStateReducer,
     walletCreationSteps: walletCreationStepsReducer,
     walletObject: walletObjectReducer,
-    menu: menuSelectionReducer
+    menu: menuSelectionReducer,
+    sendFunds: sendFundsReducer,
 })
 
 const persistConfig = {

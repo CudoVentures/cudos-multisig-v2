@@ -3,17 +3,14 @@ import { Box, Typography  } from '@mui/material'
 import { RootState } from '../../store'
 import { useSelector } from 'react-redux'
 
-export const getCurrentMenuSelection = () => {
-  const { menuSelection } = useSelector((state: RootState) => state.menu)
-  return menuSelection
-}
-
 export const MenuSelectionInfo = () => {
+
+  const { menuSelection } = useSelector((state: RootState) => state.menu)
   
   let title: string = 'Dashboard'
   let subTitle: string = "Here is your MultiSig Wallet information and a list with your assets"
 
-  switch (getCurrentMenuSelection()){
+  switch (menuSelection){
     case 0:
       title = 'Dashboard'
       subTitle = 'Here is your MultiSig Wallet information and a list with your assets'

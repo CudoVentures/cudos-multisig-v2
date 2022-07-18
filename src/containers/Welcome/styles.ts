@@ -33,14 +33,20 @@ export const styles = {
   },
   contentDissapear: {
     opacity: '0', 
-    transition: 'opacity 0.5s', 
-    WebkitTransition: 'opacity 0.5s'
+    transition: 'all 0.5s', 
+    WebkitTransition: 'all 0.5s'
+  },
+  cardContentDissapear: {
+    paddingBottom:'5px', 
+    display: 'flex', 
+    justifyContent: "flex-end", 
+    width: '100%'
   },
   Card: {
     textAlign: "center",
     width: '100%',
     height: '500px',
-    transition: "all 1s",
+    transition: "all 0.5s",
   },
   leftSteps: {
     padding: '0',
@@ -49,7 +55,7 @@ export const styles = {
     textAlign: "center",
     flexDirection: "column",
     justifyContent: "center",
-    transition: "all 1s",
+    transition: "all 0.5s",
   },
   welcomeHolder: {
     display: 'flex', 

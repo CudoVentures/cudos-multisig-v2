@@ -1,7 +1,6 @@
-import { Button, Tooltip, tooltipClasses, TooltipProps, Typography } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { Button, Tooltip, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { styles } from '../styles'
+import { styles } from './styles'
 import { updateModalState } from 'store/modals'
 import PlusIcon from 'assets/vectors/plus-icon.svg'
 import UploadFromCsv from 'assets/vectors/csv-upload.svg'
@@ -13,15 +12,31 @@ import { RootState } from 'store'
 import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 import { initialState as initialModalState } from 'store/modals'
 import { CSVLink } from "react-csv"
-import { FILE_ERROR_MSG, FILE_ERROR_TITLE } from 'utils/constants'
+import { HtmlTooltip } from 'utils/multiSendTableHelper'
+
+import { 
+    DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE, 
+    DUPLICATED_ADDRESS_MSG, 
+    DUPLICATED_ADDRESS_TYPE, 
+    FILE_ERROR_MSG, 
+    FILE_ERROR_TITLE 
+} from 'utils/constants'
+
+interface DataObject {
+    index: number
+}
+interface addressBook {
+    [key: string]: string;
+  }
 
 const AddAddressButtons = () => {
     const dispatch = useDispatch()
     const [userName, setUserName] = useState('')
     const [userAddress, setUserAddress] = useState('')
-    const { addNewAddress } = useSelector((state: RootState) => state.modalState)
+    const { addNewAddress, editAddressBookRecord, dataObject } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
     const currentStep = parseInt(getCurrentWalletCreationStep())
+    const dataFromObject: DataObject = new Object(dataObject) as DataObject
     
     let fileReader: any
     let invdalidData: boolean = false
@@ -29,18 +44,6 @@ const AddAddressButtons = () => {
     const handleModalClose = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
-      
-    const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
-        <Tooltip {...props} classes={{ popper: className }} />
-        ))(({ theme }) => ({
-        [`& .${tooltipClasses.tooltip}`]: {
-            backgroundColor: '#f5f5f9',
-            color: 'rgba(0, 0, 0, 0.87)',
-            maxWidth: 'max-content',
-            fontSize: theme.typography.pxToRem(12),
-            border: '1px solid #dadde9',
-        },
-    }))
 
     const handleFileRead = (e: any) => {
         const content = fileReader.result.split('\n')
@@ -68,7 +71,6 @@ const AddAddressButtons = () => {
                     break 
                 }
 
-            // Avoiding duplicates by keeping the address as unique key-constraint
             txBatch = {...txBatch, [address]: name}
         }
         
@@ -96,25 +98,72 @@ const AddAddressButtons = () => {
     }
 
     const handleAddNewAddress = () => {
-        switch(true) {
-            case addNewAddress:
+        let fail: boolean = false
+        let oldRecordIndex: number = 0
+        let tempBook: addressBook = {}
+        let updatedBook: addressBook = {}
+
+        if ( addNewAddress ) {
+            for ( const address of Object.keys(addressBook!) ) {
+                if (address === userAddress) {
+                    fail = true
+                    break
+                }
+            }
+
+            if ( !fail ) {
                 dispatch(updateUser({
-                    addressBook: {...addressBook, [userAddress]: userName}
+                    addressBook: { ...addressBook, [userAddress]: userName }
                 }))
+    
                 localStorage.removeItem('addressBookAccountName')
                 localStorage.removeItem('addressBookAccountAddress')
                 dispatch(updateModalState({ addNewAddress: false }))
                 if (currentStep === 3) { handleModalClose() }
-                break
-
-            default:
-                dispatch(updateModalState({ addNewAddress: true }))
+                return
+            }
         }
+
+        if ( editAddressBookRecord ) {
+            tempBook = { ...addressBook }
+            oldRecordIndex = dataFromObject.index
+            let index: number = 0
+
+            for ( const [address, name] of Object.entries(tempBook) ) {
+                if (oldRecordIndex !== index) {
+                    if (address === userAddress) { 
+                        fail = true 
+                        break 
+                    }
+                    updatedBook[address] = name
+                }
+                index++
+            }
+
+            if ( !fail ) {
+                dispatch(updateUser({ addressBook: { ...updatedBook, [userAddress]: userName } }))
+                dispatch(updateModalState({ editAddressBookRecord: false }))
+                return
+            }
+        }
+
+        if ( fail ) {
+            dispatch(updateModalState({
+                failure: true,
+                msgType: DUPLICATED_ADDRESS_TYPE,
+                title: DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE,
+                message: DUPLICATED_ADDRESS_MSG,
+            }))
+            return
+        }
+
+        dispatch(updateModalState({ addNewAddress: true }))
     }
 
     const handleBackToAddressBook = () => {
         dispatch(updateModalState({
-            addNewAddress: false
+            addNewAddress: false,
+            editAddressBookRecord: false
         }))
     }
 
@@ -149,16 +198,11 @@ const AddAddressButtons = () => {
         <div>
             {addNewAddress?
             <div style={{display: "flex", alignItems: "flex-start"}}>
-                <div style={{display: 'flex', height: '80px', alignItems: "flex-end"}}>
+                <div style={styles.btnHolder}>
                 <Button
                     variant="contained"
                     color="secondary"
-                    sx={() => ({
-                    width: '220px',
-                    height: '50px',
-                    marginRight: '10px',
-                    fontWeight: 700
-                    })}
+                    sx={styles.leftOrientedBtn}
                     onClick={currentStep === 3?handleModalClose:handleBackToAddressBook}
                 >
                      {currentStep === 3?"Close":"Back to Address Book"}
@@ -169,12 +213,7 @@ const AddAddressButtons = () => {
                             disabled={!validInput}
                             variant="contained"
                             color="primary"
-                            sx={() => ({
-                            marginLeft: '10px',
-                            width: '220px',
-                            height: '50px',
-                            fontWeight: 700
-                            })}
+                            sx={styles.rightOrientedBtn}
                             onClick={handleAddNewAddress}
                         >
                             <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
@@ -185,7 +224,36 @@ const AddAddressButtons = () => {
                 </div>
                 <div id="clear-fix" style={{marginBottom: '108.5px'}}></div>
             </div>
-        :
+            :
+            editAddressBookRecord?
+            <div style={{display: "flex", alignItems: "flex-start"}}>
+                <div style={styles.btnHolder}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={styles.leftOrientedBtn}
+                    onClick={currentStep === 3?handleModalClose:handleBackToAddressBook}
+                >
+                     {currentStep === 3?"Close":"Back to Address Book"}
+                </Button>
+                <Tooltip title={validInput?"":"Please provide valid name and address"}>
+                    <div className='tooltip-base'>
+                        <Button
+                            disabled={!validInput}
+                            variant="contained"
+                            color="primary"
+                            sx={styles.rightOrientedBtn}
+                            onClick={handleAddNewAddress}
+                        >
+                            <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
+                           Confirm change
+                        </Button>
+                    </div>
+                </Tooltip>
+                </div>
+                <div id="clear-fix" style={{marginBottom: '108.5px'}}></div>
+            </div>
+            :
             <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                 <Button
                 variant="contained"

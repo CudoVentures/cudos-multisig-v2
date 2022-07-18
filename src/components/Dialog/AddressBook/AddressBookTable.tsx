@@ -16,6 +16,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import trashbinIcon from 'assets/vectors/trashbin-icon.svg'
+import editIcon from 'assets/vectors/edit-icon.svg'
 import { Button } from '@mui/material';
 import { styles } from '../styles';
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints';
@@ -24,6 +25,7 @@ import CopyIcon from 'assets/vectors/copy-icon.svg'
 import copy from 'copy-to-clipboard'
 import { formatAddress } from 'utils/helpers';
 import { updateUser } from 'store/user';
+import { updateModalState } from 'store/modals';
 
 interface Data {
   name: string;
@@ -274,6 +276,13 @@ export default function AddressBookTable() {
     }, 3000)
   }
 
+  const editSelected = (row: Data,idx: number) => {
+    dispatch(updateModalState({ 
+      editAddressBookRecord: true,
+      dataObject: {index: idx, name: row.name, address: row.address}
+    }))
+  }
+
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   return (
@@ -308,7 +317,8 @@ export default function AddressBookTable() {
                       key={row.address}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox"
+                      <TableCell 
+                        padding="checkbox"
                         onClick={(event) => handleClick(event, row.address)}>
                         <Checkbox
                           color="primary"
@@ -339,14 +349,23 @@ export default function AddressBookTable() {
                         onClick={(event) => handleClick(event, row.address)} style={{color: '#7D87AA'}} align="left">
                             {formatAddress(row.address, 20)}
                         </TableCell>
-                      <TableCell style={{width:'100px'}}>
+                      <TableCell>
                         <Box style={{ display: 'flex', justifyContent: 'center'}}>
+                          <Tooltip 
+                            onClick={() => editSelected(row, index)}
+                            title={`Edit record`}>
+                          
+                            <img
+                            style={styles.icons}
+                            src={editIcon} 
+                            alt="Edit icon" />
+                        </Tooltip>
                         <Tooltip
                             onClick={() => handleCopy(row.address)}
                             title={copied ? 'Copied' : 'Copy to clipboard'}
                         >
                             <img
-                            style={{ marginLeft: '10px', cursor: 'pointer' }}
+                            style={styles.icons}
                             src={CopyIcon}
                             alt="Copy"
                             />
@@ -354,7 +373,7 @@ export default function AddressBookTable() {
                         <Tooltip title="Check address on explorer">
                             <a href={EXPLORER_ADDRESS_DETAILS(row.address)} target='_blank'>
                             <img
-                                style={{ marginLeft: '10px', cursor: 'pointer' }}
+                                style={{paddingTop: '5px', ...styles.icons}}
                                 src={LinkIcon}
                                 alt="Link"
                             />

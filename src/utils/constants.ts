@@ -5,6 +5,8 @@ export const EXPLORER_PUBLIC_ADDRESS = import.meta.env.VITE_APP_EXPLORER_PUBLIC_
 export const CHAIN_NAME = import.meta.env.VITE_APP_CHAIN_NAME || process.env.VITE_APP_CHAIN_NAME || ""
 export const CHAIN_ID = import.meta.env.VITE_APP_CHAIN_ID || process.env.VITE_APP_CHAIN_ID || ""
 export const GAS_PRICE = import.meta.env.VITE_APP_GAS_PRICE || process.env.VITE_APP_GAS_PRICE || ""
+export const GRAPHQL_URL = import.meta.env.VITE_APP_GRAPHQL_URL || process.env.VITE_APP_GRAPHQL_URL || ""
+export const GRAPHQL_WS = import.meta.env.VITE_APP_GRAPHQL_WS || process.env.VITE_APP_GRAPHQL_WS || ""
 
 // General config
 export const ADMIN_TOKEN_DENOM = 'cudosAdmin'
@@ -19,16 +21,32 @@ export const FILE_ERROR_TITLE = 'File Error'
 export const LOGIN_FAIL_TITLE = 'Login Failed'
 export const WALLET_PROCESS_FAIL_TITLE = 'Process Failed!'
 export const WALLET_CREATION_FAILURE_TITLE = 'Creating Failed!'
+export const WALLET_FUNDING_FAILURE_TITLE = 'Funding Failed!'
 export const WALLET_CREATION_LOADING_TITLE = 'Creating MultiSig Wallet...'
+export const PROPOSAL_CREATION_LOADING_TITLE = 'Creating Proposal...'
+export const PROPOSAL_CREATION_FAILURE_TITLE = 'Proposing Failed!'
+export const WALLET_FUNDING_LOADING_TITLE = 'Funding MultiSig Wallet...'
+export const DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE = 'Address book operation failed'
+export const GENERAL_FAILURE_TITLE = 'Ooops... operation failure'
 
 // Modal Msg Types
+export const PROPOSAL_CREATION_SUCCESS_TYPE = 'Proposal Creation Success'
 export const WALLET_CREATION_SUCCESS_TYPE = 'Wallet Creation Success'
 export const WALLET_CREATION_FAILURE_TYPE = 'Wallet Creation Failure'
+export const PROPOSAL_CREATION_FAILURE_TYPE = "Proposal Creation Failure"
+export const WALLET_FUNDING_SUCCESS_TYPE = 'Wallet Funding Success'
+export const WALLET_FUNDING_FAILURE_TYPE = 'Wallet Funding Failure'
 export const WALLET_CORRUPTED_PROCESS_TYPE = 'Wallet Corrupted Process'
+export const DUPLICATED_ADDRESS_TYPE = 'Duplicated address'
+export const FEE_ESTIMATION_ERROR = 'Fee estimation failure'
 
 // General Modal Msgs
 export const DEFAULT_LOGIN_FAILURE_MSG = 'Seems like something went wrong. Please try again later'
 export const FILE_ERROR_MSG = 'File is in wrong format or contains invalid data'
-export const WALLET_CREATION_FAILURE_MSG = 'Seems like something went wrong. Try again or check your account balance.'
-export const WALLET_CREATION_SUCCESS_MSG = 'Your MultiSig account was successfully created!'
+export const GENERAL_FAILURE_MSG = 'Seems like something went wrong. Try again or check your account balance.'
+export const PROPOSAL_CREATION_SUCCESS_MSG = 'Proposal was successfully created!'
+export const WALLET_CREATION_SUCCESS_MSG = 'Your MultiSig wallet was successfully created!'
+export const WALLET_FUNDING_SUCCESS_MSG = 'Your MultiSig wallet was successfully funded!'
 export const DEFAULT_LOADING_MODAL_MSG = 'Waiting for transaction confirmation...'
+export const DUPLICATED_ADDRESS_MSG = "It seems the address already exists in your address book"
+export const INSUFFICIENT_BALANCE = 'You need to have sufficient CUDOS in your remaining balance in order to cover the required fees upon execution'

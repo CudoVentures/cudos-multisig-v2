@@ -5,10 +5,16 @@ import { RootState } from 'store'
 import { CancelRoundedIcon, ModalContainer } from './styles'
 import SuccessIcon from 'assets/vectors/success.svg'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
-import { WALLET_CREATION_SUCCESS_TYPE } from 'utils/constants'
 import WalletCreationSuccess from './WalletCreationSuccess'
 import { useNavigate } from 'react-router-dom'
+import WalletFundingSuccess from './WalletFundingSuccess'
+import ProposalCreationSuccess from './ProposalCreationSuccess'
 
+import { 
+  PROPOSAL_CREATION_SUCCESS_TYPE, 
+  WALLET_CREATION_SUCCESS_TYPE, 
+  WALLET_FUNDING_SUCCESS_TYPE 
+} from 'utils/constants'
 
 const Success = () => {
 
@@ -24,11 +30,21 @@ const Success = () => {
     let navPath: string = ""
 
     switch(msgType) {
+      case PROPOSAL_CREATION_SUCCESS_TYPE:
+        contentComponent = <ProposalCreationSuccess />
+        navPath = '/dashboard'
+        break
+
       case WALLET_CREATION_SUCCESS_TYPE:
         contentComponent = <WalletCreationSuccess />
         navPath = '/welcome'
         break
 
+      case WALLET_FUNDING_SUCCESS_TYPE:
+        contentComponent = <WalletFundingSuccess />  
+        navPath = '/dashboard'
+        break
+        
       default:
         break
     }
@@ -71,16 +87,16 @@ const Success = () => {
             </Box>
             {contentComponent}
             <Button
-            variant="contained"
-            color="primary"
-            sx={() => ({
-              width: '50%',
-              fontWeight: 700
-            })}
-            onClick={handleModalClose}
-          >
-            Close
-          </Button>
+              variant="contained"
+              color="primary"
+              sx={() => ({
+                width: '50%',
+                fontWeight: 700
+              })}
+              onClick={handleModalClose}
+            >
+              Close
+            </Button>
           </ModalContainer>
         </MuiDialog>
     )

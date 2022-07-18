@@ -1,32 +1,31 @@
+
 //@ts-nocheck
 import { Box, Button, ClickAwayListener, Divider, Tooltip, Typography } from '@mui/material'
 import { styles } from './styles'
 import { RootState } from 'store'
 import { useDispatch, useSelector } from 'react-redux'
-import { checkForAdminToken, formatAddress, getAccountBalances, getCudosBalanceInUSD, getNativeBalance } from 'utils/helpers'
 import copy from 'copy-to-clipboard'
 import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
-import { emptyWallet, updatedSelectedWallet, updateUserWallets, wallet } from 'store/user'
+import { emptyWallet, updatedSelectedWallet, updateUser } from 'store/user'
 import { useNavigate } from 'react-router-dom'
 import SlidingSwitchMenu from '../SlidingMenu/SlidingSwitchMenu'
-import { cutFractions } from 'utils/regexFormatting'
+import { setDecimalPrecisionTo } from 'utils/regexFormatting'
+
+import { 
+    formatAddress, 
+    getCudosBalanceInUSD, 
+    updatedWalletsBalances, 
+    updateWalletBalances 
+} from 'utils/helpers'
 
 const LeftWalletSummary = ({ 
-    resizableCardLeft, 
     resizableCardRight,
-    leftStepsContent,
-    rightStepsContent,
-    entireDashboardPage
     }:{
-    resizableCardLeft: MutableRefObject<HTMLInputElement>;
     resizableCardRight: MutableRefObject<HTMLInputElement>;
-    leftStepsContent: MutableRefObject<HTMLInputElement>;
-    rightStepsContent: MutableRefObject<HTMLInputElement>;
-    entireDashboardPage: MutableRefObject<HTMLInputElement>;}
-    ) => {
+    }) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -38,47 +37,23 @@ const LeftWalletSummary = ({
     const defaultElement = document.createElement('div') as HTMLInputElement
     const slidingHolder = useRef<HTMLInputElement>(defaultElement)
 
+
     const updateWallets = async () => {
+        try {
+            const updatedWallets = await updatedWalletsBalances(wallets!)
+            dispatch(updateUser({ wallets: updatedWallets }))
 
-        let tempWallets: wallet[] = []
-        wallets!.forEach(async (wallet, idx) => {
-            const currentBalances = await getAccountBalances(wallet.walletAddress!)
-            const admin = checkForAdminToken(currentBalances)
-            const nativeBalance = getNativeBalance(currentBalances)
-
-            const updatedUserWalletState: wallet =  {
-                walletID: wallet.walletID,
-                walletAddress: wallet.walletAddress,
-                walletName: wallet.walletName,
-                isAdmin: admin,
-                members: wallet.members,
-                memberCount: wallet.memberCount,
-                threshold: wallet.threshold,
-                walletBalances: currentBalances,
-                nativeBalance: nativeBalance
-            }
-            tempWallets.push(updatedUserWalletState)
-        })
-
-        // TO DO
-        // Timing out due to nondetermined yet racing while setting the state
-        setTimeout(() => dispatch(updateUserWallets(tempWallets)), 200)
+        } catch (error: any) {
+            console.debug(error.message)
+        }
     }
     
     const updateSelectedWallet = async () => {
         try {
-            let tempWallet = {...selectedWallet}
-            const currentBalances = await getAccountBalances(selectedWallet?.walletAddress!)
-            const admin = checkForAdminToken(currentBalances)
-            const nativeBalance = getNativeBalance(currentBalances)
+            const updatedWallet = await updateWalletBalances(selectedWallet!)
+            dispatch(updatedSelectedWallet(updatedWallet))
 
-            tempWallet.walletBalances = currentBalances
-            tempWallet.isAdmin = admin
-            tempWallet.nativeBalance = nativeBalance
-
-            dispatch(updatedSelectedWallet(tempWallet))
-
-            } catch (error: any) {
+        } catch (error: any) {
             console.debug(error.message)
         }
     }
@@ -107,11 +82,11 @@ const LeftWalletSummary = ({
         clearInterval(timer)
         }
 
-      }, [selectedWallet?.nativeBalance])
+      }, [selectedWallet?.walletBalances])
 
     useEffect(() => {
         setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '0', 400)
-        setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = ' #7d87aa21', 550)
+        setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = '#7d87aa21', 550)
         setTimeout(() => slidingHolder.current!.children[0].style.width = '0', 600)
         setTimeout(() => unlockBackround(), 600)
         setTimeout(() => setToggled(false), 600)
@@ -119,22 +94,10 @@ const LeftWalletSummary = ({
         updateSelectedWallet()
     }, [selectedWallet?.walletAddress])
 
-    const clearSelectedWalletState = async () => {
-        dispatch(updatedSelectedWallet(emptyWallet))
-    }
-
-    const shrinkAndRemoveContent = () => {
-        resizableCardLeft.current.style.width = '0'
-        resizableCardRight.current.style.width = '0'
-        leftStepsContent.current.style.opacity = '0'
-        rightStepsContent.current.style.opacity = '0'
-        entireDashboardPage.current.style.opacity = '0'
-    }
       
     const backToWallets = () => {
-        shrinkAndRemoveContent()
-        setTimeout(() => navigate("/welcome"), 350)
-        setTimeout(() => clearSelectedWalletState(), 360)
+        dispatch(updatedSelectedWallet(emptyWallet))
+        navigate("/welcome")
     }
 
     const lockBackround = () => {
@@ -152,8 +115,6 @@ const LeftWalletSummary = ({
     const handleSliderClick = () => {
         setToggled(!toggled)
         setDisableButton(true)
-        setTimeout(() => setDisableButton(false), 600)
-        setTimeout(() => setDisableButton(false), 600)
         
         if (toggled) {
             unlockBackround()
@@ -170,6 +131,8 @@ const LeftWalletSummary = ({
             setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = '#20273E', 400)
             setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '1', 600)
         }
+
+        setTimeout(() => setDisableButton(false), 600)
     }
 
     return (
@@ -237,7 +200,7 @@ const LeftWalletSummary = ({
                         <Typography variant='h6' margin={1} fontWeight={600} >
                             <Tooltip title={`$ ${usdValue}`}>
                                 <div>
-                                    <span>$ {cutFractions(usdValue)}</span>
+                                    <span>$ {setDecimalPrecisionTo(usdValue, 2)}</span>
                                 </div>
                             </Tooltip>
                         </Typography>

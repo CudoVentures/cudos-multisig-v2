@@ -6,16 +6,25 @@ interface addressBook {
   [key: string]: string;
 }
 
+interface proposal {
+  // TODO
+}
+
 export interface wallet {
-  walletName?: string;
-  isAdmin?: boolean;
-  walletAddress?: string;
-  walletID?: string;
+  walletAddress: string;
   members?: member[];
-  memberCount?: number;
+  walletName?: string;
+  generalInfo?: string;
+  isAdmin?: boolean;
+  proposals?: proposal[];
+  walletID?: string;
+  executionPeriod?: number;
   threshold?: number;
+  votingPeriod?: number;
+  memberCount?: number;
   walletBalances?: Coin[];
   nativeBalance?: string;
+  chosenBalance?: Coin;
 }
 
 export interface userState {
@@ -28,18 +37,24 @@ export interface userState {
   wallets?: wallet[]
   selectedWallet?: wallet
   addressBook?: addressBook
+  chosenBalance?: Coin
 }
 
 export const emptyWallet: wallet = {  
-  walletName: '',
   walletAddress: '',
-  walletID: '',
-  isAdmin: false,
   members: [],
-  memberCount: 0,
+  walletName: '',
+  generalInfo: '',
+  isAdmin: false,
+  proposals: [],
+  walletID: '',
+  executionPeriod: 0,
   threshold: 0,
+  votingPeriod: 0,
+  memberCount: 0,
   walletBalances: [],
-  nativeBalance: ''
+  nativeBalance: '',
+  chosenBalance: { denom: '', amount: ''}
 }
 
 export const initialState: userState = {
@@ -52,6 +67,7 @@ export const initialState: userState = {
   wallets: [],
   selectedWallet: emptyWallet,
   addressBook: {},
+  chosenBalance: { denom: '', amount: ''}
 }
 
 export const userStateSlice = createSlice({
