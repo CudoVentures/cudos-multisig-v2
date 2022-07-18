@@ -36,8 +36,8 @@ const LeftMenu = ({
 
   useEffect(() => {
     rightStepsContent.current.style.opacity = '0'
-    setTimeout(() => dispatch(updateMenuSelectionState({menuSelection: selected})), 200)
-    setTimeout(() => rightStepsContent.current.style.opacity = '1', 200)
+    setTimeout(() => dispatch(updateMenuSelectionState({menuSelection: selected})), 400)
+    setTimeout(() => rightStepsContent.current.style.opacity = '1', 400)
   }, [selected])
 
   return (

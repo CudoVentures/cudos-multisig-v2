@@ -1,3 +1,6 @@
+import SendIcon from 'assets/vectors/type-icons/send.svg'
+import UnknownIcon from 'assets/vectors/type-icons/unknown.svg'
+
 // ENV
 export const RPC_ADDRESS = import.meta.env.VITE_APP_RPC || process.env.VITE_APP_RPC || ""
 export const API_ADDRESS = import.meta.env.VITE_APP_API || process.env.VITE_APP_API || ""
@@ -22,10 +25,10 @@ export const LOGIN_FAIL_TITLE = 'Login Failed'
 export const WALLET_PROCESS_FAIL_TITLE = 'Process Failed!'
 export const WALLET_CREATION_FAILURE_TITLE = 'Creating Failed!'
 export const WALLET_FUNDING_FAILURE_TITLE = 'Funding Failed!'
-export const WALLET_CREATION_LOADING_TITLE = 'Creating MultiSig Wallet...'
+export const WALLET_CREATION_LOADING_TITLE = 'Creating Wallet...'
 export const PROPOSAL_CREATION_LOADING_TITLE = 'Creating Proposal...'
 export const PROPOSAL_CREATION_FAILURE_TITLE = 'Proposing Failed!'
-export const WALLET_FUNDING_LOADING_TITLE = 'Funding MultiSig Wallet...'
+export const WALLET_FUNDING_LOADING_TITLE = 'Funding Wallet...'
 export const DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE = 'Address book operation failed'
 export const GENERAL_FAILURE_TITLE = 'Ooops... operation failure'
 
@@ -41,6 +44,7 @@ export const DUPLICATED_ADDRESS_TYPE = 'Duplicated address'
 export const FEE_ESTIMATION_ERROR = 'Fee estimation failure'
 
 // General Modal Msgs
+export const NO_TX_HASH_MSG = 'Not executed yet'
 export const DEFAULT_LOGIN_FAILURE_MSG = 'Seems like something went wrong. Please try again later'
 export const FILE_ERROR_MSG = 'File is in wrong format or contains invalid data'
 export const GENERAL_FAILURE_MSG = 'Seems like something went wrong. Try again or check your account balance.'
@@ -50,3 +54,23 @@ export const WALLET_FUNDING_SUCCESS_MSG = 'Your MultiSig wallet was successfully
 export const DEFAULT_LOADING_MODAL_MSG = 'Waiting for transaction confirmation...'
 export const DUPLICATED_ADDRESS_MSG = "It seems the address already exists in your address book"
 export const INSUFFICIENT_BALANCE = 'You need to have sufficient CUDOS in your remaining balance in order to cover the required fees upon execution'
+
+// TypeURLs
+export const MULTI_SEND_TYPE_URL = "/cosmos.bank.v1beta1.MsgMultiSend"
+
+// Proposal statuses
+export const PROPOSAL_STATUS_SUBMITTED = 'PROPOSAL_STATUS_SUBMITTED'
+export const PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED = 'PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED'
+export const PROPOSAL_EXECUTOR_RESULT_NOT_RUN = 'PROPOSAL_EXECUTOR_RESULT_NOT_RUN'
+export const PROPOSAL_STATUS_ACCEPTED = 'PROPOSAL_STATUS_ACCEPTED'
+export const UNDEFINED = 'UNKNOWN'
+
+// Proposal Coloring
+export const READY_TO_EXECUTE = { text: "READY TO EXECUTE", color: "#0F71D1" }
+export const WAITING_APPROVAL = { text: "WAITING APPROVAL", color: "#E89518" }
+export const OPEN_TO_APPROVE = { text: "OPEN TO APPROVE", color: "#9646F9" }
+export const UNKNOWN = { text: "UNKNOWN", color: "#1B2031" }
+
+// Type Mapping
+export const MULTI_SEND_TYPE = { text: "Multi Send", icon: SendIcon }
+export const UNDEFINED_TYPE = { text: "Unknown", icon: UnknownIcon }

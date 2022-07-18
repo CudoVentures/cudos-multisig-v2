@@ -1,118 +1,158 @@
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
 import { styles } from './styles'
-import { formatAddress } from 'utils/helpers'
-import { TX_HASH_DETAILS } from 'api/endpoints'
-import Card from 'components/Card/Card'
-import { COLORS_DARK_THEME } from 'theme/colors'
-import ActionsIconComponent from 'utils/actionsIconHandler'
-import ClockIcon from 'assets/vectors/clock-icon.svg'
-import ProposalStatusComponent from 'utils/proposalStatusHandler'
+import { RootState } from 'store'
 import Dialog from 'components/Dialog'
+import Card from 'components/Card/Card'
+import { useSelector } from 'react-redux'
+import { TX_HASH_DETAILS } from 'api/endpoints'
+import { COLORS_DARK_THEME } from 'theme/colors'
+import { NO_TX_HASH_MSG } from 'utils/constants'
+import { TxTypeComponent } from 'utils/TxTypeHandler'
+import ClockIcon from 'assets/vectors/clock-icon.svg'
+import { formatAddress, formatDateTime } from 'utils/helpers'
+import { useGetWalletProposalsSubscription } from 'graphql/types'
+import { determineStatus, ProposalStatusComponent } from 'utils/proposalStatusHandler'
 
-interface Data {
+import {
+    Box,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Typography
+} from '@mui/material'
+
+
+interface TableData {
     blockHeight: string;
-    action: string;
+    type: string;
     txHash: string;
     date: string;
-    status: string
-  }
+    status: string;
+}
 
 const TxsSummaryTable = () => {
 
-    // TO DO - Have to be implemented
-    // const { proposals } = useSelector((state: RootState) => state.userState.selectedWallet)
+    const { address, selectedWallet } = useSelector((state: RootState) => state.userState)
+    const walletId: number = parseInt(selectedWallet!.walletID!)
 
+    const { loading, error, data } = useGetWalletProposalsSubscription({
+        variables: { id: walletId }
+    })
 
-    let dummyProposals: Data[] = [
-        {
-            blockHeight: '6,326,594',
-            action: 'Send',
-            txHash: 'D422864D611352A3CCEBB4F761DF4C4BE97AFCFF814D8814EEF8A767155262BD',
-            date: '27 Feb 2022, 12:30 PM (UTC +2)',
-            status: 'Waiting approval'
-        },
-        {
-            blockHeight: '6,326,600',
-            action: 'Send',
-            txHash: 'D422864D611352A3CCEBB4F761DF4C4BE97AFCFF814D8814EEF8A767155262BD',
-            date: '27 Feb 2022, 12:30 PM (UTC +2)',
-            status: 'Waiting approval'
-        },
-        {
-            blockHeight: '6,326,905',
-            action: 'Send',
-            txHash: 'D422864D611352A3CCEBB4F761DF4C4BE97AFCFF814D8814EEF8A767155262BD',
-            date: '27 Feb 2022, 12:30 PM (UTC +2)',
-            status: 'Waiting approval'
-        },
-    ]
-      
-    const rows: Data[] = [];
-      Object.entries(dummyProposals!).forEach(([index, member]) =>
-        rows.push(member)
-    )
+    let tableData: TableData[] = []
+    if (data) {
+        for (const proposal of data.group_with_policy_by_pk!.group_proposals) {
+            const txHash = proposal.transaction_hash ? proposal.transaction_hash : NO_TX_HASH_MSG
+            const proposalMessage = proposal.messages[0] ? proposal.messages[0] : null
+            const msgType = proposalMessage["@type"]
+            const status = determineStatus(address!, proposal)
+
+            tableData.push({
+                blockHeight: parseInt(proposal.block.height).toLocaleString(),
+                type: msgType,
+                txHash: txHash,
+                date: formatDateTime(proposal.block.timestamp),
+                status: status
+            })
+        }
+    }
 
     return (
-        <Card elevation={0} style={{margin: '0', padding: '0'}}>
+        <Card elevation={0} style={{ margin: '0', padding: '0' }}>
             <Dialog />
             <TableContainer>
-                <Table style={styles.summaryTable} aria-label="simple table">
+                <Table style={styles.summaryTable}>
                     <TableHead style={styles.summaryTableHead}>
                         <TableRow style={styles.summaryTHRow}>
                             <TableCell align='left' style={styles.defaultSummaryTableCell}>
-                                <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
+                                <Typography
+                                    variant='subtitle2'
+                                    color="text.secondary"
+                                    fontWeight={600}
+                                >
                                     Block Height
                                 </Typography>
                             </TableCell>
                             <TableCell align='left' style={styles.defaultSummaryTableCell}>
-                                <Typography style={{marginLeft: '15px'}} variant='subtitle2' color="text.secondary" fontWeight={600}>
-                                    Action
+                                <Typography
+                                    variant='subtitle2'
+                                    color="text.secondary"
+                                    fontWeight={600}
+                                >
+                                    Type
                                 </Typography>
                             </TableCell>
-                            <TableCell align='left' style={{...styles.defaultSummaryTableCell, width: '200px'}}>
-                                <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
+                            <TableCell align='left' style={{ ...styles.defaultSummaryTableCell, width: '186px' }}>
+                                <Typography
+                                    variant='subtitle2'
+                                    color="text.secondary"
+                                    fontWeight={600}
+                                >
                                     Transaction Hash
                                 </Typography>
                             </TableCell>
-                            <TableCell align='left' style={{...styles.defaultSummaryTableCell, width: '330px'}}>
-                                <Typography style={{marginLeft: '5px'}} variant='subtitle2' color="text.secondary" fontWeight={600}>
+                            <TableCell align='left'
+                                style={{ ...styles.defaultSummaryTableCell, paddingLeft: '30px', width: '350px' }}>
+                                <Typography
+                                    style={{ marginLeft: '5px' }}
+                                    variant='subtitle2'
+                                    color="text.secondary"
+                                    fontWeight={600}
+                                >
                                     Date
                                 </Typography>
                             </TableCell>
-                            <TableCell align='center' style={{...styles.defaultSummaryTableCell, width: '170px'}}>
-                                <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
+                            <TableCell align='center' style={{ ...styles.defaultSummaryTableCell, width: '110px' }}>
+                                <Typography
+                                    variant='subtitle2'
+                                    color="text.secondary"
+                                    fontWeight={600}
+                                >
                                     Status
                                 </Typography>
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody style={styles.summaryTableBody}>
-                    {rows.map((row) => (
-                        <TableRow style={styles.summaryTBRow} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell style={{width: '120px'}} align="left">{row.blockHeight}</TableCell>
-                            <TableCell style={{width: '120px'}} align="left">
-                               <ActionsIconComponent type={'Send'} />
-                            </TableCell>
-                            <TableCell style={{width: '120px'}} align="left">
-                                <a style={{textDecoration: 'none'}} href={TX_HASH_DETAILS(row.txHash)} target='_blank'>
-                                    <Tooltip title={row.txHash}>
-                                        <div style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE}}>{formatAddress(row.txHash, 15)}</div>
-                                    </Tooltip>
-                                </a>
-                            </TableCell>
-                            <TableCell style={{width: '290px'}} align="left">
-                                <Box style={{display: 'flex', alignItems: 'center'}}>
-                                    <img style={{marginRight:'5px', width:'18px', height: '18px'}} src={ClockIcon} alt={`Clock logo`}/>
-                                    <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
-                                        {row.date}
-                                    </Typography>
-                                </Box>
-                            </TableCell>
-                            <TableCell>
-                                <ProposalStatusComponent status={'Waiting'} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                        {tableData.map((row) => (
+                            <TableRow style={styles.summaryTBRow}>
+                                <TableCell width={120} align="left">
+                                    {row.blockHeight}
+                                </TableCell>
+                                <TableCell width={150} align="left">
+                                    <TxTypeComponent type={row.type} />
+                                </TableCell>
+                                <TableCell style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} width={230} align="left">
+                                    {row.txHash === NO_TX_HASH_MSG ? row.txHash :
+                                        <a
+                                            style={{ textDecoration: 'none' }}
+                                            href={TX_HASH_DETAILS(row.txHash)}
+                                            target='_blank'
+                                        >
+                                            <Tooltip title={row.txHash}>
+                                                <div style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
+                                                    {formatAddress(row.txHash, 15)}
+                                                </div>
+                                            </Tooltip>
+                                        </a>
+                                    }
+                                </TableCell>
+                                <TableCell width={285} align="left">
+                                    <Box style={{ display: 'flex', alignItems: 'center' }}>
+                                        <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
+                                        <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
+                                            {row.date}
+                                        </Typography>
+                                    </Box>
+                                </TableCell>
+                                <TableCell>
+                                    <ProposalStatusComponent status={row.status} />
+                                </TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>

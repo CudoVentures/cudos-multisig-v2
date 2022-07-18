@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export const styles = {
   connectButton: {
     height: '50px',
@@ -8,9 +7,6 @@ export const styles = {
   },
   plusIcon: {
     marginRight: '20px'
-  },
-  addressBookIcon: {
-    marginRight: '10px'
   },
   btnLogo: {
     marginRight: '10px'
@@ -32,14 +28,14 @@ export const styles = {
     height: 'fit-content'
   },
   contentDissapear: {
-    opacity: '0', 
-    transition: 'all 0.5s', 
+    opacity: '0',
+    transition: 'all 0.5s',
     WebkitTransition: 'all 0.5s'
   },
   cardContentDissapear: {
-    paddingBottom:'5px', 
-    display: 'flex', 
-    justifyContent: "flex-end", 
+    paddingBottom: '5px',
+    display: 'flex',
+    justifyContent: "flex-end",
     width: '100%'
   },
   Card: {
@@ -58,7 +54,7 @@ export const styles = {
     transition: "all 0.5s",
   },
   welcomeHolder: {
-    display: 'flex', 
+    display: 'flex',
     height: '100%',
     justifyContent: 'center',
     width: '100%',

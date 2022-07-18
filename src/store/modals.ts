@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 export interface modalState {
     title?: string
     message?: string
@@ -14,7 +15,7 @@ export interface modalState {
     openFundWallet?: boolean
     addNewAddress?: boolean
     editAddressBookRecord?: boolean
-    dataObject?: Object
+    dataObject?: Record<string, unknown>
 }
 
 export const initialState: modalState = {

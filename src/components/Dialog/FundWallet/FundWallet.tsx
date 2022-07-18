@@ -4,7 +4,7 @@ import { styles } from './styles'
 import BigNumber from 'bignumber.js'
 import Card from 'components/Card/Card'
 import { updateUser } from 'store/user'
-import { calculateFeeFromGas, enforceCustomFeesOverKeplr, formatAddress } from 'utils/helpers'
+import { amountToAcudos, calculateFeeFromGas, enforceCustomFeesOverKeplr, formatAddress } from 'utils/helpers'
 import { updateModalState } from 'store/modals'
 import { COLORS_DARK_THEME } from 'theme/colors'
 import { Dialog as MuiDialog } from '@mui/material'
@@ -249,7 +249,7 @@ const FundWallet = () => {
         const transferAmount = 
             isAdminTransfer?
             amountToSend.toString():
-            (amountToSend * 10 ** 18).toLocaleString('fullwide', {useGrouping:false})
+            amountToAcudos(amountToSend)
         return transferAmount
     }
 

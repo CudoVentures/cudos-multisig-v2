@@ -1,16 +1,18 @@
+import { Coin } from 'cudosjs'
+
 import { 
-    VALID_CUDOS_ADDRESS,
+    ADMIN_BALANCES,
+    EMPTY_BALANCES,
     INVALID_CUDOS_ADDRESS,
     REGULAR_BALANCES,
-    ADMIN_BALANCES,
-    EMPTY_BALANCES
-} from '../utils/testEnvironments'
+    VALID_CUDOS_ADDRESS} from '../utils/testEnvironments'
+
 import { checkForAdminToken, formatAddress, getAccountBalances, getNativeBalance } from './helpers'
 
 describe("Testing getAcountBalance", () => {
     const userAddress = VALID_CUDOS_ADDRESS()
     const invalidAddress = INVALID_CUDOS_ADDRESS()
-    const expectedBalances: any[] = EMPTY_BALANCES()
+    const expectedBalances: Coin[] = EMPTY_BALANCES()
 
     it('should pass and return empty balance', async () => {
         expect(await getAccountBalances(userAddress)).toEqual(expectedBalances)

@@ -1,5 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 export const styles = {
+  topBtn: {
+    width: '210px', height: '45px'
+  },
   btnLogo: {
     marginRight: '10px'
   },

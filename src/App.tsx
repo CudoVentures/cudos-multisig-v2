@@ -22,6 +22,7 @@ import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/
 import WalletDetails from 'containers/WalletDetails'
 import SendFundsProposal from 'containers/SendFundsProposal'
 import RequireWalletFunds from 'components/RequireWalletFunds/RequireWalletFunds'
+import RequireWallet from 'components/RequireWallet/RequireWallet'
 
 const App = () => {
   const location = useLocation()
@@ -79,10 +80,12 @@ const App = () => {
                   <Route element={<RequireWalletFunds />}>
                     <Route path="send-funds" element={<SendFundsProposal />} />
                   </Route>
-                  <Route path="dashboard" element={<WalletDetails />} />
-                  <Route path="transactions" element={<WalletDetails />} />
-                  <Route path="members" element={<WalletDetails />} />
-                  <Route path="settings" element={<WalletDetails />} />
+                  <Route element={<RequireWallet />}>
+                    <Route path="dashboard" element={<WalletDetails />} />
+                    <Route path="transactions" element={<WalletDetails />} />
+                    <Route path="members" element={<WalletDetails />} />
+                    <Route path="settings" element={<WalletDetails />} />
+                  </Route>
                 </Route>
                 <Route path="*" element={<Navigate to="/" state={{ from: location }} />} />
               </Routes>

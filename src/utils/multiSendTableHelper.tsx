@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 import BigNumber from "bignumber.js";
 import { Coin } from "cudosjs";
-import { denomToAlias } from "./helpers";
+import { amountToAcudos, denomToAlias } from "./helpers";
 
 export interface MultiSendUser {
     address: string;
@@ -36,7 +36,7 @@ export const createArrayOfRecipients = (rows: multisendRow[]) => {
         address: item.recipient,
         coins: [{
             denom: item.denom,
-            amount: item.denom==="acudos"?(parseFloat(item.amount) * 10 ** 18).toLocaleString('fullwide', {useGrouping:false}):item.amount
+            amount: item.denom==="acudos"?amountToAcudos(parseFloat(item.amount)):item.amount
         }]
     }))
 
@@ -53,7 +53,7 @@ export const createArrayOfCoinsFromMapper = (dueBalances: RecipientBalances): Co
 
             switch (denom) {
                 case 'acudos':
-                    tempAmount = (amount * 10 ** 18).toLocaleString('fullwide', {useGrouping:false})
+                    tempAmount = amountToAcudos(amount)
                     break
                 default:
                     break

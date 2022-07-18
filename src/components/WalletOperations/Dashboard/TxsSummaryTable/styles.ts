@@ -2,6 +2,11 @@ import { COLORS_DARK_THEME } from "theme/colors";
 
 /* eslint-disable import/prefer-default-export */
 export const styles = {
+  clockIcon: {
+    marginRight: '5px', 
+    width: '18px', 
+    height: '18px'
+  },
   summaryTable: {
     marginTop: '-10px', 
     backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND
@@ -12,6 +17,7 @@ export const styles = {
     backgroundColor: 'transparent'
   },
   summaryTableBody: {
+    padding: '0px 5px',
     display: 'flex', 
     height: '175px', 
     overflow: 'scroll',
@@ -27,7 +33,7 @@ export const styles = {
     paddingLeft: '10px', 
     background: COLORS_DARK_THEME.LIGHT_BACKGROUND, 
     borderRadius: '10px', 
-    margin: '10px 10px 5px 0px'
+    margin: '10px 0px 5px 0px'
   },
   defaultSummaryTableCell: {
     width: '120px', 
