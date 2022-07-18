@@ -15,13 +15,13 @@ const AddressEdit = () => {
     dispatchEvent(new Event("storage"))
 
     const handleChange = (e: any) => {
-        switch (e.target.name) {
-            case "addressBookAccountName":
-                setName(e.target.value)
-                break
-            default:
-                setAddress(e.target.value)
-                break
+
+        if ( e.target.name === "addressBookAccountName") {
+            setName(e.target.value)
+        }
+
+        if (e.target.name === "addressBookAccountAddress") {
+            setAddress(e.target.value)
         }
         
         dispatchEvent(new Event("storage"))
