@@ -97,7 +97,7 @@ const AddAddressButtons = () => {
         document.getElementById("csv-file")?.click()
     }
 
-        const handleAddNewAddress = () => {
+    const handleAddNewAddress = () => {
         let fail: boolean = false
         let oldRecordIndex: number = 0
         let tempBook: addressBook = {}
@@ -110,6 +110,18 @@ const AddAddressButtons = () => {
                     break
                 }
             }
+
+            if ( !fail ) {
+                dispatch(updateUser({
+                    addressBook: { ...addressBook, [userAddress]: userName }
+                }))
+    
+                localStorage.removeItem('addressBookAccountName')
+                localStorage.removeItem('addressBookAccountAddress')
+                dispatch(updateModalState({ addNewAddress: false }))
+                if (currentStep === 3) { handleModalClose() }
+                return
+            }
         }
 
         if ( editAddressBookRecord ) {
@@ -119,10 +131,19 @@ const AddAddressButtons = () => {
 
             for ( const [address, name] of Object.entries(tempBook) ) {
                 if (oldRecordIndex !== index) {
-                    if (address === userAddress) { fail = true ; break }
+                    if (address === userAddress) { 
+                        fail = true 
+                        break 
+                    }
                     updatedBook[address] = name
                 }
                 index++
+            }
+
+            if ( !fail ) {
+                dispatch(updateUser({ addressBook: { ...updatedBook, [userAddress]: userName } }))
+                dispatch(updateModalState({ editAddressBookRecord: false }))
+                return
             }
         }
 
@@ -133,24 +154,6 @@ const AddAddressButtons = () => {
                 title: DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE,
                 message: DUPLICATED_ADDRESS_MSG,
             }))
-            return
-        }
-
-        if ( addNewAddress ) { 
-            dispatch(updateUser({
-                addressBook: { ...addressBook, [userAddress]: userName }
-            }))
-
-            localStorage.removeItem('addressBookAccountName')
-            localStorage.removeItem('addressBookAccountAddress')
-            dispatch(updateModalState({ addNewAddress: false }))
-            if (currentStep === 3) { handleModalClose() }
-            return
-        }
-
-        if ( editAddressBookRecord ) {
-            dispatch(updateUser({ addressBook: { ...updatedBook, [userAddress]: userName } }))
-            dispatch(updateModalState({ editAddressBookRecord: false }))
             return
         }
 
