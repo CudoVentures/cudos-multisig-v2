@@ -58,7 +58,8 @@ export const styles = {
     display: "grid",
     placeItems: "center",
     heigth: '35px',
-    width: '40px',
+    width: 'max-content',
+    minWidth: '40px',
     background: 'rgba(82, 166, 248, 1)',
   }
 }

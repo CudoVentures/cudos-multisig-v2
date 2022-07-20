@@ -1,22 +1,21 @@
-import { Box, Button, Tooltip, Typography } from '@mui/material'
+import { useState } from 'react'
+import { styles } from './styles'
+import copy from 'copy-to-clipboard'
+import { RootState } from 'store'
+import Dialog from 'components/Dialog'
 import Card from 'components/Card/Card'
-import WalletIcon from 'assets/vectors/wallet-icon.svg'
+import { CHAIN_NAME } from 'utils/constants'
+import { formatAddress } from 'utils/helpers'
+import { updateModalState } from 'store/modals'
+import TxsSummaryTable from './TxsSummaryTable'
 import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from 'store'
-import copy from 'copy-to-clipboard'
-import { useState } from 'react'
-import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
-import { formatAddress } from 'utils/helpers'
-import { CHAIN_NAME } from 'utils/constants'
-import AssetIconComponent from 'utils/assetsIconHandler'
-import TxsSummaryTable from './TxsSummaryTable'
-import Dialog from 'components/Dialog'
-import { updateModalState } from 'store/modals'
-import { styles } from './styles'
 import { updateMenuSelectionState } from 'store/menu'
-import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import WalletIcon from 'assets/vectors/wallet-icon.svg'
+import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
+import AssetIconComponent from 'utils/assetsIconHandler'
+import { Box, Button, Tooltip, Typography } from '@mui/material'
 
 const Dashboard = () => {
     const [copied, setCopied] = useState<boolean>(false)
@@ -157,7 +156,6 @@ const Dashboard = () => {
                     </Box>
                 </Card>
             </Box>
-
             <Card style={styles.lowerCardHolder}>
                 <Box style={styles.lowerBoxHolder}>
                     <Typography style={{ marginBottom: '15px'}} variant="subtitle1" fontWeight={600} color="text.secondary">
@@ -172,7 +170,6 @@ const Dashboard = () => {
                         <span>{"See all"}</span>
                     </Button>
                 </Box>
-               
                <TxsSummaryTable />
             </Card>
         </Box>

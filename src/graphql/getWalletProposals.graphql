@@ -1,0 +1,19 @@
+subscription getWalletProposals($id: Int = 0) {
+  group_with_policy_by_pk(id: $id) {
+    group_proposals(order_by: {block: {timestamp: desc}}) {
+      block {
+        height
+        timestamp
+      }
+      messages
+      transaction_hash
+      status
+      executor_result
+      group_proposal_votes {
+        vote_option
+        voter
+      }
+    }
+    voting_period
+  }
+}

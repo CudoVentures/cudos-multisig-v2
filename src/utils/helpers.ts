@@ -1,11 +1,26 @@
-import { getCurrencyRate } from "api/calls"
+import moment from "moment"
 import BigNumber from "bignumber.js"
-import { emptyWallet, wallet } from "store/user"
+
 import { queryClient } from "./config"
-import { ADMIN_TOKEN_DENOM, GAS_PRICE, NATIVE_TOKEN_DENOM } from "./constants"
+import { getCurrencyRate } from "api/calls"
+import { emptyWallet, wallet } from "store/user"
 import { separateDecimals, separateFractions } from "./regexFormatting"
+import { ADMIN_TOKEN_DENOM, GAS_PRICE, NATIVE_TOKEN_DENOM } from "./constants"
+
 import cudosLogo from 'assets/vectors/balances/cudos.svg'
 import cudosAdminLogo from 'assets/vectors/balances/cudos-admin.svg'
+
+export const formatDateTime = (dateTimeString: string): string => {
+    const localTimeString: string = moment(dateTimeString).parseZone().toLocaleString()
+    const formattedTime: string = moment(localTimeString)
+        .format('DD MMM YYYY LTS')
+        .toLocaleString()
+    return formattedTime
+}
+
+export const amountToAcudos = (amount: number): string => {
+    return (amount * 10 ** 18).toLocaleString('fullwide', {useGrouping:false})
+}
 
 export const convertSecondsToDisplay = (seconds: number, desiredFormat: string): string => {
     let result: number = seconds
@@ -24,8 +39,10 @@ export const convertSecondsToDisplay = (seconds: number, desiredFormat: string):
         default:
             break
     }
-    const format = result + 1 > 2?`${desiredFormat}`: `${desiredFormat.slice(0, -1)}`
-    
+
+    // This will cut the S if no plural form is needed as in this example: HOURS -> HOUR
+    const format: string = result + 1 > 2 ? `${desiredFormat}` : `${desiredFormat.slice(0, -1)}`
+
     return `${result.toString()} ${format.toUpperCase()}`
 }
 
@@ -42,8 +59,8 @@ export const calculateFeeFromGas = (gasAmount: number): string => {
 }
 
 export const updatedWalletsBalances = async (wallets: wallet[]): Promise<wallet[]> => {
-    
-    let tempWallets: wallet[] = []
+
+    const tempWallets: wallet[] = []
     for await (const obj of wallets!) {
         const updatedWallet = await updateWalletBalances(obj)
         tempWallets.push(updatedWallet)
@@ -53,8 +70,8 @@ export const updatedWalletsBalances = async (wallets: wallet[]): Promise<wallet[
 
 export const updateWalletBalances = async (wallet: wallet): Promise<wallet> => {
 
-    let tempWallet = {...wallet}
-    const currentWalletBalances = await getAccountBalances(tempWallet.walletAddress)
+    const tempWallet: wallet = { ...wallet }
+    const currentWalletBalances: any = await getAccountBalances(tempWallet.walletAddress)
     let isAdmin: boolean = false
     let nativeBalance: string = ''
 
@@ -74,12 +91,12 @@ export const updateWalletBalances = async (wallet: wallet): Promise<wallet> => {
 }
 
 export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet => {
-    
+
     let walletfound: wallet = emptyWallet
     for (let i = 0; i < wallets.length; i++) {
         if (wallets[i].walletAddress === givenAddress) {
-            walletfound = {...wallets[i]}
-            break 
+            walletfound = { ...wallets[i] }
+            break
         }
         console.debug('Wallet not found')
     }
@@ -95,16 +112,16 @@ export const getAccountBalances = async (accountAddress: string): Promise<any> =
 export const getCudosBalanceInUSD = async (balance: string): Promise<string> => {
     const response = await getCurrencyRate('USD')
     const rate = response.data.cudos.usd
-    const rawResult = new BigNumber(balance).multipliedBy(rate).toString(10).replace(/\.[0-9]+/gm, "")
-    const fullUsdBalance = separateDecimals(separateFractions(rawResult))
+    const rawResult: string = new BigNumber(balance).multipliedBy(rate).toString(10).replace(/\.[0-9]+/gm, "")
+    const fullUsdBalance: string = separateDecimals(separateFractions(rawResult))
     return fullUsdBalance
 }
 
 export const checkForAdminToken = (balances: any[]): boolean => {
-    let isAdmin = false
+    let isAdmin: boolean = false
     balances.map((balance) => {
-        if ( balance.denom === ADMIN_TOKEN_DENOM && parseInt(balance.amount) > 0) { 
-            isAdmin = true 
+        if (balance.denom === ADMIN_TOKEN_DENOM && parseInt(balance.amount) > 0) {
+            isAdmin = true
         }
     })
     return isAdmin
@@ -113,18 +130,18 @@ export const checkForAdminToken = (balances: any[]): boolean => {
 export const formatAddress = (text: string, sliceIndex: number): string => {
     if (!text) { return '' }
     const len = text.length
-    if (text === null || text.length < 10) { 
-        return text 
+    if (text === null || text.length < 10) {
+        return text
     }
     return `${text.slice(0, sliceIndex)}...${text.slice(len - 4, len)}`
-  }
+}
 
 export const getNativeBalance = (balances: any[]): string => {
-    let nativeBalance: string = '0'
+    let nativeBalance = '0'
     balances.map((balance: any) => {
-      if (balance.denom === NATIVE_TOKEN_DENOM && new BigNumber(balance.amount).gt(0)) {
-        nativeBalance = balance.amount
-      }
+        if (balance.denom === NATIVE_TOKEN_DENOM && new BigNumber(balance.amount).gt(0)) {
+            nativeBalance = balance.amount
+        }
     })
     return nativeBalance
 }

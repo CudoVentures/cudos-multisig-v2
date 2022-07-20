@@ -1,6 +1,3 @@
-import { COLORS_DARK_THEME } from "theme/colors";
-
-/* eslint-disable import/prefer-default-export */
 export const styles = {
     addWalletBtn: {
         position: 'relative', 
@@ -38,5 +35,6 @@ export const styles = {
         zIndex: '1',
         backgroundColor: '#7d87aa21',
     }
+    
   } as const
   

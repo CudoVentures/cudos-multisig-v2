@@ -1,13 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Coin } from 'cudosjs'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import { member } from './walletObject'
 
 interface addressBook {
   [key: string]: string;
-}
-
-interface proposal {
-  // TODO
 }
 
 export interface wallet {
@@ -16,7 +13,7 @@ export interface wallet {
   walletName?: string;
   generalInfo?: string;
   isAdmin?: boolean;
-  proposals?: proposal[];
+  proposals?: [];
   walletID?: string;
   executionPeriod?: number;
   threshold?: number;
@@ -40,7 +37,7 @@ export interface userState {
   chosenBalance?: Coin
 }
 
-export const emptyWallet: wallet = {  
+export const emptyWallet: wallet = {
   walletAddress: '',
   members: [],
   walletName: '',
@@ -54,7 +51,7 @@ export const emptyWallet: wallet = {
   memberCount: 0,
   walletBalances: [],
   nativeBalance: '',
-  chosenBalance: { denom: '', amount: ''}
+  chosenBalance: { denom: '', amount: '' }
 }
 
 export const initialState: userState = {
@@ -67,7 +64,7 @@ export const initialState: userState = {
   wallets: [],
   selectedWallet: emptyWallet,
   addressBook: {},
-  chosenBalance: { denom: '', amount: ''}
+  chosenBalance: { denom: '', amount: '' }
 }
 
 export const userStateSlice = createSlice({

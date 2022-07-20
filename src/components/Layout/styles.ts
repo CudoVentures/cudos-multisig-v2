@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { styled, Box } from '@mui/material'
+
 import theme from '../../theme'
 
 export const styles = {

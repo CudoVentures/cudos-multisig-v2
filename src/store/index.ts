@@ -1,13 +1,15 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import storage from 'redux-persist/lib/storage'
+
 import { persistReducer } from 'redux-persist'
-import settingsReducer from './settings'
-import modalStateReducer from './modals'
+import { combineReducers,configureStore } from '@reduxjs/toolkit'
+
 import userStateReducer from './user'
-import walletCreationStepsReducer from './walletCreation'
-import walletObjectReducer from './walletObject'
+import modalStateReducer from './modals'
 import menuSelectionReducer from './menu'
+import settingsReducer from './settings'
 import sendFundsReducer from './sendFunds'
+import walletObjectReducer from './walletObject'
+import walletCreationStepsReducer from './walletCreation'
 
 const rootReducer = combineReducers({
     settings: settingsReducer,

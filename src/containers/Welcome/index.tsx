@@ -4,7 +4,6 @@ import { Box, Typography, Button } from '@mui/material'
 import Card from 'components/Card/Card'
 import { styles } from './styles'
 import NoWallet from 'components/NoWallets/NoWallet'
-import addressBookIcon from 'assets/vectors/small-address-book-icon.svg'
 import { updateModalState } from 'store/modals'
 import Dialog from 'components/Dialog'
 import { useEffect } from 'react'
@@ -17,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import PlusIcon from 'assets/vectors/plus-icon.svg'
 import { useGetWalletsQuery } from 'graphql/types'
 import { emptyWallet, updateUser, wallet } from 'store/user'
+import { AddressBookBtn } from 'utils/wrappers'
 
 const Welcome = () => {
   
@@ -91,9 +91,10 @@ const Welcome = () => {
       document.getElementById("welcome-address-book-dissapear")!.style.opacity = '1', 
       500
     )
-  }, [])
 
-  clearState()
+    setTimeout(() => clearState(),500 )
+    
+  }, [])
 
   return (
     <Box id="entire-welcome-page-dissapear" style={{...styles.welcomeHolder, ...styles.contentDissapear}}>
@@ -135,11 +136,7 @@ const Welcome = () => {
                   {wallets!.length}
                 </div>
               </div>:null}
-
-              <Button disableRipple style={styles.addressBookBtn} onClick={() => handleAddressBookOpen()}>
-                <img style={styles.addressBookIcon} src={addressBookIcon} alt="Address Book Logo" />
-                Address Book
-              </Button>
+              <AddressBookBtn onClickProp={handleAddressBookOpen}/>
             </div>
 
             {userHaveWallets?<WalletsView />:<NoWallet />}
