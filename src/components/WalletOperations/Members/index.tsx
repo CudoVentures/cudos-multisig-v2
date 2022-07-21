@@ -6,8 +6,9 @@ import { updateModalState } from 'store/modals'
 import { Box, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetWalletMembersQuery } from 'graphql/types'
-import MembersTable, { FetchedData } from './MembersTable'
+import MembersTable from './MembersTable'
 import { AddressBookBtn, DownloadToCsvBtn } from 'utils/wrappers'
+import { TableData } from 'utils/tableSortingHelper'
 
 const Members = () => {
 
@@ -17,7 +18,7 @@ const Members = () => {
     const { loading, error, data } = useGetWalletMembersQuery({
         variables: { id: walletId }
     })
-    const walletMembers: FetchedData[] = []
+    const walletMembers: TableData[] = []
 
     if (data) {
         for (const member of data.group_with_policy_by_pk!.group_members) {

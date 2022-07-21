@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { RootState } from 'store'
 import { styles } from '../styles'
 import copy from 'copy-to-clipboard'
@@ -30,64 +31,15 @@ import {
   Toolbar, Tooltip,
   Typography
 } from '@mui/material'
-
-interface TableData {
-  name: string;
-  address: string;
-}
-
-function createData(
-  name: string,
-  address: string,
-): TableData {
-  return {
-    name,
-    address,
-  };
-}
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-type Order = 'asc' | 'desc';
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-    a: { [key in Key]: number | string },
-    b: { [key in Key]: number | string },
-  ) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof TableData;
-  label: string;
-  numeric: boolean;
-}
+import { 
+  HeadCell, 
+  TableData, 
+  Order, 
+  createData, 
+  stableSort, 
+  getComparator, 
+  EnhancedTableProps
+} from 'utils/tableSortingHelper'
 
 const headCells: readonly HeadCell[] = [
   {
@@ -104,21 +56,12 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TableData) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler =
     (property: keyof TableData) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
+      onRequestSort!(event, property);
     };
 
   return (
@@ -127,7 +70,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableCell padding="checkbox">
           <Checkbox
             color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
+            indeterminate={numSelected! > 0 && numSelected! < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
@@ -161,7 +104,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           </TableCell>
         ))}
         <TableCell>
-          <EnhancedTableToolbar numSelected={numSelected} />
+          <EnhancedTableToolbar numSelected={numSelected!} />
         </TableCell>
       </TableRow>
     </TableHead>
@@ -338,7 +281,7 @@ const StepThree = () => {
               <TableBody style={styles.tableBody}>
                 {stableSort(rows, getComparator(order, orderBy))
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.address);
+                    const isItemSelected = isSelected(row.address.toString());
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
@@ -351,7 +294,7 @@ const StepThree = () => {
                         selected={isItemSelected}
                       >
                         <TableCell padding="checkbox"
-                          onClick={(event) => handleClick(event, row.address)}>
+                          onClick={(event) => handleClick(event, row.address.toString())}>
                           <Checkbox
                             color="primary"
                             checked={isItemSelected}
@@ -362,29 +305,29 @@ const StepThree = () => {
                         </TableCell>
                         <TableCell
                           style={{ width: "200px" }}
-                          onClick={(event) => handleClick(event, row.address)}
+                          onClick={(event) => handleClick(event, row.address.toString())}
                           component="th"
                           id={labelId}
                           scope="row"
                           padding="none"
                         >
-                          {row.name.length > 30 ?
+                          {row.name.toString().length > 30 ?
                             <Tooltip title={row.name}>
                               <div>
-                                {formatAddress(row.name, 10)}
+                                {formatAddress(row.name.toString(), 10)}
                               </div>
                             </Tooltip>
                             : row.name
                           }
                         </TableCell>
                         <TableCell
-                          onClick={(event) => handleClick(event, row.address)} style={{ color: '#7D87AA' }} align="left">
+                          onClick={(event) => handleClick(event, row.address.toString())} style={{ color: '#7D87AA' }} align="left">
                           {row.address}
                         </TableCell>
                         <TableCell style={{ width: '150px' }}>
                           <Box style={{ display: 'flex', justifyContent: 'center' }}>
                             <Tooltip
-                              onClick={() => handleCopy(row.address)}
+                              onClick={() => handleCopy(row.address.toString())}
                               title={copied ? 'Copied' : 'Copy to clipboard'}
                             >
                               <img
@@ -394,7 +337,7 @@ const StepThree = () => {
                               />
                             </Tooltip>
                             <Tooltip title="Check address on explorer">
-                              <a href={EXPLORER_ADDRESS_DETAILS(row.address)} target='_blank'>
+                              <a href={EXPLORER_ADDRESS_DETAILS(row.address.toString())} target='_blank'>
                                 <img
                                   style={{ marginLeft: '10px', cursor: 'pointer' }}
                                   src={LinkIcon}

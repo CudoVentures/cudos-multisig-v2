@@ -1,23 +1,12 @@
 //@ts-nocheck
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Checkbox from '@mui/material/Checkbox';
-import Tooltip from '@mui/material/Tooltip';
+
 import { visuallyHidden } from '@mui/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import trashbinIcon from 'assets/vectors/trashbin-icon.svg'
 import editIcon from 'assets/vectors/edit-icon.svg'
-import { Button } from '@mui/material';
+
 import { styles } from '../styles';
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints';
 import LinkIcon from 'assets/vectors/link-icon.svg'
@@ -26,64 +15,31 @@ import copy from 'copy-to-clipboard'
 import { formatAddress } from 'utils/helpers';
 import { updateUser } from 'store/user';
 import { updateModalState } from 'store/modals';
+import { 
+  Order, 
+  stableSort, 
+  getComparator, 
+  HeadCell, 
+  createData, 
+  TableData, 
+  EnhancedTableProps 
+} from 'utils/tableSortingHelper';
 
-interface Data {
-  name: string;
-  address: string;
-}
-
-function createData(
-  name: string,
-  address: string,
-): Data {
-  return {
-    name,
-    address,
-  };
-}
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-type Order = 'asc' | 'desc';
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
+import {
+  TableHead,
+  TableRow,
+  TableCell,
+  Checkbox,
+  TableSortLabel,
+  Box,
+  Toolbar,
+  alpha,
+  Tooltip,
+  Button,
+  TableContainer,
+  Table,
+  TableBody
+} from '@mui/material'
 
 const headCells: readonly HeadCell[] = [
   {
@@ -100,26 +56,16 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  deleteSelected: () => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, deleteSelected, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
+    (property: keyof TableData) => (event: React.MouseEvent<unknown>) => {
+      onRequestSort!(event, property);
     };
 
   return (
-    <TableHead style={{display: 'block'}}>
+    <TableHead style={{ display: 'block' }}>
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
@@ -139,9 +85,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-              {idx === 0?
-                <TableSortLabel
-                style={{color: '#7D87AA', width: "155px"}}
+            {idx === 0 ?
+              <TableSortLabel
+                style={{ color: '#7D87AA', width: "155px" }}
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : 'asc'}
                 onClick={createSortHandler(headCell.id)}
@@ -154,11 +100,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 ) : null}
               </TableSortLabel>
               :
-              <div style={{color: '#7D87AA'}}> {headCell.label} </div>}
+              <div style={{ color: '#7D87AA' }}> {headCell.label} </div>}
           </TableCell>
         ))}
         <TableCell>
-            <EnhancedTableToolbar deleteSelected={deleteSelected} numSelected={numSelected} />
+          <EnhancedTableToolbar deleteSelected={deleteSelected!} numSelected={numSelected} />
         </TableCell>
       </TableRow>
     </TableHead>
@@ -174,70 +120,70 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const { numSelected, deleteSelected } = props;
 
   return (
-    <div style={{height: '0', width: '20px'}}>
-        <Toolbar
-        style={{backgroundColor: 'transparent'}}
+    <div style={{ height: '0', width: '20px' }}>
+      <Toolbar
+        style={{ backgroundColor: 'transparent' }}
         sx={{
-            pl: { sm: 2 },
-            pr: { xs: 1, sm: 1 },
-            ...(numSelected > 0 && {
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+          ...(numSelected > 0 && {
             bgcolor: (theme) =>
-                alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-            }),
+              alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+          }),
         }}
-        >
-      {numSelected > 0 ? (
-        <Tooltip title={`Delete ${numSelected} selected`}>
-            <Button 
-                disableRipple 
-                style={styles.trashbin}
-                onClick={deleteSelected}
+      >
+        {numSelected > 0 ? (
+          <Tooltip title={`Delete ${numSelected} selected`}>
+            <Button
+              disableRipple
+              style={styles.trashbin}
+              onClick={deleteSelected}
             >
-                <img src={trashbinIcon} alt="Trashbin icon" />
+              <img src={trashbinIcon} alt="Trashbin icon" />
             </Button>
-        </Tooltip>
-      ) : null}
-    </Toolbar>
+          </Tooltip>
+        ) : null}
+      </Toolbar>
     </div>
   );
 };
 
 export default function AddressBookTable() {
-    const { addressBook } = useSelector((state: RootState) => state.userState)
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
-    const [copied, setCopied] = React.useState<boolean>(false)
-    const [selected, setSelected] = React.useState<readonly string[]>([]);
-    const dispatch = useDispatch()
+  const { addressBook } = useSelector((state: RootState) => state.userState)
+  const [order, setOrder] = React.useState<Order>('asc');
+  const [orderBy, setOrderBy] = React.useState<keyof TableData>('name');
+  const [copied, setCopied] = React.useState<boolean>(false)
+  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const dispatch = useDispatch()
 
-    const deleteSelected = () => {
-    
-        let newAddressBook = {...addressBook}
-        for (let address of selected) {
-            delete newAddressBook![address]
-        }
-    
-        dispatch(updateUser({
-            addressBook: newAddressBook
-        }))
-        setSelected([])
-      }
+  const deleteSelected = () => {
 
-    const rows: Data[] = [];
-    if (addressBook) {
-      Object.entries(addressBook!).forEach(
-          ([address, name]) => rows.push(createData(name, address))
-      )
+    let newAddressBook = { ...addressBook }
+    for (let address of selected) {
+      delete newAddressBook![address]
     }
-    
-    const handleRequestSort = (
-        event: React.MouseEvent<unknown>,
-        property: keyof Data,
-    ) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
+
+    dispatch(updateUser({
+      addressBook: newAddressBook
+    }))
+    setSelected([])
+  }
+
+  const rows: TableData[] = [];
+  if (addressBook) {
+    Object.entries(addressBook!).forEach(
+      ([address, name]) => rows.push(createData(name, address))
+    )
+  }
+
+  const handleRequestSort = (
+    event: React.MouseEvent<unknown>,
+    property: keyof TableData,
+  ) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -276,117 +222,117 @@ export default function AddressBookTable() {
     }, 3000)
   }
 
-  const editSelected = (row: Data,idx: number) => {
-    dispatch(updateModalState({ 
+  const editSelected = (row: TableData, idx: number) => {
+    dispatch(updateModalState({
       editAddressBookRecord: true,
-      dataObject: {index: idx, name: row.name, address: row.address}
+      dataObject: { index: idx, name: row.name, address: row.address }
     }))
   }
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   return (
-    <Box sx={{ width: '100%', height: '250px'}}>
-        <TableContainer style={{display: "flex", justifyContent: "center" }}>
-          <Table
-            sx={{ marginTop: '20px', minWidth: 530, width: 530, height: 230 }}
-            aria-labelledby="tableTitle"
-            size='medium'
-          >
-            <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                deleteSelected={deleteSelected}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
-            />
-            <TableBody style={{display: 'block', height: '185px', overflow: 'scroll'}}>
-              {stableSort(rows, getComparator(order, orderBy))
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.address);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <Box sx={{ width: '100%', height: '250px' }}>
+      <TableContainer style={{ display: "flex", justifyContent: "center" }}>
+        <Table
+          sx={{ marginTop: '20px', minWidth: 530, width: 530, height: 230 }}
+          aria-labelledby="tableTitle"
+          size='medium'
+        >
+          <EnhancedTableHead
+            numSelected={selected.length}
+            order={order}
+            orderBy={orderBy}
+            deleteSelected={deleteSelected}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={rows.length}
+          />
+          <TableBody style={{ display: 'block', height: '185px', overflow: 'scroll' }}>
+            {stableSort(rows, getComparator(order, orderBy))
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.address.toString());
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.address}
-                      selected={isItemSelected}
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.address}
+                    selected={isItemSelected}
+                  >
+                    <TableCell
+                      padding="checkbox"
+                      onClick={(event) => handleClick(event, row.address.toString())}>
+                      <Checkbox
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          'aria-labelledby': labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      style={{ width: "155px" }}
+                      onClick={(event) => handleClick(event, row.address.toString())}
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="none"
                     >
-                      <TableCell 
-                        padding="checkbox"
-                        onClick={(event) => handleClick(event, row.address)}>
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        style={{width: "155px"}}
-                        onClick={(event) => handleClick(event, row.address)}
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name.length > 18?
+                      {row.name.toString().length > 18 ?
                         <Tooltip title={row.name}>
-                            <div>
-                                {formatAddress(row.name, 10)}
-                            </div>
+                          <div>
+                            {formatAddress(row.name.toString(), 10)}
+                          </div>
                         </Tooltip>
-                        :row.name
-                        }
-                      </TableCell>
-                      <TableCell 
-                        onClick={(event) => handleClick(event, row.address)} style={{color: '#7D87AA'}} align="left">
-                            {formatAddress(row.address, 20)}
-                        </TableCell>
-                      <TableCell>
-                        <Box style={{ display: 'flex', justifyContent: 'center'}}>
-                          <Tooltip 
-                            onClick={() => editSelected(row, index)}
-                            title={`Edit record`}>
-                          
-                            <img
+                        : row.name
+                      }
+                    </TableCell>
+                    <TableCell
+                      onClick={(event) => handleClick(event, row.address.toString())} style={{ color: '#7D87AA' }} align="left">
+                      {formatAddress(row.address.toString(), 20)}
+                    </TableCell>
+                    <TableCell>
+                      <Box style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Tooltip
+                          onClick={() => editSelected(row, index)}
+                          title={`Edit record`}>
+
+                          <img
                             style={styles.icons}
-                            src={editIcon} 
+                            src={editIcon}
                             alt="Edit icon" />
                         </Tooltip>
                         <Tooltip
-                            onClick={() => handleCopy(row.address)}
-                            title={copied ? 'Copied' : 'Copy to clipboard'}
+                          onClick={() => handleCopy(row.address.toString())}
+                          title={copied ? 'Copied' : 'Copy to clipboard'}
                         >
-                            <img
+                          <img
                             style={styles.icons}
                             src={CopyIcon}
                             alt="Copy"
-                            />
+                          />
                         </Tooltip>
                         <Tooltip title="Check address on explorer">
-                            <a href={EXPLORER_ADDRESS_DETAILS(row.address)} target='_blank'>
+                          <a href={EXPLORER_ADDRESS_DETAILS(row.address.toString())} target='_blank'>
                             <img
-                                style={{paddingTop: '5px', ...styles.icons}}
-                                src={LinkIcon}
-                                alt="Link"
+                              style={{ paddingTop: '5px', ...styles.icons }}
+                              src={LinkIcon}
+                              alt="Link"
                             />
-                            </a>
+                          </a>
                         </Tooltip>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 }
