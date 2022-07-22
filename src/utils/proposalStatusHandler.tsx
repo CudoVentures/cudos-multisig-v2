@@ -1,30 +1,57 @@
 import { Box, Typography } from '@mui/material'
 
 import {
-    OPEN_TO_APPROVE,
+    FAIL,
+    OPEN_TO_VOTE,
+    PROPOSAL_EXECUTOR_RESULT_FAILURE,
     PROPOSAL_EXECUTOR_RESULT_NOT_RUN,
+    PROPOSAL_EXECUTOR_RESULT_SUCCESS,
     PROPOSAL_STATUS_ACCEPTED,
+    PROPOSAL_STATUS_REJECTED,
     PROPOSAL_STATUS_SUBMITTED,
     PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED,
     READY_TO_EXECUTE,
+    REJECTED,
+    SUCCESS,
     UNDEFINED,
     UNKNOWN,
-    WAITING_APPROVAL
+    WAITING_VOTES
 } from './constants'
 
 const statuses = {
-    [PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED]: OPEN_TO_APPROVE,
+    [PROPOSAL_EXECUTOR_RESULT_FAILURE]: FAIL,
+    [PROPOSAL_STATUS_REJECTED]: REJECTED,
+    [PROPOSAL_EXECUTOR_RESULT_SUCCESS]: SUCCESS,
+    [PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED]: WAITING_VOTES,
     [PROPOSAL_STATUS_ACCEPTED]: READY_TO_EXECUTE,
-    [PROPOSAL_STATUS_SUBMITTED]: WAITING_APPROVAL,
+    [PROPOSAL_STATUS_SUBMITTED]: OPEN_TO_VOTE,
     [UNDEFINED]: UNKNOWN
 }
 
 export const isVoted = (userAddress: string, votes: any[]): boolean => {
-    if (votes.length === 0) { return false }
-
-    for (const vote of votes) {
-        if (vote.voter === userAddress) { return true }
+    if (votes.length === 0) {
+        return false
     }
+
+    let voterAddress: string = ''
+    for (const vote of votes) {
+        
+        if (vote.voter) {
+            voterAddress = vote.voter
+            break
+        } 
+        
+        if (vote.group_member) {
+            voterAddress = vote.group_member.address
+            break
+        }
+
+    }
+
+    if (voterAddress !== '' && voterAddress === userAddress) {
+        return true
+    }
+
     return false
 }
 

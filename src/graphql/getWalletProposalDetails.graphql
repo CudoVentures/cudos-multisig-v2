@@ -1,0 +1,31 @@
+query getWalletProposalDetails($id: Int = 0) {
+  group_proposal_by_pk(id: $id) {
+    executor
+    execution_time
+    executor_result
+    status
+    messages
+    proposer
+    transaction_hash
+    group_proposal_votes {
+      group_member {
+        address
+        metadata
+      }
+      vote_metadata
+      vote_option
+      submit_time
+    }
+    group_with_policy {
+      voting_period
+      threshold
+      group_members(where: {weight: {_gt: 0}}) {
+        metadata
+        address
+      }
+    }
+    block {
+      timestamp
+    }
+  }
+}

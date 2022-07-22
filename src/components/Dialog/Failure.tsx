@@ -11,110 +11,132 @@ import { updateWalletCreationSteps } from 'store/walletCreation'
 import { updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialWalletObject } from 'store/walletObject'
 import { initialState as initialSendFundsState, updateSendFunds } from 'store/sendFunds'
-import { DUPLICATED_ADDRESS_TYPE, FEE_ESTIMATION_ERROR, PROPOSAL_CREATION_FAILURE_TYPE, WALLET_CORRUPTED_PROCESS_TYPE } from 'utils/constants'
-
+import {
+  DUPLICATED_ADDRESS_TYPE,
+  FEE_ESTIMATION_ERROR,
+  PROPOSAL_CREATION_FAILURE_TYPE,
+  PROPOSAL_VOTING_ERROR_TYPE,
+  WALLET_CORRUPTED_PROCESS_TYPE
+} from 'utils/constants'
 
 const Failure = () => {
-      
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
 
-    const clearState = async () => {
-      dispatch(updateWalletCreationSteps({currentStep: ''}))
-      dispatch(updateSendFunds({ ...initialSendFundsState }))
-      dispatch(updateWalletObjectState({ ...initialWalletObject }))
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const clearState = async () => {
+    dispatch(updateWalletCreationSteps({ currentStep: '' }))
+    dispatch(updateSendFunds({ ...initialSendFundsState }))
+    dispatch(updateWalletObjectState({ ...initialWalletObject }))
+  }
+
+  const goHome = () => {
+    clearState()
+    navigate("/welcome")
+  }
+
+  const {
+    failure,
+    title,
+    message,
+    msgType,
+    dataObject
+  } = useSelector((state: RootState) => state.modalState)
+
+  const handleModalClose = () => {
+    switch (msgType) {
+
+      case PROPOSAL_VOTING_ERROR_TYPE:
+        const proposalID: number = parseInt(dataObject!.proposalID as string)
+        dispatch(updateModalState({ ...initialModalState }))
+        dispatch(updateModalState({
+          dataObject: {
+            proposalID: proposalID
+          },
+          showProposalDetails: true
+        }))
+        break
+
+      case FEE_ESTIMATION_ERROR:
+      case PROPOSAL_CREATION_FAILURE_TYPE:
+      case WALLET_CORRUPTED_PROCESS_TYPE:
+        dispatch(updateModalState({ ...initialModalState }))
+        goHome()
+        break
+
+      case DUPLICATED_ADDRESS_TYPE:
+        dispatch(updateModalState({ ...initialModalState }))
+        dispatch(updateModalState({ openAddressBook: true }))
+        localStorage.removeItem('addressBookAccountName')
+        localStorage.removeItem('addressBookAccountAddress')
+        break
+
+      default:
+        dispatch(updateModalState({ ...initialModalState }))
+        break
     }
+  }
 
-    const goHome = () => {
-        clearState()
-        navigate("/welcome")
+  const closeModal = (ev: any, reason: string) => {
+    if (reason !== 'backdropClick') {
+      handleModalClose()
     }
+  }
 
-    const { 
-        failure, 
-        title, 
-        message,
-        msgType, 
-    } = useSelector((state: RootState) => state.modalState)
-
-    const handleModalClose = () => {
-      switch(msgType) {
-
-        case FEE_ESTIMATION_ERROR:
-        case PROPOSAL_CREATION_FAILURE_TYPE:
-        case WALLET_CORRUPTED_PROCESS_TYPE:
-          dispatch(updateModalState({ ...initialModalState }))
-          goHome()
-          break
-
-        case DUPLICATED_ADDRESS_TYPE:
-          dispatch(updateModalState({ ...initialModalState }))
-          dispatch(updateModalState({ openAddressBook: true }))
-          localStorage.removeItem('addressBookAccountName')
-          localStorage.removeItem('addressBookAccountAddress')
-          break
-  
-        default:
-          dispatch(updateModalState({ ...initialModalState }))
-          break
-      }
-    }
-      
-    const closeModal = (ev: any, reason: string) => {
-        if (reason !== 'backdropClick') {
-          handleModalClose()
+  return (
+    <MuiDialog
+      open={failure!}
+      onClose={closeModal}
+      PaperProps={{
+        sx: {
+          background: 'transparent',
+          boxShadow: 'none',
+          position: 'fixed',
+          overflow: 'hidden',
+          borderRadius: '25px'
         }
-    }
-
-    return (
-        <MuiDialog
-          open={failure!}
-          onClose={closeModal}
-          PaperProps={{
-            sx: {
-              background: 'transparent',
-              boxShadow: 'none',
-              position: 'fixed',
-              overflow: 'hidden',
-              borderRadius: '25px'
-            }
-          }}
+      }}
+    >
+      <ModalContainer sx={{ padding: '4rem' }}>
+        <img src={FailureIcon} alt="failure-icon" />
+        <CancelRoundedIcon onClick={handleModalClose} />
+        <Box
+          width='400px'
+          minHeight='200px'
+          display="block"
+          flexDirection="column"
+          alignItems="center"
+          textAlign="center"
+          gap={1}
         >
-          <ModalContainer sx={{ padding: '4rem' }}>
-          <img src={FailureIcon} alt="failure-icon" />
-          <CancelRoundedIcon onClick={handleModalClose} />
-          <Box
-            width='400px'
-            minHeight= '200px'
-            display="block"
-            flexDirection="column"
-            alignItems="center"
-            textAlign="center"
-            gap={1}
+          <Typography
+            style={{ margin: '20px 0 20px 0' }}
+            variant="h4"
+            fontWeight={900}
+            letterSpacing={2}
           >
-            <Typography style={{margin: '20px 0 20px 0'}} variant="h4" fontWeight={900} letterSpacing={2}>
-              {title}
-            </Typography>
-            {message?
-              <Typography variant="subtitle1" color="text.secondary">
+            {title}
+          </Typography>
+          {message ?
+            <Typography variant="subtitle1" color="text.secondary">
               {message}
-              </Typography>
-            :null}
-          </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={() => ({
-              width: '50%',
-              fontWeight: 700
-            })}
-            onClick={handleModalClose}
-          >
-            Close
-          </Button>
-        </ModalContainer>
-        </MuiDialog>
-      )
+            </Typography>
+            : null}
+        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={() => ({
+            width: '50%',
+            fontWeight: 700
+          })}
+          onClick={handleModalClose}
+        >
+          Close
+        </Button>
+      </ModalContainer>
+    </MuiDialog>
+  )
 }
 
 export default Failure
