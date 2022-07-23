@@ -3,11 +3,10 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
-import moment from 'moment'
 import { RootState } from 'store'
 import { styles } from './styles'
 import Card from 'components/Card/Card'
-import { formatAddress } from 'utils/helpers'
+import { formatAddress, formatDateTime } from 'utils/helpers'
 import { Pagination, Mousewheel } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { updateModalState } from 'store/modals'
@@ -23,7 +22,7 @@ import { EXPLORER_ADDRESS_DETAILS, TX_HASH_DETAILS } from 'api/endpoints'
 import BluePlusIcon from 'assets/vectors/proposalDetails/blue-plus-icon.svg'
 import HollowGrayIcon from 'assets/vectors/proposalDetails/hollow-gray-icon.svg'
 import RedRejectedIcon from 'assets/vectors/proposalDetails/red-rejected-icon.svg'
-import { determineStatus, ProposalStatusComponent } from 'utils/proposalStatusHandler'
+import { determineStatus, getExpirationTime, isExpiredStatus, ProposalStatusComponent } from 'utils/proposalStatusHandler'
 import BluePositiveCheckIcon from 'assets/vectors/proposalDetails/blue-positive-check-icon.svg'
 
 import {
@@ -57,7 +56,6 @@ export interface FetchedProposalDetailsData {
     status: string;
     isVotable: boolean;
     proposer: string;
-    isExpired: boolean;
     expirationDate: string;
     haveComments: boolean;
     submissionTime: string;
@@ -97,7 +95,6 @@ const ProposalDetails = () => {
         status: '',
         isVotable: false,
         proposer: '',
-        isExpired: false,
         expirationDate: '',
         haveComments: false,
         submissionTime: '',
@@ -114,24 +111,12 @@ const ProposalDetails = () => {
         const proposalMessage = proposal?.messages[0] ? proposal?.messages[0] : null
         const msgType: string = proposalMessage["@type"]
         const status: string = determineStatus(address!, proposal)
-        const votingTime: number = parseInt(proposal?.group_with_policy.voting_period)
+        const expirationTime: string = getExpirationTime(proposal)
         const threshold: number = proposal?.group_with_policy.threshold!
         const totalMembers: number = proposal?.group_with_policy.group_members.length!
         const proposer: string = proposal?.proposer!
         const votes: Vote[] = []
         let isHavingComments: boolean = false
-
-        const expirationTime = moment(proposalTimeStamp)
-            .add(votingTime, 'seconds')
-            .format('DD MMM YYYY LTS')
-            .toLocaleString()
-
-        const currentTime = moment()
-            .format('DD MMM YYYY LTS')
-            .toLocaleString()
-
-        const isExpired = moment(expirationTime)
-            .isSameOrBefore(currentTime)
 
         for (const vote of proposal?.group_proposal_votes!) {
             const currentVote: Vote = {
@@ -158,17 +143,12 @@ const ProposalDetails = () => {
             isVotable: (status === PROPOSAL_STATUS_SUBMITTED),
             proposer: proposer,
             expirationDate: expirationTime,
-            isExpired: isExpired,
             haveComments: isHavingComments,
-            submissionTime: moment(proposalTimeStamp)
-                .format('DD MMM YYYY LTS')
-                .toLocaleString(),
+            submissionTime: formatDateTime(proposalTimeStamp),
             threshold: threshold,
             totalMembers: totalMembers,
             executor: proposal?.executor!,
-            executionTime: moment(proposal?.execution_time)
-                .format('DD MMM YYYY LTS')
-                .toLocaleString()
+            executionTime: formatDateTime(proposal?.execution_time)
         }
     }
 
@@ -343,7 +323,7 @@ const ProposalDetails = () => {
                                         variant='subtitle2'
                                         color='text.secondary'
                                     >
-                                        {`Voting ${proposalDetails.isExpired ? 'ended' : 'ends'} on `}
+                                        {`Voting ${isExpiredStatus(proposalDetails.status) ? 'ended' : 'ends'} on `}
                                     </Typography>
                                     <Typography variant='subtitle1' color='text.primary'>
                                         {proposalDetails.expirationDate}
@@ -427,7 +407,7 @@ const ProposalDetails = () => {
                                             proposalDetails.votes.length < proposalDetails.threshold ?
                                                 <Box style={styles.approvalNeededInfoBox}>
                                                     <Typography color={COLORS_DARK_THEME.PRIMARY_BLUE}>
-                                                        {`${proposalDetails.threshold - proposalDetails.votes.length} more approvals needed`}
+                                                        {`${proposalDetails.threshold - proposalDetails.votes.length} more approvals ${isExpiredStatus(proposalDetails.status) ? 'were' : null} needed`}
                                                     </Typography>
                                                 </Box>
                                                 :
@@ -461,25 +441,31 @@ const ProposalDetails = () => {
                                                         </Typography>
                                                     </Box>
                                                 </Tooltip>
-                                                : proposalDetails.status === PROPOSAL_EXECUTOR_RESULT_SUCCESS ?
-                                                    <Box>
-                                                        <Box style={styles.executedInfoAddressBox}>
-                                                            <Typography marginRight={1} color={'text.secondary'}>by</Typography>
-                                                            <a
-                                                                style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE, textDecoration: 'none' }}
-                                                                href={EXPLORER_ADDRESS_DETAILS(proposalDetails.executor)}
-                                                                target='_blank'
-                                                            >
-                                                                {formatAddress(proposalDetails.executor, 15)}
-                                                            </a>
-                                                        </Box>
-                                                        <Box style={styles.executedInfoTimeBox}>
-                                                            <Typography marginRight={1} color={'text.secondary'}>on</Typography>
-                                                            <Typography>{proposalDetails.executionTime}</Typography>
-                                                        </Box>
+                                                : isExpiredStatus(proposalDetails.status) ?
+                                                    <Box style={styles.expiredInfoBox}>
+                                                        <Typography>
+                                                            Transaction expired
+                                                        </Typography>
                                                     </Box>
+                                                    : proposalDetails.status === PROPOSAL_EXECUTOR_RESULT_SUCCESS ?
+                                                        <Box>
+                                                            <Box style={styles.executedInfoAddressBox}>
+                                                                <Typography marginRight={1} color={'text.secondary'}>by</Typography>
+                                                                <a
+                                                                    style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE, textDecoration: 'none' }}
+                                                                    href={EXPLORER_ADDRESS_DETAILS(proposalDetails.executor)}
+                                                                    target='_blank'
+                                                                >
+                                                                    {formatAddress(proposalDetails.executor, 15)}
+                                                                </a>
+                                                            </Box>
+                                                            <Box style={styles.executedInfoTimeBox}>
+                                                                <Typography marginRight={1} color={'text.secondary'}>on</Typography>
+                                                                <Typography>{proposalDetails.executionTime}</Typography>
+                                                            </Box>
+                                                        </Box>
 
-                                                    : null
+                                                        : null
                                         }
                                     </div>
                                 </Box>
