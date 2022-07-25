@@ -1,7 +1,11 @@
 import { COLORS_DARK_THEME } from "theme/colors";
 
-/* eslint-disable import/prefer-default-export */
 export const styles = {
+  proposalStatusBox: {
+    width: "100%", 
+    display: 'flex', 
+    justifyContent: 'flex-end'
+  },
   clockIcon: {
     marginRight: '5px', 
     width: '18px', 

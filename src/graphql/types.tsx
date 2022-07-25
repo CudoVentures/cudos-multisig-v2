@@ -3853,7 +3853,7 @@ export type Group_Member = {
   group_proposal_votes_aggregate: Group_Proposal_Vote_Aggregate;
   /** An object relationship */
   group_with_policy: Group_With_Policy;
-  member_metadata?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Scalars['String']>;
   weight: Scalars['Int'];
 };
 
@@ -3944,7 +3944,7 @@ export type Group_Member_Bool_Exp = {
   group_id?: InputMaybe<Int_Comparison_Exp>;
   group_proposal_votes?: InputMaybe<Group_Proposal_Vote_Bool_Exp>;
   group_with_policy?: InputMaybe<Group_With_Policy_Bool_Exp>;
-  member_metadata?: InputMaybe<String_Comparison_Exp>;
+  metadata?: InputMaybe<String_Comparison_Exp>;
   weight?: InputMaybe<Int_Comparison_Exp>;
 };
 
@@ -3953,7 +3953,7 @@ export type Group_Member_Max_Fields = {
   __typename?: 'group_member_max_fields';
   address?: Maybe<Scalars['String']>;
   group_id?: Maybe<Scalars['Int']>;
-  member_metadata?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Scalars['String']>;
   weight?: Maybe<Scalars['Int']>;
 };
 
@@ -3961,7 +3961,7 @@ export type Group_Member_Max_Fields = {
 export type Group_Member_Max_Order_By = {
   address?: InputMaybe<Order_By>;
   group_id?: InputMaybe<Order_By>;
-  member_metadata?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
   weight?: InputMaybe<Order_By>;
 };
 
@@ -3970,7 +3970,7 @@ export type Group_Member_Min_Fields = {
   __typename?: 'group_member_min_fields';
   address?: Maybe<Scalars['String']>;
   group_id?: Maybe<Scalars['Int']>;
-  member_metadata?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Scalars['String']>;
   weight?: Maybe<Scalars['Int']>;
 };
 
@@ -3978,7 +3978,7 @@ export type Group_Member_Min_Fields = {
 export type Group_Member_Min_Order_By = {
   address?: InputMaybe<Order_By>;
   group_id?: InputMaybe<Order_By>;
-  member_metadata?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
   weight?: InputMaybe<Order_By>;
 };
 
@@ -3988,7 +3988,7 @@ export type Group_Member_Order_By = {
   group_id?: InputMaybe<Order_By>;
   group_proposal_votes_aggregate?: InputMaybe<Group_Proposal_Vote_Aggregate_Order_By>;
   group_with_policy?: InputMaybe<Group_With_Policy_Order_By>;
-  member_metadata?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
   weight?: InputMaybe<Order_By>;
 };
 
@@ -3999,7 +3999,7 @@ export enum Group_Member_Select_Column {
   /** column name */
   GroupId = 'group_id',
   /** column name */
-  MemberMetadata = 'member_metadata',
+  Metadata = 'metadata',
   /** column name */
   Weight = 'weight'
 }
@@ -4100,6 +4100,8 @@ export type Group_Proposal = {
   __typename?: 'group_proposal';
   /** An object relationship */
   block: Block;
+  execution_time?: Maybe<Scalars['timestamp']>;
+  executor?: Maybe<Scalars['String']>;
   executor_result: Scalars['proposal_executor_result'];
   group_id: Scalars['Int'];
   /** An array relationship */
@@ -4111,9 +4113,12 @@ export type Group_Proposal = {
   height: Scalars['bigint'];
   id: Scalars['Int'];
   messages: Scalars['jsonb'];
-  proposal_metadata?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Scalars['String']>;
   proposer: Scalars['String'];
   status: Scalars['proposal_status'];
+  submit_time: Scalars['timestamp'];
+  /** An object relationship */
+  transaction?: Maybe<Transaction>;
   transaction_hash?: Maybe<Scalars['String']>;
 };
 
@@ -4209,6 +4214,8 @@ export type Group_Proposal_Bool_Exp = {
   _not?: InputMaybe<Group_Proposal_Bool_Exp>;
   _or?: InputMaybe<Array<Group_Proposal_Bool_Exp>>;
   block?: InputMaybe<Block_Bool_Exp>;
+  execution_time?: InputMaybe<Timestamp_Comparison_Exp>;
+  executor?: InputMaybe<String_Comparison_Exp>;
   executor_result?: InputMaybe<Proposal_Executor_Result_Comparison_Exp>;
   group_id?: InputMaybe<Int_Comparison_Exp>;
   group_proposal_votes?: InputMaybe<Group_Proposal_Vote_Bool_Exp>;
@@ -4216,57 +4223,73 @@ export type Group_Proposal_Bool_Exp = {
   height?: InputMaybe<Bigint_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   messages?: InputMaybe<Jsonb_Comparison_Exp>;
-  proposal_metadata?: InputMaybe<String_Comparison_Exp>;
+  metadata?: InputMaybe<String_Comparison_Exp>;
   proposer?: InputMaybe<String_Comparison_Exp>;
   status?: InputMaybe<Proposal_Status_Comparison_Exp>;
+  submit_time?: InputMaybe<Timestamp_Comparison_Exp>;
+  transaction?: InputMaybe<Transaction_Bool_Exp>;
   transaction_hash?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** aggregate max on columns */
 export type Group_Proposal_Max_Fields = {
   __typename?: 'group_proposal_max_fields';
+  execution_time?: Maybe<Scalars['timestamp']>;
+  executor?: Maybe<Scalars['String']>;
   group_id?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['bigint']>;
   id?: Maybe<Scalars['Int']>;
-  proposal_metadata?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Scalars['String']>;
   proposer?: Maybe<Scalars['String']>;
+  submit_time?: Maybe<Scalars['timestamp']>;
   transaction_hash?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "group_proposal" */
 export type Group_Proposal_Max_Order_By = {
+  execution_time?: InputMaybe<Order_By>;
+  executor?: InputMaybe<Order_By>;
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  proposal_metadata?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
   proposer?: InputMaybe<Order_By>;
+  submit_time?: InputMaybe<Order_By>;
   transaction_hash?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
 export type Group_Proposal_Min_Fields = {
   __typename?: 'group_proposal_min_fields';
+  execution_time?: Maybe<Scalars['timestamp']>;
+  executor?: Maybe<Scalars['String']>;
   group_id?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['bigint']>;
   id?: Maybe<Scalars['Int']>;
-  proposal_metadata?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Scalars['String']>;
   proposer?: Maybe<Scalars['String']>;
+  submit_time?: Maybe<Scalars['timestamp']>;
   transaction_hash?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "group_proposal" */
 export type Group_Proposal_Min_Order_By = {
+  execution_time?: InputMaybe<Order_By>;
+  executor?: InputMaybe<Order_By>;
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  proposal_metadata?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
   proposer?: InputMaybe<Order_By>;
+  submit_time?: InputMaybe<Order_By>;
   transaction_hash?: InputMaybe<Order_By>;
 };
 
 /** Ordering options when selecting data from "group_proposal". */
 export type Group_Proposal_Order_By = {
   block?: InputMaybe<Block_Order_By>;
+  execution_time?: InputMaybe<Order_By>;
+  executor?: InputMaybe<Order_By>;
   executor_result?: InputMaybe<Order_By>;
   group_id?: InputMaybe<Order_By>;
   group_proposal_votes_aggregate?: InputMaybe<Group_Proposal_Vote_Aggregate_Order_By>;
@@ -4274,14 +4297,20 @@ export type Group_Proposal_Order_By = {
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   messages?: InputMaybe<Order_By>;
-  proposal_metadata?: InputMaybe<Order_By>;
+  metadata?: InputMaybe<Order_By>;
   proposer?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
+  submit_time?: InputMaybe<Order_By>;
+  transaction?: InputMaybe<Transaction_Order_By>;
   transaction_hash?: InputMaybe<Order_By>;
 };
 
 /** select columns of table "group_proposal" */
 export enum Group_Proposal_Select_Column {
+  /** column name */
+  ExecutionTime = 'execution_time',
+  /** column name */
+  Executor = 'executor',
   /** column name */
   ExecutorResult = 'executor_result',
   /** column name */
@@ -4293,11 +4322,13 @@ export enum Group_Proposal_Select_Column {
   /** column name */
   Messages = 'messages',
   /** column name */
-  ProposalMetadata = 'proposal_metadata',
+  Metadata = 'metadata',
   /** column name */
   Proposer = 'proposer',
   /** column name */
   Status = 'status',
+  /** column name */
+  SubmitTime = 'submit_time',
   /** column name */
   TransactionHash = 'transaction_hash'
 }
@@ -14489,29 +14520,43 @@ export type GetWalletMembersQueryVariables = Exact<{
 }>;
 
 
-export type GetWalletMembersQuery = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_members: Array<{ __typename?: 'group_member', address: string, member_metadata?: string | null }> } | null };
+export type GetWalletMembersQuery = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null }> } | null };
 
-export type GetWalletProposalsSubscriptionVariables = Exact<{
+export type GetWalletProposalDetailsQueryVariables = Exact<{
   id?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetWalletProposalsSubscription = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', voting_period: any, group_proposals: Array<{ __typename?: 'group_proposal', messages: any, transaction_hash?: string | null, status: any, executor_result: any, block: { __typename?: 'block', height: any, timestamp: any }, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', vote_option: any, voter: string }> }> } | null };
+export type GetWalletProposalDetailsQuery = { group_proposal_by_pk?: { __typename?: 'group_proposal', executor?: string | null, execution_time?: any | null, executor_result: any, status: any, messages: any, proposer: string, transaction_hash?: string | null, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', vote_metadata?: string | null, vote_option: any, submit_time: any, group_member?: { __typename?: 'group_member', address: string, metadata?: string | null } | null }>, group_with_policy: { __typename?: 'group_with_policy', voting_period: any, threshold: number, group_members: Array<{ __typename?: 'group_member', metadata?: string | null, address: string }> }, block: { __typename?: 'block', timestamp: any } } | null };
+
+export type GetWalletProposalsMainSummarySubscriptionVariables = Exact<{
+  id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetWalletProposalsMainSummarySubscription = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_proposals: Array<{ __typename?: 'group_proposal', id: number, messages: any, transaction_hash?: string | null, status: any, executor_result: any, block: { __typename?: 'block', height: any, timestamp: any }, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', voter: string }> }> } | null };
+
+export type GetWalletProposalsSummarySubscriptionVariables = Exact<{
+  id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetWalletProposalsSummarySubscription = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_proposals: Array<{ __typename?: 'group_proposal', id: number, messages: any, transaction_hash?: string | null, status: any, executor_result: any, block: { __typename?: 'block', height: any, timestamp: any }, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', voter: string }> }> } | null };
 
 export type GetWalletsQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, group_members: Array<{ __typename?: 'group_member', address: string, member_metadata?: string | null }> } }> };
+export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null }> } }> };
 
 
 export const GetWalletMembersDocument = gql`
     query GetWalletMembers($id: Int = 0) {
   group_with_policy_by_pk(id: $id) {
-    group_members {
+    group_members(where: {weight: {_gt: 0}}) {
       address
-      member_metadata
+      metadata
     }
   }
 }
@@ -14544,50 +14589,153 @@ export function useGetWalletMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetWalletMembersQueryHookResult = ReturnType<typeof useGetWalletMembersQuery>;
 export type GetWalletMembersLazyQueryHookResult = ReturnType<typeof useGetWalletMembersLazyQuery>;
 export type GetWalletMembersQueryResult = Apollo.QueryResult<GetWalletMembersQuery, GetWalletMembersQueryVariables>;
-export const GetWalletProposalsDocument = gql`
-    subscription getWalletProposals($id: Int = 0) {
+export const GetWalletProposalDetailsDocument = gql`
+    query getWalletProposalDetails($id: Int = 0) {
+  group_proposal_by_pk(id: $id) {
+    executor
+    execution_time
+    executor_result
+    status
+    messages
+    proposer
+    transaction_hash
+    group_proposal_votes {
+      group_member {
+        address
+        metadata
+      }
+      vote_metadata
+      vote_option
+      submit_time
+    }
+    group_with_policy {
+      voting_period
+      threshold
+      group_members(where: {weight: {_gt: 0}}) {
+        metadata
+        address
+      }
+    }
+    block {
+      timestamp
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetWalletProposalDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetWalletProposalDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWalletProposalDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWalletProposalDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWalletProposalDetailsQuery(baseOptions?: Apollo.QueryHookOptions<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>(GetWalletProposalDetailsDocument, options);
+      }
+export function useGetWalletProposalDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>(GetWalletProposalDetailsDocument, options);
+        }
+export type GetWalletProposalDetailsQueryHookResult = ReturnType<typeof useGetWalletProposalDetailsQuery>;
+export type GetWalletProposalDetailsLazyQueryHookResult = ReturnType<typeof useGetWalletProposalDetailsLazyQuery>;
+export type GetWalletProposalDetailsQueryResult = Apollo.QueryResult<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>;
+export const GetWalletProposalsMainSummaryDocument = gql`
+    subscription getWalletProposalsMainSummary($id: Int = 0) {
   group_with_policy_by_pk(id: $id) {
     group_proposals(order_by: {block: {timestamp: desc}}) {
       block {
         height
         timestamp
       }
+      id
       messages
       transaction_hash
       status
       executor_result
       group_proposal_votes {
-        vote_option
         voter
       }
     }
-    voting_period
   }
 }
     `;
 
 /**
- * __useGetWalletProposalsSubscription__
+ * __useGetWalletProposalsMainSummarySubscription__
  *
- * To run a query within a React component, call `useGetWalletProposalsSubscription` and pass it any options that fit your needs.
- * When your component renders, `useGetWalletProposalsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetWalletProposalsMainSummarySubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetWalletProposalsMainSummarySubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetWalletProposalsSubscription({
+ * const { data, loading, error } = useGetWalletProposalsMainSummarySubscription({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetWalletProposalsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetWalletProposalsSubscription, GetWalletProposalsSubscriptionVariables>) {
+export function useGetWalletProposalsMainSummarySubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetWalletProposalsMainSummarySubscription, GetWalletProposalsMainSummarySubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<GetWalletProposalsSubscription, GetWalletProposalsSubscriptionVariables>(GetWalletProposalsDocument, options);
+        return Apollo.useSubscription<GetWalletProposalsMainSummarySubscription, GetWalletProposalsMainSummarySubscriptionVariables>(GetWalletProposalsMainSummaryDocument, options);
       }
-export type GetWalletProposalsSubscriptionHookResult = ReturnType<typeof useGetWalletProposalsSubscription>;
-export type GetWalletProposalsSubscriptionResult = Apollo.SubscriptionResult<GetWalletProposalsSubscription>;
+export type GetWalletProposalsMainSummarySubscriptionHookResult = ReturnType<typeof useGetWalletProposalsMainSummarySubscription>;
+export type GetWalletProposalsMainSummarySubscriptionResult = Apollo.SubscriptionResult<GetWalletProposalsMainSummarySubscription>;
+export const GetWalletProposalsSummaryDocument = gql`
+    subscription getWalletProposalsSummary($id: Int = 0) {
+  group_with_policy_by_pk(id: $id) {
+    group_proposals(order_by: {block: {timestamp: desc}}) {
+      block {
+        height
+        timestamp
+      }
+      id
+      messages
+      transaction_hash
+      status
+      executor_result
+      group_proposal_votes {
+        voter
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetWalletProposalsSummarySubscription__
+ *
+ * To run a query within a React component, call `useGetWalletProposalsSummarySubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetWalletProposalsSummarySubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWalletProposalsSummarySubscription({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWalletProposalsSummarySubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetWalletProposalsSummarySubscription, GetWalletProposalsSummarySubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GetWalletProposalsSummarySubscription, GetWalletProposalsSummarySubscriptionVariables>(GetWalletProposalsSummaryDocument, options);
+      }
+export type GetWalletProposalsSummarySubscriptionHookResult = ReturnType<typeof useGetWalletProposalsSummarySubscription>;
+export type GetWalletProposalsSummarySubscriptionResult = Apollo.SubscriptionResult<GetWalletProposalsSummarySubscription>;
 export const GetWalletsDocument = gql`
     query GetWallets($_eq: String = "") {
   group_member(where: {address: {_eq: $_eq}}) {
@@ -14597,9 +14745,9 @@ export const GetWalletsDocument = gql`
       threshold
       voting_period
       id
-      group_members {
+      group_members(where: {weight: {_gt: 0}}) {
         address
-        member_metadata
+        metadata
       }
     }
   }

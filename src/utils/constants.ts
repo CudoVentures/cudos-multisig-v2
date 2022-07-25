@@ -1,5 +1,7 @@
 import SendIcon from 'assets/vectors/type-icons/send.svg'
 import UnknownIcon from 'assets/vectors/type-icons/unknown.svg'
+import YesIcon from 'assets/vectors/yes-vote-icon.svg'
+import NoIcon from 'assets/vectors/no-vote-icon.svg'
 
 // ENV
 export const RPC_ADDRESS = import.meta.env.VITE_APP_RPC || process.env.VITE_APP_RPC || ""
@@ -42,6 +44,8 @@ export const WALLET_FUNDING_FAILURE_TYPE = 'Wallet Funding Failure'
 export const WALLET_CORRUPTED_PROCESS_TYPE = 'Wallet Corrupted Process'
 export const DUPLICATED_ADDRESS_TYPE = 'Duplicated address'
 export const FEE_ESTIMATION_ERROR = 'Fee estimation failure'
+export const PROPOSAL_VOTING_ERROR_TYPE = 'Proposal voting error'
+export const PROPOSAL_VOTING_SUCCESS_TYPE = 'Proposal voting success'
 
 // General Modal Msgs
 export const NO_TX_HASH_MSG = 'Not executed yet'
@@ -51,6 +55,8 @@ export const GENERAL_FAILURE_MSG = 'Seems like something went wrong. Try again o
 export const PROPOSAL_CREATION_SUCCESS_MSG = 'Proposal was successfully created!'
 export const WALLET_CREATION_SUCCESS_MSG = 'Your MultiSig wallet was successfully created!'
 export const WALLET_FUNDING_SUCCESS_MSG = 'Your MultiSig wallet was successfully funded!'
+export const PROPOSAL_VOTING_SUCCESS_MSG = 'You have successfully voted on the proposal!'
+export const PROPOSAL_EXECUTING_SUCCESS_MSG = 'You have successfully sent an execution message!'
 export const DEFAULT_LOADING_MODAL_MSG = 'Waiting for transaction confirmation...'
 export const DUPLICATED_ADDRESS_MSG = "It seems the address already exists in your address book"
 export const INSUFFICIENT_BALANCE = 'You need to have sufficient CUDOS in your remaining balance in order to cover the required fees upon execution'
@@ -60,17 +66,38 @@ export const MULTI_SEND_TYPE_URL = "/cosmos.bank.v1beta1.MsgMultiSend"
 
 // Proposal statuses
 export const PROPOSAL_STATUS_SUBMITTED = 'PROPOSAL_STATUS_SUBMITTED'
+export const PROPOSAL_EXECUTOR_RESULT_FAILURE = 'PROPOSAL_EXECUTOR_RESULT_FAILURE'
+export const PROPOSAL_STATUS_REJECTED = 'PROPOSAL_STATUS_REJECTED'
 export const PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED = 'PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED'
 export const PROPOSAL_EXECUTOR_RESULT_NOT_RUN = 'PROPOSAL_EXECUTOR_RESULT_NOT_RUN'
 export const PROPOSAL_STATUS_ACCEPTED = 'PROPOSAL_STATUS_ACCEPTED'
+export const PROPOSAL_EXECUTOR_RESULT_SUCCESS = 'PROPOSAL_EXECUTOR_RESULT_SUCCESS'
+export const PROPOSAL_STATUS_EXPIRED = 'PROPOSAL_STATUS_EXPIRED'
 export const UNDEFINED = 'UNKNOWN'
 
 // Proposal Coloring
+export const EXPIRED = { text: 'EXPIRED', color: '#7D87AA' }
 export const READY_TO_EXECUTE = { text: "READY TO EXECUTE", color: "#0F71D1" }
-export const WAITING_APPROVAL = { text: "WAITING APPROVAL", color: "#E89518" }
-export const OPEN_TO_APPROVE = { text: "OPEN TO APPROVE", color: "#9646F9" }
+export const FAIL = { text: 'FAIL TO EXECUTE', color: '#E8343470' }
+export const REJECTED = { text: "REJECTED", color: "#EA6161" }
+export const WAITING_VOTES = { text: "WAITING VOTES", color: "#E89518" }
+export const OPEN_TO_VOTE = { text: "OPEN TO VOTE", color: "#9646F9" }
+export const SUCCESS = { text: 'SUCCESS', color: '#65B48F' }
 export const UNKNOWN = { text: "UNKNOWN", color: "#1B2031" }
 
 // Type Mapping
 export const MULTI_SEND_TYPE = { text: "Multi Send", icon: SendIcon }
 export const UNDEFINED_TYPE = { text: "Unknown", icon: UnknownIcon }
+
+// Vote Options
+export const VOTE_OPTION_YES = 'VOTE_OPTION_YES'
+export const VOTE_OPTION_NO = 'VOTE_OPTION_NO'
+
+// Vote Options Color Mapping
+export const VOTE_OPTIONS_MAPPING = {
+    [VOTE_OPTION_YES]: { icon: YesIcon, color: '#65B48F' },
+    [VOTE_OPTION_NO]: { icon: NoIcon, color: '#EA6161' }
+}
+
+//Proposal Options
+export const PROPOSAL_OPTION_EXECUTE = 'PROPOSAL_OPTION_EXECUTE'

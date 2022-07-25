@@ -10,11 +10,13 @@ export interface modalState {
     failure?: boolean
     openAddressBook?: boolean
     openAssetsTable?: boolean
+    showProposalDetails?: boolean
     transactionSelector?: boolean
     walletRelated?: boolean
     openFundWallet?: boolean
     addNewAddress?: boolean
     editAddressBookRecord?: boolean
+    openVotingModal?: boolean
     dataObject?: Record<string, unknown>
 }
 
@@ -30,9 +32,11 @@ export const initialState: modalState = {
     editAddressBookRecord: false,
     transactionSelector: false,
     walletRelated: false,
+    showProposalDetails: false,
     openAddressBook: false,
     openFundWallet: false,
     openAssetsTable: false,
+    openVotingModal: false,
     dataObject: {}
 }
 

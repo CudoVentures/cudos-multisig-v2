@@ -19,7 +19,7 @@ export const formatDateTime = (dateTimeString: string): string => {
 }
 
 export const amountToAcudos = (amount: number): string => {
-    return (amount * 10 ** 18).toLocaleString('fullwide', {useGrouping:false})
+    return (amount * 10 ** 18).toLocaleString('fullwide', { useGrouping: false })
 }
 
 export const convertSecondsToDisplay = (seconds: number, desiredFormat: string): string => {
@@ -98,6 +98,9 @@ export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet =
             walletfound = { ...wallets[i] }
             break
         }
+    }
+
+    if (walletfound === emptyWallet) {
         console.debug('Wallet not found')
     }
     return walletfound

@@ -9,7 +9,7 @@ export interface EnhancedTableProps {
     order: Order;
     orderBy: string;
     rowCount: number;
-  }
+}
 
 export interface HeadCell {
     disablePadding?: boolean;
@@ -19,20 +19,44 @@ export interface HeadCell {
 }
 
 export interface TableData {
-    name: string;
-    address: string;
+    name?: string;
+    address?: string;
     action?: string;
+    blockHeight?: string;
+    type?: string;
+    txHash?: string;
+    date?: string;
+    status?: string;
+    votesCount?: number;
+    membersCount?: number;
+    proposalID?: number;
 }
 
 export function createData(
-    name: string,
-    address: string,
-    action?: string
+    name?: string,
+    address?: string,
+    action?: string,
+    blockHeight?: string,
+    type?: string,
+    txHash?: string,
+    date?: string,
+    status?: string,
+    votesCount?: number,
+    membersCount?: number,
+    proposalID?: number
 ): TableData {
     return {
         name,
         address,
-        action
+        action,
+        blockHeight,
+        type,
+        txHash,
+        date,
+        status,
+        votesCount,
+        membersCount,
+        proposalID
     }
 }
 

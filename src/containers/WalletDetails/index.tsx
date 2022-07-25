@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import Members from 'components/WalletOperations/Members'
 import { ComingSoonWrapper } from 'utils/wrappers'
+import Transactions from 'components/WalletOperations/Transactions'
 
 const WalletDetails = () => {
     const dispatch = useDispatch()
@@ -88,9 +89,10 @@ const WalletDetails = () => {
                     </Box>
                     {
                         menuSelection === 0 ? <Dashboard /> :
-                            menuSelection === 2 ? <Members />
-                                :
-                                null
+                            menuSelection === 1 ? <Transactions /> :
+                                menuSelection === 2 ? <Members />
+                                    :
+                                    null
                     }
                 </Box>
             </Box>
