@@ -14522,26 +14522,26 @@ export type GetWalletMembersQueryVariables = Exact<{
 
 export type GetWalletMembersQuery = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null }> } | null };
 
-export type GetWalletProposalDetailsQueryVariables = Exact<{
+export type GetWalletProposalDetailsSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetWalletProposalDetailsQuery = { group_proposal_by_pk?: { __typename?: 'group_proposal', executor?: string | null, execution_time?: any | null, executor_result: any, status: any, messages: any, proposer: string, transaction_hash?: string | null, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', vote_metadata?: string | null, vote_option: any, submit_time: any, group_member?: { __typename?: 'group_member', address: string, metadata?: string | null } | null }>, group_with_policy: { __typename?: 'group_with_policy', voting_period: any, threshold: number, group_members: Array<{ __typename?: 'group_member', metadata?: string | null, address: string }> }, block: { __typename?: 'block', timestamp: any } } | null };
+export type GetWalletProposalDetailsSubscription = { group_proposal_by_pk?: { __typename?: 'group_proposal', executor?: string | null, execution_time?: any | null, executor_result: any, status: any, messages: any, proposer: string, transaction_hash?: string | null, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', vote_metadata?: string | null, vote_option: any, submit_time: any, group_member?: { __typename?: 'group_member', address: string, metadata?: string | null } | null }>, group_with_policy: { __typename?: 'group_with_policy', voting_period: any, threshold: number, group_members: Array<{ __typename?: 'group_member', metadata?: string | null, address: string }> }, block: { __typename?: 'block', timestamp: any } } | null };
 
 export type GetWalletProposalsMainSummarySubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetWalletProposalsMainSummarySubscription = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_proposals: Array<{ __typename?: 'group_proposal', id: number, messages: any, transaction_hash?: string | null, status: any, executor_result: any, block: { __typename?: 'block', height: any, timestamp: any }, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', voter: string }> }> } | null };
+export type GetWalletProposalsMainSummarySubscription = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_proposals: Array<{ __typename?: 'group_proposal', id: number, messages: any, transaction_hash?: string | null, status: any, executor_result: any, block: { __typename?: 'block', height: any, timestamp: any }, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', voter: string }>, group_with_policy: { __typename?: 'group_with_policy', voting_period: any } }> } | null };
 
 export type GetWalletProposalsSummarySubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetWalletProposalsSummarySubscription = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_proposals: Array<{ __typename?: 'group_proposal', id: number, messages: any, transaction_hash?: string | null, status: any, executor_result: any, block: { __typename?: 'block', height: any, timestamp: any }, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', voter: string }> }> } | null };
+export type GetWalletProposalsSummarySubscription = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_proposals: Array<{ __typename?: 'group_proposal', id: number, messages: any, transaction_hash?: string | null, status: any, executor_result: any, block: { __typename?: 'block', height: any, timestamp: any }, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', voter: string }>, group_with_policy: { __typename?: 'group_with_policy', voting_period: any } }> } | null };
 
 export type GetWalletsQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['String']>;
@@ -14590,7 +14590,7 @@ export type GetWalletMembersQueryHookResult = ReturnType<typeof useGetWalletMemb
 export type GetWalletMembersLazyQueryHookResult = ReturnType<typeof useGetWalletMembersLazyQuery>;
 export type GetWalletMembersQueryResult = Apollo.QueryResult<GetWalletMembersQuery, GetWalletMembersQueryVariables>;
 export const GetWalletProposalDetailsDocument = gql`
-    query getWalletProposalDetails($id: Int = 0) {
+    subscription getWalletProposalDetails($id: Int = 0) {
   group_proposal_by_pk(id: $id) {
     executor
     execution_time
@@ -14624,32 +14624,27 @@ export const GetWalletProposalDetailsDocument = gql`
     `;
 
 /**
- * __useGetWalletProposalDetailsQuery__
+ * __useGetWalletProposalDetailsSubscription__
  *
- * To run a query within a React component, call `useGetWalletProposalDetailsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetWalletProposalDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetWalletProposalDetailsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetWalletProposalDetailsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetWalletProposalDetailsQuery({
+ * const { data, loading, error } = useGetWalletProposalDetailsSubscription({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetWalletProposalDetailsQuery(baseOptions?: Apollo.QueryHookOptions<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>) {
+export function useGetWalletProposalDetailsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<GetWalletProposalDetailsSubscription, GetWalletProposalDetailsSubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>(GetWalletProposalDetailsDocument, options);
+        return Apollo.useSubscription<GetWalletProposalDetailsSubscription, GetWalletProposalDetailsSubscriptionVariables>(GetWalletProposalDetailsDocument, options);
       }
-export function useGetWalletProposalDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>(GetWalletProposalDetailsDocument, options);
-        }
-export type GetWalletProposalDetailsQueryHookResult = ReturnType<typeof useGetWalletProposalDetailsQuery>;
-export type GetWalletProposalDetailsLazyQueryHookResult = ReturnType<typeof useGetWalletProposalDetailsLazyQuery>;
-export type GetWalletProposalDetailsQueryResult = Apollo.QueryResult<GetWalletProposalDetailsQuery, GetWalletProposalDetailsQueryVariables>;
+export type GetWalletProposalDetailsSubscriptionHookResult = ReturnType<typeof useGetWalletProposalDetailsSubscription>;
+export type GetWalletProposalDetailsSubscriptionResult = Apollo.SubscriptionResult<GetWalletProposalDetailsSubscription>;
 export const GetWalletProposalsMainSummaryDocument = gql`
     subscription getWalletProposalsMainSummary($id: Int = 0) {
   group_with_policy_by_pk(id: $id) {
@@ -14665,6 +14660,9 @@ export const GetWalletProposalsMainSummaryDocument = gql`
       executor_result
       group_proposal_votes {
         voter
+      }
+      group_with_policy {
+        voting_period
       }
     }
   }
@@ -14708,6 +14706,9 @@ export const GetWalletProposalsSummaryDocument = gql`
       executor_result
       group_proposal_votes {
         voter
+      }
+      group_with_policy {
+        voting_period
       }
     }
   }

@@ -1,18 +1,19 @@
 //@ts-nocheck
-import * as React from 'react';
+import * as React from 'react'
+import { useDispatch } from 'react-redux'
+import Dialog from 'components/Dialog'
 import { visuallyHidden } from '@mui/utils'
 import { styles } from './styles'
 import { formatAddress } from 'utils/helpers'
 import { COLORS_DARK_THEME } from 'theme/colors'
+import { NO_TX_HASH_MSG } from 'utils/constants'
+import { TxTypeComponent } from 'utils/TxTypeHandler'
 import ClockIcon from 'assets/vectors/clock-icon.svg'
 import MembersIcon from 'assets/vectors/members-icon.svg'
-import { NO_TX_HASH_MSG } from 'utils/constants'
-import { TX_HASH_DETAILS } from 'api/endpoints'
 import { ProposalStatusComponent } from 'utils/proposalStatusHandler'
-import { TxTypeComponent } from 'utils/TxTypeHandler'
-import { useDispatch } from 'react-redux'
-import { updateModalState } from 'store/modals'
-import Dialog from 'components/Dialog'
+import ProposalDetails from 'components/Dialog/ProposalDetails'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 
 import {
   Box,
@@ -25,14 +26,16 @@ import {
   Tooltip,
   TableSortLabel,
   Typography,
+  Collapse,
+  IconButton,
 } from '@mui/material'
 
-import { 
-  HeadCell, 
-  Order, 
-  stableSort, 
-  getComparator, 
-  TableData 
+import {
+  HeadCell,
+  Order,
+  stableSort,
+  getComparator,
+  TableData
 } from 'utils/tableSortingHelper'
 
 function createData(
@@ -43,7 +46,7 @@ function createData(
   status: string,
   votesCount: number,
   membersCount: number,
-  proposalID: number
+  proposalID: number,
 ): TableData {
   return {
     blockHeight,
@@ -61,7 +64,7 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'blockHeight',
     numeric: false,
-    label: 'Block Height',
+    label: 'Height',
   },
   {
     id: 'type',
@@ -111,12 +114,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell, idx) => (
           <TableCell
             width={(
-              idx === 0 ? 135 :
-                idx === 1 ? 125 :
-                  idx === 2 ? 200 :
+              idx === 0 ? 110 :
+                idx === 1 ? 115 :
+                  idx === 2 ? 190 :
                     idx === 3 ? 205 :
-                      idx === 4 ? 175 :
-                        100)}
+                      idx === 4 ? 190 :
+                        idx === 5 ? 50 :
+                          idx === 6 ? 20 :
+                            100)}
             key={headCell.id}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -149,6 +154,79 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
+function Row(props: { row: ReturnType<typeof createData> }) {
+  const { row } = props
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <Box>
+      <Box style={{ margin: '9px 0' }}>
+        <Box
+          onClick={() => setOpen(!open)}
+          key={row.date}
+          sx={styles.selectableBox}
+        >
+
+          <TableCell width={80}>
+            {row.blockHeight}
+          </TableCell>
+
+          <TableCell width={140} align="left">
+            <TxTypeComponent type={row.type!.toString()} />
+          </TableCell>
+
+          <TableCell style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} width={160} align="left">
+            {row.txHash === NO_TX_HASH_MSG ? row.txHash :
+              <Tooltip title={row.txHash}>
+                <div style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
+                  {formatAddress(row.txHash!.toString(), 9)}
+                </div>
+              </Tooltip>
+            }
+          </TableCell>
+
+          <TableCell width={210} align="left">
+            <Box style={{ display: 'flex', alignItems: 'center' }}>
+              <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
+              <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
+                {row.date}
+              </Typography>
+            </Box>
+          </TableCell>
+
+          <TableCell align="left" width={120}>
+            <Box style={styles.votesBox}>
+              <img style={{ width: '20px' }} src={MembersIcon} alt="Members Icon" />
+              <Typography style={{ margin: '0 10px' }} variant="inherit" color="text.secondary">
+                {`${row.votesCount} of ${row.membersCount}`}
+              </Typography>
+            </Box>
+          </TableCell>
+
+          <TableCell width={175}>
+            <Box style={styles.proposalStatusBox}>
+              <ProposalStatusComponent status={row.status!.toString()} />
+            </Box>
+          </TableCell>
+          <TableCell width={50}>
+            <IconButton
+              size="small"
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+
+        </Box>
+        <Collapse in={open} timeout='auto'>
+          <ProposalDetails proposalID={row.proposalID!} />
+        </Collapse>
+      </Box>
+
+    </Box>
+
+  )
+}
+
 export default function TransactionsTable({ fetchedData }: { fetchedData: TableData[] }) {
   const [order, setOrder] = React.useState<Order>('desc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('date');
@@ -158,14 +236,14 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
   if (fetchedData.length > 0) {
     for (const data of fetchedData) {
       rows.push(createData(
-        data.blockHeight,
-        data.type,
-        data.txHash,
-        data.date,
-        data.status,
-        data.votesCount,
-        data.membersCount,
-        data.proposalID
+        data.blockHeight!,
+        data.type!,
+        data.txHash!,
+        data.date!,
+        data.status!,
+        data.votesCount!,
+        data.membersCount!,
+        data.proposalID!
       ))
     }
   }
@@ -179,15 +257,6 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
     setOrderBy(property);
   }
 
-  const openDetails = (proposalID: number) => {
-    dispatch(updateModalState({ 
-      showProposalDetails: true,
-      dataObject: {
-        proposalID: proposalID
-      } 
-    }))
-  }
-
   return (
     <Box>
       <Dialog />
@@ -197,7 +266,8 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
           size='medium'
           sx={{
             marginTop: '10px',
-            width: '100%'
+            width: '100%',
+            maxHeight: '100%'
           }}
         >
           <EnhancedTableHead
@@ -211,62 +281,8 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
               .map((row, index) => {
 
                 return (
-                  <Box
-                    onClick={() => openDetails(row.proposalID)}
-                    key={row.date}
-                    sx={styles.selectableBox}
-                  >
-
-                    <TableCell width={100}>
-                      {row.blockHeight}
-                    </TableCell>
-
-                    <TableCell width={150} align="left">
-                      <TxTypeComponent type={row.type.toString()} />
-                    </TableCell>
-
-                    <TableCell style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} width={170} align="left">
-                      {row.txHash === NO_TX_HASH_MSG ? row.txHash :
-                        <a
-                          style={{ textDecoration: 'none' }}
-                          href={TX_HASH_DETAILS(row.txHash.toString())}
-                          target='_blank'
-                        >
-                          <Tooltip title={row.txHash}>
-                            <div style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
-                              {formatAddress(row.txHash.toString(), 9)}
-                            </div>
-                          </Tooltip>
-                        </a>
-                      }
-                    </TableCell>
-
-                    <TableCell width={210} align="left">
-                      <Box style={{ display: 'flex', alignItems: 'center' }}>
-                        <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
-                        <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
-                          {row.date}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-
-                    <TableCell align="left" width={120}>
-                      <Box style={styles.votesBox}>
-                        <img style={{ width: '20px' }} src={MembersIcon} alt="Members Icon" />
-                        <Typography style={{ margin: '0 10px' }} variant="inherit" color="text.secondary">
-                          {`${row.votesCount} of ${row.membersCount}`}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-
-                    <TableCell width={175}>
-                      <Box style={styles.proposalStatusBox}>
-                        <ProposalStatusComponent status={row.status.toString()} />
-                      </Box>
-                    </TableCell>
-
-                  </Box>
-                );
+                  <Row key={row.proposalID} row={row} />
+                )
               })}
           </TableBody>
         </Table>

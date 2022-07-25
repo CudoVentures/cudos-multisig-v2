@@ -9,13 +9,13 @@ export const styles = {
     },
     selectableBox: {
         backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND,
-        margin: '15px 0',
+        position: 'relative',
         borderRadius: '10px',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
         display: 'flex',
-    
+        boxShadow: '0 2px 2px -2px black',
         "&:hover": {
             cursor: 'pointer',
             backgroundColor: 'rgba(82, 166, 248, 0.1)'
@@ -69,18 +69,21 @@ export const styles = {
     tableBody: {
         width: '100%',
         display: 'block',
-        height: '395px',
+        maxHeight: '620px',
         overflow: 'scroll'
     },
     tableContainer: {
         display: "flex",
         justifyContent: "center",
-        width: '100%'
+        width: '100%',
+        maxHeight: '100%'
     },
     cardHolder: {
         height: '512px',
         marginTop: '10px',
         width: '100%',
+        maxHeight: '100%',
+        display: 'inline-table'
     },
     boxHolder: {
         height: '100%',

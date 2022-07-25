@@ -42,19 +42,19 @@ const TypeDetailsHandlerComponent = ({ proposalDetails }: {
                         Recipients
                     </Typography>
                     <Box style={{ overflow: 'scroll', maxHeight: '250px' }}>
-                        {proposalDetails.message.outputs.map((item: any, index: number) => (
+                        {proposalDetails.message.outputs.map((item: any, userIndex: number) => (
                             <Box>
                                 {item.coins.map((coin: any, index: number) => (
                                     <Box style={styles.recipientsBox}>
                                         <Typography
-                                            marginRight={2}
+                                            style={{width: '50px'}}
                                             color='text.secondary'
                                         >
-                                            {index + 1}
+                                            {userIndex + 1}
                                         </Typography>
 
                                         <Typography
-                                            width={400}
+                                            width={500}
                                             fontWeight={600}
                                             variant='subtitle1'
                                             color='text.primary'
@@ -114,10 +114,10 @@ const TypeDetailsHandlerComponent = ({ proposalDetails }: {
         }, 3000)
     }
     return proposalDetails.msgType === MULTI_SEND_TYPE_URL ? (
-        <Box>
+        <Box style={{display: 'flex', flexDirection: 'column'}}>
             <Popover
                 anchorReference="anchorPosition"
-                anchorPosition={{ top: 200, left: 600 }}
+                anchorPosition={{ top: window.innerHeight / 3, left: window.innerWidth / 2 }}
                 PaperProps={{
                     style: {
                         borderRadius: '20px'

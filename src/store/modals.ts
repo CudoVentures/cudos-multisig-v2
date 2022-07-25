@@ -10,7 +10,6 @@ export interface modalState {
     failure?: boolean
     openAddressBook?: boolean
     openAssetsTable?: boolean
-    showProposalDetails?: boolean
     transactionSelector?: boolean
     walletRelated?: boolean
     openFundWallet?: boolean
@@ -32,7 +31,6 @@ export const initialState: modalState = {
     editAddressBookRecord: false,
     transactionSelector: false,
     walletRelated: false,
-    showProposalDetails: false,
     openAddressBook: false,
     openFundWallet: false,
     openAssetsTable: false,

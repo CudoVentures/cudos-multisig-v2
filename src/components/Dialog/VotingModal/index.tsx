@@ -46,26 +46,12 @@ const VotingModal = () => {
                 'Reject'
 
     const getMsgAndFees = async (): Promise<{ msg: EncodeObject; fee: StdFee; }> => {
-        
-        switch (chosenOption) {
-            case VOTE_OPTION_YES:
-                return getVotingMsgAndFees(VoteOption.VOTE_OPTION_YES)
 
-            case VOTE_OPTION_NO:
-                return getVotingMsgAndFees(VoteOption.VOTE_OPTION_NO)
-
-            case PROPOSAL_OPTION_EXECUTE:
-                return getExecutionMsgAndFees()
-
-            default:
-                return {
-                    msg: { typeUrl: '', value: '' },
-                    fee: {
-                        amount: [{ amount: '', denom: '' }],
-                        gas: ''
-                    }
-                }
+        if (chosenOption === PROPOSAL_OPTION_EXECUTE) {
+            return getExecutionMsgAndFees()
         }
+
+        return getVotingMsgAndFees(VoteOption[chosenOption as keyof typeof VoteOption])
     }
 
     const getExecutionMsgAndFees = async () => {
@@ -97,11 +83,7 @@ const VotingModal = () => {
 
     const closeVotingModal = () => {
         dispatch(updateModalState({
-            dataObject: {
-                proposalID: proposalID
-            },
             openVotingModal: false,
-            showProposalDetails: true,
         }))
     }
 
@@ -124,7 +106,6 @@ const VotingModal = () => {
 
             dispatch(updateModalState({
                 openVotingModal: false,
-                showProposalDetails: false,
                 loading: true,
                 message: DEFAULT_LOADING_MODAL_MSG
             }))
@@ -164,7 +145,8 @@ const VotingModal = () => {
                 dispatch(updateModalState({
                     loading: false,
                     failure: true,
-                    title: PROPOSAL_VOTING_ERROR_TYPE,
+                    title: GENERAL_FAILURE_TITLE,
+                    msgType: PROPOSAL_VOTING_ERROR_TYPE,
                     message: GENERAL_FAILURE_MSG
                 }))
                 console.debug(e.message)

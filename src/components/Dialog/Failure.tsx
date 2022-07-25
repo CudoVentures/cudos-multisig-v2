@@ -40,22 +40,10 @@ const Failure = () => {
     title,
     message,
     msgType,
-    dataObject
   } = useSelector((state: RootState) => state.modalState)
 
   const handleModalClose = () => {
     switch (msgType) {
-
-      case PROPOSAL_VOTING_ERROR_TYPE:
-        const proposalID: number = parseInt(dataObject!.proposalID as string)
-        dispatch(updateModalState({ ...initialModalState }))
-        dispatch(updateModalState({
-          dataObject: {
-            proposalID: proposalID
-          },
-          showProposalDetails: true
-        }))
-        break
 
       case FEE_ESTIMATION_ERROR:
       case PROPOSAL_CREATION_FAILURE_TYPE:
@@ -71,6 +59,7 @@ const Failure = () => {
         localStorage.removeItem('addressBookAccountAddress')
         break
 
+      case PROPOSAL_VOTING_ERROR_TYPE:
       default:
         dispatch(updateModalState({ ...initialModalState }))
         break

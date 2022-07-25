@@ -1,4 +1,4 @@
-query getWalletProposalDetails($id: Int = 0) {
+subscription getWalletProposalDetails($id: Int = 0) {
   group_proposal_by_pk(id: $id) {
     executor
     execution_time

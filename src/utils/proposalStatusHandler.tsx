@@ -2,12 +2,14 @@ import { Box, Typography } from '@mui/material'
 import moment from 'moment'
 
 import {
+    ABORTED,
     EXPIRED,
     FAIL,
     OPEN_TO_VOTE,
     PROPOSAL_EXECUTOR_RESULT_FAILURE,
     PROPOSAL_EXECUTOR_RESULT_NOT_RUN,
     PROPOSAL_EXECUTOR_RESULT_SUCCESS,
+    PROPOSAL_STATUS_ABORTED,
     PROPOSAL_STATUS_ACCEPTED,
     PROPOSAL_STATUS_EXPIRED,
     PROPOSAL_STATUS_REJECTED,
@@ -29,6 +31,7 @@ const statuses = {
     [PROPOSAL_STATUS_SUBMITTED_AND_USER_VOTED]: WAITING_VOTES,
     [PROPOSAL_STATUS_ACCEPTED]: READY_TO_EXECUTE,
     [PROPOSAL_STATUS_SUBMITTED]: OPEN_TO_VOTE,
+    [PROPOSAL_STATUS_ABORTED]: ABORTED,
     [UNDEFINED]: UNKNOWN
 }
 
@@ -57,27 +60,24 @@ export const isExpired = (expirationTime: string): boolean => {
 }
 
 export const isVoted = (userAddress: string, votes: any[]): boolean => {
-    if (votes.length === 0) {
-        return false
-    }
 
-    let voterAddress: string = ''
-    for (const vote of votes) {
+    if (votes.length > 0) {
+        
+        for (const vote of votes) {
+            let voterAddress: string = ''
 
-        if (vote.voter) {
-            voterAddress = vote.voter
-            break
+            if (vote.voter) {
+                voterAddress = vote.voter
+            }
+
+            if (vote.group_member) {
+                voterAddress = vote.group_member.address
+            }
+
+            if (voterAddress !== '' && voterAddress === userAddress) {
+                return true
+            }
         }
-
-        if (vote.group_member) {
-            voterAddress = vote.group_member.address
-            break
-        }
-
-    }
-
-    if (voterAddress !== '' && voterAddress === userAddress) {
-        return true
     }
 
     return false

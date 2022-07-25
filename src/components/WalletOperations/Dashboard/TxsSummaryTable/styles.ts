@@ -22,8 +22,9 @@ export const styles = {
   },
   summaryTableBody: {
     padding: '0px 5px',
-    display: 'flex', 
-    height: '175px', 
+    display: 'flex',
+    minHeight: '175px',
+    maxHeight: '175px',
     overflow: 'scroll',
     flexDirection: 'column'
   },

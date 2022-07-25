@@ -13,23 +13,18 @@ export const styles = {
             opacity: 0.8
         }
     },
-    paperProps: {
-        sx: {
-            border: 'none',
-            maxWidth: '1030px',
-            minWidth: '1030px',
-            width: '100%',
-            height: '610px',
-            position: 'absolute',
-            overflow: 'hidden',
-            borderRadius: '25px'
-        }
-    },
+    displayFlexStart: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    }
+    ,
     modalContainer: {
-        boxShadow: 'none',
-        padding: '35px 50px 50px 50px',
+        borderRadius: '10px',
+        boxShadow: 1,
+        padding: '10px 30px',
         width: '100%',
-        height: '100%',
+        height: '520px',
         overflow: 'hidden',
         backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND
     },
@@ -53,7 +48,7 @@ export const styles = {
     leftContainerBox: {
         position: 'relative',
         flexDirection: 'column',
-        alignContent: 'flex-start',
+        alignItems: 'flex-start',
         maxHeight: '100%',
         float: 'left',
         width: '60%',
@@ -90,13 +85,13 @@ export const styles = {
         paddingTop: '0',
         backgroundColor: 'rgba(99, 109, 143, 0.1)',
         height: '140px',
-        width: '90%'
+        width: '420px'
     },
     votersBox: {
         padding: '0px 20px',
         width: '100%',
         flexDirection: 'column',
-        height: '100px',
+        height: '120px',
         overflow: 'scroll',
         position: 'absolute',
         top: '70px',
@@ -132,7 +127,7 @@ export const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
-        padding: '0 20px',
+        padding: '0 10px',
         margin: '0px 20px',
         position: 'absolute',
         top: '280px',
@@ -148,7 +143,7 @@ export const styles = {
         position: 'absolute',
         top: '260px',
         height: '40px',
-        width: '73%',
+        width: '76%',
     },
     executedInfoTimeBox: {
         alignItems: 'center',
@@ -157,7 +152,7 @@ export const styles = {
         position: 'absolute',
         top: '290px',
         height: '40px',
-        width: '72%',
+        width: '73%',
     },
     verticalLineSteps: {
         width: '100%',
@@ -171,7 +166,7 @@ export const styles = {
         float: 'right',
         width: '38%',
         height: '100%',
-        padding: '50px 0'
+        padding: '30px 0'
     },
     expirationHolder: {
         maxHeight: '100%',
