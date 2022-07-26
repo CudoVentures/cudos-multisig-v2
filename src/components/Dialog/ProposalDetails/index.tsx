@@ -42,7 +42,8 @@ import {
     PROPOSAL_OPTION_EXECUTE,
     PROPOSAL_STATUS_REJECTED,
     PROPOSAL_EXECUTOR_RESULT_FAILURE,
-    PROPOSAL_STATUS_ABORTED
+    PROPOSAL_STATUS_ABORTED,
+    PROPOSAL_STATUS_EXPIRED
 } from 'utils/constants'
 
 export interface FetchedProposalDetailsData {
@@ -420,6 +421,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                     </Box>
                                     {
                                         proposalDetails.status === PROPOSAL_STATUS_REJECTED ||
+                                            proposalDetails.status === PROPOSAL_STATUS_ABORTED ||
                                             proposalDetails.status === PROPOSAL_EXECUTOR_RESULT_FAILURE ?
                                             <Tooltip placement='top' title={
                                                 proposalDetails.status === PROPOSAL_EXECUTOR_RESULT_FAILURE ? proposalDetails.executionLog :
@@ -432,7 +434,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                                     </Typography>
                                                 </Box>
                                             </Tooltip>
-                                            : isExpired(proposalDetails.expirationDate) ?
+                                            : proposalDetails.status === PROPOSAL_STATUS_EXPIRED ?
                                                 <Box style={styles.expiredInfoBox}>
                                                     <Typography>
                                                         Transaction expired
