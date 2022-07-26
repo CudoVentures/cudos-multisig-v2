@@ -64,8 +64,9 @@ export const styles = {
         display: 'flex', 
         flexDirection: 'column', 
         width: '100%', 
-        height: '274px', 
-        marginTop: '10px'
+        height: '100%', 
+        marginTop: '10px',
+        paddingBottom: '10px'
     },
     lowerBoxHolder: {
         display: 'flex', 

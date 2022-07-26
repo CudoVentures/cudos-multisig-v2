@@ -32,7 +32,7 @@ export const PROPOSAL_CREATION_LOADING_TITLE = 'Creating Proposal...'
 export const PROPOSAL_CREATION_FAILURE_TITLE = 'Proposing Failed!'
 export const WALLET_FUNDING_LOADING_TITLE = 'Funding Wallet...'
 export const DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE = 'Address book operation failed'
-export const GENERAL_FAILURE_TITLE = 'Ooops... operation failure'
+export const GENERAL_FAILURE_TITLE = 'Failure'
 
 // Modal Msg Types
 export const PROPOSAL_CREATION_SUCCESS_TYPE = 'Proposal Creation Success'
@@ -73,10 +73,12 @@ export const PROPOSAL_EXECUTOR_RESULT_NOT_RUN = 'PROPOSAL_EXECUTOR_RESULT_NOT_RU
 export const PROPOSAL_STATUS_ACCEPTED = 'PROPOSAL_STATUS_ACCEPTED'
 export const PROPOSAL_EXECUTOR_RESULT_SUCCESS = 'PROPOSAL_EXECUTOR_RESULT_SUCCESS'
 export const PROPOSAL_STATUS_EXPIRED = 'PROPOSAL_STATUS_EXPIRED'
+export const PROPOSAL_STATUS_ABORTED = 'PROPOSAL_STATUS_ABORTED'
 export const UNDEFINED = 'UNKNOWN'
 
 // Proposal Coloring
 export const EXPIRED = { text: 'EXPIRED', color: '#7D87AA' }
+export const ABORTED = { text: 'ABORTED', color: '#7D2E61' }
 export const READY_TO_EXECUTE = { text: "READY TO EXECUTE", color: "#0F71D1" }
 export const FAIL = { text: 'FAIL TO EXECUTE', color: '#E8343470' }
 export const REJECTED = { text: "REJECTED", color: "#EA6161" }

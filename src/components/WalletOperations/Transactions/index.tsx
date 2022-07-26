@@ -1,18 +1,25 @@
 import { styles } from './styles'
 import { RootState } from 'store'
+import { useState } from 'react'
 import Dialog from 'components/Dialog'
 import Card from 'components/Card/Card'
-import { Box, CircularProgress, Typography } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
-import { useGetWalletProposalsSummarySubscription } from 'graphql/types'
-import TransactionsTable from './TransactionsTable'
-import SwitchSelector from "react-switch-selector"
-import { COLORS_DARK_THEME } from 'theme/colors'
-import { useState } from 'react'
-import { NO_TX_HASH_MSG, PROPOSAL_EXECUTOR_RESULT_SUCCESS, PROPOSAL_STATUS_REJECTED } from 'utils/constants'
 import { formatDateTime } from 'utils/helpers'
-import { determineStatus, isExecuted } from 'utils/proposalStatusHandler'
+import { COLORS_DARK_THEME } from 'theme/colors'
+import SwitchSelector from "react-switch-selector"
+import TransactionsTable from './TransactionsTable'
 import { TableData } from 'utils/tableSortingHelper'
+import { useSelector } from 'react-redux'
+import { determineStatus } from 'utils/proposalStatusHandler'
+import { Box, CircularProgress, Typography } from '@mui/material'
+import { useGetWalletProposalsSummarySubscription } from 'graphql/types'
+
+import { 
+    NO_TX_HASH_MSG, 
+    PROPOSAL_EXECUTOR_RESULT_SUCCESS, 
+    PROPOSAL_STATUS_ABORTED, 
+    PROPOSAL_STATUS_EXPIRED, 
+    PROPOSAL_STATUS_REJECTED 
+} from 'utils/constants'
 
 const Transactions = () => {
 
@@ -24,8 +31,10 @@ const Transactions = () => {
     })
 
     const finalStatuses = [
-        PROPOSAL_EXECUTOR_RESULT_SUCCESS, 
-        PROPOSAL_STATUS_REJECTED
+        PROPOSAL_EXECUTOR_RESULT_SUCCESS,
+        PROPOSAL_STATUS_REJECTED,
+        PROPOSAL_STATUS_EXPIRED,
+        PROPOSAL_STATUS_ABORTED
     ]
 
     let completedProposals: TableData[] = []
@@ -49,7 +58,7 @@ const Transactions = () => {
                 proposalID: proposal.id
             }
 
-            if (finalStatuses.includes(status) ) {
+            if (finalStatuses.includes(status)) {
                 completedProposals.push(tableObject)
                 continue
             }
@@ -102,7 +111,7 @@ const Transactions = () => {
                     <Box style={styles.blueCountDisplayer}>{totalProposals}</Box>
                 </Box>
                 <Box>
-                    {loading ? <CircularProgress style={{position: 'absolute', top:'250px'}}/> :
+                    {loading ? <CircularProgress style={{ position: 'absolute', top: '250px' }} /> :
                         <TransactionsTable
                             fetchedData={toggleOption ? completedProposals : onGoingProposals}
                         />

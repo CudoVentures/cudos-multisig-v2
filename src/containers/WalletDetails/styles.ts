@@ -60,7 +60,8 @@ export const styles = {
   contentAppear: {
     opacity: '1', 
     transition: 'all 0.5s', 
-    WebkitTransition: 'all 0.5s'
+    WebkitTransition: 'all 0.5s',
+    height: '100%'
   },
   informativeBlock: {
     display: "flex",

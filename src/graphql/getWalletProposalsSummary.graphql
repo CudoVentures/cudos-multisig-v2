@@ -13,6 +13,9 @@ subscription getWalletProposalsSummary($id: Int = 0) {
       group_proposal_votes {
         voter
       }
+      group_with_policy {
+        voting_period
+      }
     }
   }
 }
