@@ -1,4 +1,3 @@
-//@ts-nocheck
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -43,7 +42,8 @@ import {
     PROPOSAL_OPTION_EXECUTE,
     PROPOSAL_STATUS_REJECTED,
     PROPOSAL_EXECUTOR_RESULT_FAILURE,
-    PROPOSAL_STATUS_ABORTED
+    PROPOSAL_STATUS_ABORTED,
+    PROPOSAL_STATUS_EXPIRED
 } from 'utils/constants'
 
 export interface FetchedProposalDetailsData {
@@ -61,6 +61,7 @@ export interface FetchedProposalDetailsData {
     totalMembers: number;
     executor: string;
     executionTime: string;
+    executionLog: string;
 }
 
 interface Voter {
@@ -97,7 +98,8 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
         threshold: 0,
         totalMembers: 0,
         executor: '',
-        executionTime: ''
+        executionTime: '',
+        executionLog: ''
     }
 
     if (data) {
@@ -144,7 +146,8 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
             threshold: threshold,
             totalMembers: totalMembers,
             executor: proposal?.executor!,
-            executionTime: formatDateTime(proposal?.execution_time)
+            executionTime: formatDateTime(proposal?.execution_time),
+            executionLog: proposal?.execution_log!
         }
     }
 
@@ -379,11 +382,11 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                             proposalDetails.votes.map((vote) => {
                                                 return (
                                                     <Box style={{ margin: '5px 0', display: 'flex', justifyContent: 'space-between' }}>
-                                                        <Typography color={VOTE_OPTIONS_MAPPING[vote.voteOption].color}>
+                                                        <Typography color={VOTE_OPTIONS_MAPPING[vote.voteOption as keyof typeof VOTE_OPTIONS_MAPPING].color}>
                                                             {`${formatAddress(vote.voter.address, 10)} (${vote.voter.name})`}
 
                                                         </Typography>
-                                                        <img src={VOTE_OPTIONS_MAPPING[vote.voteOption].icon} />
+                                                        <img src={VOTE_OPTIONS_MAPPING[vote.voteOption as keyof typeof VOTE_OPTIONS_MAPPING].icon} />
                                                     </Box>
                                                 )
                                             })
@@ -418,19 +421,20 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                     </Box>
                                     {
                                         proposalDetails.status === PROPOSAL_STATUS_REJECTED ||
+                                            proposalDetails.status === PROPOSAL_STATUS_ABORTED ||
                                             proposalDetails.status === PROPOSAL_EXECUTOR_RESULT_FAILURE ?
                                             <Tooltip placement='top' title={
-                                                proposalDetails.status === PROPOSAL_EXECUTOR_RESULT_FAILURE ? '{Failute reason}' :
-                                                    proposalDetails.status === PROPOSAL_STATUS_ABORTED ?
-                                                        'It seems some of the wallet settings have changed during the active period of this proposal' : ''}>
+                                                proposalDetails.status === PROPOSAL_EXECUTOR_RESULT_FAILURE ? proposalDetails.executionLog :
+                                                    proposalDetails.status === PROPOSAL_STATUS_REJECTED ?
+                                                        '' : 'It seems some of the wallet settings have changed during the active period of this proposal'}>
                                                 <Box style={styles.rejectedInfoBox}>
                                                     <Typography color={VOTE_OPTIONS_MAPPING[VOTE_OPTION_NO].color}>
                                                         {`Transaction ${proposalDetails.status === PROPOSAL_EXECUTOR_RESULT_FAILURE ? "failed to execute" :
-                                                            proposalDetails.status === PROPOSAL_STATUS_ABORTED ? "has been aborted" : "has been rejected"}`}
+                                                            proposalDetails.status === PROPOSAL_STATUS_REJECTED ? "has been rejected" : "has been aborted"}`}
                                                     </Typography>
                                                 </Box>
                                             </Tooltip>
-                                            : isExpired(proposalDetails.expirationDate) ?
+                                            : proposalDetails.status === PROPOSAL_STATUS_EXPIRED ?
                                                 <Box style={styles.expiredInfoBox}>
                                                     <Typography>
                                                         Transaction expired

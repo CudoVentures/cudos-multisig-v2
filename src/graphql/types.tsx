@@ -4100,6 +4100,7 @@ export type Group_Proposal = {
   __typename?: 'group_proposal';
   /** An object relationship */
   block: Block;
+  execution_log?: Maybe<Scalars['String']>;
   execution_time?: Maybe<Scalars['timestamp']>;
   executor?: Maybe<Scalars['String']>;
   executor_result: Scalars['proposal_executor_result'];
@@ -4214,6 +4215,7 @@ export type Group_Proposal_Bool_Exp = {
   _not?: InputMaybe<Group_Proposal_Bool_Exp>;
   _or?: InputMaybe<Array<Group_Proposal_Bool_Exp>>;
   block?: InputMaybe<Block_Bool_Exp>;
+  execution_log?: InputMaybe<String_Comparison_Exp>;
   execution_time?: InputMaybe<Timestamp_Comparison_Exp>;
   executor?: InputMaybe<String_Comparison_Exp>;
   executor_result?: InputMaybe<Proposal_Executor_Result_Comparison_Exp>;
@@ -4234,6 +4236,7 @@ export type Group_Proposal_Bool_Exp = {
 /** aggregate max on columns */
 export type Group_Proposal_Max_Fields = {
   __typename?: 'group_proposal_max_fields';
+  execution_log?: Maybe<Scalars['String']>;
   execution_time?: Maybe<Scalars['timestamp']>;
   executor?: Maybe<Scalars['String']>;
   group_id?: Maybe<Scalars['Int']>;
@@ -4247,6 +4250,7 @@ export type Group_Proposal_Max_Fields = {
 
 /** order by max() on columns of table "group_proposal" */
 export type Group_Proposal_Max_Order_By = {
+  execution_log?: InputMaybe<Order_By>;
   execution_time?: InputMaybe<Order_By>;
   executor?: InputMaybe<Order_By>;
   group_id?: InputMaybe<Order_By>;
@@ -4261,6 +4265,7 @@ export type Group_Proposal_Max_Order_By = {
 /** aggregate min on columns */
 export type Group_Proposal_Min_Fields = {
   __typename?: 'group_proposal_min_fields';
+  execution_log?: Maybe<Scalars['String']>;
   execution_time?: Maybe<Scalars['timestamp']>;
   executor?: Maybe<Scalars['String']>;
   group_id?: Maybe<Scalars['Int']>;
@@ -4274,6 +4279,7 @@ export type Group_Proposal_Min_Fields = {
 
 /** order by min() on columns of table "group_proposal" */
 export type Group_Proposal_Min_Order_By = {
+  execution_log?: InputMaybe<Order_By>;
   execution_time?: InputMaybe<Order_By>;
   executor?: InputMaybe<Order_By>;
   group_id?: InputMaybe<Order_By>;
@@ -4288,6 +4294,7 @@ export type Group_Proposal_Min_Order_By = {
 /** Ordering options when selecting data from "group_proposal". */
 export type Group_Proposal_Order_By = {
   block?: InputMaybe<Block_Order_By>;
+  execution_log?: InputMaybe<Order_By>;
   execution_time?: InputMaybe<Order_By>;
   executor?: InputMaybe<Order_By>;
   executor_result?: InputMaybe<Order_By>;
@@ -4307,6 +4314,8 @@ export type Group_Proposal_Order_By = {
 
 /** select columns of table "group_proposal" */
 export enum Group_Proposal_Select_Column {
+  /** column name */
+  ExecutionLog = 'execution_log',
   /** column name */
   ExecutionTime = 'execution_time',
   /** column name */
@@ -14527,7 +14536,7 @@ export type GetWalletProposalDetailsSubscriptionVariables = Exact<{
 }>;
 
 
-export type GetWalletProposalDetailsSubscription = { group_proposal_by_pk?: { __typename?: 'group_proposal', executor?: string | null, execution_time?: any | null, executor_result: any, status: any, messages: any, proposer: string, transaction_hash?: string | null, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', vote_metadata?: string | null, vote_option: any, submit_time: any, group_member?: { __typename?: 'group_member', address: string, metadata?: string | null } | null }>, group_with_policy: { __typename?: 'group_with_policy', voting_period: any, threshold: number, group_members: Array<{ __typename?: 'group_member', metadata?: string | null, address: string }> }, block: { __typename?: 'block', timestamp: any } } | null };
+export type GetWalletProposalDetailsSubscription = { group_proposal_by_pk?: { __typename?: 'group_proposal', execution_log?: string | null, executor?: string | null, execution_time?: any | null, executor_result: any, status: any, messages: any, proposer: string, transaction_hash?: string | null, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', vote_metadata?: string | null, vote_option: any, submit_time: any, group_member?: { __typename?: 'group_member', address: string, metadata?: string | null } | null }>, group_with_policy: { __typename?: 'group_with_policy', voting_period: any, threshold: number, group_members: Array<{ __typename?: 'group_member', metadata?: string | null, address: string }> }, block: { __typename?: 'block', timestamp: any } } | null };
 
 export type GetWalletProposalsMainSummarySubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['Int']>;
@@ -14592,6 +14601,7 @@ export type GetWalletMembersQueryResult = Apollo.QueryResult<GetWalletMembersQue
 export const GetWalletProposalDetailsDocument = gql`
     subscription getWalletProposalDetails($id: Int = 0) {
   group_proposal_by_pk(id: $id) {
+    execution_log
     executor
     execution_time
     executor_result
