@@ -3,22 +3,23 @@ import { RootState } from 'store'
 import { useState } from 'react'
 import Dialog from 'components/Dialog'
 import Card from 'components/Card/Card'
+import { useSelector } from 'react-redux'
 import { formatDateTime } from 'utils/helpers'
 import { COLORS_DARK_THEME } from 'theme/colors'
 import SwitchSelector from "react-switch-selector"
 import TransactionsTable from './TransactionsTable'
+import { determineType } from 'utils/TxTypeHandler'
 import { TableData } from 'utils/tableSortingHelper'
-import { useSelector } from 'react-redux'
 import { determineStatus } from 'utils/proposalStatusHandler'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { useGetWalletProposalsSummarySubscription } from 'graphql/types'
 
-import { 
-    NO_TX_HASH_MSG, 
-    PROPOSAL_EXECUTOR_RESULT_SUCCESS, 
-    PROPOSAL_STATUS_ABORTED, 
-    PROPOSAL_STATUS_EXPIRED, 
-    PROPOSAL_STATUS_REJECTED 
+import {
+    NO_TX_HASH_MSG,
+    PROPOSAL_EXECUTOR_RESULT_SUCCESS,
+    PROPOSAL_STATUS_ABORTED,
+    PROPOSAL_STATUS_EXPIRED,
+    PROPOSAL_STATUS_REJECTED
 } from 'utils/constants'
 
 const Transactions = () => {
@@ -43,15 +44,14 @@ const Transactions = () => {
     if (data) {
         for (const proposal of data.group_with_policy_by_pk!.group_proposals) {
             const txHash = proposal.transaction_hash ? proposal.transaction_hash : NO_TX_HASH_MSG
-            const proposalMessage = proposal.messages[0] ? proposal.messages[0] : null
-            const msgType = proposalMessage["@type"]
+            const msgType = determineType(proposal)
             const status = determineStatus(address!, proposal)
 
             const tableObject: TableData = {
                 blockHeight: parseInt(proposal.block.height).toLocaleString(),
                 type: msgType,
                 txHash: txHash,
-                date: formatDateTime(proposal.block.timestamp),
+                date: formatDateTime(proposal.submit_time),
                 status: status,
                 votesCount: proposal.group_proposal_votes.length,
                 membersCount: selectedWallet?.memberCount!,

@@ -33,7 +33,7 @@ const App = () => {
 
   const connectAccount = useCallback(async () => {
     try {
-      const { address, keplrName  } = await ConnectLedger()
+      const { address, keplrName } = await ConnectLedger()
       if (address !== lastLoggedAddress) {
         dispatch(updateUser({ ...initialUserState })
         )
@@ -42,16 +42,16 @@ const App = () => {
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
 
-      dispatch(updateUser({ 
+      dispatch(updateUser({
         keplrName: keplrName,
         address: address,
         lastLoggedAddress: address,
-        balances: currentBalances, 
-        nativeBalance: userBalance, 
+        balances: currentBalances,
+        nativeBalance: userBalance,
         isAdmin: admin,
         addressBook
       }))
-        
+
     } catch (error: any) {
       console.debug(error.message)
     }
@@ -64,13 +64,15 @@ const App = () => {
   }, [connectAccount])
 
   return (
-    <Container maxWidth='xl' style={{display: 'contents', height: '100vh', width: '100vw', overflow: 'auto'}}>
+    <Container maxWidth='xl' style={{ display: 'contents', height: '100vh', width: '100vw', overflow: 'auto' }}>
       <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme[themeColor]}>
           <CssBaseline />
-          <Routes>
-            <Route path="/" element={<ConnectWallet />} />
-          </Routes>
+          {location.pathname !== '/' ? null : (
+            <Routes>
+              <Route path="/" element={<ConnectWallet />} />
+            </Routes>
+          )}
           {location.pathname === '/' ? null : (
             <Layout>
               <Routes>

@@ -14,7 +14,7 @@ import PlusIcon from 'assets/vectors/plus-icon.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { DEFAULT_VOTING_WEIGHT } from 'utils/constants'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
-import { member, updateWalletObjectState } from 'store/walletObject'
+import { Member, updateWalletObjectState } from 'store/walletObject'
 
 import {
   Box,
@@ -151,7 +151,7 @@ const StepThree = () => {
   }
 
   const addSelectedMembersToWalletObject = (addresses: string[]) => {
-    let newMembers: member[] = []
+    let newMembers: Member[] = []
     addresses.map((address) => {
       newMembers.push({
         address: address,

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { TX_HASH_DETAILS } from 'api/endpoints'
 import { COLORS_DARK_THEME } from 'theme/colors'
 import { NO_TX_HASH_MSG } from 'utils/constants'
-import { TxTypeComponent } from 'utils/TxTypeHandler'
+import { determineType, TxTypeComponent } from 'utils/TxTypeHandler'
 import ClockIcon from 'assets/vectors/clock-icon.svg'
 import { formatAddress, formatDateTime } from 'utils/helpers'
 import { useGetWalletProposalsMainSummarySubscription } from 'graphql/types'
@@ -47,15 +47,14 @@ const TxsSummaryTable = () => {
     if (data) {
         for (const proposal of data.group_with_policy_by_pk!.group_proposals) {
             const txHash = proposal.transaction_hash ? proposal.transaction_hash : NO_TX_HASH_MSG
-            const proposalMessage = proposal.messages[0] ? proposal.messages[0] : null
-            const msgType = proposalMessage["@type"]
+            const msgType = determineType(proposal)
             const status = determineStatus(address!, proposal)
 
             tableData.push({
                 blockHeight: parseInt(proposal.block.height).toLocaleString(),
                 type: msgType,
                 txHash: txHash,
-                date: formatDateTime(proposal.block.timestamp),
+                date: formatDateTime(proposal.submit_time),
                 status: status
             })
         }
@@ -69,7 +68,10 @@ const TxsSummaryTable = () => {
                     <Table style={styles.summaryTable}>
                         <TableHead style={styles.summaryTableHead}>
                             <TableRow style={styles.summaryTHRow}>
-                                <TableCell align='left' style={styles.defaultSummaryTableCell}>
+                                <TableCell
+                                    align='left'
+                                    style={{ ...styles.defaultSummaryTableCell, width: '110px' }}
+                                >
                                     <Typography
                                         variant='subtitle2'
                                         color="text.secondary"
@@ -78,7 +80,7 @@ const TxsSummaryTable = () => {
                                         Block Height
                                     </Typography>
                                 </TableCell>
-                                <TableCell align='left' style={styles.defaultSummaryTableCell}>
+                                <TableCell align='left' style={{ ...styles.defaultSummaryTableCell }}>
                                     <Typography
                                         variant='subtitle2'
                                         color="text.secondary"
@@ -87,7 +89,10 @@ const TxsSummaryTable = () => {
                                         Type
                                     </Typography>
                                 </TableCell>
-                                <TableCell align='left' style={{ ...styles.defaultSummaryTableCell, width: '186px' }}>
+                                <TableCell
+                                    align='left'
+                                    style={{ ...styles.defaultSummaryTableCell, width: '150px' }}
+                                >
                                     <Typography
                                         variant='subtitle2'
                                         color="text.secondary"
@@ -96,8 +101,10 @@ const TxsSummaryTable = () => {
                                         Transaction Hash
                                     </Typography>
                                 </TableCell>
-                                <TableCell align='left'
-                                    style={{ ...styles.defaultSummaryTableCell, paddingLeft: '30px', width: '350px' }}>
+                                <TableCell
+                                    align='left'
+                                    style={{ ...styles.defaultSummaryTableCell, paddingLeft: '65px', width: '350px' }}
+                                >
                                     <Typography
                                         style={{ marginLeft: '5px' }}
                                         variant='subtitle2'
@@ -107,7 +114,10 @@ const TxsSummaryTable = () => {
                                         Date
                                     </Typography>
                                 </TableCell>
-                                <TableCell align='center' style={{ ...styles.defaultSummaryTableCell, width: '110px' }}>
+                                <TableCell
+                                    align='center'
+                                    style={{ ...styles.defaultSummaryTableCell, width: '110px' }}
+                                >
                                     <Typography
                                         variant='subtitle2'
                                         color="text.secondary"
@@ -121,10 +131,10 @@ const TxsSummaryTable = () => {
                         <TableBody style={styles.summaryTableBody}>
                             {tableData.map((row) => (
                                 <TableRow style={styles.summaryTBRow}>
-                                    <TableCell width={120} align="left">
+                                    <TableCell width={100} align="left">
                                         {row.blockHeight}
                                     </TableCell>
-                                    <TableCell width={150} align="left">
+                                    <TableCell width={200} align="left">
                                         <TxTypeComponent type={row.type} />
                                     </TableCell>
                                     <TableCell style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} width={230} align="left">

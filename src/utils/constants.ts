@@ -1,5 +1,6 @@
 import SendIcon from 'assets/vectors/type-icons/send.svg'
 import UnknownIcon from 'assets/vectors/type-icons/unknown.svg'
+import MembersIcon from 'assets/vectors/members-icon.svg'
 import YesIcon from 'assets/vectors/yes-vote-icon.svg'
 import NoIcon from 'assets/vectors/no-vote-icon.svg'
 
@@ -51,18 +52,23 @@ export const PROPOSAL_VOTING_SUCCESS_TYPE = 'Proposal voting success'
 export const NO_TX_HASH_MSG = 'Not executed yet'
 export const DEFAULT_LOGIN_FAILURE_MSG = 'Seems like something went wrong. Please try again later'
 export const FILE_ERROR_MSG = 'File is in wrong format or contains invalid data'
+export const INVALID_DATA_PROMPT_MSG = 'Please provide valid data'
 export const GENERAL_FAILURE_MSG = 'Seems like something went wrong. Try again or check your account balance.'
 export const PROPOSAL_CREATION_SUCCESS_MSG = 'Proposal was successfully created!'
 export const WALLET_CREATION_SUCCESS_MSG = 'Your MultiSig wallet was successfully created!'
 export const WALLET_FUNDING_SUCCESS_MSG = 'Your MultiSig wallet was successfully funded!'
 export const PROPOSAL_VOTING_SUCCESS_MSG = 'You have successfully voted on the proposal!'
 export const PROPOSAL_EXECUTING_SUCCESS_MSG = 'You have successfully sent an execution message!'
+export const UPDATING_MEMBERS_SUCCESS_MSG = 'You have successfully proposed wallet members update!'
 export const DEFAULT_LOADING_MODAL_MSG = 'Waiting for transaction confirmation...'
-export const DUPLICATED_ADDRESS_MSG = "It seems the address already exists in your address book"
+export const DUPLICATED_ADDRESS_MSG = "It seems the address already exists"
 export const INSUFFICIENT_BALANCE = 'You need to have sufficient CUDOS in your remaining balance in order to cover the required fees upon execution'
 
 // TypeURLs
 export const MULTI_SEND_TYPE_URL = "/cosmos.bank.v1beta1.MsgMultiSend"
+export const MEMBERS_UPDATE_TYPE_URL = '/cosmos.group.v1.MsgUpdateGroupMembers'
+export const ADD_MEMBER_TYPE_URL = '/custom.MsgAddGroupMember'
+export const DELETE_MEMBER_TYPE_URL = '/custom.MsgDeleteGroupMember'
 
 // Proposal statuses
 export const PROPOSAL_STATUS_SUBMITTED = 'PROPOSAL_STATUS_SUBMITTED'
@@ -89,6 +95,8 @@ export const UNKNOWN = { text: "UNKNOWN", color: "#1B2031" }
 
 // Type Mapping
 export const MULTI_SEND_TYPE = { text: "Multi Send", icon: SendIcon }
+export const ADD_MEMBER_TYPE = { text: "Add Member", icon: MembersIcon }
+export const DELETE_MEMBER_TYPE = { text: "Delete Member", icon: MembersIcon }
 export const UNDEFINED_TYPE = { text: "Unknown", icon: UnknownIcon }
 
 // Vote Options

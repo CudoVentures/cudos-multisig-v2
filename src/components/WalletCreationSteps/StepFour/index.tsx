@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
-import { member, updateWalletObjectState, votingPeriod } from 'store/walletObject'
+import { Member, updateWalletObjectState, votingPeriod } from 'store/walletObject'
 import { styles } from '../styles'
 import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
 import { HtmlTooltip } from 'utils/multiSendTableHelper'
@@ -94,7 +94,7 @@ const StepFour = () => {
         
                             onChange={handleChange}
                         >
-                        {members!.map((currentMember: member, idx) => (
+                        {members!.map((currentMember: Member, idx) => (
                             <MenuItem value={idx+1}>{idx+1}</MenuItem>
                         ))}
                         </Select>

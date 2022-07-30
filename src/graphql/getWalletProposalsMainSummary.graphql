@@ -3,8 +3,8 @@ subscription getWalletProposalsMainSummary($id: Int = 0) {
     group_proposals(order_by: {block: {timestamp: desc}}) {
       block {
         height
-        timestamp
       }
+      submit_time
       id
       messages
       transaction_hash
@@ -15,6 +15,11 @@ subscription getWalletProposalsMainSummary($id: Int = 0) {
       }
       group_with_policy {
         voting_period
+        group_members(where: {weight: {_gt: 0}}) {
+          metadata
+          address
+          add_time
+        }
       }
     }
   }

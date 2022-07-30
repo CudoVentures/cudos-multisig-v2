@@ -2,10 +2,6 @@ import { COLORS_DARK_THEME } from "theme/colors";
 import { EXPIRED } from "utils/constants";
 
 export const styles = {
-    icons: {
-        marginLeft: '10px',
-        cursor: 'pointer'
-    },
     backDrop: {
         style: {
             backgroundColor: 'transparent',
@@ -60,24 +56,6 @@ export const styles = {
         right: '10px',
         borderRight: '1px solid rgba(99, 109, 143, 0.2)',
         height: '300px'
-    },
-    componentHolderBox: {
-        backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND,
-        borderRadius: '20px',
-        padding: '20px 20px 20px 40px',
-        width: '550px',
-        display: 'block'
-    },
-    recipientsBox: {
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start'
-    },
-    typoHolder: {
-        display: 'flex',
-        alignItems: 'center',
-        marginTop: '5px'
     },
     swiperCard: {
         marginTop: '5px',
@@ -152,7 +130,7 @@ export const styles = {
         position: 'absolute',
         top: '290px',
         height: '40px',
-        width: '73%',
+        width: '76%',
     },
     verticalLineSteps: {
         width: '100%',

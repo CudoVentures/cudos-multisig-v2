@@ -1,6 +1,5 @@
 //@ts-nocheck
 import * as React from 'react'
-import { useDispatch } from 'react-redux'
 import Dialog from 'components/Dialog'
 import { visuallyHidden } from '@mui/utils'
 import { styles } from './styles'
@@ -114,11 +113,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell, idx) => (
           <TableCell
             width={(
-              idx === 0 ? 110 :
-                idx === 1 ? 115 :
-                  idx === 2 ? 190 :
-                    idx === 3 ? 205 :
-                      idx === 4 ? 190 :
+              idx === 0 ? 100 :
+                idx === 1 ? 140 :
+                  idx === 2 ? 175 :
+                    idx === 3 ? 210 :
+                      idx === 4 ? 185 :
                         idx === 5 ? 50 :
                           idx === 6 ? 20 :
                             100)}
@@ -167,15 +166,15 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           sx={styles.selectableBox}
         >
 
-          <TableCell width={80}>
+          <TableCell width={70}>
             {row.blockHeight}
           </TableCell>
 
-          <TableCell width={140} align="left">
+          <TableCell width={170} align="left">
             <TxTypeComponent type={row.type!.toString()} />
           </TableCell>
 
-          <TableCell style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} width={160} align="left">
+          <TableCell style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} width={150} align="left">
             {row.txHash === NO_TX_HASH_MSG ? row.txHash :
               <Tooltip title={row.txHash}>
                 <div style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
@@ -185,7 +184,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             }
           </TableCell>
 
-          <TableCell width={210} align="left">
+          <TableCell width={220} align="left">
             <Box style={{ display: 'flex', alignItems: 'center' }}>
               <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
               <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
@@ -230,7 +229,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 export default function TransactionsTable({ fetchedData }: { fetchedData: TableData[] }) {
   const [order, setOrder] = React.useState<Order>('desc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('date');
-  const dispatch = useDispatch()
 
   const rows: TableData[] = [];
   if (fetchedData.length > 0) {

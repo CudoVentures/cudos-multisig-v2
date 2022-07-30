@@ -22,6 +22,7 @@ import {
     UNKNOWN,
     WAITING_VOTES
 } from './constants'
+import { formatDateTime } from './helpers'
 
 const statuses = {
     [PROPOSAL_STATUS_EXPIRED]: EXPIRED,
@@ -38,7 +39,7 @@ const statuses = {
 export const getExpirationTime = (proposal: any): string => {
 
     const votingTime: number = proposal?.group_with_policy ? parseInt(proposal?.group_with_policy.voting_period) : 0
-    const proposalTimeStamp: string = proposal?.block.timestamp
+    const proposalTimeStamp: string = formatDateTime(proposal?.submit_time)
 
     return moment(proposalTimeStamp)
         .add(votingTime, 'seconds')
