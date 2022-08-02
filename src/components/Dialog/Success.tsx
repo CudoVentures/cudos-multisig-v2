@@ -8,10 +8,13 @@ import { useNavigate } from 'react-router-dom'
 import WalletFundingSuccess from './WalletFundingSuccess'
 import ProposalCreationSuccess from './ProposalCreationSuccess'
 import VotingOnProposalSuccess from './VotingOnProposalSuccess'
+import MembersUpdateSuccess from './MembersUpdateSuccess'
 import { CancelRoundedIcon, ModalContainer } from './styles'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
 
 import {
+  ADD_MEMBER_TYPE_URL,
+  DELETE_MEMBER_TYPE_URL,
   PROPOSAL_CREATION_SUCCESS_TYPE,
   PROPOSAL_VOTING_SUCCESS_TYPE,
   WALLET_CREATION_SUCCESS_TYPE,
@@ -32,6 +35,12 @@ const Success = () => {
   let navPath: string = ""
 
   switch (msgType) {
+
+    case DELETE_MEMBER_TYPE_URL:
+    case ADD_MEMBER_TYPE_URL:
+      contentComponent = <MembersUpdateSuccess />
+      navPath = '/dashboard'
+      break
 
     case PROPOSAL_VOTING_SUCCESS_TYPE:
       contentComponent = <VotingOnProposalSuccess />

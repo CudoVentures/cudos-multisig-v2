@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Tooltip } from '@mui/material'
 import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
@@ -13,8 +13,8 @@ import { initialState as initialModalState } from 'store/modals'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import Members from 'components/WalletOperations/Members'
-import { ComingSoonWrapper } from 'utils/wrappers'
 import Transactions from 'components/WalletOperations/Transactions'
+import { ADD_MEMBER_TYPE_URL } from 'utils/constants'
 
 const WalletDetails = () => {
     const dispatch = useDispatch()
@@ -37,7 +37,12 @@ const WalletDetails = () => {
     }
 
     const startAddNewMemberProposal = () => {
-        // TODO
+        dispatch(updateModalState({
+            openMembersOperationsModal: true,
+            dataObject: {
+                msgType: ADD_MEMBER_TYPE_URL
+            }
+        }))
     }
 
     return (
@@ -63,9 +68,8 @@ const WalletDetails = () => {
                     <Box style={{ width: '100%', justifyContent: 'space-between', alignItems: 'end', display: 'flex' }}>
                         <MenuSelectionInfo />
                         {menuSelection === 2 ?
-                            <ComingSoonWrapper>
+                            <Tooltip title={'Start ADD NEW MEMBER proposal'}>
                                 <Button
-                                    disabled={true}
                                     variant="contained"
                                     color="primary"
                                     style={styles.topBtn}
@@ -74,7 +78,7 @@ const WalletDetails = () => {
                                     <img style={styles.btnLogo} src={PlusIcon} alt="Plus Icon" />
                                     Add New Member
                                 </Button>
-                            </ComingSoonWrapper>
+                            </Tooltip>
                             : menuSelection === 3 ? null :
                                 <Button
                                     variant="contained"

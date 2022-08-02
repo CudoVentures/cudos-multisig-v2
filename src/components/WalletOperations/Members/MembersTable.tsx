@@ -13,25 +13,28 @@ import {
 } from '@mui/material'
 import copy from 'copy-to-clipboard'
 import { visuallyHidden } from '@mui/utils'
+import { useDispatch } from 'react-redux'
 
 import { styles } from './styles'
 import { formatAddress } from 'utils/helpers'
 import { COLORS_DARK_THEME } from 'theme/colors'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
+import { updateModalState } from 'store/modals'
+import Dialog from 'components/Dialog'
 
 import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
-import editIcon from 'assets/vectors/edit-icon.svg'
 import trashbinIcon from 'assets/vectors/gray-trashbin-icon.svg'
-import { 
-  Order, 
-  stableSort, 
-  getComparator, 
-  HeadCell, 
-  TableData, 
-  createData, 
-  EnhancedTableProps 
+import {
+  Order,
+  stableSort,
+  getComparator,
+  HeadCell,
+  TableData,
+  createData,
+  EnhancedTableProps
 } from 'utils/tableSortingHelper';
+import { DELETE_MEMBER_TYPE_URL } from 'utils/constants';
 
 const headCells: readonly HeadCell[] = [
   {
@@ -86,7 +89,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               <div style={{
                 color: COLORS_DARK_THEME.SECONDARY_TEXT,
                 position: 'relative',
-                left: headCell.id === 'address' ? '-190px' : 'default'
+                left: headCell.id === 'address' ? '-180px' : 'default'
               }}
               >
                 {headCell.label}
@@ -103,6 +106,7 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('name');
   const [copied, setCopied] = React.useState<boolean>(false)
+  const dispatch = useDispatch()
 
   const rows: TableData[] = [];
   if (fetchedData.length > 0) {
@@ -133,8 +137,21 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
     }, 3000)
   }
 
+  const startDeleteMemberProposal = (address: string, name: string) => {
+    dispatch(updateModalState({
+      openMembersOperationsModal: true,
+      dataObject: {
+        memberAddress: address,
+        memberName: name,
+        msgType: DELETE_MEMBER_TYPE_URL,
+        walletMembers: fetchedData
+      }
+    }))
+  }
+
   return (
     <Box>
+      <Dialog />
       <TableContainer style={styles.tableContainer}>
         <Table
           aria-labelledby="tableTitle"
@@ -191,18 +208,20 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
                       </Box>
                     </TableCell>
                     <TableCell>
-                      <Tooltip
+                      {/* COMMENTING OUT EDITING OPTION FOR A WALLET MEMBER */}
+                      {/* <Tooltip
                         title={`Create EDIT MEMBER proposal`}>
                         <img
                           style={styles.icons}
                           src={editIcon}
                           alt="Edit icon" />
-                      </Tooltip>
+                      </Tooltip> */}
                       <Tooltip
                         title={`Create DELETE MEMBER proposal`}>
                         <img
-                          style={styles.icons}
+                          style={{ ...styles.icons, marginRight: '5px' }}
                           src={trashbinIcon}
+                          onClick={() => startDeleteMemberProposal(row.address.toString(), row.name.toString())}
                           alt="Trashbin icon" />
                       </Tooltip>
                     </TableCell>

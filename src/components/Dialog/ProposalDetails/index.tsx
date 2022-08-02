@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { updateModalState } from 'store/modals'
 import { COLORS_DARK_THEME } from 'theme/colors'
 import { useDispatch, useSelector } from 'react-redux'
-import { TxTypeComponent } from 'utils/TxTypeHandler'
+import { determineType, TxTypeComponent } from 'utils/TxTypeHandler'
 import MembersIcon from 'assets/vectors/members-icon.svg'
 import { useGetWalletProposalDetailsSubscription } from 'graphql/types'
 import TypeDetailsHandlerComponent from './TypeDetailsHandlerComponent'
@@ -59,6 +59,7 @@ export interface FetchedProposalDetailsData {
     submissionTime: string;
     threshold: number;
     totalMembers: number;
+    groupMembers: any[];
     executor: string;
     executionTime: string;
     executionLog: string;
@@ -97,6 +98,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
         submissionTime: '',
         threshold: 0,
         totalMembers: 0,
+        groupMembers: [],
         executor: '',
         executionTime: '',
         executionLog: ''
@@ -104,14 +106,15 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
 
     if (data) {
         const proposal = data.group_proposal_by_pk
-        const proposalTimeStamp: string = proposal?.block.timestamp
+        const proposalTimeStamp: string = formatDateTime(proposal?.submit_time)
         const txHash: string = proposal?.transaction_hash ? proposal?.transaction_hash : NO_TX_HASH_MSG
         const proposalMessage = proposal?.messages[0] ? proposal?.messages[0] : null
-        const msgType: string = proposalMessage["@type"]
+        const msgType: string = determineType(proposal)
         const status: string = determineStatus(address!, proposal)
         const expirationTime: string = getExpirationTime(proposal)
         const threshold: number = proposal?.group_with_policy.threshold!
-        const totalMembers: number = proposal?.group_with_policy.group_members.length!
+        const groupMembers: any[] = proposal?.group_with_policy.group_members!
+        const totalMembers: number = groupMembers.length
         const proposer: string = proposal?.proposer!
         const votes: Vote[] = []
         let isHavingComments: boolean = false
@@ -140,10 +143,11 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
             status: status,
             isVotable: (status === PROPOSAL_STATUS_SUBMITTED),
             proposer: proposer,
-            expirationDate: expirationTime,
+            expirationDate: formatDateTime(expirationTime),
             haveComments: isHavingComments,
             submissionTime: formatDateTime(proposalTimeStamp),
             threshold: threshold,
+            groupMembers: groupMembers,
             totalMembers: totalMembers,
             executor: proposal?.executor!,
             executionTime: formatDateTime(proposal?.execution_time),

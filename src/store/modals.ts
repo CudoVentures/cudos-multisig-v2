@@ -16,6 +16,7 @@ export interface modalState {
     addNewAddress?: boolean
     editAddressBookRecord?: boolean
     openVotingModal?: boolean
+    openMembersOperationsModal?: boolean
     dataObject?: Record<string, unknown>
 }
 
@@ -35,6 +36,7 @@ export const initialState: modalState = {
     openFundWallet: false,
     openAssetsTable: false,
     openVotingModal: false,
+    openMembersOperationsModal: false,
     dataObject: {}
 }
 

@@ -1,7 +1,7 @@
 import { Coin } from 'cudosjs'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { member } from './walletObject'
+import { Member } from './walletObject'
 
 interface addressBook {
   [key: string]: string;
@@ -9,7 +9,7 @@ interface addressBook {
 
 export interface wallet {
   walletAddress: string;
-  members?: member[];
+  members?: Member[];
   walletName?: string;
   generalInfo?: string;
   isAdmin?: boolean;

@@ -1,5 +1,6 @@
 subscription getWalletProposalDetails($id: Int = 0) {
   group_proposal_by_pk(id: $id) {
+		submit_time
     execution_log
     executor
     execution_time
@@ -23,10 +24,8 @@ subscription getWalletProposalDetails($id: Int = 0) {
       group_members(where: {weight: {_gt: 0}}) {
         metadata
         address
+        add_time
       }
-    }
-    block {
-      timestamp
     }
   }
 }

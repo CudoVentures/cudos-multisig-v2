@@ -61,7 +61,7 @@ export const styles = {
     opacity: '1', 
     transition: 'all 0.5s', 
     WebkitTransition: 'all 0.5s',
-    height: '100%'
+    height: '99%'
   },
   informativeBlock: {
     display: "flex",

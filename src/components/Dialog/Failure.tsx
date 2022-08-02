@@ -15,7 +15,6 @@ import {
   DUPLICATED_ADDRESS_TYPE,
   FEE_ESTIMATION_ERROR,
   PROPOSAL_CREATION_FAILURE_TYPE,
-  PROPOSAL_VOTING_ERROR_TYPE,
   WALLET_CORRUPTED_PROCESS_TYPE
 } from 'utils/constants'
 
@@ -28,6 +27,10 @@ const Failure = () => {
     dispatch(updateWalletCreationSteps({ currentStep: '' }))
     dispatch(updateSendFunds({ ...initialSendFundsState }))
     dispatch(updateWalletObjectState({ ...initialWalletObject }))
+  }
+
+  const clearModalState = () => {
+    dispatch(updateModalState({ ...initialModalState }))
   }
 
   const goHome = () => {
@@ -48,20 +51,19 @@ const Failure = () => {
       case FEE_ESTIMATION_ERROR:
       case PROPOSAL_CREATION_FAILURE_TYPE:
       case WALLET_CORRUPTED_PROCESS_TYPE:
-        dispatch(updateModalState({ ...initialModalState }))
+        clearModalState()
         goHome()
         break
 
       case DUPLICATED_ADDRESS_TYPE:
-        dispatch(updateModalState({ ...initialModalState }))
+        clearModalState()
         dispatch(updateModalState({ openAddressBook: true }))
         localStorage.removeItem('addressBookAccountName')
         localStorage.removeItem('addressBookAccountAddress')
         break
 
-      case PROPOSAL_VOTING_ERROR_TYPE:
       default:
-        dispatch(updateModalState({ ...initialModalState }))
+        clearModalState()
         break
     }
   }

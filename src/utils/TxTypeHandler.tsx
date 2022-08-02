@@ -4,12 +4,37 @@ import {
     UNDEFINED,
     MULTI_SEND_TYPE_URL,
     MULTI_SEND_TYPE,
-    UNDEFINED_TYPE
+    UNDEFINED_TYPE,
+    ADD_MEMBER_TYPE_URL,
+    DELETE_MEMBER_TYPE_URL,
+    ADD_MEMBER_TYPE,
+    DELETE_MEMBER_TYPE,
+    MEMBERS_UPDATE_TYPE_URL
 } from './constants'
 
 const chainTxType = {
     [MULTI_SEND_TYPE_URL]: MULTI_SEND_TYPE,
+    [ADD_MEMBER_TYPE_URL]: ADD_MEMBER_TYPE,
+    [DELETE_MEMBER_TYPE_URL]: DELETE_MEMBER_TYPE,
     [UNDEFINED]: UNDEFINED_TYPE
+}
+
+export const determineType = (proposal: any): string => {
+    const proposalMessage = proposal?.messages[0] ? proposal?.messages[0] : null
+    const msgType: string = proposalMessage["@type"]
+
+    if (msgType === MEMBERS_UPDATE_TYPE_URL) {
+        const proposalMessage = proposal?.messages[0] ? proposal?.messages[0] : null
+        const updatedMembers = proposalMessage.member_updates
+        const zeroWeight = updatedMembers.find((m: { weight: string }) => m.weight === '0')
+
+        if (zeroWeight) {
+            return DELETE_MEMBER_TYPE_URL
+        }
+        return ADD_MEMBER_TYPE_URL
+    }
+
+    return msgType
 }
 
 export const TxTypeComponent = ({ type }: { type: string }): JSX.Element => {
