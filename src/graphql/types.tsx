@@ -4122,6 +4122,7 @@ export type Group_Proposal = {
   group_with_policy: Group_With_Policy;
   height: Scalars['bigint'];
   id: Scalars['Int'];
+  member_count: Scalars['Int'];
   messages: Scalars['jsonb'];
   metadata?: Maybe<Scalars['String']>;
   proposer: Scalars['String'];
@@ -4209,6 +4210,7 @@ export type Group_Proposal_Avg_Fields = {
   group_id?: Maybe<Scalars['Float']>;
   height?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
+  member_count?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "group_proposal" */
@@ -4216,6 +4218,7 @@ export type Group_Proposal_Avg_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "group_proposal". All fields are combined with a logical 'AND'. */
@@ -4233,6 +4236,7 @@ export type Group_Proposal_Bool_Exp = {
   group_with_policy?: InputMaybe<Group_With_Policy_Bool_Exp>;
   height?: InputMaybe<Bigint_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
+  member_count?: InputMaybe<Int_Comparison_Exp>;
   messages?: InputMaybe<Jsonb_Comparison_Exp>;
   metadata?: InputMaybe<String_Comparison_Exp>;
   proposer?: InputMaybe<String_Comparison_Exp>;
@@ -4251,6 +4255,7 @@ export type Group_Proposal_Max_Fields = {
   group_id?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['bigint']>;
   id?: Maybe<Scalars['Int']>;
+  member_count?: Maybe<Scalars['Int']>;
   metadata?: Maybe<Scalars['String']>;
   proposer?: Maybe<Scalars['String']>;
   submit_time?: Maybe<Scalars['timestamp']>;
@@ -4265,6 +4270,7 @@ export type Group_Proposal_Max_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
   metadata?: InputMaybe<Order_By>;
   proposer?: InputMaybe<Order_By>;
   submit_time?: InputMaybe<Order_By>;
@@ -4280,6 +4286,7 @@ export type Group_Proposal_Min_Fields = {
   group_id?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['bigint']>;
   id?: Maybe<Scalars['Int']>;
+  member_count?: Maybe<Scalars['Int']>;
   metadata?: Maybe<Scalars['String']>;
   proposer?: Maybe<Scalars['String']>;
   submit_time?: Maybe<Scalars['timestamp']>;
@@ -4294,6 +4301,7 @@ export type Group_Proposal_Min_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
   metadata?: InputMaybe<Order_By>;
   proposer?: InputMaybe<Order_By>;
   submit_time?: InputMaybe<Order_By>;
@@ -4312,6 +4320,7 @@ export type Group_Proposal_Order_By = {
   group_with_policy?: InputMaybe<Group_With_Policy_Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
   messages?: InputMaybe<Order_By>;
   metadata?: InputMaybe<Order_By>;
   proposer?: InputMaybe<Order_By>;
@@ -4338,6 +4347,8 @@ export enum Group_Proposal_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  MemberCount = 'member_count',
+  /** column name */
   Messages = 'messages',
   /** column name */
   Metadata = 'metadata',
@@ -4357,6 +4368,7 @@ export type Group_Proposal_Stddev_Fields = {
   group_id?: Maybe<Scalars['Float']>;
   height?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
+  member_count?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "group_proposal" */
@@ -4364,6 +4376,7 @@ export type Group_Proposal_Stddev_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -4372,6 +4385,7 @@ export type Group_Proposal_Stddev_Pop_Fields = {
   group_id?: Maybe<Scalars['Float']>;
   height?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
+  member_count?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "group_proposal" */
@@ -4379,6 +4393,7 @@ export type Group_Proposal_Stddev_Pop_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -4387,6 +4402,7 @@ export type Group_Proposal_Stddev_Samp_Fields = {
   group_id?: Maybe<Scalars['Float']>;
   height?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
+  member_count?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "group_proposal" */
@@ -4394,6 +4410,7 @@ export type Group_Proposal_Stddev_Samp_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
 };
 
 /** aggregate sum on columns */
@@ -4402,6 +4419,7 @@ export type Group_Proposal_Sum_Fields = {
   group_id?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['bigint']>;
   id?: Maybe<Scalars['Int']>;
+  member_count?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "group_proposal" */
@@ -4409,6 +4427,7 @@ export type Group_Proposal_Sum_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_pop on columns */
@@ -4417,6 +4436,7 @@ export type Group_Proposal_Var_Pop_Fields = {
   group_id?: Maybe<Scalars['Float']>;
   height?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
+  member_count?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "group_proposal" */
@@ -4424,6 +4444,7 @@ export type Group_Proposal_Var_Pop_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
@@ -4432,6 +4453,7 @@ export type Group_Proposal_Var_Samp_Fields = {
   group_id?: Maybe<Scalars['Float']>;
   height?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
+  member_count?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "group_proposal" */
@@ -4439,6 +4461,7 @@ export type Group_Proposal_Var_Samp_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
@@ -4447,6 +4470,7 @@ export type Group_Proposal_Variance_Fields = {
   group_id?: Maybe<Scalars['Float']>;
   height?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
+  member_count?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "group_proposal" */
@@ -4454,6 +4478,7 @@ export type Group_Proposal_Variance_Order_By = {
   group_id?: InputMaybe<Order_By>;
   height?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  member_count?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "group_proposal_vote" */
@@ -14882,6 +14907,13 @@ export type GetWalletProposalsSummarySubscriptionVariables = Exact<{
 
 export type GetWalletProposalsSummarySubscription = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_proposals: Array<{ __typename?: 'group_proposal', submit_time: any, id: number, messages: any, transaction_hash?: string | null, status: any, executor_result: any, block: { __typename?: 'block', height: any }, group_proposal_votes: Array<{ __typename?: 'group_proposal_vote', voter: string }>, group_with_policy: { __typename?: 'group_with_policy', voting_period: any, group_members: Array<{ __typename?: 'group_member', metadata?: string | null, address: string, add_time: any }> } }> } | null };
 
+export type GetWalletSettingsQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetWalletSettingsQuery = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_metadata?: string | null, voting_period: any, threshold: number } | null };
+
 export type GetWalletsQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['String']>;
 }>;
@@ -15086,6 +15118,43 @@ export function useGetWalletProposalsSummarySubscription(baseOptions?: Apollo.Su
       }
 export type GetWalletProposalsSummarySubscriptionHookResult = ReturnType<typeof useGetWalletProposalsSummarySubscription>;
 export type GetWalletProposalsSummarySubscriptionResult = Apollo.SubscriptionResult<GetWalletProposalsSummarySubscription>;
+export const GetWalletSettingsDocument = gql`
+    query getWalletSettings($id: Int = 1) {
+  group_with_policy_by_pk(id: $id) {
+    group_metadata
+    voting_period
+    threshold
+  }
+}
+    `;
+
+/**
+ * __useGetWalletSettingsQuery__
+ *
+ * To run a query within a React component, call `useGetWalletSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWalletSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWalletSettingsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetWalletSettingsQuery(baseOptions?: Apollo.QueryHookOptions<GetWalletSettingsQuery, GetWalletSettingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWalletSettingsQuery, GetWalletSettingsQueryVariables>(GetWalletSettingsDocument, options);
+      }
+export function useGetWalletSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWalletSettingsQuery, GetWalletSettingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWalletSettingsQuery, GetWalletSettingsQueryVariables>(GetWalletSettingsDocument, options);
+        }
+export type GetWalletSettingsQueryHookResult = ReturnType<typeof useGetWalletSettingsQuery>;
+export type GetWalletSettingsLazyQueryHookResult = ReturnType<typeof useGetWalletSettingsLazyQuery>;
+export type GetWalletSettingsQueryResult = Apollo.QueryResult<GetWalletSettingsQuery, GetWalletSettingsQueryVariables>;
 export const GetWalletsDocument = gql`
     query GetWallets($_eq: String = "") {
   group_member(where: {address: {_eq: $_eq}}) {

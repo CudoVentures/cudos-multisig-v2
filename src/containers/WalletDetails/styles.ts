@@ -15,16 +15,6 @@ export const styles = {
   plusIcon: {
     marginRight: '20px'
   },
-  addressBookIcon: {
-    marginRight: '10px'
-  },
-  addressBookBtn: {
-    background: 'none',
-    textDecoration: 'none',
-    position: 'relative',
-    marginRight: '10px',
-    height: 'fit-content'
-  },
   contentDissapear: {
     opacity: '1', 
     transition: 'all 0.5s', 

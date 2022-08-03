@@ -11,10 +11,14 @@ import VotingOnProposalSuccess from './VotingOnProposalSuccess'
 import MembersUpdateSuccess from './MembersUpdateSuccess'
 import { CancelRoundedIcon, ModalContainer } from './styles'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
+import WalletUpdateSuccess from './WalletUpdateSuccess'
+import { updateMenuSelectionState } from 'store/menu'
 
 import {
   ADD_MEMBER_TYPE_URL,
   DELETE_MEMBER_TYPE_URL,
+  GROUP_UPDATE_DECISION_POLICY_TYPE_URL,
+  GROUP_UPDATE_METADATA_TYPE_URL,
   PROPOSAL_CREATION_SUCCESS_TYPE,
   PROPOSAL_VOTING_SUCCESS_TYPE,
   WALLET_CREATION_SUCCESS_TYPE,
@@ -32,24 +36,26 @@ const Success = () => {
   } = useSelector((state: RootState) => state.modalState)
 
   let contentComponent: JSX.Element = (<div></div>)
-  let navPath: string = ""
+  let navPath: string = '/dashboard'
 
   switch (msgType) {
+
+    case GROUP_UPDATE_DECISION_POLICY_TYPE_URL:
+    case GROUP_UPDATE_METADATA_TYPE_URL:
+      contentComponent = <WalletUpdateSuccess />
+      break
 
     case DELETE_MEMBER_TYPE_URL:
     case ADD_MEMBER_TYPE_URL:
       contentComponent = <MembersUpdateSuccess />
-      navPath = '/dashboard'
       break
 
     case PROPOSAL_VOTING_SUCCESS_TYPE:
       contentComponent = <VotingOnProposalSuccess />
-      navPath = '/dashboard'
       break
 
     case PROPOSAL_CREATION_SUCCESS_TYPE:
       contentComponent = <ProposalCreationSuccess />
-      navPath = '/dashboard'
       break
 
     case WALLET_CREATION_SUCCESS_TYPE:
@@ -59,7 +65,6 @@ const Success = () => {
 
     case WALLET_FUNDING_SUCCESS_TYPE:
       contentComponent = <WalletFundingSuccess />
-      navPath = '/dashboard'
       break
 
     default:
@@ -68,6 +73,7 @@ const Success = () => {
 
   const handleModalClose = () => {
     dispatch(updateModalState({ ...initialModalState }))
+    dispatch(updateMenuSelectionState({ menuSelection: 0 }))
     navigate(navPath)
   }
 
