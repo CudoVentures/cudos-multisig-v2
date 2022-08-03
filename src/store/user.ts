@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Member } from './walletObject'
 
-interface addressBook {
+export interface AddressBook {
   [key: string]: string;
 }
 
@@ -33,7 +33,7 @@ export interface userState {
   balances?: Coin[]
   wallets?: wallet[]
   selectedWallet?: wallet
-  addressBook?: addressBook
+  addressBook?: AddressBook
   chosenBalance?: Coin
 }
 

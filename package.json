@@ -21,6 +21,7 @@
     "appollo": "^0.1.13",
     "axios": "^0.27.2",
     "bignumber.js": "^9.0.2",
+    "firebase": "^9.9.1",
     "graphql": "^16.5.0",
     "graphql-ws": "^5.9.1",
     "moment": "^2.29.4",

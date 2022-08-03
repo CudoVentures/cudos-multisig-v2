@@ -40,6 +40,7 @@ import {
   Table,
   TableBody
 } from '@mui/material'
+import { Firebase } from 'utils/firebase'
 
 const headCells: readonly HeadCell[] = [
   {
@@ -149,14 +150,14 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 export default function AddressBookTable() {
-  const { addressBook } = useSelector((state: RootState) => state.userState)
+  const { address, addressBook } = useSelector((state: RootState) => state.userState)
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('name');
   const [copied, setCopied] = React.useState<boolean>(false)
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const dispatch = useDispatch()
 
-  const deleteSelected = () => {
+  const deleteSelected = async () => {
 
     let newAddressBook = { ...addressBook }
     for (let address of selected) {
@@ -167,6 +168,7 @@ export default function AddressBookTable() {
       addressBook: newAddressBook
     }))
     setSelected([])
+    await Firebase.saveAddressBook(address, newAddressBook)
   }
 
   const rows: TableData[] = [];

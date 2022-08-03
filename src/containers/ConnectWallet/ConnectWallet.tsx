@@ -15,13 +15,14 @@ import { RootState } from 'store'
 import Header from 'components/Layout/Header'
 import { initialState as initialUserState } from 'store/user'
 import { DEFAULT_LOGIN_FAILURE_MSG, LOGIN_FAIL_TITLE } from 'utils/constants'
+import { Firebase } from 'utils/firebase'
 
 const ConnectWallet = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { address, lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
+  const { address, lastLoggedAddress } = useSelector((state: RootState) => state.userState)
 
   const connect = async () => {
     try {
@@ -32,6 +33,7 @@ const ConnectWallet = () => {
       const currentBalances = await getAccountBalances(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
+      const addressBook = await Firebase.getAddressBook(address)
       
       dispatch(updateUser({ 
         keplrName: keplrName,

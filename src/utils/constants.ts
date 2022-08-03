@@ -13,6 +13,9 @@ export const CHAIN_ID = import.meta.env.VITE_APP_CHAIN_ID || process.env.VITE_AP
 export const GAS_PRICE = import.meta.env.VITE_APP_GAS_PRICE || process.env.VITE_APP_GAS_PRICE || ""
 export const GRAPHQL_URL = import.meta.env.VITE_APP_GRAPHQL_URL || process.env.VITE_APP_GRAPHQL_URL || ""
 export const GRAPHQL_WS = import.meta.env.VITE_APP_GRAPHQL_WS || process.env.VITE_APP_GRAPHQL_WS || ""
+export const FIREBASE_API_KEY = import.meta.env.VITE_APP_FIREBASE_API_KEY || process.env.VITE_APP_FIREBASE_API_KEY || ""
+export const FIREBASE_AUTH_DOMAIN = import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || process.env.VITE_APP_FIREBASE_AUTH_DOMAIN || ""
+export const FIREBASE_PROJECT_ID = import.meta.env.VITE_APP_FIREBASE_PROJECT_ID || process.env.VITE_APP_FIREBASE_PROJECT_ID || ""
 
 // General config
 export const ADMIN_TOKEN_DENOM = 'cudosAdmin'

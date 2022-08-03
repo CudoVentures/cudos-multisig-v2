@@ -7,7 +7,7 @@ import UploadFromCsv from 'assets/vectors/csv-upload.svg'
 import DownloadToCsv from 'assets/vectors/csv-download.svg'
 import React, { useEffect, useState } from 'react'
 import { isValidCudosAddress } from 'utils/validation'
-import { updateUser } from 'store/user'
+import { updateUser, AddressBook } from 'store/user'
 import { RootState } from 'store'
 import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 import { initialState as initialModalState } from 'store/modals'
@@ -22,12 +22,10 @@ import {
     FILE_ERROR_TITLE,
     INVALID_DATA_PROMPT_MSG
 } from 'utils/constants'
+import { Firebase } from 'utils/firebase'
 
 interface DataObject {
     index: number
-}
-interface addressBook {
-    [key: string]: string;
 }
 
 const AddAddressButtons = () => {
@@ -35,7 +33,7 @@ const AddAddressButtons = () => {
     const [userName, setUserName] = useState('')
     const [userAddress, setUserAddress] = useState('')
     const { addNewAddress, editAddressBookRecord, dataObject } = useSelector((state: RootState) => state.modalState)
-    const { addressBook } = useSelector((state: RootState) => state.userState)
+    const { address, addressBook } = useSelector((state: RootState) => state.userState)
     const currentStep = parseInt(getCurrentWalletCreationStep())
     const dataFromObject: DataObject = new Object(dataObject) as DataObject
 
@@ -46,7 +44,7 @@ const AddAddressButtons = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const handleFileRead = (e: any) => {
+    const handleFileRead = async (e: any) => {
         const content = fileReader.result.split('\n')
 
         let txBatch = {}
@@ -82,6 +80,7 @@ const AddAddressButtons = () => {
             }))
         } else {
             dispatch(updateUser({ addressBook: txBatch }))
+            await Firebase.saveAddressBook(address!, txBatch)
         }
     }
 
@@ -97,11 +96,11 @@ const AddAddressButtons = () => {
         document.getElementById("csv-file")?.click()
     }
 
-    const handleAddNewAddress = () => {
+    const handleAddNewAddress = async () => {
         let fail: boolean = false
         let oldRecordIndex: number = 0
-        let tempBook: addressBook = {}
-        let updatedBook: addressBook = {}
+        let tempBook: AddressBook = {}
+        let updatedBook: AddressBook = {}
 
         if (addNewAddress) {
             for (const address of Object.keys(addressBook!)) {
@@ -112,10 +111,9 @@ const AddAddressButtons = () => {
             }
 
             if (!fail) {
-                dispatch(updateUser({
-                    addressBook: { ...addressBook, [userAddress]: userName }
-                }))
-
+                const newAddressBook = { ...addressBook, [userAddress]: userName }
+                dispatch(updateUser({ addressBook: newAddressBook }))
+                await Firebase.saveAddressBook(address!, newAddressBook)
                 localStorage.removeItem('addressBookAccountName')
                 localStorage.removeItem('addressBookAccountAddress')
                 dispatch(updateModalState({ addNewAddress: false }))
@@ -141,7 +139,9 @@ const AddAddressButtons = () => {
             }
 
             if (!fail) {
-                dispatch(updateUser({ addressBook: { ...updatedBook, [userAddress]: userName } }))
+                const newAddressBook = { ...updatedBook, [userAddress]: userName }
+                dispatch(updateUser({ addressBook: newAddressBook }))
+                await Firebase.saveAddressBook(address!, newAddressBook!)
                 dispatch(updateModalState({ editAddressBookRecord: false }))
                 return
             }
