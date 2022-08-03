@@ -67,6 +67,7 @@ export const INSUFFICIENT_BALANCE = 'You need to have sufficient CUDOS in your r
 
 // TypeURLs
 export const MULTI_SEND_TYPE_URL = "/cosmos.bank.v1beta1.MsgMultiSend"
+export const SINGLE_SEND_TYPE_URL = "/cosmos.bank.v1beta1.MsgSend"
 export const MEMBERS_UPDATE_TYPE_URL = '/cosmos.group.v1.MsgUpdateGroupMembers'
 export const GROUP_UPDATE_METADATA_TYPE_URL = '/cosmos.group.v1.MsgUpdateGroupMetadata'
 export const GROUP_UPDATE_DECISION_POLICY_TYPE_URL = '/cosmos.group.v1.MsgUpdateGroupPolicyDecisionPolicy'
