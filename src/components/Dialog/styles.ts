@@ -2,37 +2,56 @@ import { styled, Box } from '@mui/material'
 import { CancelRounded } from '@mui/icons-material'
 
 export const styles = {
+  successWalletInfoHolder: {
+    overflow: 'auto',
+    maxWidth: '200px',
+    maxHeight: '150px',
+    wordBreak: 'break-word'
+  },
+  SuccessHolderInfoBox: {
+    margin: '0 0 10px 0',
+    display: "flex",
+    justifyContent: 'space-between',
+    alignItems: "center",
+  },
+  SuccessHolderBox: {
+    margin: '10px 0',
+    display: "flex",
+    justifyContent: 'space-between',
+    alignItems: "center",
+    padding: "0.5rem 0"
+  },
   loadingModalContainer: {
-    minWidth: '600px', 
-    minHeight:'300px', 
+    minWidth: '600px',
+    minHeight: '300px',
     padding: '4rem'
   },
   icons: {
-    marginLeft: '10px', 
+    marginLeft: '10px',
     cursor: 'pointer'
   },
   alertInfo: {
     display: 'flex',
-    justifyContent: "flex-start", 
-    alignItems: "center", 
-    marginTop: '-20px', 
-    height: '50px', 
-    borderRadius: '10px', 
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: '-20px',
+    height: '50px',
+    borderRadius: '10px',
     backgroundColor: "rgba(245, 185, 94, 0.1)"
   },
   inputGroup: {
-    display: "flex", 
-    flexDirection: "column", 
+    display: "flex",
+    flexDirection: "column",
     alignItems: "center"
-},
+  },
   addressInput: {
-    width: '550px', 
-    height: '50px', 
-    backgroundColor: '#28314E', 
-    fontSize: '90%', 
+    width: '550px',
+    height: '50px',
+    backgroundColor: '#28314E',
+    fontSize: '90%',
     paddingLeft: '20px',
     borderRadius: '5px'
-},
+  },
   btnLogo: {
     marginRight: '15px'
   },
@@ -40,7 +59,7 @@ export const styles = {
     margin: '35px 0 20px 0'
   },
   infoHolder: {
-    display: "flex",  
+    display: "flex",
     alignItems: "flex-start",
     width: '100%'
   },

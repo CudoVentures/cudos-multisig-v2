@@ -9,13 +9,19 @@ import {
     DELETE_MEMBER_TYPE_URL,
     ADD_MEMBER_TYPE,
     DELETE_MEMBER_TYPE,
-    MEMBERS_UPDATE_TYPE_URL
+    MEMBERS_UPDATE_TYPE_URL,
+    GROUP_UPDATE_DECISION_POLICY_TYPE_URL,
+    GROUP_UPDATE_METADATA_TYPE_URL,
+    UPDATE_WALLET_SETTINGS_TYPE,
+    UPDATE_WALLET_POLICIES_TYPE,
 } from './constants'
 
 const chainTxType = {
     [MULTI_SEND_TYPE_URL]: MULTI_SEND_TYPE,
     [ADD_MEMBER_TYPE_URL]: ADD_MEMBER_TYPE,
     [DELETE_MEMBER_TYPE_URL]: DELETE_MEMBER_TYPE,
+    [GROUP_UPDATE_METADATA_TYPE_URL]: UPDATE_WALLET_SETTINGS_TYPE,
+    [GROUP_UPDATE_DECISION_POLICY_TYPE_URL]: UPDATE_WALLET_POLICIES_TYPE,
     [UNDEFINED]: UNDEFINED_TYPE
 }
 
@@ -45,7 +51,7 @@ export const TxTypeComponent = ({ type }: { type: string }): JSX.Element => {
     const text: string = chainTxType[chainType as keyof typeof chainTxType].text
 
     return (
-        <Box style={{ display: 'flex', alignItems: 'flex-end' }}>
+        <Box style={{ display: 'flex', alignItems: 'center' }}>
             <img style={{ marginRight: '5px' }} src={icon} alt={`${chainType} logo`} />
             <Typography style={{ float: 'left' }} variant="subtitle2" fontWeight={600} >
                 {text}

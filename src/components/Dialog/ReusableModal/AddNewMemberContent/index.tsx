@@ -5,26 +5,27 @@ import { useSelector } from 'react-redux'
 import { isValidCudosAddress } from 'utils/validation'
 import { useGetWalletMembersQuery } from 'graphql/types'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
-import { Member } from 'store/walletObject'
 
 import {
     DEFAULT_VOTING_WEIGHT,
     DUPLICATED_ADDRESS_MSG,
     INVALID_DATA_PROMPT_MSG
 } from 'utils/constants'
+import { getMembersUpdateMsgAndFees } from '../helpers'
+import { EncodeObject, StdFee } from 'cudosjs'
 
 const AddNewMemberContent = ({
     propose,
     close,
 }: {
     propose: (
-        members: Member[],
-        memberName: string,
-        memberAddress: string) => void,
+        msgs: EncodeObject[],
+        fee: StdFee,
+        msgSpecificData: any) => void,
     close: () => void,
 }) => {
 
-    const { selectedWallet } = useSelector((state: RootState) => state.userState)
+    const { address, selectedWallet } = useSelector((state: RootState) => state.userState)
     const [newMemberName, setNewMemberName] = useState<string>('')
     const [newMemberAddress, setNewMemberAddress] = useState<string>('')
     const walletId: number = parseInt(selectedWallet!.walletID!)
@@ -33,7 +34,6 @@ const AddNewMemberContent = ({
     })
 
     const oldWalletMembers: { metadata: string; address: string; weight: number }[] = []
-    const oldWalletMembersAddresses: string[] = []
 
     if (data) {
         for (const member of data.group_with_policy_by_pk!.group_members) {
@@ -42,14 +42,11 @@ const AddNewMemberContent = ({
                 address: member.address,
                 weight: DEFAULT_VOTING_WEIGHT
             })
-            oldWalletMembersAddresses.push(
-                member.address
-            )
         }
     }
 
     const userInWallet = (): boolean => {
-        return oldWalletMembersAddresses.includes(newMemberAddress)
+        return oldWalletMembers.some(w => w.address === newMemberAddress)
     }
 
     const validData = (): boolean => {
@@ -64,9 +61,10 @@ const AddNewMemberContent = ({
             return INVALID_DATA_PROMPT_MSG
         }
 
-        if (validData() && userInWallet()) {
+        if (userInWallet()) {
             return DUPLICATED_ADDRESS_MSG
         }
+        
         return ''
     }
 
@@ -85,10 +83,24 @@ const AddNewMemberContent = ({
             newMember
         ]
 
-        propose(
+        const { msg, fee } = await getMembersUpdateMsgAndFees(
             updatedWalletMembers,
-            newMemberName,
-            newMemberAddress
+            walletId,
+            selectedWallet?.walletAddress!,
+            address!
+        )
+
+        const msgSpecificData = {
+            member: {
+                metadata: newMemberName,
+                address: newMemberAddress
+            }
+        }
+
+        propose(
+            [msg],
+            fee,
+            msgSpecificData
         )
     }
 

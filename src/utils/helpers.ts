@@ -9,6 +9,7 @@ import { ADMIN_TOKEN_DENOM, GAS_PRICE, NATIVE_TOKEN_DENOM } from "./constants"
 
 import cudosLogo from 'assets/vectors/balances/cudos.svg'
 import cudosAdminLogo from 'assets/vectors/balances/cudos-admin.svg'
+import { votingPeriod } from "store/walletObject"
 
 export const formatDateTime = (dateTimeString: string): string => {
     const localTimeString: string = moment(dateTimeString).parseZone().toLocaleString()
@@ -20,6 +21,13 @@ export const formatDateTime = (dateTimeString: string): string => {
 
 export const amountToAcudos = (amount: number): string => {
     return (amount * 10 ** 18).toLocaleString('fullwide', { useGrouping: false })
+}
+
+export const convertVotingPeriodToSeconds = (selectedVotingPeriod: number): votingPeriod => {
+    return {
+        seconds: selectedVotingPeriod * 24 * 60 * 60,
+        nanos: 0
+    }
 }
 
 export const convertSecondsToDisplay = (seconds: number, desiredFormat: string): string => {

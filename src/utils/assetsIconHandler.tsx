@@ -68,7 +68,7 @@ const AssetIconComponent = ({
     return denom === 'noBalance'? (
         <Box style={{...styles.assetsIconHolder, justifyContent: 'center', height: '110%'}}>
             <Typography variant="inherit" fontWeight={600} fontSize={17} color="text.primary">
-                It seems you do not have any assets just yet
+                It seems your wallet have no assets yet
             </Typography>
         </Box>
     ) : (

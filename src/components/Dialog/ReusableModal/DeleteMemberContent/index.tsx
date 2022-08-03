@@ -5,19 +5,23 @@ import { Box, Button } from '@mui/material'
 import { Member } from 'store/walletObject'
 import { TableData } from 'utils/tableSortingHelper'
 import { DEFAULT_VOTING_WEIGHT } from 'utils/constants'
+import { EncodeObject, StdFee } from 'cudosjs'
+import { getMembersUpdateMsgAndFees } from '../helpers'
 
 const DeleteMemberContent = ({
     propose,
     close,
 }: {
     propose: (
-        members: Member[],
-        memberName: string,
-        memberAddress: string) => void,
+        msgs: EncodeObject[],
+        fee: StdFee,
+        msgSpecificData: any) => void,
     close: () => void,
 }) => {
 
+    const { address, selectedWallet } = useSelector((state: RootState) => state.userState)
     const { dataObject } = useSelector((state: RootState) => state.modalState)
+    const walletId: number = parseInt(selectedWallet!.walletID!)
     const memberAddress: string = dataObject!.memberAddress as string
     const memberName: string = dataObject!.memberName as string
     const walletMembers: TableData[] = dataObject!.walletMembers as TableData[]
@@ -32,6 +36,29 @@ const DeleteMemberContent = ({
             })
         }
         updatedWalletMembers.push(updatedMember)
+    }
+
+    const createProposal = async () => {
+
+        const { msg, fee } = await getMembersUpdateMsgAndFees(
+            updatedWalletMembers,
+            walletId,
+            selectedWallet?.walletAddress!,
+            address!
+        )
+
+        const msgSpecificData = {
+            member: {
+                metadata: memberName,
+                address: memberAddress
+            }
+        }
+
+        propose(
+            [msg],
+            fee,
+            msgSpecificData
+        )
     }
 
     return (
@@ -52,11 +79,7 @@ const DeleteMemberContent = ({
                         variant="contained"
                         color="primary"
                         sx={styles.ctrlBtn}
-                        onClick={() => propose(
-                            updatedWalletMembers,
-                            memberName,
-                            memberAddress
-                        )}
+                        onClick={() => createProposal()}
                     >
                         Yes, Confirm
                     </Button>

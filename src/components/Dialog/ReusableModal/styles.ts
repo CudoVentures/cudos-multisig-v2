@@ -1,10 +1,20 @@
 import { COLORS_DARK_THEME } from "theme/colors";
 
 export const styles = {
+    addressBookBtn: {
+        background: 'none',
+        textDecoration: 'none',
+        position: 'relative',
+        padding: '0',
+        height: 'fit-content'
+    },
+    addressBookIcon: {
+        marginRight: '10px'
+    },
     titleHolder: {
-        width: '100%', 
-        display: 'flex', 
-        flexDirection: 'column', 
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center'
     },
     controlsHolder: {
@@ -34,7 +44,7 @@ export const styles = {
         }
     },
     modalContainer: {
-        width: '100%',
+        width: '500px',
         padding: '50px',
         boxShadow: 'none',
         overflow: 'hidden',
@@ -51,6 +61,7 @@ export const styles = {
         fontWeight: 700
     }),
     contentHolder: {
+        width: '100%',
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

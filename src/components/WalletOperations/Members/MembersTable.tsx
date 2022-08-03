@@ -139,7 +139,7 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
 
   const startDeleteMemberProposal = (address: string, name: string) => {
     dispatch(updateModalState({
-      openMembersOperationsModal: true,
+      openReusableModal: true,
       dataObject: {
         memberAddress: address,
         memberName: name,
