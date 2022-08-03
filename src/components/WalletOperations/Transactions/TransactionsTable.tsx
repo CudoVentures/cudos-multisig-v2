@@ -3,7 +3,7 @@ import * as React from 'react'
 import Dialog from 'components/Dialog'
 import { visuallyHidden } from '@mui/utils'
 import { styles } from './styles'
-import { formatAddress } from 'utils/helpers'
+import { formatAddress, formatDateTime } from 'utils/helpers'
 import { COLORS_DARK_THEME } from 'theme/colors'
 import { NO_TX_HASH_MSG } from 'utils/constants'
 import { TxTypeComponent } from 'utils/TxTypeHandler'
@@ -41,7 +41,7 @@ function createData(
   blockHeight: string,
   type: string,
   txHash: string,
-  date: string,
+  date: Date,
   status: string,
   votesCount: number,
   membersCount: number,
@@ -188,7 +188,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             <Box style={{ display: 'flex', alignItems: 'center' }}>
               <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
               <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
-                {row.date}
+                {formatDateTime(row.date?.toString()!)}
               </Typography>
             </Box>
           </TableCell>

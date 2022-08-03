@@ -25,7 +25,7 @@ export interface TableData {
     blockHeight?: string;
     type?: string;
     txHash?: string;
-    date?: string;
+    date?: string | Date;
     status?: string;
     votesCount?: number;
     membersCount?: number;
