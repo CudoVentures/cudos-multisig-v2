@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { updateWalletCreationSteps } from 'store/walletCreation'
 import { initialState as initialModalState } from 'store/modals'
 import { initialState as initialSendFundsState } from 'store/sendFunds'
-import { signingClient } from 'utils/config'
+import { getSigningClient } from 'utils/config'
 import { assertIsDeliverTxSuccess, Coin, EncodeObject, GasPrice, StdFee } from 'cudosjs'
 import { updateModalState } from 'store/modals'
 import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
@@ -78,7 +78,8 @@ const SendFundsProposal = () => {
         enforceCustomFeesOverKeplr()
 
         try {
-            const result = await (await signingClient).signAndBroadcast(address!, [msg], fees!, DEFAULT_MEMO)
+            const client = await getSigningClient()
+            const result = await client.signAndBroadcast(address!, [msg], fees!, DEFAULT_MEMO)
             assertIsDeliverTxSuccess(result)
 
             const tempFee = calculateFeeFromGas(result.gasUsed)
@@ -134,7 +135,8 @@ const SendFundsProposal = () => {
             coins: totalCoinsDue
         }]
 
-        return (await signingClient).groupModule.msgMultiSendProposal(
+        const client = await getSigningClient()
+        return client.groupModule.msgMultiSendProposal(
             sender,
             recipients,
             selectedWallet!.walletAddress!,

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "store"
 import { COLORS_DARK_THEME } from "theme/colors"
 import DeleteMemberIcon from 'assets/vectors/delete-member-icon.svg'
-import { signingClient } from "utils/config"
+import { getSigningClient } from "utils/config"
 import { EncodeObject, GasPrice, StdFee } from "cudosjs"
 import { Member } from "store/walletObject"
 import { styles } from "./styles"
@@ -27,7 +27,8 @@ export const getMsgAndFees = async (
     fee: StdFee;
 }> => {
 
-    return (await signingClient).groupModule.msgUpdateMembersProposal(
+    const client = await getSigningClient();
+    return client.groupModule.msgUpdateMembersProposal(
         members,
         walletId,
         walletAddress,

@@ -46,8 +46,8 @@ export const convertSecondsToDisplay = (seconds: number, desiredFormat: string):
     return `${result.toString()} ${format.toUpperCase()}`
 }
 
-export const enforceCustomFeesOverKeplr = () => {
-    return window.keplr.defaultOptions = {
+export const enforceCustomFeesOverKeplr = (): void => {
+    window.keplr!.defaultOptions = {
         sign: {
             preferNoSetFee: true,
         }

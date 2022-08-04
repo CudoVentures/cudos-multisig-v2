@@ -11,7 +11,7 @@ import { initialState as initialModalState } from 'store/modals'
 import { useCallback } from 'react'
 import { Member } from 'store/walletObject'
 import { calculateFeeFromGas, enforceCustomFeesOverKeplr } from 'utils/helpers'
-import { signingClient } from 'utils/config'
+import { getSigningClient } from 'utils/config'
 import { assertIsDeliverTxSuccess } from 'cudosjs'
 import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
 
@@ -67,7 +67,7 @@ const MembersOperationsModal = () => {
         memberName: string,
         memberAddress: string
     ) => {
-        
+
         try {
             const { msg, fee } = await getMsgAndFees(
                 members,
@@ -84,7 +84,8 @@ const MembersOperationsModal = () => {
 
             enforceCustomFeesOverKeplr()
 
-            const result = await (await signingClient).signAndBroadcast(
+            const client = await getSigningClient();
+            const result = await client.signAndBroadcast(
                 address!,
                 [msg],
                 fee,

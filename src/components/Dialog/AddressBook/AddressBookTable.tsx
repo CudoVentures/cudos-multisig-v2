@@ -15,6 +15,8 @@ import copy from 'copy-to-clipboard'
 import { formatAddress } from 'utils/helpers';
 import { updateUser } from 'store/user';
 import { updateModalState } from 'store/modals';
+import { Firebase } from 'utils/firebase'
+import { getKeplrAddress } from 'ledgers/KeplrLedger';
 import { 
   Order, 
   stableSort, 
@@ -40,7 +42,6 @@ import {
   Table,
   TableBody
 } from '@mui/material'
-import { Firebase } from 'utils/firebase'
 
 const headCells: readonly HeadCell[] = [
   {
@@ -150,7 +151,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 export default function AddressBookTable() {
-  const { address, addressBook } = useSelector((state: RootState) => state.userState)
+  const { addressBook } = useSelector((state: RootState) => state.userState)
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('name');
   const [copied, setCopied] = React.useState<boolean>(false)
@@ -164,11 +165,11 @@ export default function AddressBookTable() {
       delete newAddressBook![address]
     }
 
+    await Firebase.saveAddressBook(await getKeplrAddress(), newAddressBook);
     dispatch(updateUser({
       addressBook: newAddressBook
     }))
     setSelected([])
-    await Firebase.saveAddressBook(address, newAddressBook)
   }
 
   const rows: TableData[] = [];

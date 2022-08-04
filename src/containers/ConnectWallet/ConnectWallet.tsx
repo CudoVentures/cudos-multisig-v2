@@ -5,7 +5,7 @@ import BackgroundImage from 'assets/vectors/background.svg'
 
 import { styles } from './styles'
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
-import { ConnectLedger } from 'ledgers/KeplrLedger'
+import { connectLedger } from 'ledgers/KeplrLedger'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateModalState } from 'store/modals'
@@ -26,7 +26,7 @@ const ConnectWallet = () => {
 
   const connect = async () => {
     try {
-      const { address, keplrName } = await ConnectLedger()
+      const { address, keplrName } = await connectLedger()
       if (address !== lastLoggedAddress) {
         dispatch(updateUser({ ...initialUserState }))
       }

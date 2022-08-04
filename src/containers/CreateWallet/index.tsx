@@ -16,49 +16,47 @@ import { initialState as initialModalState } from 'store/modals'
 import StepThree from 'components/WalletCreationSteps/StepThree'
 import StepFour from 'components/WalletCreationSteps/StepFour'
 import StepFfive from 'components/WalletCreationSteps/StepFive'
-import { signingClient } from 'utils/config'
+import { getSigningClient } from 'utils/config'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice } from 'cudosjs'
 import { updateModalState } from 'store/modals'
 import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
 import { calculateFeeFromGas, enforceCustomFeesOverKeplr } from 'utils/helpers'
 
-import { 
-    DEFAULT_MEMO, 
-    DEFAULT_META_DATA, 
+import {
+    DEFAULT_MEMO,
+    DEFAULT_META_DATA,
     DEFAULT_MULTIPLIER,
-    GAS_PRICE, 
-    WALLET_PROCESS_FAIL_TITLE, 
-    NATIVE_TOKEN_DENOM, 
-    WALLET_CORRUPTED_PROCESS_TYPE, 
-    GENERAL_FAILURE_MSG, 
-    WALLET_CREATION_SUCCESS_MSG, 
-    WALLET_CREATION_SUCCESS_TYPE, 
-    WALLET_CREATION_FAILURE_TITLE, 
-    WALLET_CREATION_LOADING_TITLE, 
-    DEFAULT_LOADING_MODAL_MSG 
+    GAS_PRICE,
+    WALLET_PROCESS_FAIL_TITLE,
+    NATIVE_TOKEN_DENOM,
+    WALLET_CORRUPTED_PROCESS_TYPE,
+    GENERAL_FAILURE_MSG,
+    WALLET_CREATION_SUCCESS_MSG,
+    WALLET_CREATION_SUCCESS_TYPE,
+    WALLET_CREATION_FAILURE_TITLE,
+    WALLET_CREATION_LOADING_TITLE,
+    DEFAULT_LOADING_MODAL_MSG
 } from 'utils/constants'
 
 const CreateWallet = () => {
-    
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const currentStep = parseInt(getCurrentWalletCreationStep())
     const { groupMetadata, members, threshold, votingPeriod, feeForCreation } = useSelector((state: RootState) => state.walletObject)
     const { address, wallets } = useSelector((state: RootState) => state.userState)
-    const [msg, setMsg] = useState<EncodeObject>({typeUrl: '', value: ''})
+    const [msg, setMsg] = useState<EncodeObject>({ typeUrl: '', value: '' })
 
     const clearState = async () => {
-        dispatch(updateWalletCreationSteps({currentStep: ''}))
+        dispatch(updateWalletCreationSteps({ currentStep: '' }))
         dispatch(updateWalletObjectState({ ...initialWalletObject }))
-      }
+    }
 
     const goHome = () => {
         clearState()
         navigate("/welcome")
     }
 
-    const broadcasCreateWallettMsg = async () => {
-        
+    const broadcastCreateWalletMsg = async () => {
         dispatch(updateModalState({
             loading: true,
             title: WALLET_CREATION_LOADING_TITLE,
@@ -68,7 +66,8 @@ const CreateWallet = () => {
         enforceCustomFeesOverKeplr()
 
         try {
-            const result = await (await signingClient).signAndBroadcast(address!, [msg], feeForCreation!, DEFAULT_MEMO)
+            const client = await getSigningClient()
+            const result = await client.signAndBroadcast(address!, [msg], feeForCreation!, DEFAULT_MEMO)
             assertIsDeliverTxSuccess(result)
 
             const tempFee = calculateFeeFromGas(result.gasUsed)
@@ -94,11 +93,11 @@ const CreateWallet = () => {
                 message: WALLET_CREATION_SUCCESS_MSG
             }))
 
-        } catch (e: any){
+        } catch (e: any) {
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
-                title: WALLET_CREATION_FAILURE_TITLE, 
+                title: WALLET_CREATION_FAILURE_TITLE,
                 message: GENERAL_FAILURE_MSG
             }))
             console.debug(e.message)
@@ -106,7 +105,8 @@ const CreateWallet = () => {
     }
 
     const getCreateWalletMsgAndFees = async () => {
-       return await (await signingClient).groupModule.msgCreateGroupWithPolicy(
+        const client = await getSigningClient()
+        return await client.groupModule.msgCreateGroupWithPolicy(
             address!,
             members!,
             JSON.stringify(groupMetadata!),
@@ -116,7 +116,7 @@ const CreateWallet = () => {
                 votingPeriod: votingPeriod?.seconds!,
                 minExecutionPeriod: 0
             },
-            GasPrice.fromString(GAS_PRICE+NATIVE_TOKEN_DENOM),
+            GasPrice.fromString(GAS_PRICE + NATIVE_TOKEN_DENOM),
             DEFAULT_MULTIPLIER,
             DEFAULT_MEMO
         )
@@ -124,11 +124,11 @@ const CreateWallet = () => {
 
     const renderStep = (step: string) => {
         let tempStep: number = parseInt(step)
-        if (tempStep < 1) {tempStep = 1}
-        if (tempStep > 5) {tempStep = 5}
+        if (tempStep < 1) { tempStep = 1 }
+        if (tempStep > 5) { tempStep = 5 }
         const stepToSet = tempStep.toString()
         dispatch(updateWalletCreationSteps({ currentStep: stepToSet }))
-      }
+    }
 
     const renderPreviousStep = () => {
         const stepToRender = (currentStep - 1).toString()
@@ -140,11 +140,11 @@ const CreateWallet = () => {
         if (currentStep === 4) {
             try {
                 const { msg, fee } = await getCreateWalletMsgAndFees()
-                dispatch(updateWalletObjectState({feeForCreation: fee}))
+                dispatch(updateWalletObjectState({ feeForCreation: fee }))
                 setMsg(msg)
             } catch (error: any) {
                 dispatch(updateModalState({
-                    failure: true, 
+                    failure: true,
                     title: WALLET_PROCESS_FAIL_TITLE,
                     msgType: WALLET_CORRUPTED_PROCESS_TYPE,
                     message: GENERAL_FAILURE_MSG
@@ -167,79 +167,79 @@ const CreateWallet = () => {
         setTimeout(() => document.getElementById("right-card-appear")!.style.display = 'block', 500)
         setTimeout(() => document.getElementById("left-steps-appear")!.style.opacity = '1', 600)
         setTimeout(() => document.getElementById("right-card-appear")!.style.opacity = '1', 550)
-      }, [])
+    }, [])
 
-      let validData = 
-        currentStep === 1?true:
-        currentStep === 2?groupMetadata?.walletName !== '':
-        currentStep === 3?members?.length! > 0:
-        currentStep === 4?threshold !== 0 && votingPeriod?.seconds !== 0:
-        currentStep === 5?true:
-        false
+    let validData =
+        currentStep === 1 ? true :
+            currentStep === 2 ? groupMetadata?.walletName !== '' :
+                currentStep === 3 ? members?.length! > 0 :
+                    currentStep === 4 ? threshold !== 0 && votingPeriod?.seconds !== 0 :
+                        currentStep === 5 ? true :
+                            false
 
     return (
-        <Box id='entire-create-wallet-page-appear' style={{...styles.holder, ...styles.contentAppear}}>
-            <Dialog/>
-    
+        <Box id='entire-create-wallet-page-appear' style={{ ...styles.holder, ...styles.contentAppear }}>
+            <Dialog />
+
             {/* ////LEFT CARD - STEPS////// */}
             <Card id='resizable-card-left' style={styles.leftSteps}>
-                <div id='left-steps-appear' style={{...styles.contentAppear}}>
+                <div id='left-steps-appear' style={{ ...styles.contentAppear }}>
                     <Steps />
-                </div> 
+                </div>
             </Card>
-            
+
             {/* /////RIGHT CARD - OPERATIONS///// */}
             <Card id='resizable-card-right' style={styles.Card}>
-                <div id='right-card-appear' style={{...styles.contentAppear}}>
+                <div id='right-card-appear' style={{ ...styles.contentAppear }}>
                     <Box id='informative-block' style={styles.informativeBlock}>
                         <StringStep />
                         <StepInfo />
                     </Box>
-                    
-                    <Box id='dynamic-content-holder' style={{width: '100%', height: '320px'}}>{
-                        currentStep === 1?<StepOne />:
-                        currentStep === 2?<StepTwo />:
-                        currentStep === 3?<StepThree />:
-                        currentStep === 4?<StepFour />:
-                        currentStep === 5?<StepFfive />:
-                        null}
+
+                    <Box id='dynamic-content-holder' style={{ width: '100%', height: '320px' }}>{
+                        currentStep === 1 ? <StepOne /> :
+                            currentStep === 2 ? <StepTwo /> :
+                                currentStep === 3 ? <StepThree /> :
+                                    currentStep === 4 ? <StepFour /> :
+                                        currentStep === 5 ? <StepFfive /> :
+                                            null}
                     </Box>
 
-                    <Box id='navigation-holder' style={{width: '100%'}}>
+                    <Box id='navigation-holder' style={{ width: '100%' }}>
                         <Button
                             variant="contained"
                             color="secondary"
                             sx={() => ({
-                            float:'left',
-                            width: '220px',
-                            marginTop: '20px',
-                            height: '50px',
-                            fontWeight: 700
+                                float: 'left',
+                                width: '220px',
+                                marginTop: '20px',
+                                height: '50px',
+                                fontWeight: 700
                             })}
                             onClick={
-                                currentStep === 1?goHome:
-                                renderPreviousStep}>
-                            {currentStep === 1?"Cancel":"Back"}
+                                currentStep === 1 ? goHome :
+                                    renderPreviousStep}>
+                            {currentStep === 1 ? "Cancel" : "Back"}
                         </Button>
                         <Button
                             disabled={!validData}
                             variant="contained"
                             color="primary"
                             sx={() => ({
-                            float:'right',
-                            width: '220px',
-                            marginTop: '20px',
-                            height: '50px',
-                            fontWeight: 700
+                                float: 'right',
+                                width: '220px',
+                                marginTop: '20px',
+                                height: '50px',
+                                fontWeight: 700
                             })}
                             onClick={
-                                currentStep < 5?renderNextStep:
-                                broadcasCreateWallettMsg}
+                                currentStep < 5 ? renderNextStep :
+                                    broadcastCreateWalletMsg}
                         >
-                            {currentStep === 5?"Create":"Next Step"}
+                            {currentStep === 5 ? "Create" : "Next Step"}
                         </Button>
                     </Box>
-                </div>    
+                </div>
             </Card>
         </Box>
     )
