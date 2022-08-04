@@ -79,8 +79,9 @@ const AddAddressButtons = () => {
                 message: FILE_ERROR_MSG
             }))
         } else {
+            const address = await getKeplrAddress();
+            await Firebase.saveAddressBook(address, txBatch);
             dispatch(updateUser({ addressBook: txBatch }))
-            await Firebase.saveAddressBook(await getKeplrAddress(), txBatch)
         }
     }
 
@@ -111,8 +112,9 @@ const AddAddressButtons = () => {
             }
 
             if (!fail) {
-                const newAddressBook = { ...addressBook, [userAddress]: userName }
-                await Firebase.saveAddressBook(await getKeplrAddress(), newAddressBook)
+                const newAddressBook = { ...addressBook, [userAddress]: userName };
+                const address = await getKeplrAddress();
+                await Firebase.saveAddressBook(address, newAddressBook);
                 dispatch(updateUser({ addressBook: newAddressBook }))
                 localStorage.removeItem('addressBookAccountName')
                 localStorage.removeItem('addressBookAccountAddress')
@@ -139,8 +141,9 @@ const AddAddressButtons = () => {
             }
 
             if (!fail) {
-                const newAddressBook = { ...updatedBook, [userAddress]: userName }
-                await Firebase.saveAddressBook(await getKeplrAddress(), newAddressBook)
+                const newAddressBook = { ...updatedBook, [userAddress]: userName };
+                const address = await getKeplrAddress();
+                await Firebase.saveAddressBook(address, newAddressBook);
                 dispatch(updateUser({ addressBook: newAddressBook }))
                 dispatch(updateModalState({ editAddressBookRecord: false }))
                 return

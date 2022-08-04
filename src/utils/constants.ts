@@ -16,6 +16,9 @@ export const GRAPHQL_WS = import.meta.env.VITE_APP_GRAPHQL_WS || process.env.VIT
 export const FIREBASE_API_KEY = import.meta.env.VITE_APP_FIREBASE_API_KEY || process.env.VITE_APP_FIREBASE_API_KEY || ""
 export const FIREBASE_AUTH_DOMAIN = import.meta.env.VITE_APP_FIREBASE_AUTH_DOMAIN || process.env.VITE_APP_FIREBASE_AUTH_DOMAIN || ""
 export const FIREBASE_PROJECT_ID = import.meta.env.VITE_APP_FIREBASE_PROJECT_ID || process.env.VITE_APP_FIREBASE_PROJECT_ID || ""
+export const FIREBASE_AUTH_EMAIL = import.meta.env.VITE_APP_FIREBASE_AUTH_EMAIL || process.env.VITE_APP_FIREBASE_AUTH_EMAIL || ""
+export const FIREBASE_AUTH_PASSWORD = import.meta.env.VITE_APP_FIREBASE_AUTH_PASSWORD || process.env.VITE_APP_FIREBASE_AUTH_PASSWORD || ""
+export const FIREBASE_COLLECTION_NAME = import.meta.env.VITE_APP_FIREBASE_COLLECTION_NAME || process.env.VITE_APP_FIREBASE_COLLECTION_NAME || ""
 
 // General config
 export const ADMIN_TOKEN_DENOM = 'cudosAdmin'

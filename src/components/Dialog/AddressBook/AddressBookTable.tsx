@@ -159,13 +159,13 @@ export default function AddressBookTable() {
   const dispatch = useDispatch()
 
   const deleteSelected = async () => {
-
     let newAddressBook = { ...addressBook }
     for (let address of selected) {
       delete newAddressBook![address]
     }
 
-    await Firebase.saveAddressBook(await getKeplrAddress(), newAddressBook);
+    const address = await getKeplrAddress();
+    await Firebase.saveAddressBook(address, newAddressBook);
     dispatch(updateUser({
       addressBook: newAddressBook
     }))
