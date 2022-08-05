@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from './styles'
 import { denomToIcon, denomToAlias } from './helpers'
-import { updateUser } from 'store/user'
+import { updatedSelectedWallet, updateUser } from 'store/user'
 import { updateModalState } from 'store/modals'
 
 const AssetIconComponent = ({ 
@@ -25,6 +25,7 @@ const AssetIconComponent = ({
     const dispatch = useDispatch()
     const [usdValue, setUsdValue] = useState<string>('')
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
+    const { walletRelated } = useSelector((state: RootState) => state.modalState)
     const iconImg = denomToIcon[denom as keyof typeof denomToIcon]
     const denomToDisplay = denomToAlias[denom as keyof typeof denomToAlias]
     const tooltipTitle = denom === 'cudosAdmin'?amount:separateDecimals(separateFractions(amount))
@@ -32,12 +33,25 @@ const AssetIconComponent = ({
     const usdPriceToDisplay = denom ==='cudosAdmin'?'Priceless':`$ ${setDecimalPrecisionTo(usdValue, 2)}`
 
     const setSelected = () => {
-        dispatch(updateUser({ chosenBalance: {
+
+        const selectedBalance = {
             denom: denom,
             amount: amount
-        }}))
+        }
 
         dispatch(updateModalState({ openAssetsTable: false}))
+
+        if (walletRelated) {
+            let tempWallet = {
+                ...selectedWallet,
+                chosenBalance: selectedBalance
+            }
+            dispatch(updatedSelectedWallet(tempWallet))
+
+            return
+        }
+
+        dispatch(updateUser({ chosenBalance: selectedBalance}))
     }
 
     const selectableBox = {

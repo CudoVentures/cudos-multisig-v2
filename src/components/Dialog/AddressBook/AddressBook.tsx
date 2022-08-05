@@ -1,4 +1,5 @@
 import { RootState } from 'store'
+import { styles as defaultStyles } from '../styles'
 import NoAddress from './NoAddress'
 import AddressEdit from './AddressEdit'
 import Card from 'components/Card/Card'
@@ -44,17 +45,10 @@ const AddressBook = () => {
 
     return (
         <MuiDialog
+            BackdropProps={defaultStyles.defaultBackDrop}
             open={openAddressBook!}
             onClose={closeModal}
-            PaperProps={{
-                sx: {
-                    background: 'transparent',
-                    boxShadow: 'none',
-                    position: 'fixed',
-                    overflow: 'hidden',
-                    borderRadius: '25px',
-                }
-            }}
+            PaperProps={defaultStyles.defaultPaperProps}
         >
             <ModalContainer sx={{ padding: '30px', height: 'max-content' }}>
                 <CancelRoundedIcon onClick={handleModalClose} />

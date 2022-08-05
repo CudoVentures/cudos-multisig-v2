@@ -35,7 +35,7 @@ const AssetsTable = () => {
                 {openFundWallet?<CancelRoundedIcon style={styles.customIcon} onClick={handleModalClose} />:null}
                 {balancesToWorkWith!.length === 0?<AssetIconComponent denom={'noBalance'} amount={'0'} selectable={false}/>:
                     balancesToWorkWith!.map((balance, idx) => (
-                        <AssetIconComponent denom={balance.denom} amount={balance.amount} selectable={walletRelated?false:true}/>
+                        <AssetIconComponent denom={balance.denom} amount={balance.amount} selectable={true}/>
                 ))}
             </Box>
         </ClickAwayListener>

@@ -1,5 +1,6 @@
 import { RootState } from 'store'
 import { styles } from './styles'
+import { styles as defaultStyles } from '../styles'
 import { updateModalState } from 'store/modals'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -165,7 +166,7 @@ const VotingModal = () => {
 
     return (
         <MuiDialog
-            BackdropProps={styles.backDrop}
+            BackdropProps={defaultStyles.defaultBackDrop}
             open={openVotingModal!}
             onClose={closeModal}
             PaperProps={

@@ -99,6 +99,7 @@ export const UNKNOWN = { text: "UNKNOWN", color: "#1B2031" }
 
 // Type Mapping
 export const MULTI_SEND_TYPE = { text: "Multi Send", icon: SendIcon }
+export const SINGLE_SEND_TYPE = { text: "Single Send", icon: SendIcon }
 export const ADD_MEMBER_TYPE = { text: "Add Member", icon: MembersIcon }
 export const DELETE_MEMBER_TYPE = { text: "Delete Member", icon: MembersIcon }
 export const UPDATE_WALLET_SETTINGS_TYPE = { text: "Details Update", icon: ActiveSettingsIcon}
