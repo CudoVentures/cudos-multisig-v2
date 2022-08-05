@@ -24,7 +24,8 @@ import {
 } from 'utils/constants'
 
 interface DataObject {
-    index: number
+    index: number,
+    address?: string
 }
 interface addressBook {
     [key: string]: string;
@@ -99,9 +100,6 @@ const AddAddressButtons = () => {
 
     const handleAddNewAddress = () => {
         let fail: boolean = false
-        let oldRecordIndex: number = 0
-        let tempBook: addressBook = {}
-        let updatedBook: addressBook = {}
 
         if (addNewAddress) {
             for (const address of Object.keys(addressBook!)) {
@@ -125,23 +123,40 @@ const AddAddressButtons = () => {
         }
 
         if (editAddressBookRecord) {
-            tempBook = { ...addressBook }
-            oldRecordIndex = dataFromObject.index
-            let index: number = 0
 
-            for (const [address, name] of Object.entries(tempBook)) {
-                if (oldRecordIndex !== index) {
-                    if (address === userAddress) {
-                        fail = true
-                        break
-                    }
-                    updatedBook[address] = name
-                }
-                index++
+            let updatedAddressBook: addressBook = {}
+            const oldAddressBook: addressBook = { ...addressBook! }
+
+            //This is the address a change is proposed to
+            const oldAddressToDiscard: string = dataFromObject.address!
+
+            //This is the proposed change
+            const newRecord = {
+                address: userAddress,
+                name: userName
             }
 
+            // Make sure the updated book only keeps records not subject of the change.
+            for (const [addressToKeep, name] of Object.entries(oldAddressBook)) {
+                if (addressToKeep !== oldAddressToDiscard) {
+                    updatedAddressBook[addressToKeep] = name
+                }
+            }
+
+            // If the updated book contains the newly proposed change, it is a NO GO
+            // as you can't edit one record to become equal to another record.
+            if (updatedAddressBook[newRecord.address]) {
+                fail = true
+            }
+
+            // Finally, the updated book + the proposed change
             if (!fail) {
-                dispatch(updateUser({ addressBook: { ...updatedBook, [userAddress]: userName } }))
+                dispatch(updateUser({
+                    addressBook: {
+                        ...updatedAddressBook,
+                        [newRecord.address]: newRecord.name
+                    }
+                }))
                 dispatch(updateModalState({ editAddressBookRecord: false }))
                 return
             }
