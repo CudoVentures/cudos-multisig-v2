@@ -34,7 +34,12 @@ const WalletDetails = () => {
     }, [])
 
     const handleNewTxClick = () => {
-        dispatch(updateModalState({ transactionSelector: true }))
+        dispatch(updateModalState({
+            transactionSelector: true,
+            dataObject: {
+                selectSendType: false
+            }
+        }))
     }
 
     const handleReusableModal = (msgType: string) => {

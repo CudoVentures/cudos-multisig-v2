@@ -24,6 +24,7 @@ export const styles = {
     },
     executePaperProps: {
         sx: {
+            top: '1%',
             border: 'none',
             maxWidth: '500px',
             minWidth: '500px',
@@ -36,6 +37,7 @@ export const styles = {
     },
     paperProps: {
         sx: {
+            top: '1%',
             border: 'none',
             maxWidth: '500px',
             minWidth: '500px',

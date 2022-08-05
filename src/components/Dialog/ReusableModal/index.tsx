@@ -1,5 +1,6 @@
 import { RootState } from 'store'
 import { styles } from './styles'
+import { styles as defaultStyles } from '../styles'
 import { updateModalState } from 'store/modals'
 import { useDispatch, useSelector } from 'react-redux'
 import { Dialog as MuiDialog } from '@mui/material'
@@ -109,10 +110,10 @@ const ReusableModal = () => {
     return (
         //CONTENT WRAPPER
         <MuiDialog
-            BackdropProps={styles.backDrop}
+            BackdropProps={defaultStyles.defaultBackDrop}
             open={openReusableModal!}
             onClose={closeModal}
-            PaperProps={styles.paperProps}
+            PaperProps={defaultStyles.defaultPaperProps}
         >
             <ModalContainer sx={styles.modalContainer}>
                 <CancelRoundedIcon onClick={closeModal} />

@@ -1,6 +1,10 @@
 import { COLORS_DARK_THEME } from "theme/colors";
 
 export const styles = {
+    icons: {
+        marginLeft: '10px',
+        cursor: 'pointer'
+    },
     addressBookBtn: {
         background: 'none',
         textDecoration: 'none',
@@ -11,11 +15,10 @@ export const styles = {
     addressBookIcon: {
         marginRight: '10px'
     },
-    titleHolder: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
+    centerFlexLinear: {
+        alignItems: 'center', 
+        display: 'flex', 
+        justifyContent: 'center'
     },
     controlsHolder: {
         width: '100%',
@@ -44,7 +47,6 @@ export const styles = {
         }
     },
     modalContainer: {
-        width: '500px',
         padding: '50px',
         boxShadow: 'none',
         overflow: 'hidden',

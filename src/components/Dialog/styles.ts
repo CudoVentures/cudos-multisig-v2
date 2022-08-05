@@ -1,7 +1,34 @@
 import { styled, Box } from '@mui/material'
-import { CancelRounded } from '@mui/icons-material'
+import { CancelRounded, ArrowBack } from '@mui/icons-material'
 
 export const styles = {
+  loadingProps: {
+    sx: {
+      background: 'transparent',
+      boxShadow: 'none',
+      position: 'fixed',
+      overflow: 'hidden',
+      borderRadius: '25px'
+    }
+  },
+  defaultPaperProps: {
+    sx: {
+      background: 'transparent',
+      width: '100%',
+      height: 'min-content',
+      position: 'absolute',
+      top: '1%',
+      overflow: 'hidden',
+      borderRadius: '25px'
+    }
+  },
+  defaultBackDrop: {
+    style: {
+      backgroundColor: 'transparent',
+      backdropFilter: "blur(6px)",
+      opacity: 0.9
+    }
+  },
   successWalletInfoHolder: {
     overflow: 'auto',
     maxWidth: '200px',
@@ -103,3 +130,10 @@ export const CancelRoundedIcon = styled(CancelRounded)(({ theme }) => ({
   cursor: 'pointer'
 }))
 
+export const ArrowBackIcon = styled(ArrowBack)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  position: 'absolute',
+  top: 32,
+  left: 32,
+  cursor: 'pointer'
+}))
