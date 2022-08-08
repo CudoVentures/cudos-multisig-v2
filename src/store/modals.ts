@@ -18,6 +18,7 @@ export interface modalState {
     openVotingModal?: boolean
     openReusableModal?: boolean
     openSingleSendModal?: boolean
+    openMultiSendModal?: boolean
     dataObject?: Record<string, unknown>
 }
 
@@ -39,6 +40,7 @@ export const initialState: modalState = {
     openVotingModal: false,
     openReusableModal: false,
     openSingleSendModal: false,
+    openMultiSendModal: false,
     dataObject: {}
 }
 
