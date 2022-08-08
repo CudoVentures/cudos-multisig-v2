@@ -21,8 +21,8 @@ export const styles = {
         justifyContent: 'space-between'
     },
     multiSigTitle: {
-        marginBottom: '3px',
-        marginRight: '10px',
+        textAlign: 'center',
+        width: '100%',
         float: 'left'
     },
     TxSummaryHolder: {

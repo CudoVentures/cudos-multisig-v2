@@ -1,7 +1,7 @@
 import { assertIsDeliverTxSuccess, Coin, EncodeObject, StdFee } from 'cudosjs'
 import { RootState } from 'store'
 import { styles } from './styles'
-import { styles as defaultStyles } from '../styles'
+import { ArrowBackIcon, styles as defaultStyles } from '../styles'
 import BigNumber from 'bignumber.js'
 import Card from 'components/Card/Card'
 import { amountToAcudos, calculateFeeFromGas, formatAddress } from 'utils/helpers'
@@ -272,6 +272,16 @@ const SingleSend = () => {
         return ''
     }
 
+    const goBackToTxTypeSelector = () => {
+        handleModalClose()
+        dispatch(updateModalState({
+            transactionSelector: true,
+            dataObject: {
+                selectSendType: true
+            }
+        }))
+    }
+
     return (
         <MuiDialog
             BackdropProps={defaultStyles.defaultBackDrop}
@@ -282,6 +292,7 @@ const SingleSend = () => {
             <ModalContainer sx={{ padding: '30px' }}>
                 {openAssetsTable ? <AssetsTable /> :
                     <div>
+                        <ArrowBackIcon onClick={goBackToTxTypeSelector} />
                         <CancelRoundedIcon onClick={handleModalClose} />
                         <Typography
                             style={styles.multiSigTitle}

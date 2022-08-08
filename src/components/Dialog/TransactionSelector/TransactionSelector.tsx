@@ -48,8 +48,8 @@ const TransactionSelector = () => {
         {
             type: 'Multi Send',
             coloring: "primary",
-            disabled: true,
-            tooltipText: 'COMING SOON - Send funds to multiple recipients',
+            disabled: false,
+            tooltipText: 'Send funds to multiple recipients',
             msgType: MULTI_SEND_TYPE_URL
         },
     ]
@@ -75,14 +75,15 @@ const TransactionSelector = () => {
     }
 
     const handleTxClick = (msgType: string) => {
-        if (msgType === SINGLE_SEND_TYPE_URL) {
 
-            handleModalClose()
+        handleModalClose()
+
+        if (msgType === SINGLE_SEND_TYPE_URL) {
             dispatch(updateModalState({ openSingleSendModal: true }))
             return
         }
 
-        // TODO MultiSend TX Handling here
+        dispatch(updateModalState({ openMultiSendModal: true }))
     }
 
     const goBackToSelector = () => {
