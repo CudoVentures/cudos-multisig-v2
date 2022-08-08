@@ -49,7 +49,7 @@ const TransactionSelector = () => {
             type: 'Multi Send',
             coloring: "primary",
             disabled: false,
-            tooltipText: 'COMING SOON - Send funds to multiple recipients',
+            tooltipText: 'Send funds to multiple recipients',
             msgType: MULTI_SEND_TYPE_URL
         },
     ]
