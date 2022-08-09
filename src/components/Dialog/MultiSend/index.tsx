@@ -90,22 +90,23 @@ const MultiSend = () => {
 
     const getTooltip = (): string => {
 
-        switch (true) {
-            case multisendRows?.length! < 1:
-                return INVALID_DATA_PROMPT_MSG
-
-            case singleLikeTx:
-                return SINGLE_TX_PROMPT_MSG
-
-            case !preview && !sufficientWalletBalance:
-                return INSUFFICIENT_WALLET_BALANCE
-
-            case preview && !sufficientAccountBalance:
-                return INSUFFICIENT_BALANCE
-
-            default:
-                return ''
+        if (multisendRows?.length! < 1) {
+            return INVALID_DATA_PROMPT_MSG
         }
+
+        if (singleLikeTx) {
+            return SINGLE_TX_PROMPT_MSG
+        }
+
+        if (!preview && !sufficientWalletBalance) {
+            return INSUFFICIENT_WALLET_BALANCE
+        }
+
+        if (preview && !sufficientAccountBalance) {
+            return INSUFFICIENT_BALANCE
+        }
+
+        return ''
     }
 
     const goBack = () => {
