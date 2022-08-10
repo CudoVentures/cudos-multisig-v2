@@ -9,6 +9,7 @@ import AddressBook from './AddressBook/AddressBook'
 import TransactionSelector from './TransactionSelector/TransactionSelector'
 import ReusableModal from './ReusableModal'
 import SingleSend from './SingleSend'
+import MultiSend from './MultiSend'
 
 const Dialog = () => {
 
@@ -19,6 +20,7 @@ const Dialog = () => {
     openAddressBook,
     openFundWallet,
     openSingleSendModal,
+    openMultiSendModal,
     transactionSelector,
     openVotingModal,
     openReusableModal
@@ -37,6 +39,8 @@ const Dialog = () => {
       return <FundWallet />
     case openSingleSendModal:
       return <SingleSend />
+    case openMultiSendModal:
+      return <MultiSend />
     case transactionSelector:
       return <TransactionSelector />
     case openVotingModal:

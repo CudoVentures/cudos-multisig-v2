@@ -20,8 +20,6 @@ import '@fontsource/poppins'
 import { updateUser } from 'store/user'
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 import WalletDetails from 'containers/WalletDetails'
-import SendFundsProposal from 'containers/SendFundsProposal'
-import RequireWalletFunds from 'components/RequireWalletFunds/RequireWalletFunds'
 import RequireWallet from 'components/RequireWallet/RequireWallet'
 
 const App = () => {
@@ -79,9 +77,6 @@ const App = () => {
                 <Route element={<RequireKeplr />}>
                   <Route path="welcome" element={<Welcome />} />
                   <Route path="create-wallet" element={<CreateWallet />} />
-                  <Route element={<RequireWalletFunds />}>
-                    <Route path="send-funds" element={<SendFundsProposal />} />
-                  </Route>
                   <Route element={<RequireWallet />}>
                     <Route path="dashboard" element={<WalletDetails />} />
                     <Route path="transactions" element={<WalletDetails />} />

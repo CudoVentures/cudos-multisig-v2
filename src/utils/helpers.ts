@@ -4,12 +4,13 @@ import BigNumber from "bignumber.js"
 import { queryClient } from "./config"
 import { getCurrencyRate } from "api/calls"
 import { emptyWallet, wallet } from "store/user"
-import { separateDecimals, separateFractions } from "./regexFormatting"
+import { handleFullBalanceToPrecision, separateDecimals, separateFractions } from "./regexFormatting"
 import { ADMIN_TOKEN_DENOM, GAS_PRICE, NATIVE_TOKEN_DENOM } from "./constants"
 
 import cudosLogo from 'assets/vectors/balances/cudos.svg'
 import cudosAdminLogo from 'assets/vectors/balances/cudos-admin.svg'
 import { votingPeriod } from "store/walletObject"
+import { StdFee } from "cudosjs"
 
 export const formatDateTime = (dateTimeString: string): string => {
     const localTimeString: string = moment(dateTimeString).parseZone().toLocaleString()
@@ -17,6 +18,11 @@ export const formatDateTime = (dateTimeString: string): string => {
         .format('DD MMM YYYY LTS')
         .toLocaleString()
     return formattedTime
+}
+
+export const displayWorthyFee = (fees: StdFee): string => {
+    const feesAmount = fees.gas ? fees.amount[0].amount : '0'
+    return handleFullBalanceToPrecision(feesAmount, 4, 'CUDOS')
 }
 
 export const amountToAcudos = (amount: number): string => {
