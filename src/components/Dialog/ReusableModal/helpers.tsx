@@ -57,7 +57,8 @@ export const getMultiSendMsgAndFees = async (
         coins: totalCoinsDue
     }]
 
-    return (await signingClient).groupModule.msgMultiSendProposal(
+    const client = await getSigningClient()
+    return client.groupModule.msgMultiSendProposal(
         sender,
         recipients,
         walletAddress,
