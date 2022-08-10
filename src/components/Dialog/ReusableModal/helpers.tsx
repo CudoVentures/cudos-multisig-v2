@@ -9,7 +9,7 @@ import CopyIcon from 'assets/vectors/copy-icon.svg'
 import { EXPLORER_ADDRESS_DETAILS } from "api/endpoints"
 import copy from "copy-to-clipboard"
 import EditIcon from 'assets/vectors/blue-edit-icon.svg'
-import { signingClient } from "utils/config"
+import { getSigningClient } from "utils/config"
 import { Coin, DeliverTxResponse, EncodeObject, GasPrice, StdFee } from "cudosjs"
 import { convertVotingPeriodToSeconds, enforceCustomFeesOverKeplr, formatAddress } from "utils/helpers"
 import { createArrayOfCoinsFromMapper, createArrayOfRecipients, HtmlTooltip, multisendRow, MultiSendUser, totalAmountDue } from "utils/multiSendTableHelper"
@@ -33,7 +33,8 @@ export const executeMsgs = async (signer: string, msgs: EncodeObject[], fee: Std
 
     enforceCustomFeesOverKeplr()
 
-    return (await signingClient).signAndBroadcast(
+    const client = await getSigningClient()
+    return client.signAndBroadcast(
         signer,
         msgs,
         fee,
@@ -56,7 +57,8 @@ export const getMultiSendMsgAndFees = async (
         coins: totalCoinsDue
     }]
 
-    return (await signingClient).groupModule.msgMultiSendProposal(
+    const client = await getSigningClient()
+    return client.groupModule.msgMultiSendProposal(
         sender,
         recipients,
         walletAddress,
@@ -77,8 +79,8 @@ export const getSingleSendMsgAndFees = async (
     msg: EncodeObject;
     fee: StdFee;
 }> => {
-
-    return (await signingClient).groupModule.msgSingleSendProposal(
+    const client = await getSigningClient()
+    return client.groupModule.msgSingleSendProposal(
         recipient,
         amount,
         walletAddress,
@@ -99,8 +101,8 @@ export const getMembersUpdateMsgAndFees = async (
     msg: EncodeObject;
     fee: StdFee;
 }> => {
-
-    return (await signingClient).groupModule.msgUpdateMembersProposal(
+    const client = await getSigningClient()
+    return client.groupModule.msgUpdateMembersProposal(
         members,
         walletId,
         walletAddress,
@@ -123,7 +125,8 @@ export const getWalletDecisionPolicyUpdateMsgAndFees = async (
 }> => {
 
     const compatibleTime: votingPeriod = convertVotingPeriodToSeconds(votingPeriod)
-    return (await signingClient).groupModule.msgUpdateGroupDecisionPolicy(
+    const client = await getSigningClient()
+    return client.groupModule.msgUpdateGroupDecisionPolicy(
         {
             threshold: threshold,
             votingPeriod: compatibleTime.seconds,
@@ -147,8 +150,8 @@ export const getWalletMetadataUpdateMsgAndFees = async (
     msg: EncodeObject;
     fee: StdFee;
 }> => {
-
-    return (await signingClient).groupModule.msgUpdateGroupMetadata(
+    const client = await getSigningClient()
+    return client.groupModule.msgUpdateGroupMetadata(
         metadata,
         walletId,
         walletAddress,

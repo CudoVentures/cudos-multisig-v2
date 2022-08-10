@@ -5,7 +5,7 @@ import BackgroundImage from 'assets/vectors/background.svg'
 
 import { styles } from './styles'
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
-import { ConnectLedger } from 'ledgers/KeplrLedger'
+import { connectLedger } from 'ledgers/KeplrLedger'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateModalState } from 'store/modals'
@@ -15,23 +15,25 @@ import { RootState } from 'store'
 import Header from 'components/Layout/Header'
 import { initialState as initialUserState } from 'store/user'
 import { DEFAULT_LOGIN_FAILURE_MSG, LOGIN_FAIL_TITLE } from 'utils/constants'
+import { Firebase } from 'utils/firebase'
 
 const ConnectWallet = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { address, lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
+  const { address, lastLoggedAddress } = useSelector((state: RootState) => state.userState)
 
   const connect = async () => {
     try {
-      const { address, keplrName } = await ConnectLedger()
+      const { address, keplrName } = await connectLedger()
       if (address !== lastLoggedAddress) {
         dispatch(updateUser({ ...initialUserState }))
       }
       const currentBalances = await getAccountBalances(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
+      const addressBook = await Firebase.getAddressBook(address)
       
       dispatch(updateUser({ 
         keplrName: keplrName,

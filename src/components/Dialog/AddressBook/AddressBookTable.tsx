@@ -15,6 +15,8 @@ import copy from 'copy-to-clipboard'
 import { formatAddress } from 'utils/helpers';
 import { updateUser } from 'store/user';
 import { updateModalState } from 'store/modals';
+import { Firebase } from 'utils/firebase'
+import { getKeplrAddress } from 'ledgers/KeplrLedger';
 import { 
   Order, 
   stableSort, 
@@ -156,13 +158,14 @@ export default function AddressBookTable() {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const dispatch = useDispatch()
 
-  const deleteSelected = () => {
-
+  const deleteSelected = async () => {
     let newAddressBook = { ...addressBook }
     for (let address of selected) {
       delete newAddressBook![address]
     }
 
+    const address = await getKeplrAddress();
+    await Firebase.saveAddressBook(address, newAddressBook);
     dispatch(updateUser({
       addressBook: newAddressBook
     }))

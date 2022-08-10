@@ -20,7 +20,7 @@ import { CancelRoundedIcon, ModalContainer } from '../styles'
 import { initialState as initialModalState } from 'store/modals'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
 import { handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
-import { signingClient } from 'utils/config'
+import { getSigningClient } from 'utils/config'
 import { MultiSendUser } from 'utils/multiSendTableHelper'
 
 import { 
@@ -173,7 +173,8 @@ const FundWallet = () => {
         enforceCustomFeesOverKeplr()
 
         try {
-            const result = await (await signingClient).signAndBroadcast(
+            const client = await getSigningClient();
+            const result = await client.signAndBroadcast(
                 address!, 
                 [msg], 
                 fees, 
@@ -273,7 +274,8 @@ const FundWallet = () => {
             }]
         }]
 
-        return await (await signingClient).msgMultisend(
+        const client = await getSigningClient();
+        return client.msgMultisend(
             sender,
             recipient,
             GasPrice.fromString(GAS_PRICE+NATIVE_TOKEN_DENOM),

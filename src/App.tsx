@@ -11,7 +11,7 @@ import CreateWallet from 'containers/CreateWallet'
 import theme from 'theme'
 import { RootState } from 'store'
 import { useCallback, useEffect } from 'react'
-import { ConnectLedger } from 'ledgers/KeplrLedger'
+import { connectLedger } from 'ledgers/KeplrLedger'
 import { initialState as initialUserState } from 'store/user'
 import { ApolloProvider } from '@apollo/client'
 import { useApollo } from './graphql/client'
@@ -31,7 +31,7 @@ const App = () => {
 
   const connectAccount = useCallback(async () => {
     try {
-      const { address, keplrName } = await ConnectLedger()
+      const { address, keplrName } = await connectLedger()
       if (address !== lastLoggedAddress) {
         dispatch(updateUser({ ...initialUserState })
         )

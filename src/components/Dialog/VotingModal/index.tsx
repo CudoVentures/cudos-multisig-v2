@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CancelRoundedIcon, ModalContainer } from '../styles'
 import CommentIcon from 'assets/vectors/comment-icon.svg'
-import { signingClient } from 'utils/config'
+import { getSigningClient } from 'utils/config'
 import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
 import { Exec } from 'cudosjs/build/stargate/modules/group/proto-types/tx.pb'
 import { calculateFeeFromGas, enforceCustomFeesOverKeplr } from 'utils/helpers'
@@ -56,7 +56,8 @@ const VotingModal = () => {
     }
 
     const getExecutionMsgAndFees = async () => {
-        return (await signingClient).groupModule.msgExec(
+        const client = await getSigningClient();
+        return client.groupModule.msgExec(
             proposalID,
             address!,
             GasPrice.fromString(GAS_PRICE + NATIVE_TOKEN_DENOM),
@@ -66,7 +67,8 @@ const VotingModal = () => {
     }
 
     const getVotingMsgAndFees = async (voteOption: number) => {
-        return (await signingClient).groupModule.msgVote(
+        const client = await getSigningClient();
+        return client.groupModule.msgVote(
             proposalID,
             address!,
             voteOption,
@@ -114,7 +116,8 @@ const VotingModal = () => {
             enforceCustomFeesOverKeplr()
 
             try {
-                const result = await (await signingClient).signAndBroadcast(
+                const client = await getSigningClient();
+                const result = await client.signAndBroadcast(
                     address!,
                     [msg],
                     fee,

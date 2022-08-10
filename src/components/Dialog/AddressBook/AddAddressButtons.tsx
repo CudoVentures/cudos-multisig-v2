@@ -22,6 +22,8 @@ import {
     FILE_ERROR_TITLE,
     INVALID_DATA_PROMPT_MSG
 } from 'utils/constants'
+import { Firebase } from 'utils/firebase'
+import { getKeplrAddress } from 'ledgers/KeplrLedger'
 
 interface DataObject {
     index: number,
@@ -47,7 +49,7 @@ const AddAddressButtons = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const handleFileRead = (e: any) => {
+    const handleFileRead = async (e: any) => {
         const content = fileReader.result.split('\n')
 
         let txBatch = {}
@@ -83,6 +85,9 @@ const AddAddressButtons = () => {
             }))
         } else {
             dispatch(updateUser({ addressBook: txBatch }))
+
+            const address = await getKeplrAddress();
+            await Firebase.saveAddressBook(address, txBatch);
         }
     }
 
@@ -98,7 +103,7 @@ const AddAddressButtons = () => {
         document.getElementById("csv-file")?.click()
     }
 
-    const handleAddNewAddress = () => {
+    const handleAddNewAddress = async () => {
         let fail: boolean = false
 
         if (addNewAddress) {
@@ -110,9 +115,13 @@ const AddAddressButtons = () => {
             }
 
             if (!fail) {
+                const newAddressBook = { ...addressBook, [userAddress]: userName }
                 dispatch(updateUser({
-                    addressBook: { ...addressBook, [userAddress]: userName }
+                    addressBook: newAddressBook
                 }))
+
+                const address = await getKeplrAddress();
+                await Firebase.saveAddressBook(address, newAddressBook);
 
                 localStorage.removeItem('addressBookAccountName')
                 localStorage.removeItem('addressBookAccountAddress')
@@ -151,13 +160,18 @@ const AddAddressButtons = () => {
 
             // Finally, the updated book + the proposed change
             if (!fail) {
+                const newAddressBook = {
+                    ...updatedAddressBook,
+                    [newRecord.address]: newRecord.name
+                }
                 dispatch(updateUser({
-                    addressBook: {
-                        ...updatedAddressBook,
-                        [newRecord.address]: newRecord.name
-                    }
+                    addressBook: newAddressBook
                 }))
                 dispatch(updateModalState({ editAddressBookRecord: false }))
+
+                const address = await getKeplrAddress();
+                await Firebase.saveAddressBook(address, newAddressBook);
+
                 return
             }
         }
