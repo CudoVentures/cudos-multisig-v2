@@ -106,7 +106,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
 
     if (data) {
         const proposal = data.group_proposal_by_pk
-        const proposalTimeStamp: string = formatDateTime(proposal?.submit_time)
+        const proposalTimeStamp: string = proposal?.submit_time
         const txHash: string = proposal?.transaction_hash ? proposal?.transaction_hash : NO_TX_HASH_MSG
         const proposalMessage = proposal?.messages[0] ? proposal?.messages[0] : null
         const msgType: string = determineType(proposal)
@@ -143,14 +143,14 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
             status: status,
             isVotable: (status === PROPOSAL_STATUS_SUBMITTED),
             proposer: proposer,
-            expirationDate: formatDateTime(expirationTime),
+            expirationDate: expirationTime,
             haveComments: isHavingComments,
-            submissionTime: formatDateTime(proposalTimeStamp),
+            submissionTime: proposalTimeStamp,
             threshold: threshold,
             groupMembers: groupMembers,
             totalMembers: totalMembers,
             executor: proposal?.executor!,
-            executionTime: formatDateTime(proposal?.execution_time),
+            executionTime: proposal?.execution_time,
             executionLog: proposal?.execution_log!
         }
     }
@@ -349,7 +349,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                             fontWeight={500}
                                             color='text.secondary'
                                         >
-                                            {proposalDetails.submissionTime}
+                                            {formatDateTime(proposalDetails.submissionTime)}
                                         </Typography>
                                     </Box>
 

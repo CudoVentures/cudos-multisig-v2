@@ -8,7 +8,9 @@ import { formatAddress } from 'utils/helpers'
 import { DELETE_MEMBER_TYPE_URL } from 'utils/constants'
 
 interface SuccessData {
-    member: Member;
+    msgSpecificData: {
+        member: Member;
+    }
     txHash: string;
     txFee: string;
 }
@@ -21,7 +23,7 @@ const MembersUpdateSuccess = () => {
     return (
         <Box
             padding='20px 10px 0 10px'
-            width='100%'
+            width='400px'
             display="flex"
             flexDirection="column"
             gap={2}
@@ -34,7 +36,7 @@ const MembersUpdateSuccess = () => {
                     Name
                 </Typography>
                 <Typography variant='subtitle1' color={"primary.main"}>
-                    {successData.member.metadata}
+                    {successData.msgSpecificData.member.metadata}
                 </Typography>
             </Box>
             <Box style={{ justifyContent: 'space-between', display: 'flex' }}>
@@ -42,7 +44,7 @@ const MembersUpdateSuccess = () => {
                     Address
                 </Typography>
                 <Tooltip title="Open in Explorer">
-                    <a href={EXPLORER_ADDRESS_DETAILS(successData.member.address)} target='_blank'>
+                    <a href={EXPLORER_ADDRESS_DETAILS(successData.msgSpecificData.member.address)} target='_blank'>
                         <Stack
                             marginBottom='20px'
                             direction="row"
@@ -55,7 +57,7 @@ const MembersUpdateSuccess = () => {
                                 color="primary.main"
                                 sx={{ textDecoration: 'underline' }}
                             >
-                                {formatAddress(successData.member.address, 25)}
+                                {formatAddress(successData.msgSpecificData.member.address, 25)}
                             </Typography>
  
                         </Stack>

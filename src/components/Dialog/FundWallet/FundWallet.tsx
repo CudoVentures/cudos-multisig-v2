@@ -1,6 +1,7 @@
 import { assertIsDeliverTxSuccess, Coin, EncodeObject, GasPrice, StdFee } from 'cudosjs'
 import { RootState } from 'store'
 import { styles } from './styles'
+import { styles as defaultStyles } from '../styles'
 import BigNumber from 'bignumber.js'
 import Card from 'components/Card/Card'
 import { updateUser } from 'store/user'
@@ -285,21 +286,11 @@ const FundWallet = () => {
 
     return (
         <MuiDialog
+        BackdropProps={defaultStyles.defaultBackDrop}
             ref={dialog}
             open={openFundWallet!}
             onClose={closeModal}
-            PaperProps={{
-                sx: {
-                background: 'transparent',
-                width: '100%',
-                height: 'min-content',
-                boxShadow: 'none',
-                position: 'absolute',
-                top: '1%',
-                overflow: 'hidden',
-                borderRadius: '25px'
-                }
-            }}
+            PaperProps={defaultStyles.defaultPaperProps}
         >
             <ModalContainer sx={{padding: '30px' }}>
                 {openAssetsTable?<AssetsTable />:

@@ -5,18 +5,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import SuccessIcon from 'assets/vectors/success.svg'
 import WalletCreationSuccess from './WalletCreationSuccess'
 import { useNavigate } from 'react-router-dom'
-import WalletFundingSuccess from './WalletFundingSuccess'
+import BankSendTypeSuccess from './BankSendTypeSuccess'
 import ProposalCreationSuccess from './ProposalCreationSuccess'
 import VotingOnProposalSuccess from './VotingOnProposalSuccess'
 import MembersUpdateSuccess from './MembersUpdateSuccess'
-import { CancelRoundedIcon, ModalContainer } from './styles'
+import { CancelRoundedIcon, ModalContainer, styles } from './styles'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
+import WalletUpdateSuccess from './WalletUpdateSuccess'
+import { updateMenuSelectionState } from 'store/menu'
 
 import {
   ADD_MEMBER_TYPE_URL,
   DELETE_MEMBER_TYPE_URL,
+  GROUP_UPDATE_DECISION_POLICY_TYPE_URL,
+  GROUP_UPDATE_METADATA_TYPE_URL,
+  MULTI_SEND_TYPE_URL,
   PROPOSAL_CREATION_SUCCESS_TYPE,
   PROPOSAL_VOTING_SUCCESS_TYPE,
+  SINGLE_SEND_TYPE_URL,
   WALLET_CREATION_SUCCESS_TYPE,
   WALLET_FUNDING_SUCCESS_TYPE
 } from 'utils/constants'
@@ -32,24 +38,26 @@ const Success = () => {
   } = useSelector((state: RootState) => state.modalState)
 
   let contentComponent: JSX.Element = (<div></div>)
-  let navPath: string = ""
+  let navPath: string = '/dashboard'
 
   switch (msgType) {
+
+    case GROUP_UPDATE_DECISION_POLICY_TYPE_URL:
+    case GROUP_UPDATE_METADATA_TYPE_URL:
+      contentComponent = <WalletUpdateSuccess />
+      break
 
     case DELETE_MEMBER_TYPE_URL:
     case ADD_MEMBER_TYPE_URL:
       contentComponent = <MembersUpdateSuccess />
-      navPath = '/dashboard'
       break
 
     case PROPOSAL_VOTING_SUCCESS_TYPE:
       contentComponent = <VotingOnProposalSuccess />
-      navPath = '/dashboard'
       break
 
     case PROPOSAL_CREATION_SUCCESS_TYPE:
       contentComponent = <ProposalCreationSuccess />
-      navPath = '/dashboard'
       break
 
     case WALLET_CREATION_SUCCESS_TYPE:
@@ -57,9 +65,10 @@ const Success = () => {
       navPath = '/welcome'
       break
 
+    case MULTI_SEND_TYPE_URL:
+    case SINGLE_SEND_TYPE_URL:
     case WALLET_FUNDING_SUCCESS_TYPE:
-      contentComponent = <WalletFundingSuccess />
-      navPath = '/dashboard'
+      contentComponent = <BankSendTypeSuccess />
       break
 
     default:
@@ -68,6 +77,7 @@ const Success = () => {
 
   const handleModalClose = () => {
     dispatch(updateModalState({ ...initialModalState }))
+    dispatch(updateMenuSelectionState({ menuSelection: 0 }))
     navigate(navPath)
   }
 
@@ -79,17 +89,10 @@ const Success = () => {
 
   return (
     <MuiDialog
+      BackdropProps={styles.defaultBackDrop}
       open={success!}
       onClose={closeModal}
-      PaperProps={{
-        sx: {
-          background: 'transparent',
-          boxShadow: 'none',
-          position: 'fixed',
-          overflow: 'hidden',
-          borderRadius: '25px'
-        }
-      }}
+      PaperProps={styles.defaultPaperProps}
     >
       <ModalContainer sx={{ padding: '4rem' }}>
         <img src={SuccessIcon} alt="success-icon" />

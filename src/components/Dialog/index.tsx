@@ -7,7 +7,8 @@ import { useSelector } from 'react-redux'
 import FundWallet from './FundWallet/FundWallet'
 import AddressBook from './AddressBook/AddressBook'
 import TransactionSelector from './TransactionSelector/TransactionSelector'
-import MembersOperationsModal from './MembersOperations/MembersOperationsModal'
+import ReusableModal from './ReusableModal'
+import SingleSend from './SingleSend'
 
 const Dialog = () => {
 
@@ -17,9 +18,10 @@ const Dialog = () => {
     failure,
     openAddressBook,
     openFundWallet,
+    openSingleSendModal,
     transactionSelector,
     openVotingModal,
-    openMembersOperationsModal
+    openReusableModal
   } = useSelector((state: RootState) => state.modalState)
 
   switch (true) {
@@ -33,12 +35,14 @@ const Dialog = () => {
       return <AddressBook />
     case openFundWallet:
       return <FundWallet />
+    case openSingleSendModal:
+      return <SingleSend />
     case transactionSelector:
       return <TransactionSelector />
     case openVotingModal:
       return <VotingModal />
-    case openMembersOperationsModal:
-      return <MembersOperationsModal />
+    case openReusableModal:
+      return <ReusableModal />
     default:
       return <div></div>
   }

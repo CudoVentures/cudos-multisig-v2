@@ -1,6 +1,7 @@
 import SendIcon from 'assets/vectors/type-icons/send.svg'
 import UnknownIcon from 'assets/vectors/type-icons/unknown.svg'
 import MembersIcon from 'assets/vectors/members-icon.svg'
+import ActiveSettingsIcon from 'assets/vectors/dashboard/active-settings.svg'
 import YesIcon from 'assets/vectors/yes-vote-icon.svg'
 import NoIcon from 'assets/vectors/no-vote-icon.svg'
 
@@ -72,7 +73,10 @@ export const INSUFFICIENT_BALANCE = 'You need to have sufficient CUDOS in your r
 
 // TypeURLs
 export const MULTI_SEND_TYPE_URL = "/cosmos.bank.v1beta1.MsgMultiSend"
+export const SINGLE_SEND_TYPE_URL = "/cosmos.bank.v1beta1.MsgSend"
 export const MEMBERS_UPDATE_TYPE_URL = '/cosmos.group.v1.MsgUpdateGroupMembers'
+export const GROUP_UPDATE_METADATA_TYPE_URL = '/cosmos.group.v1.MsgUpdateGroupMetadata'
+export const GROUP_UPDATE_DECISION_POLICY_TYPE_URL = '/cosmos.group.v1.MsgUpdateGroupPolicyDecisionPolicy'
 export const ADD_MEMBER_TYPE_URL = '/custom.MsgAddGroupMember'
 export const DELETE_MEMBER_TYPE_URL = '/custom.MsgDeleteGroupMember'
 
@@ -101,8 +105,11 @@ export const UNKNOWN = { text: "UNKNOWN", color: "#1B2031" }
 
 // Type Mapping
 export const MULTI_SEND_TYPE = { text: "Multi Send", icon: SendIcon }
+export const SINGLE_SEND_TYPE = { text: "Single Send", icon: SendIcon }
 export const ADD_MEMBER_TYPE = { text: "Add Member", icon: MembersIcon }
 export const DELETE_MEMBER_TYPE = { text: "Delete Member", icon: MembersIcon }
+export const UPDATE_WALLET_SETTINGS_TYPE = { text: "Details Update", icon: ActiveSettingsIcon}
+export const UPDATE_WALLET_POLICIES_TYPE = { text: "Policy Update", icon: ActiveSettingsIcon}
 export const UNDEFINED_TYPE = { text: "Unknown", icon: UnknownIcon }
 
 // Vote Options

@@ -2,7 +2,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { Dialog as MuiDialog } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
-import { CancelRoundedIcon, ModalContainer } from './styles'
+import { CancelRoundedIcon, ModalContainer, styles } from './styles'
 import FailureIcon from 'assets/vectors/failure.svg'
 import { useNavigate } from 'react-router-dom'
 import { updateModalState } from 'store/modals'
@@ -76,17 +76,10 @@ const Failure = () => {
 
   return (
     <MuiDialog
+      BackdropProps={styles.defaultBackDrop}
       open={failure!}
       onClose={closeModal}
-      PaperProps={{
-        sx: {
-          background: 'transparent',
-          boxShadow: 'none',
-          position: 'fixed',
-          overflow: 'hidden',
-          borderRadius: '25px'
-        }
-      }}
+      PaperProps={styles.defaultPaperProps}
     >
       <ModalContainer sx={{ padding: '4rem' }}>
         <img src={FailureIcon} alt="failure-icon" />

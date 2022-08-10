@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { styles } from './styles'
 import { RootState } from 'store'
 import { useState } from 'react'
@@ -51,7 +52,7 @@ const Transactions = () => {
                 blockHeight: parseInt(proposal.block.height).toLocaleString(),
                 type: msgType,
                 txHash: txHash,
-                date: formatDateTime(proposal.submit_time),
+                date: moment(formatDateTime(proposal.submit_time)).toDate(),
                 status: status,
                 votesCount: proposal.group_proposal_votes.length,
                 membersCount: selectedWallet?.memberCount!,

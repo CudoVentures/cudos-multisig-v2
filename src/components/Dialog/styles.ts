@@ -1,38 +1,84 @@
 import { styled, Box } from '@mui/material'
-import { CancelRounded } from '@mui/icons-material'
+import { CancelRounded, ArrowBack } from '@mui/icons-material'
 
 export const styles = {
+  loadingProps: {
+    sx: {
+      background: 'transparent',
+      boxShadow: 'none',
+      position: 'fixed',
+      overflow: 'hidden',
+      borderRadius: '25px'
+    }
+  },
+  defaultPaperProps: {
+    sx: {
+      background: 'transparent',
+      width: '100%',
+      height: 'min-content',
+      position: 'absolute',
+      top: '1%',
+      overflow: 'hidden',
+      borderRadius: '25px'
+    }
+  },
+  defaultBackDrop: {
+    style: {
+      backgroundColor: 'transparent',
+      backdropFilter: "blur(6px)",
+      opacity: 0.9
+    }
+  },
+  successWalletInfoHolder: {
+    overflow: 'auto',
+    maxWidth: '200px',
+    maxHeight: '150px',
+    wordBreak: 'break-word'
+  },
+  SuccessHolderInfoBox: {
+    margin: '0 0 10px 0',
+    display: "flex",
+    justifyContent: 'space-between',
+    alignItems: "center",
+  },
+  SuccessHolderBox: {
+    margin: '10px 0',
+    display: "flex",
+    justifyContent: 'space-between',
+    alignItems: "center",
+    padding: "0.5rem 0"
+  },
   loadingModalContainer: {
-    minWidth: '600px', 
-    minHeight:'300px', 
+    minWidth: '600px',
+    minHeight: '300px',
     padding: '4rem'
   },
   icons: {
-    marginLeft: '10px', 
+    marginLeft: '10px',
     cursor: 'pointer'
   },
   alertInfo: {
     display: 'flex',
-    justifyContent: "flex-start", 
-    alignItems: "center", 
-    marginTop: '-20px', 
-    height: '50px', 
-    borderRadius: '10px', 
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: '-20px',
+    height: '50px',
+    borderRadius: '10px',
     backgroundColor: "rgba(245, 185, 94, 0.1)"
   },
   inputGroup: {
-    display: "flex", 
-    flexDirection: "column", 
+    display: "flex",
+    flexDirection: "column",
     alignItems: "center"
-},
+  },
   addressInput: {
-    width: '550px', 
-    height: '50px', 
-    backgroundColor: '#28314E', 
-    fontSize: '90%', 
+    width: '550px',
+    height: '50px',
+    backgroundColor: '#28314E',
+    fontSize: '90%',
     paddingLeft: '20px',
     borderRadius: '5px'
-},
+  },
   btnLogo: {
     marginRight: '15px'
   },
@@ -40,7 +86,7 @@ export const styles = {
     margin: '35px 0 20px 0'
   },
   infoHolder: {
-    display: "flex",  
+    display: "flex",
     alignItems: "flex-start",
     width: '100%'
   },
@@ -84,3 +130,10 @@ export const CancelRoundedIcon = styled(CancelRounded)(({ theme }) => ({
   cursor: 'pointer'
 }))
 
+export const ArrowBackIcon = styled(ArrowBack)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  position: 'absolute',
+  top: 32,
+  left: 32,
+  cursor: 'pointer'
+}))
