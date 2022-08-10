@@ -54,6 +54,7 @@ export const NO_TX_HASH_MSG = 'Not executed yet'
 export const DEFAULT_LOGIN_FAILURE_MSG = 'Seems like something went wrong. Please try again later'
 export const FILE_ERROR_MSG = 'File is in wrong format or contains invalid data'
 export const INVALID_DATA_PROMPT_MSG = 'Please provide valid data'
+export const SINGLE_TX_PROMPT_MSG = 'Please use the "Single Send "option when only 1 recipient'
 export const GENERAL_FAILURE_MSG = 'Seems like something went wrong. Try again or check your account balance.'
 export const PROPOSAL_CREATION_SUCCESS_MSG = 'Proposal was successfully created!'
 export const WALLET_CREATION_SUCCESS_MSG = 'Your MultiSig wallet was successfully created!'
@@ -64,6 +65,7 @@ export const UPDATING_MEMBERS_SUCCESS_MSG = 'You have successfully proposed wall
 export const DEFAULT_LOADING_MODAL_MSG = 'Waiting for transaction confirmation...'
 export const DUPLICATED_ADDRESS_MSG = "It seems the address already exists"
 export const INSUFFICIENT_BALANCE = 'You need to have sufficient CUDOS in your remaining balance in order to cover the required fees upon execution'
+export const INSUFFICIENT_WALLET_BALANCE = 'You need to have sufficient tokens in your current wallet balances in order to cover the total due in the list'
 
 // TypeURLs
 export const MULTI_SEND_TYPE_URL = "/cosmos.bank.v1beta1.MsgMultiSend"

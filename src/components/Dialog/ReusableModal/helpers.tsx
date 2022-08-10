@@ -12,7 +12,7 @@ import EditIcon from 'assets/vectors/blue-edit-icon.svg'
 import { signingClient } from "utils/config"
 import { Coin, DeliverTxResponse, EncodeObject, GasPrice, StdFee } from "cudosjs"
 import { convertVotingPeriodToSeconds, enforceCustomFeesOverKeplr, formatAddress } from "utils/helpers"
-import { HtmlTooltip } from "utils/multiSendTableHelper"
+import { createArrayOfCoinsFromMapper, createArrayOfRecipients, HtmlTooltip, multisendRow, MultiSendUser, totalAmountDue } from "utils/multiSendTableHelper"
 import { Fragment, useState } from "react"
 import { updateModalState } from "store/modals"
 import { Member, votingPeriod } from "store/walletObject"
@@ -37,6 +37,33 @@ export const executeMsgs = async (signer: string, msgs: EncodeObject[], fee: Std
         signer,
         msgs,
         fee,
+        DEFAULT_MEMO
+    )
+}
+
+export const getMultiSendMsgAndFees = async (
+    multisendRows: multisendRow[],
+    walletAddress: string,
+    signerAddress: string
+): Promise<{
+    msg: EncodeObject;
+    fee: StdFee;
+}> => {
+    const totalCoinsDue: Coin[] = createArrayOfCoinsFromMapper(totalAmountDue(multisendRows))
+    const recipients: MultiSendUser[] = createArrayOfRecipients(multisendRows)
+    const sender: MultiSendUser[] = [{
+        address: walletAddress,
+        coins: totalCoinsDue
+    }]
+
+    return (await signingClient).groupModule.msgMultiSendProposal(
+        sender,
+        recipients,
+        walletAddress,
+        signerAddress,
+        DEFAULT_META_DATA,
+        GasPrice.fromString(GAS_PRICE + NATIVE_TOKEN_DENOM),
+        DEFAULT_MULTIPLIER,
         DEFAULT_MEMO
     )
 }

@@ -414,14 +414,6 @@ const SingleSend = () => {
                             </Box>
                         </Box>
                         <Box style={styles.mainBtnsHolder}>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                sx={styles.mainBtns}
-                                onClick={toggled ? clean : handleModalClose}
-                            >
-                                {toggled ? "Back" : "Cancel"}
-                            </Button>
                             <Tooltip title={getTooltip()}>
                                 <div>
                                     <Button
@@ -431,7 +423,7 @@ const SingleSend = () => {
                                         sx={styles.mainBtns}
                                         onClick={toggled ? signAndBroadcast : generateMsgAndFees}
                                     >
-                                        {toggled ? !enoughBalance() ? 'Insufficient balance' : "Propose" : "Preview"}
+                                        {toggled ? !enoughBalance() ? 'Insufficient balance' : "Propose" : "Transaction Summary"}
                                     </Button>
                                 </div>
                             </Tooltip>

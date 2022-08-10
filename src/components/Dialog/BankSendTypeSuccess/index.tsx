@@ -1,4 +1,5 @@
 import { Box, Divider, Stack, Tooltip, Typography } from '@mui/material'
+import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { OpenInNewRounded as OpenInNewRoundedIcon } from '@mui/icons-material'
@@ -7,11 +8,12 @@ import { formatAddress } from 'utils/helpers'
 import ArrowIcon from 'assets/vectors/arrow-right.svg'
 import { styles } from './styles'
 import { MULTI_SEND_TYPE_URL } from 'utils/constants'
+import { displayTooltipDueBalances, HtmlTooltip, RecipientBalances } from 'utils/multiSendTableHelper'
 
 interface SuccessData {
   from: string,
   to: string,
-  amount: string,
+  amount: string | RecipientBalances,
   txHash: string,
   txFee: string,
 }
@@ -61,16 +63,29 @@ const BankSendTypeSuccess = () => {
           </Box>
         </Box>
       </Box>
-      <Box>
+      <Box style={styles.fromToHolder}>
         <Typography
           color="text.secondary"
           variant="body2"
         >
           {multiTx ? "Total Amount" : "Amount"}
         </Typography>
-        <Typography variant="body2">
-          {successData.amount}
-        </Typography>
+        {
+          multiTx ?
+            <HtmlTooltip
+              title={<div>{
+                displayTooltipDueBalances(
+                  successData.amount as RecipientBalances
+                )
+              }</div>}
+            >
+              <img src={ExclamationMark} alt="Exclamation-mark-icon" />
+            </HtmlTooltip>
+            :
+            <Typography variant="body2">
+              {successData.amount as string}
+            </Typography>
+        }
       </Box>
       <Divider />
       <Box display="flex" alignItems="center" gap={1} padding="0.5rem 0">

@@ -2,12 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { multisendRow } from 'utils/multiSendTableHelper'
 
 export interface sendFundsState {
-  currentStep?: string
   multisendRows?: multisendRow[]
 }
 
 export const initialState: sendFundsState = {
-  currentStep: '',
   multisendRows: []
 }
 
