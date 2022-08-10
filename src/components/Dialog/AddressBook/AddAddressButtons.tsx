@@ -7,14 +7,13 @@ import UploadFromCsv from 'assets/vectors/csv-upload.svg'
 import DownloadToCsv from 'assets/vectors/csv-download.svg'
 import React, { useEffect, useState } from 'react'
 import { isValidCudosAddress } from 'utils/validation'
-import { updateUser, AddressBook } from 'store/user'
+import { updateUser } from 'store/user'
 import { RootState } from 'store'
 import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 import { initialState as initialModalState } from 'store/modals'
 import { CSVLink } from "react-csv"
 import { HtmlTooltip } from 'utils/multiSendTableHelper'
-import { Firebase } from 'utils/firebase'
-import { getKeplrAddress } from 'ledgers/KeplrLedger'
+
 import {
     DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE,
     DUPLICATED_ADDRESS_MSG,
@@ -23,10 +22,15 @@ import {
     FILE_ERROR_TITLE,
     INVALID_DATA_PROMPT_MSG
 } from 'utils/constants'
+import { Firebase } from 'utils/firebase'
+import { getKeplrAddress } from 'ledgers/KeplrLedger'
 
 interface DataObject {
     index: number,
     address?: string
+}
+interface addressBook {
+    [key: string]: string;
 }
 
 const AddAddressButtons = () => {
@@ -80,9 +84,10 @@ const AddAddressButtons = () => {
                 message: FILE_ERROR_MSG
             }))
         } else {
+            dispatch(updateUser({ addressBook: txBatch }))
+
             const address = await getKeplrAddress();
             await Firebase.saveAddressBook(address, txBatch);
-            dispatch(updateUser({ addressBook: txBatch }))
         }
     }
 
@@ -100,12 +105,6 @@ const AddAddressButtons = () => {
 
     const handleAddNewAddress = async () => {
         let fail: boolean = false
-<<<<<<< HEAD
-        let oldRecordIndex: number = 0
-        let tempBook: AddressBook = {}
-        let updatedBook: AddressBook = {}
-=======
->>>>>>> cudos-dev
 
         if (addNewAddress) {
             for (const address of Object.keys(addressBook!)) {
@@ -116,10 +115,14 @@ const AddAddressButtons = () => {
             }
 
             if (!fail) {
-                const newAddressBook = { ...addressBook, [userAddress]: userName };
+                const newAddressBook = { ...addressBook, [userAddress]: userName }
+                dispatch(updateUser({
+                    addressBook: newAddressBook
+                }))
+
                 const address = await getKeplrAddress();
                 await Firebase.saveAddressBook(address, newAddressBook);
-                dispatch(updateUser({ addressBook: newAddressBook }))
+
                 localStorage.removeItem('addressBookAccountName')
                 localStorage.removeItem('addressBookAccountAddress')
                 dispatch(updateModalState({ addNewAddress: false }))
@@ -157,20 +160,18 @@ const AddAddressButtons = () => {
 
             // Finally, the updated book + the proposed change
             if (!fail) {
-<<<<<<< HEAD
-                const newAddressBook = { ...updatedBook, [userAddress]: userName };
+                const newAddressBook = {
+                    ...updatedAddressBook,
+                    [newRecord.address]: newRecord.name
+                }
+                dispatch(updateUser({
+                    addressBook: newAddressBook
+                }))
+                dispatch(updateModalState({ editAddressBookRecord: false }))
+
                 const address = await getKeplrAddress();
                 await Firebase.saveAddressBook(address, newAddressBook);
-                dispatch(updateUser({ addressBook: newAddressBook }))
-=======
-                dispatch(updateUser({
-                    addressBook: {
-                        ...updatedAddressBook,
-                        [newRecord.address]: newRecord.name
-                    }
-                }))
->>>>>>> cudos-dev
-                dispatch(updateModalState({ editAddressBookRecord: false }))
+
                 return
             }
         }
