@@ -60,14 +60,6 @@ export const convertSecondsToDisplay = (seconds: number, desiredFormat: string):
     return `${result.toString()} ${format.toUpperCase()}`
 }
 
-export const enforceCustomFeesOverKeplr = (): void => {
-    window.keplr!.defaultOptions = {
-        sign: {
-            preferNoSetFee: true,
-        }
-    }
-}
-
 export const calculateFeeFromGas = (gasAmount: number): string => {
     return new BigNumber(GAS_PRICE).multipliedBy(new BigNumber(gasAmount)).valueOf()
 }

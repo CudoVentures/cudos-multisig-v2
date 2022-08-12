@@ -5,7 +5,7 @@ import { styles as defaultStyles } from '../styles'
 import BigNumber from 'bignumber.js'
 import Card from 'components/Card/Card'
 import { updateUser } from 'store/user'
-import { amountToAcudos, calculateFeeFromGas, enforceCustomFeesOverKeplr, formatAddress } from 'utils/helpers'
+import { amountToAcudos, calculateFeeFromGas, formatAddress } from 'utils/helpers'
 import { updateModalState } from 'store/modals'
 import { COLORS_DARK_THEME } from 'theme/colors'
 import { Dialog as MuiDialog } from '@mui/material'
@@ -169,8 +169,6 @@ const FundWallet = () => {
             title: WALLET_FUNDING_LOADING_TITLE,
             message: DEFAULT_LOADING_MODAL_MSG
         }))
-
-        enforceCustomFeesOverKeplr()
 
         try {
             const client = await getSigningClient();

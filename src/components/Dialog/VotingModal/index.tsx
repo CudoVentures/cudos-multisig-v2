@@ -9,7 +9,7 @@ import CommentIcon from 'assets/vectors/comment-icon.svg'
 import { getSigningClient } from 'utils/config'
 import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
 import { Exec } from 'cudosjs/build/stargate/modules/group/proto-types/tx.pb'
-import { calculateFeeFromGas, enforceCustomFeesOverKeplr } from 'utils/helpers'
+import { calculateFeeFromGas } from 'utils/helpers'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice, StdFee } from 'cudosjs'
 import { VoteOption } from 'cudosjs/build/stargate/modules/group/proto-types/types.pb'
 import { Box, Button, Typography, Collapse, Dialog as MuiDialog, Paper } from '@mui/material'
@@ -112,8 +112,6 @@ const VotingModal = () => {
                 loading: true,
                 message: DEFAULT_LOADING_MODAL_MSG
             }))
-
-            enforceCustomFeesOverKeplr()
 
             try {
                 const client = await getSigningClient();
