@@ -11,7 +11,7 @@ import copy from "copy-to-clipboard"
 import EditIcon from 'assets/vectors/blue-edit-icon.svg'
 import { getSigningClient } from "utils/config"
 import { Coin, DeliverTxResponse, EncodeObject, GasPrice, StdFee } from "cudosjs"
-import { convertVotingPeriodToSeconds, enforceCustomFeesOverKeplr, formatAddress } from "utils/helpers"
+import { convertVotingPeriodToSeconds, formatAddress } from "utils/helpers"
 import { createArrayOfCoinsFromMapper, createArrayOfRecipients, HtmlTooltip, multisendRow, MultiSendUser, totalAmountDue } from "utils/multiSendTableHelper"
 import { Fragment, useState } from "react"
 import { updateModalState } from "store/modals"
@@ -30,8 +30,6 @@ import {
 } from "utils/constants"
 
 export const executeMsgs = async (signer: string, msgs: EncodeObject[], fee: StdFee): Promise<DeliverTxResponse> => {
-
-    enforceCustomFeesOverKeplr()
 
     const client = await getSigningClient()
     return client.signAndBroadcast(

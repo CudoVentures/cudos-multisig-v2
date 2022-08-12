@@ -20,7 +20,7 @@ import { getSigningClient } from 'utils/config'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice } from 'cudosjs'
 import { updateModalState } from 'store/modals'
 import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
-import { calculateFeeFromGas, enforceCustomFeesOverKeplr } from 'utils/helpers'
+import { calculateFeeFromGas } from 'utils/helpers'
 
 import {
     DEFAULT_MEMO,
@@ -62,8 +62,6 @@ const CreateWallet = () => {
             title: WALLET_CREATION_LOADING_TITLE,
             message: DEFAULT_LOADING_MODAL_MSG
         }))
-
-        enforceCustomFeesOverKeplr()
 
         try {
             const client = await getSigningClient()

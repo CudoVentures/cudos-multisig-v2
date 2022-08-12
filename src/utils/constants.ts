@@ -8,6 +8,7 @@ import NoIcon from 'assets/vectors/no-vote-icon.svg'
 // ENV
 export const RPC_ADDRESS = import.meta.env.VITE_APP_RPC || process.env.VITE_APP_RPC || ""
 export const API_ADDRESS = import.meta.env.VITE_APP_API || process.env.VITE_APP_API || ""
+export const STAKING_URL = import.meta.env.VITE_APP_STAKING_URL || process.env.VITE_APP_STAKING_URL || ""
 export const EXPLORER_PUBLIC_ADDRESS = import.meta.env.VITE_APP_EXPLORER_PUBLIC_ADDRESS || process.env.VITE_APP_EXPLORER_PUBLIC_ADDRESS || ""
 export const CHAIN_NAME = import.meta.env.VITE_APP_CHAIN_NAME || process.env.VITE_APP_CHAIN_NAME || ""
 export const CHAIN_ID = import.meta.env.VITE_APP_CHAIN_ID || process.env.VITE_APP_CHAIN_ID || ""
@@ -110,8 +111,8 @@ export const MULTI_SEND_TYPE = { text: "Multi Send", icon: SendIcon }
 export const SINGLE_SEND_TYPE = { text: "Single Send", icon: SendIcon }
 export const ADD_MEMBER_TYPE = { text: "Add Member", icon: MembersIcon }
 export const DELETE_MEMBER_TYPE = { text: "Delete Member", icon: MembersIcon }
-export const UPDATE_WALLET_SETTINGS_TYPE = { text: "Details Update", icon: ActiveSettingsIcon}
-export const UPDATE_WALLET_POLICIES_TYPE = { text: "Policy Update", icon: ActiveSettingsIcon}
+export const UPDATE_WALLET_SETTINGS_TYPE = { text: "Details Update", icon: ActiveSettingsIcon }
+export const UPDATE_WALLET_POLICIES_TYPE = { text: "Policy Update", icon: ActiveSettingsIcon }
 export const UNDEFINED_TYPE = { text: "Unknown", icon: UnknownIcon }
 
 // Vote Options
