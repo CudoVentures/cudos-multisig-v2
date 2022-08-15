@@ -6,7 +6,6 @@ import { findOneWallet, formatAddress } from 'utils/helpers'
 import { useNavigate } from 'react-router-dom'
 import { cutFractions, separateDecimals, separateFractions } from 'utils/regexFormatting'
 import { updatedSelectedWallet } from 'store/user'
-import { updateMenuSelectionState } from 'store/menu'
 
 interface tableData {
     walletName: string;
