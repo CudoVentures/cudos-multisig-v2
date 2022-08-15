@@ -9,5 +9,13 @@ export const queryClient = (async (): Promise<StargateClient> => {
 
 export const getSigningClient = (): Promise<SigningStargateClient> => {
     const offlineSigner = window.getOfflineSigner!(CHAIN_ID)
+    if (window.keplr) {
+        window.keplr.defaultOptions = {
+            sign: {
+                preferNoSetFee: true,
+            },
+        }
+    }
+
     return SigningStargateClient.connectWithSigner(RPC_ADDRESS, offlineSigner)
 }

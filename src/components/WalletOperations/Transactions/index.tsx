@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { styles } from './styles'
 import { RootState } from 'store'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Dialog from 'components/Dialog'
 import Card from 'components/Card/Card'
 import { useSelector } from 'react-redux'
@@ -87,6 +87,14 @@ const Transactions = () => {
 
     const totalProposals = completedProposals.length + onGoingProposals.length
 
+    useEffect(() => {
+        if (!loading && onGoingProposals.length === 0 && completedProposals.length > 0) {
+            setToggleOption(1)
+            return
+        }
+        setToggleOption(0)
+    }, [loading])
+
     return (
         <Box style={styles.boxHolder}>
             <Dialog />
@@ -95,6 +103,7 @@ const Transactions = () => {
                     <div style={{ width: 200, height: 35 }}>
                         <SwitchSelector
                             onChange={onSwitchChange}
+                            forcedSelectedIndex={toggleOption}
                             options={switchOptions}
                             backgroundColor={COLORS_DARK_THEME.LIGHT_BACKGROUND}
                             fontColor={COLORS_DARK_THEME.SECONDARY_TEXT}

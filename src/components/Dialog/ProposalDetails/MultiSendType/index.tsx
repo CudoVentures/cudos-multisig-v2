@@ -1,6 +1,4 @@
-
-import { Coin } from 'cudosjs'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { styles } from './styles'
 import copy from 'copy-to-clipboard'
 import { FetchedProposalDetailsData } from '../'
@@ -12,15 +10,6 @@ import { denomToAlias, denomToIcon } from 'utils/helpers'
 import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
 import { Box, Button, Tooltip, Typography, Popover } from '@mui/material'
 
-interface Recipient {
-    address: string;
-    coins: Coin[];
-}
-
-const showAmounts = (amounts: Recipient[]) => {
-    // THIS WILL NEED NODE FIX. At the moment one cannot submit Tx for mixed denoms, even if multisend
-}
-
 const MultiSendType = ({ proposalDetails }: {
     proposalDetails: FetchedProposalDetailsData
 }) => {
@@ -30,7 +19,7 @@ const MultiSendType = ({ proposalDetails }: {
     const open = Boolean(anchorEl)
 
     // When more than 1, this will be showing in a pop-up like scrolling list all recipients 
-    const ShowRecipients = () => {
+    const ShowRecipients = useCallback(() => {
         return (
             <Box style={styles.componentHolderBox}>
                 <Typography sx={{ p: 2 }}>
@@ -54,7 +43,7 @@ const MultiSendType = ({ proposalDetails }: {
                                         </Typography>
 
                                         <Typography
-                                            width={500}
+                                            width={400}
                                             fontWeight={600}
                                             variant='subtitle1'
                                             color='text.primary'
@@ -95,7 +84,7 @@ const MultiSendType = ({ proposalDetails }: {
                 </Typography>
             </Box>
         )
-    }
+    }, [open])
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -129,10 +118,9 @@ const MultiSendType = ({ proposalDetails }: {
             >
                 <ShowRecipients />
             </Popover>
-            <Box style={{ display: 'inline-flex' }}>
+            <Box style={styles.typoHolder}>
                 <Typography
                     marginRight={3}
-                    marginTop={1}
                     fontWeight={600}
                     variant='subtitle1'
                     color='text.secondary'
@@ -155,7 +143,7 @@ const MultiSendType = ({ proposalDetails }: {
                         :
                         <Button
                             disableRipple
-                            onClick={() => showAmounts(proposalDetails.message.inputs)}
+                            onClick={handleClick}
                             variant="text"
                         >
                             Multiple amounts

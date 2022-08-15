@@ -31,6 +31,13 @@ export interface AmountDueBalances {
     [key: string]: string
 }
 
+export const sortArrayOfCoinsByDenom = (coins: Coin[], direction: 'asc' | 'desc'): Coin[] => {
+    if (direction === 'asc') {
+        return coins.sort((a, b) => a.denom.localeCompare(b.denom))
+    }
+    return coins.sort((a, b) => b.denom.localeCompare(a.denom))
+}
+
 export const createArrayOfRecipients = (rows: multisendRow[]) => {
     const recipients = rows.map((item) => ({
         address: item.recipient,
@@ -67,7 +74,7 @@ export const createArrayOfCoinsFromMapper = (dueBalances: RecipientBalances): Co
         }
     )
 
-    return coins
+    return sortArrayOfCoinsByDenom(coins, 'asc')
 }
 
 export const displayTooltipDueBalances = (dueBalances: RecipientBalances): JSX.Element => {
