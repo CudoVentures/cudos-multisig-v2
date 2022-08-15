@@ -49,8 +49,6 @@ const SlidingMenuTable = () => {
     const navigateToSelected = (walletAddress: string) => {
         const walletFound = findOneWallet(wallets!, walletAddress)
         dispatch(updatedSelectedWallet(walletFound))
-        dispatch(updateMenuSelectionState({ menuSelection: 0 }))
-        navigate(`/dashboard`)
     }
 
     return (
