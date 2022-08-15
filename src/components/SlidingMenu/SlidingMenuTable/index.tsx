@@ -6,13 +6,14 @@ import { findOneWallet, formatAddress } from 'utils/helpers'
 import { useNavigate } from 'react-router-dom'
 import { cutFractions, separateDecimals, separateFractions } from 'utils/regexFormatting'
 import { updatedSelectedWallet } from 'store/user'
+import { updateMenuSelectionState } from 'store/menu'
 
 interface tableData {
     walletName: string;
     walletAddress: string;
     walletBalance: string;
     walletDisplayBalance: string;
-  }
+}
 
 const SlidingMenuTable = () => {
     const dispatch = useDispatch()
@@ -24,7 +25,7 @@ const SlidingMenuTable = () => {
         walletAddress: string,
         walletBalance: string,
         walletDisplayBalance: string
-        ): tableData {
+    ): tableData {
         return {
             walletName,
             walletAddress,
@@ -34,7 +35,7 @@ const SlidingMenuTable = () => {
     }
 
     const rows: tableData[] = [];
-    if (wallets!.length>0) {
+    if (wallets!.length > 0) {
         wallets!.forEach((wallet) =>
             rows.push(createData(
                 wallet.walletName!,
@@ -48,26 +49,27 @@ const SlidingMenuTable = () => {
     const navigateToSelected = (walletAddress: string) => {
         const walletFound = findOneWallet(wallets!, walletAddress)
         dispatch(updatedSelectedWallet(walletFound))
+        dispatch(updateMenuSelectionState({ menuSelection: 0 }))
         navigate(`/dashboard`)
     }
 
     return (
-        <TableContainer style={{width:'100%'}}>
-            <Table style={{width:'100%'}} aria-label="simple table">
+        <TableContainer style={{ width: '100%' }}>
+            <Table style={{ width: '100%' }} aria-label="simple table">
                 <TableBody style={styles.summaryTableBody}>
-                {rows.map((row) => (
-                        <TableRow sx={() => (styles.summaryTableRow)} style={{ backgroundColor: row.walletAddress === selectedWallet!.walletAddress?'rgba(82, 166, 248, 0.2)':'#28314E'}}>
-                             <Button 
+                    {rows.map((row) => (
+                        <TableRow sx={() => (styles.summaryTableRow)} style={{ backgroundColor: row.walletAddress === selectedWallet!.walletAddress ? 'rgba(82, 166, 248, 0.2)' : '#28314E' }}>
+                            <Button
                                 disableRipple
                                 sx={{
                                     ':hover': {
-                                    bgcolor: 'rgba(82, 166, 248, 0.1)',
+                                        bgcolor: 'rgba(82, 166, 248, 0.1)',
                                     },
                                     borderRadius: '10px',
                                     height: '50px',
                                     width: '100%',
                                 }}
-                                onClick={() => navigateToSelected(row.walletAddress)} 
+                                onClick={() => navigateToSelected(row.walletAddress)}
                                 style={styles.slidingMenuBtn}
                             >
                                 <TableCell style={styles.summaryTableCell} align='left'>
@@ -76,7 +78,7 @@ const SlidingMenuTable = () => {
                                             {row.walletName}
                                         </div>
                                     </Tooltip>
-                                    <Typography style={{width: '200px'}} variant="subtitle2" fontWeight={600} color={row.walletAddress === selectedWallet!.walletAddress?"rgba(82, 166, 248, 1)":"text.secondary"}>
+                                    <Typography style={{ width: '200px' }} variant="subtitle2" fontWeight={600} color={row.walletAddress === selectedWallet!.walletAddress ? "rgba(82, 166, 248, 1)" : "text.secondary"}>
                                         <Tooltip title={row.walletAddress}>
                                             <div>
                                                 {formatAddress(row.walletAddress, 25)}
@@ -84,24 +86,24 @@ const SlidingMenuTable = () => {
                                         </Tooltip>
                                     </Typography>
                                 </TableCell>
-                                <TableCell style={{width: '200px'}} align='right'>
+                                <TableCell style={{ width: '200px' }} align='right'>
                                     <Typography fontWeight={600}>
-                                        {row.walletDisplayBalance.length > 13?
-                                        <Tooltip title={row.walletBalance}>
-                                        <div>
-                                            {`${formatAddress(row.walletDisplayBalance, 5)} CUDOS`}
-                                        </div>
-                                        </Tooltip>:
-                                        <Tooltip title={row.walletBalance}>
-                                        <div>
-                                            {`${row.walletDisplayBalance} CUDOS`}
-                                        </div>
-                                        </Tooltip>}
+                                        {row.walletDisplayBalance.length > 13 ?
+                                            <Tooltip title={row.walletBalance}>
+                                                <div>
+                                                    {`${formatAddress(row.walletDisplayBalance, 5)} CUDOS`}
+                                                </div>
+                                            </Tooltip> :
+                                            <Tooltip title={row.walletBalance}>
+                                                <div>
+                                                    {`${row.walletDisplayBalance} CUDOS`}
+                                                </div>
+                                            </Tooltip>}
                                     </Typography>
                                 </TableCell>
                             </Button>
                         </TableRow>
-                ))}
+                    ))}
                 </TableBody>
             </Table>
         </TableContainer>

@@ -1,5 +1,6 @@
 subscription getWalletProposalDetails($id: Int = 0) {
   group_proposal_by_pk(id: $id) {
+    member_count
 		submit_time
     execution_log
     executor

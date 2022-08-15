@@ -114,7 +114,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
         const expirationTime: string = getExpirationTime(proposal)
         const threshold: number = proposal?.group_with_policy.threshold!
         const groupMembers: any[] = proposal?.group_with_policy.group_members!
-        const totalMembers: number = groupMembers.length
+        const totalMembers: number = proposal?.member_count!
         const proposer: string = proposal?.proposer!
         const votes: Vote[] = []
         let isHavingComments: boolean = false
