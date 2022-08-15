@@ -2,7 +2,7 @@ import { Box, Button, Tooltip } from '@mui/material'
 import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import LeftMenu from 'components/LeftMenu'
 import LeftWalletSummary from 'components/LeftWalletSummary'
 import { MenuSelectionInfo } from 'components/WalletOperations'
@@ -16,9 +16,11 @@ import Members from 'components/WalletOperations/Members'
 import Transactions from 'components/WalletOperations/Transactions'
 import { ADD_MEMBER_TYPE_URL } from 'utils/constants'
 import Settings from 'components/WalletOperations/Settings'
+import { updateMenuSelectionState } from 'store/menu'
 
 const WalletDetails = () => {
     const dispatch = useDispatch()
+    const [selected, setSelected] = useState<number>(0)
     const defaultElement = document.createElement('div') as HTMLInputElement
     const resizableCardLeft = useRef<HTMLInputElement>(defaultElement)
     const resizableCardRight = useRef<HTMLInputElement>(defaultElement)
@@ -31,6 +33,7 @@ const WalletDetails = () => {
         dispatch(updateModalState({ loading: true, loadingType: true }))
         setTimeout(() => dispatch(updateModalState({ ...initialModalState })), 500)
         setTimeout(() => resizableCardLeft.current.style.opacity = '1', 400)
+        dispatch(updateMenuSelectionState({ menuSelection: 0 }))
     }, [])
 
     const handleNewTxClick = () => {
@@ -56,7 +59,7 @@ const WalletDetails = () => {
 
             switch (menuSelection) {
                 case 0:
-                    return <Dashboard />
+                    return <Dashboard setSelected={setSelected} />
                 case 1:
                     return <Transactions />
                 case 2:
@@ -112,6 +115,8 @@ const WalletDetails = () => {
             <Card ref={resizableCardLeft} style={styles.leftSteps}>
                 <div ref={leftStepsContent} style={{ ...styles.contentAppear }}>
                     <LeftMenu
+                        selected={selected}
+                        setSelected={setSelected}
                         rightStepsContent={rightStepsContent}
                     />
                     <LeftWalletSummary

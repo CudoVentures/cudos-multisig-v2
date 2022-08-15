@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react'
 import { Box, Button } from '@mui/material'
 import { styles } from './styles'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,15 +14,20 @@ import ActiveSettingsIcon from 'assets/vectors/dashboard/active-settings.svg'
 import InactiveSettingsIcon from 'assets/vectors/dashboard/inactive-settings.svg'
 import { updateMenuSelectionState } from 'store/menu'
 import { RootState } from 'store'
+import { useNavigate } from 'react-router-dom'
 
-const LeftMenu = ({ 
-  rightStepsContent
-  }:{
+const LeftMenu = ({
+  rightStepsContent,
+  selected,
+  setSelected
+}: {
+  selected: number;
+  setSelected: React.Dispatch<React.SetStateAction<number>>;
   rightStepsContent: MutableRefObject<HTMLInputElement>;
-  }) => {
+}) => {
 
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [selected, setSelected] = useState<number>(0)
   const defaultElement = document.createElement('div') as HTMLInputElement
   const menuHolder = useRef<HTMLInputElement>(defaultElement)
   const { menuSelection } = useSelector((state: RootState) => state.menu)
@@ -36,28 +41,29 @@ const LeftMenu = ({
 
   useEffect(() => {
     rightStepsContent.current.style.opacity = '0'
-    setTimeout(() => dispatch(updateMenuSelectionState({menuSelection: selected})), 400)
+    setTimeout(() => dispatch(updateMenuSelectionState({ menuSelection: selected })), 400)
     setTimeout(() => rightStepsContent.current.style.opacity = '1', 400)
+    setTimeout(() => navigate(`/${MenuItems[selected].text.toLowerCase()}`), 400)
   }, [selected])
 
   return (
-      <Box ref={menuHolder} gap={1} style={styles.menuHolder}>
-        {MenuItems.map((item, index) => (
-          <Button
+    <Box ref={menuHolder} gap={1} style={styles.menuHolder}>
+      {MenuItems.map((item, index) => (
+        <Button
           disableRipple
           variant="text"
-          sx={{...styles.menuBtn, color: menuSelection === index?"white":COLORS_DARK_THEME.SECONDARY_TEXT}}
+          sx={{ ...styles.menuBtn, color: menuSelection === index ? "white" : COLORS_DARK_THEME.SECONDARY_TEXT }}
           onClick={() => setSelected(index)}
         >
-          <img 
-            style={styles.menuIcon} 
-            src={menuSelection === index?item.active:item.inactive} 
-            alt={`${item.text}-icon`} 
+          <img
+            style={styles.menuIcon}
+            src={menuSelection === index ? item.active : item.inactive}
+            alt={`${item.text}-icon`}
           />
           <span>{item.text}</span>
         </Button>
-        ))}
-      </Box>
+      ))}
+    </Box>
   )
 }
 

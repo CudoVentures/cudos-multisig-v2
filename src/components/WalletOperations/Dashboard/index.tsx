@@ -10,14 +10,17 @@ import { updateModalState } from 'store/modals'
 import TxsSummaryTable from './TxsSummaryTable'
 import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
-import { updateMenuSelectionState } from 'store/menu'
 import { useDispatch, useSelector } from 'react-redux'
 import WalletIcon from 'assets/vectors/wallet-icon.svg'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
 import AssetIconComponent from 'utils/assetsIconHandler'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 
-const Dashboard = () => {
+const Dashboard = ({
+    setSelected
+}:{
+    setSelected: React.Dispatch<React.SetStateAction<number>>;
+}) => {
     const [copied, setCopied] = useState<boolean>(false)
     const { selectedWallet, balances } = useSelector((state: RootState) => state.userState)
     const dispatch = useDispatch()
@@ -44,7 +47,7 @@ const Dashboard = () => {
     }
 
     const seeAllTxs = () => {
-        dispatch(updateMenuSelectionState({menuSelection: 1}))
+        setSelected(1)
     }
 
     return (

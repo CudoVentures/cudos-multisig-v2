@@ -55,7 +55,7 @@ const Transactions = () => {
                 date: moment(formatDateTime(proposal.submit_time)).toDate(),
                 status: status,
                 votesCount: proposal.group_proposal_votes.length,
-                membersCount: selectedWallet?.memberCount!,
+                membersCount: proposal.member_count,
                 proposalID: proposal.id
             }
 

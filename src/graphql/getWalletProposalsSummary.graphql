@@ -4,6 +4,7 @@ subscription getWalletProposalsSummary($id: Int = 0) {
       block {
         height
       }
+      member_count
       submit_time
       id
       messages
