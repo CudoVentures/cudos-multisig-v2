@@ -1,5 +1,4 @@
 import { COLORS_DARK_THEME } from "theme/colors";
-import { EXPIRED } from "utils/constants";
 
 export const styles = {
     icons: {
@@ -10,7 +9,7 @@ export const styles = {
         backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND,
         borderRadius: '20px',
         padding: '20px 20px 20px 40px',
-        width: '550px',
+        width: '600px',
         display: 'block'
     },
     recipientsBox: {
