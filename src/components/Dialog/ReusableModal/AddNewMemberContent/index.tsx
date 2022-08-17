@@ -1,18 +1,21 @@
 import { RootState } from 'store'
 import { styles } from '../styles'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { isValidCudosAddress } from 'utils/validation'
 import { useGetWalletMembersQuery } from 'graphql/types'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
+import { getMembersUpdateMsgAndFees } from '../helpers'
+import { EncodeObject, StdFee } from 'cudosjs'
+import { updateModalState } from 'store/modals'
+import SelectFromAddressBook from './SelectFromAddressBook'
 
 import {
     DEFAULT_VOTING_WEIGHT,
     DUPLICATED_ADDRESS_MSG,
     INVALID_DATA_PROMPT_MSG
 } from 'utils/constants'
-import { getMembersUpdateMsgAndFees } from '../helpers'
-import { EncodeObject, StdFee } from 'cudosjs'
+import { Member } from 'store/walletObject'
 
 const AddNewMemberContent = ({
     propose,
@@ -25,15 +28,19 @@ const AddNewMemberContent = ({
     close: () => void,
 }) => {
 
-    const { address, selectedWallet } = useSelector((state: RootState) => state.userState)
+    const dispatch = useDispatch()
+    const { address, selectedWallet, addressBook } = useSelector((state: RootState) => state.userState)
+    const { selectFromAddressBook } = useSelector((state: RootState) => state.modalState)
+    const { members } = useSelector((state: RootState) => state.walletObject)
     const [newMemberName, setNewMemberName] = useState<string>('')
     const [newMemberAddress, setNewMemberAddress] = useState<string>('')
     const walletId: number = parseInt(selectedWallet!.walletID!)
+    const haveAddressBook: boolean = Object.keys(addressBook!).length > 0
     const { loading, error, data } = useGetWalletMembersQuery({
         variables: { id: walletId }
     })
 
-    const oldWalletMembers: { metadata: string; address: string; weight: number }[] = []
+    const oldWalletMembers: Member[] = []
 
     if (data) {
         for (const member of data.group_with_policy_by_pk!.group_members) {
@@ -50,9 +57,15 @@ const AddNewMemberContent = ({
     }
 
     const validData = (): boolean => {
+
+        if (selectFromAddressBook && members?.length! > 0) {
+            return true
+        }
+
         if (newMemberName !== '' && isValidCudosAddress(newMemberAddress)) {
             return true
         }
+
         return false
     }
 
@@ -64,23 +77,32 @@ const AddNewMemberContent = ({
         if (userInWallet()) {
             return DUPLICATED_ADDRESS_MSG
         }
-        
+
         return ''
     }
 
     const createProposal = async () => {
 
-        const newMember = {
-            address: newMemberAddress,
-            weight: DEFAULT_VOTING_WEIGHT,
-            metadata: JSON.stringify({
-                memberName: newMemberName
+        const newMembers = []
+        selectFromAddressBook ?
+            members?.map((newMember) => {
+                newMembers.push({
+                    address: newMember.address,
+                    weight: DEFAULT_VOTING_WEIGHT,
+                    metadata: newMember.metadata
+                })
+            }) :
+            newMembers.push({
+                address: newMemberAddress,
+                weight: DEFAULT_VOTING_WEIGHT,
+                metadata: JSON.stringify({
+                    memberName: newMemberName
+                })
             })
-        }
 
         const updatedWalletMembers = [
             ...oldWalletMembers,
-            newMember
+            ...newMembers
         ]
 
         const { msg, fee } = await getMembersUpdateMsgAndFees(
@@ -91,10 +113,7 @@ const AddNewMemberContent = ({
         )
 
         const msgSpecificData = {
-            member: {
-                metadata: newMemberName,
-                address: newMemberAddress
-            }
+            members: newMembers
         }
 
         propose(
@@ -107,30 +126,44 @@ const AddNewMemberContent = ({
     return (
         <Box>
             {/* CONTENT */}
-            <Box style={styles.contentHolder}>
-                <Box>
-                    <Typography style={styles.typography}>Member name</Typography>
-                    <Input
-                        disableUnderline
-                        style={styles.addressInput}
-                        type="text"
-                        placeholder="e.g James Bond"
-                        onChange={(e) => setNewMemberName(e.target.value)}
-                    />
-                </Box>
-                <Box>
-                    <Typography style={{ margin: '20px 0 10px 0' }}>Account address</Typography>
-                    <Input
-                        disableUnderline
-                        style={styles.addressInput}
-                        type="text"
-                        value={newMemberAddress}
-                        placeholder="e.g cudos1nkf0flyugd2ut40cg4tn48sp70p2e65wse8abc"
-                        onChange={(e) => setNewMemberAddress(e.target.value)}
-                    />
-                </Box>
-            </Box>
+            {selectFromAddressBook ? <SelectFromAddressBook /> :
+                <Box style={styles.contentHolder}>
 
+                    <Box>
+                        <Box style={styles.selectFromAddrBook}>
+                            <Typography style={styles.typography}>Member name</Typography>
+                            {haveAddressBook ?
+                                <Button
+                                    disableRipple
+                                    style={styles.typography}
+                                    onClick={() => dispatch(updateModalState({ selectFromAddressBook: true }))}
+                                >
+                                    Select from Address Book
+                                </Button>
+                                : null}
+                        </Box>
+
+                        <Input
+                            disableUnderline
+                            style={styles.addressInput}
+                            type="text"
+                            placeholder="e.g James Bond"
+                            onChange={(e) => setNewMemberName(e.target.value)}
+                        />
+                    </Box>
+                    <Box>
+                        <Typography style={{ margin: '20px 0 10px 0' }}>Account address</Typography>
+                        <Input
+                            disableUnderline
+                            style={styles.addressInput}
+                            type="text"
+                            value={newMemberAddress}
+                            placeholder="e.g cudos1nkf0flyugd2ut40cg4tn48sp70p2e65wse8abc"
+                            onChange={(e) => setNewMemberAddress(e.target.value)}
+                        />
+                    </Box>
+                </Box>
+            }
             {/* CONTROLS */}
             <Box style={styles.controlsHolder}>
                 <Box style={{ width: '40%' }}>
@@ -138,7 +171,10 @@ const AddNewMemberContent = ({
                         variant="contained"
                         color="secondary"
                         sx={styles.ctrlBtn}
-                        onClick={close}
+                        onClick={() =>
+                            selectFromAddressBook ?
+                                dispatch(updateModalState({ selectFromAddressBook: false })) :
+                                close()}
                     >
                         No, Go Back
                     </Button>

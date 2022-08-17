@@ -9,7 +9,7 @@ import { DELETE_MEMBER_TYPE_URL } from 'utils/constants'
 
 interface SuccessData {
     msgSpecificData: {
-        member: Member;
+        members: Member[];
     }
     txHash: string;
     txFee: string;
@@ -19,6 +19,7 @@ const MembersUpdateSuccess = () => {
 
     const { dataObject, msgType } = useSelector((state: RootState) => state.modalState)
     const successData: SuccessData = new Object(dataObject) as SuccessData
+    const multiMembers: boolean = successData.msgSpecificData.members.length > 1
 
     return (
         <Box
@@ -28,42 +29,47 @@ const MembersUpdateSuccess = () => {
             flexDirection="column"
             gap={2}
         >
-            <Typography >
-                Member to {msgType === DELETE_MEMBER_TYPE_URL ? 'Delete' : 'Add'}
+            <Typography textAlign={'center'}>
+                {multiMembers ? `${successData.msgSpecificData.members.length} Members` : 'Member'} to
+                {msgType === DELETE_MEMBER_TYPE_URL ? ' Delete' : ' Add'}
             </Typography>
-            <Box style={{ width: '100%', justifyContent: 'space-between', display: 'flex' }}>
-                <Typography variant='subtitle1' color='text.secondary'>
-                    Name
-                </Typography>
-                <Typography variant='subtitle1' color={"primary.main"}>
-                    {successData.msgSpecificData.member.metadata}
-                </Typography>
-            </Box>
-            <Box style={{ justifyContent: 'space-between', display: 'flex' }}>
-                <Typography variant='subtitle1' color='text.secondary'>
-                    Address
-                </Typography>
-                <Tooltip title="Open in Explorer">
-                    <a href={EXPLORER_ADDRESS_DETAILS(successData.msgSpecificData.member.address)} target='_blank'>
-                        <Stack
-                            marginBottom='20px'
-                            direction="row"
-                            spacing={1}
-                            alignItems="center"
-                            sx={{ cursor: 'pointer' }}
-                        >
-                            <Typography
-                                variant="body2"
-                                color="primary.main"
-                                sx={{ textDecoration: 'underline' }}
-                            >
-                                {formatAddress(successData.msgSpecificData.member.address, 25)}
-                            </Typography>
- 
-                        </Stack>
-                    </a>
-                </Tooltip>
-            </Box>
+            {multiMembers ? null :
+                <Box>
+                    <Box style={{ width: '100%', justifyContent: 'space-between', display: 'flex' }}>
+                        <Typography variant='subtitle1' color='text.secondary'>
+                            Name
+                        </Typography>
+                        <Typography variant='subtitle1' color={"primary.main"}>
+                            {JSON.parse(successData.msgSpecificData.members[0].metadata).memberName}
+                        </Typography>
+                    </Box>
+                    <Box style={{ justifyContent: 'space-between', display: 'flex' }}>
+                        <Typography variant='subtitle1' color='text.secondary'>
+                            Address
+                        </Typography>
+                        <Tooltip title="Open in Explorer">
+                            <a href={EXPLORER_ADDRESS_DETAILS(successData.msgSpecificData.members[0].address)} target='_blank'>
+                                <Stack
+                                    marginBottom='20px'
+                                    direction="row"
+                                    spacing={1}
+                                    alignItems="center"
+                                    sx={{ cursor: 'pointer' }}
+                                >
+                                    <Typography
+                                        variant="body2"
+                                        color="primary.main"
+                                        sx={{ textDecoration: 'underline' }}
+                                    >
+                                        {formatAddress(successData.msgSpecificData.members[0].address, 25)}
+                                    </Typography>
+
+                                </Stack>
+                            </a>
+                        </Tooltip>
+                    </Box>
+                </Box>
+            }
             <Divider />
             <Box display="flex" alignItems="center" gap={1} padding="0.5rem 0">
                 <Typography variant="body2">Fee</Typography>

@@ -20,10 +20,21 @@ export const styles = {
         display: 'flex', 
         justifyContent: 'center'
     },
+    smallTooltip: {
+        float: 'left', 
+        padding: '0', 
+        margin: '0'
+      },
     controlsHolder: {
         width: '100%',
         display: "flex",
         justifyContent: 'space-evenly'
+    },
+    selectFromAddrBook: {
+        width: '100%',
+        display: "flex",
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     centerFlex: {
         width: '100%',

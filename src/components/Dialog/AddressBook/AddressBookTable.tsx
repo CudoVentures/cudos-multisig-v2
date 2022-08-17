@@ -285,10 +285,10 @@ export default function AddressBookTable() {
                       scope="row"
                       padding="none"
                     >
-                      {row.name.toString().length > 18 ?
+                      {row.name.toString().length > 15 ?
                         <Tooltip title={row.name}>
                           <div>
-                            {formatAddress(row.name.toString(), 10)}
+                            {formatAddress(row.name.toString(), 8)}
                           </div>
                         </Tooltip>
                         : row.name

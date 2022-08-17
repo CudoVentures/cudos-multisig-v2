@@ -15,6 +15,7 @@ export interface modalState {
     openFundWallet?: boolean
     addNewAddress?: boolean
     editAddressBookRecord?: boolean
+    selectFromAddressBook?: boolean
     openVotingModal?: boolean
     openReusableModal?: boolean
     openSingleSendModal?: boolean
@@ -32,6 +33,7 @@ export const initialState: modalState = {
     failure: false,
     addNewAddress: false,
     editAddressBookRecord: false,
+    selectFromAddressBook: false,
     transactionSelector: false,
     walletRelated: false,
     openAddressBook: false,

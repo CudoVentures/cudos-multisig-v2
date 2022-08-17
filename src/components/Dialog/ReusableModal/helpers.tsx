@@ -9,6 +9,7 @@ import CopyIcon from 'assets/vectors/copy-icon.svg'
 import { EXPLORER_ADDRESS_DETAILS } from "api/endpoints"
 import copy from "copy-to-clipboard"
 import EditIcon from 'assets/vectors/blue-edit-icon.svg'
+import ToolTipIcon from 'assets/vectors/tooltip-icon.svg'
 import { getSigningClient } from "utils/config"
 import { Coin, DeliverTxResponse, EncodeObject, GasPrice, StdFee } from "cudosjs"
 import { convertVotingPeriodToSeconds, formatAddress } from "utils/helpers"
@@ -163,11 +164,21 @@ export const getWalletMetadataUpdateMsgAndFees = async (
 
 export const TitleAndSubtitle = (): JSX.Element => {
 
-    const { dataObject } = useSelector((state: RootState) => state.modalState)
+    const { dataObject, selectFromAddressBook } = useSelector((state: RootState) => state.modalState)
     const msgType: string = dataObject!.msgType as string
 
     let title: string = 'Add New Member'
-    let subTitle: string | JSX.Element = 'In order to add new member fill in the information below'
+    let subTitle: string | JSX.Element = selectFromAddressBook ?
+        <Tooltip title={"Only addresses not currently in the wallet are displayed"}>
+            <div>
+                <Typography style={styles.smallTooltip}>
+                    You may add new members from the list below
+                </Typography>
+                <img style={styles.smallTooltip} src={ToolTipIcon} alt="Tooltip" />
+            </div>
+        </Tooltip>
+        :
+        'In order to add new member fill in the information below'
 
     if (msgType === GROUP_UPDATE_METADATA_TYPE_URL) {
         title = 'Edit Wallet Details'

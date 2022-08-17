@@ -2,8 +2,8 @@ import { Box, Button, Tooltip } from '@mui/material'
 import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import LeftMenu from 'components/LeftMenu'
+import { useCallback, useEffect, useRef } from 'react'
+import LeftMenu, { MenuItems } from 'components/LeftMenu'
 import LeftWalletSummary from 'components/LeftWalletSummary'
 import { MenuSelectionInfo } from 'components/WalletOperations'
 import Dashboard from 'components/WalletOperations/Dashboard'
@@ -17,10 +17,11 @@ import Transactions from 'components/WalletOperations/Transactions'
 import { ADD_MEMBER_TYPE_URL } from 'utils/constants'
 import Settings from 'components/WalletOperations/Settings'
 import { updateMenuSelectionState } from 'store/menu'
+import { useNavigate } from 'react-router-dom'
 
 const WalletDetails = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [selected, setSelected] = useState<number>(0)
     const defaultElement = document.createElement('div') as HTMLInputElement
     const resizableCardLeft = useRef<HTMLInputElement>(defaultElement)
     const resizableCardRight = useRef<HTMLInputElement>(defaultElement)
@@ -29,11 +30,20 @@ const WalletDetails = () => {
     const entireDashboardPage = useRef<HTMLInputElement>(defaultElement)
     const { menuSelection } = useSelector((state: RootState) => state.menu)
 
+    const setSelection = (index: number) => {
+        if (index !== menuSelection) {
+            rightStepsContent.current.style.opacity = '0'
+            setTimeout(() => dispatch(updateMenuSelectionState({ menuSelection: index })), 300)
+            setTimeout(() => rightStepsContent.current.style.opacity = '1', 300)
+            setTimeout(() => navigate(`/${MenuItems[index].text.toLowerCase()}`), 300)
+        }
+    }
+
     useEffect(() => {
         dispatch(updateModalState({ loading: true, loadingType: true }))
         setTimeout(() => dispatch(updateModalState({ ...initialModalState })), 500)
         setTimeout(() => resizableCardLeft.current.style.opacity = '1', 400)
-        dispatch(updateMenuSelectionState({ menuSelection: 0 }))
+        setSelection(0)
     }, [])
 
     const handleNewTxClick = () => {
@@ -59,7 +69,7 @@ const WalletDetails = () => {
 
             switch (menuSelection) {
                 case 0:
-                    return <Dashboard setSelected={setSelected} />
+                    return <Dashboard setSelection={setSelection} />
                 case 1:
                     return <Transactions />
                 case 2:
@@ -115,9 +125,7 @@ const WalletDetails = () => {
             <Card ref={resizableCardLeft} style={styles.leftSteps}>
                 <div ref={leftStepsContent} style={{ ...styles.contentAppear }}>
                     <LeftMenu
-                        selected={selected}
-                        setSelected={setSelected}
-                        rightStepsContent={rightStepsContent}
+                        setSelection={setSelection}
                     />
                     <LeftWalletSummary
                         resizableCardRight={resizableCardRight}

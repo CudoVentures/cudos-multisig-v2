@@ -14,8 +14,7 @@ export const styles = {
     componentHolderBox: {
         backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND,
         borderRadius: '20px',
-        padding: '20px 20px 20px 40px',
-        width: '550px',
+        width: 'max-content',
         display: 'block'
     },
     recipientsBox: {
@@ -28,5 +27,10 @@ export const styles = {
         display: 'flex',
         alignItems: 'center',
         marginTop: '5px'
+    },
+    scrollablePopOver: {
+        overflow: 'scroll', 
+        maxHeight: '250px', 
+        marginBottom: '-15px'
     }
 } as const

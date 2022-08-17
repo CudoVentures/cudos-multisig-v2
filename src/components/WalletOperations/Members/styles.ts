@@ -11,6 +11,8 @@ export const styles = {
         display: 'flex'
     },
     addressHolderCell: {
+        width: '440px',
+        justifyContent: 'space-between',
         alignItems: 'center',
         display: 'inline-flex',
         color: COLORS_DARK_THEME.SECONDARY_TEXT

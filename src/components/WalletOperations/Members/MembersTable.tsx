@@ -1,5 +1,27 @@
 //@ts-nocheck
 import * as React from 'react';
+import copy from 'copy-to-clipboard'
+import { visuallyHidden } from '@mui/utils'
+import { useDispatch } from 'react-redux'
+import { styles } from './styles'
+import { formatAddress } from 'utils/helpers'
+import { COLORS_DARK_THEME } from 'theme/colors'
+import { updateModalState } from 'store/modals'
+import Dialog from 'components/Dialog'
+import trashbinIcon from 'assets/vectors/gray-trashbin-icon.svg'
+import { DELETE_MEMBER_TYPE_URL } from 'utils/constants'
+import { CopyAndFollowComponent } from 'components/Dialog/ReusableModal/helpers'
+
+import {
+  Order,
+  stableSort,
+  getComparator,
+  HeadCell,
+  TableData,
+  createData,
+  EnhancedTableProps
+} from 'utils/tableSortingHelper'
+
 import {
   Box,
   Table,
@@ -11,30 +33,7 @@ import {
   Tooltip,
   TableSortLabel
 } from '@mui/material'
-import copy from 'copy-to-clipboard'
-import { visuallyHidden } from '@mui/utils'
-import { useDispatch } from 'react-redux'
 
-import { styles } from './styles'
-import { formatAddress } from 'utils/helpers'
-import { COLORS_DARK_THEME } from 'theme/colors'
-import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
-import { updateModalState } from 'store/modals'
-import Dialog from 'components/Dialog'
-
-import LinkIcon from 'assets/vectors/link-icon.svg'
-import CopyIcon from 'assets/vectors/copy-icon.svg'
-import trashbinIcon from 'assets/vectors/gray-trashbin-icon.svg'
-import {
-  Order,
-  stableSort,
-  getComparator,
-  HeadCell,
-  TableData,
-  createData,
-  EnhancedTableProps
-} from 'utils/tableSortingHelper';
-import { DELETE_MEMBER_TYPE_URL } from 'utils/constants';
 
 const headCells: readonly HeadCell[] = [
   {
@@ -185,27 +184,7 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
                     </TableCell>
                     <TableCell style={styles.addressHolderCell} align="left">
                       {row.address}
-                      <Box>
-                        <Tooltip
-                          onClick={() => handleCopy(row.address.toString())}
-                          title={copied ? 'Copied' : 'Copy to clipboard'}
-                        >
-                          <img
-                            style={styles.icons}
-                            src={CopyIcon}
-                            alt="Copy"
-                          />
-                        </Tooltip>
-                        <Tooltip title="Check address on explorer">
-                          <a href={EXPLORER_ADDRESS_DETAILS(row.address.toString())} target='_blank'>
-                            <img
-                              style={{ paddingTop: '5px', ...styles.icons }}
-                              src={LinkIcon}
-                              alt="Link"
-                            />
-                          </a>
-                        </Tooltip>
-                      </Box>
+                      <CopyAndFollowComponent address={row.address} />
                     </TableCell>
                     <TableCell>
                       {/* COMMENTING OUT EDITING OPTION FOR A WALLET MEMBER */}
