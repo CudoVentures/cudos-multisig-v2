@@ -70,11 +70,11 @@ export const styles = {
         backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND
     },
     formattedRecipientAddressHolder: {
+        textAlign: 'left',
         padding: '10px',
         display: 'flex',
         alignItems: 'center',
-        borderRadius: '5px',
-        width: '450px',
+        borderRadius: '10px',
         backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND
     },
     addToListButton: {
@@ -88,101 +88,114 @@ export const styles = {
         padding: '10px'
     },
     resultCells: {
-      padding: '5px 5px 5px 5px',
-      textAlign: "left",
-      verticalAlign: "middle",
-      fontWeight: 'bold'
+        padding: '5px 5px 5px 5px',
+        textAlign: "left",
+        verticalAlign: "middle",
+        fontWeight: 'bold'
     },
     resultRow: {
-      display: "flex",
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      height: '26%',
+        display: "flex",
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: '26%',
     },
     tableContainer: {
-      borderRadius: '10px', 
-      width: '100%', 
-      height: '100%', 
+        borderRadius: '10px',
+        width: '100%',
+        height: '100%',
     },
     csvBtn: {
-        height: '30px', 
-        paddingRight: '0', 
-        marginBottom: '5px', 
-        float: 'right', 
+        height: '30px',
+        paddingRight: '0',
+        marginBottom: '5px',
+        float: 'right',
         background: 'none'
     },
     tableHead: {
-        borderRadius: '10px', 
-        width: '100%', 
+        borderRadius: '10px',
+        width: '100%',
         display: 'block'
     },
     invisibleClearBtn: {
-        visibility: 'hidden', 
-        padding: '0 0 0 5px', 
-        margin: '0', 
-        float: 'right', 
+        visibility: 'hidden',
+        padding: '0 0 0 5px',
+        margin: '0',
+        float: 'right',
         background: 'none'
     },
     visibleClearBtn: {
-        padding: '0px', 
-        margin: '0', 
-        float: 'right', 
+        padding: '0px',
+        margin: '0',
+        float: 'right',
         background: 'none'
     },
     tableBody: {
-        display: 'block', 
-        height: '130px', 
-        overflow: 'scroll', 
-        padding: '5px', 
+        display: 'block',
+        height: '130px',
+        overflow: 'scroll',
+        padding: '5px',
         marginBottom: '-10px'
     },
     thrashBinIcon: {
-        paddingRight: '0', 
-        marginBottom: '5px', 
-        float: 'right', 
+        paddingRight: '0',
+        marginBottom: '5px',
+        float: 'right',
         background: 'none'
     },
     upperSummaryTable: {
-        display: 'grid', 
-        backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND, 
-        height: '173px', 
-        padding: '10px 20px 20px 20px', 
-        margin: '20px 0 20px 0', 
-        width: '100%', 
+        display: 'grid',
+        backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND,
+        height: '173px',
+        padding: '10px 20px 20px 20px',
+        margin: '20px 0 20px 0',
+        width: '100%',
         borderRadius: '10px'
-      },
-      lowerSummaryTable: {
-        display: 'grid', 
-        backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND, 
-        height: '88px', 
-        padding: '20px', 
-        margin: '10px 0 10.5px 0', 
-        width: '100%', 
+    },
+    lowerSummaryTable: {
+        display: 'grid',
+        backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND,
+        height: '88px',
+        padding: '20px',
+        margin: '10px 0 10.5px 0',
+        width: '100%',
         borderRadius: '10px',
         alignContent: 'center'
-      },
-      smallTooltip: {
-        float: 'left', 
-        padding: '0', 
-        margin: '0', 
+    },
+    smallTooltip: {
+        float: 'left',
+        padding: '0',
+        margin: '0',
         height: '25px'
-      },
-      addRowHolder: {
-        marginTop: '-10px', 
-        alignItems: 'flex-end', 
-        width: '100%', 
+    },
+    addRowHolder: {
+        marginTop: '-10px',
+        alignItems: 'flex-end',
+        width: '100%',
         display: 'flex'
-      },
-      amountHeadCell: {
-        padding: '0px 0px 0px 65px', 
-        textAlign: 'left', 
+    },
+    amountHeadCell: {
+        padding: '0px 0px 0px 65px',
+        textAlign: 'left',
         width: '250px'
-      },
-      addressHeadCell: {
-        padding: '10px', 
+    },
+    addressHeadCell: {
+        padding: '10px',
         width: '410px'
-      },
-      hashHeadCell: {
+    },
+    hashHeadCell: {
         padding: '10px 10px 10px 24px'
-      }
+    },
+    menuProps: {
+        style: {
+            maxHeight: 195,
+        },
+    },
+    clearBtn: {
+        padding: '0', 
+        textDecoration: 'none'
+    },
+    placeholder: {
+        fontSize: '15.4px',
+        color: '#8f95a5'
+    }
 } as const

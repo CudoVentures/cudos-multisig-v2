@@ -17,6 +17,7 @@ export interface EnhancedTableProps {
 
 export interface HeadCell {
     disablePadding?: boolean;
+    width?: number;
     id: keyof TableData;
     label: string;
     numeric: boolean;

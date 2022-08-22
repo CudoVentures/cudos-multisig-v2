@@ -38,7 +38,7 @@ export const styles = {
     paddingLeft: '10px', 
     background: COLORS_DARK_THEME.LIGHT_BACKGROUND, 
     borderRadius: '10px', 
-    margin: '10px 0px 5px 0px'
+    margin: '12px 0px 5px 0px'
   },
   defaultSummaryTableCell: {
     width: '120px', 

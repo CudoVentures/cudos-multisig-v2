@@ -13,6 +13,8 @@ import { ProposalStatusComponent } from 'utils/proposalStatusHandler'
 import ProposalDetails from 'components/Dialog/ProposalDetails'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 import {
   Box,
@@ -27,6 +29,10 @@ import {
   Typography,
   Collapse,
   IconButton,
+  TableFooter,
+  Pagination,
+  PaginationItem,
+  Stack
 } from '@mui/material'
 
 import {
@@ -64,31 +70,37 @@ const headCells: readonly HeadCell[] = [
     id: 'blockHeight',
     numeric: false,
     label: 'Height',
+    width: 100
   },
   {
     id: 'type',
     numeric: false,
     label: 'Type',
+    width: 140
   },
   {
     id: 'txHash',
     numeric: false,
     label: 'Transaction Hash',
+    width: 175
   },
   {
     id: 'date',
     numeric: false,
     label: 'Date',
+    width: 210
   },
   {
     id: 'votesCount',
     numeric: false,
     label: 'Votes',
+    width: 185
   },
   {
     id: 'status',
     numeric: false,
     label: 'Status',
+    width: 50
   },
 ]
 
@@ -112,21 +124,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       <TableRow style={styles.tableRow}>
         {headCells.map((headCell, idx) => (
           <TableCell
-            width={(
-              idx === 0 ? 100 :
-                idx === 1 ? 140 :
-                  idx === 2 ? 175 :
-                    idx === 3 ? 210 :
-                      idx === 4 ? 185 :
-                        idx === 5 ? 50 :
-                          idx === 6 ? 20 :
-                            100)}
+            width={headCell.width}
             key={headCell.id}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            {idx === 3 ?
+            {headCell.id === 'date' ?
               <TableSortLabel
-                style={{ color: COLORS_DARK_THEME.SECONDARY_TEXT }}
+                style={styles.enhancedTableHeadCell}
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : 'asc'}
                 onClick={createSortHandler(headCell.id)}
@@ -139,10 +143,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 ) : null}
               </TableSortLabel>
               :
-              <div style={{
-                color: COLORS_DARK_THEME.SECONDARY_TEXT,
-                position: 'relative',
-              }}
+              <div style={styles.enhancedTableHeadCell}
               >
                 {headCell.label}
               </div>}
@@ -184,7 +185,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             }
           </TableCell>
 
-          <TableCell width={220} align="left">
+          <TableCell style={{paddingRight: '0px'}} width={220} align="left">
             <Box style={{ display: 'flex', alignItems: 'center' }}>
               <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
               <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
@@ -229,6 +230,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 export default function TransactionsTable({ fetchedData }: { fetchedData: TableData[] }) {
   const [order, setOrder] = React.useState<Order>('desc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('date');
+  const [page, setPage] = React.useState<number>(0)
+  const rowsPerPage: number = 8
 
   const rows: TableData[] = [];
   if (fetchedData.length > 0) {
@@ -255,6 +258,10 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
     setOrderBy(property);
   }
 
+  const handlePageChange = (event: React.BaseSyntheticEvent, pageNumber: number) => {
+    setPage(pageNumber - 1)
+  }
+
   return (
     <Box>
       <Dialog />
@@ -262,11 +269,7 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
         <Table
           aria-labelledby="tableTitle"
           size='medium'
-          sx={{
-            marginTop: '10px',
-            width: '100%',
-            maxHeight: '100%'
-          }}
+          sx={styles.table}
         >
           <EnhancedTableHead
             order={order}
@@ -275,14 +278,35 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
             rowCount={rows.length}
           />
           <TableBody style={styles.tableBody}>
-            {stableSort(rows, getComparator(order, orderBy))
-              .map((row, index) => {
-
-                return (
-                  <Row key={row.proposalID} row={row} />
-                )
-              })}
+            {
+              stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  return (
+                    <Row key={row.proposalID} row={row} />
+                  )
+                })}
           </TableBody>
+          {
+            rows.length > rowsPerPage ?
+              <TableFooter>
+                <TableRow>
+                  <Stack alignItems={'center'} spacing={2}>
+                    <Pagination
+                      onChange={handlePageChange}
+                      count={Math.ceil(rows.length / rowsPerPage)}
+                      renderItem={(item) => (
+                        <PaginationItem
+                          components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }}
+                          {...item}
+                        />
+                      )}
+                    />
+                  </Stack>
+                </TableRow>
+              </TableFooter>
+              : null
+          }
         </Table>
       </TableContainer>
     </Box>
