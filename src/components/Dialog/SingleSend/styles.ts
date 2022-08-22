@@ -12,7 +12,8 @@ export const styles = {
     walletAddress: {
         display: 'flex',
         margin: '30px 0 5px 0',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     connectedAddress: {
         width: '100%',
@@ -104,4 +105,7 @@ export const styles = {
         width: '100%',
         backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND
     },
+    typography: {
+        margin: '20px 0 10px 0'
+    }
 } as const

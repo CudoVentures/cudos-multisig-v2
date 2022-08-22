@@ -69,7 +69,7 @@ export const styles = {
     tableBody: {
         width: '100%',
         display: 'block',
-        maxHeight: '620px',
+        maxHeight: '625px',
         overflow: 'scroll'
     },
     tableContainer: {
@@ -109,4 +109,19 @@ export const styles = {
         marginLeft: '10px',
         cursor: 'pointer'
     },
+    enhancedTableHeadCell: {
+        color: COLORS_DARK_THEME.SECONDARY_TEXT,
+    },
+    sortingHolder: {
+        width: 'max-content', 
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center'
+    },
+    table: {
+        marginTop: '10px',
+        width: '100%',
+        maxHeight: '100%',
+        height: '420px'
+    }
 } as const

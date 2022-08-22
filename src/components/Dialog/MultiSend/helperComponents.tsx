@@ -29,6 +29,8 @@ import {
     Box,
     Button,
     Input,
+    MenuItem,
+    Select,
     Table,
     TableContainer,
     TableRow,
@@ -39,7 +41,6 @@ import {
 export const Preview = ({ displayWorthyFee }: { displayWorthyFee: string }): JSX.Element => {
 
     const { multisendRows } = useSelector((state: RootState) => state.sendFunds)
-    const { selectedWallet } = useSelector((state: RootState) => state.userState)
 
     return (
         <Box id='component-holder'>
@@ -125,7 +126,7 @@ export const SingleUserInput = (): JSX.Element => {
     const [recipientAddress, setRecipientAddress] = useState<string>('')
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
     const { multisendRows } = useSelector((state: RootState) => state.sendFunds)
-    const { openAssetsTable } = useSelector((state: RootState) => state.modalState)
+    const { openAssetsTable, selectFromAddressBook } = useSelector((state: RootState) => state.modalState)
 
     const defaultBalance: Coin = {
         denom: NATIVE_TOKEN_DENOM,
@@ -191,6 +192,10 @@ export const SingleUserInput = (): JSX.Element => {
         }))
     }
 
+    useEffect(() => {
+        setRecipientAddress('')
+    }, [selectFromAddressBook])
+
     return (
         <Box style={styles.addRowHolder}>
             <Box id='recipientHolder'>
@@ -198,16 +203,25 @@ export const SingleUserInput = (): JSX.Element => {
                     <Typography marginRight={10} fontWeight={600}>
                         Recipient address
                     </Typography>
+                    <SelectFromAddrBookBtn />
                 </Box>
-                <Input
-                    style={styles.formattedRecipientAddressHolder}
-                    disableUnderline
-                    placeholder='enter recipients address'
-                    type="text"
-                    name='recipientAddress'
-                    value={recipientAddress}
-                    onChange={handleChange}
-                />
+                {
+                    selectFromAddressBook ?
+                        <SelectFromAddrBookDropDown
+                            onChangeProp={handleChange}
+                            componentWidth={"401px"}
+                        />
+                        :
+                        <Input
+                            style={styles.formattedRecipientAddressHolder}
+                            disableUnderline
+                            placeholder='enter recipients address'
+                            type="text"
+                            name='recipientAddress'
+                            value={recipientAddress}
+                            onChange={handleChange}
+                        />
+                }
             </Box>
             <Box style={{ margin: '0 20px' }}>
                 <Box id='amountHolder' style={styles.walletAddress}>
@@ -320,4 +334,81 @@ export const ConnectedAddressAndNetwork = (): JSX.Element => {
             </Box>
         </Box>
     )
+}
+
+export const SelectFromAddrBookDropDown = ({
+    onChangeProp,
+    componentWidth
+}: {
+    onChangeProp: (event: any) => void,
+    componentWidth: string
+}): JSX.Element => {
+
+    const { addressBook } = useSelector((state: RootState) => state.userState)
+    const { multisendRows } = useSelector((state: RootState) => state.sendFunds)
+    const [selected, setSelected] = useState<string>('')
+
+    useEffect(() => {
+        setSelected('')
+    }, [multisendRows])
+
+    const handleChange = (e: any) => {
+        onChangeProp(e)
+        setSelected(e.target.value)
+    }
+
+    return (
+        <Select
+            sx={{ ...styles.formattedRecipientAddressHolder, width: componentWidth }}
+            MenuProps={styles.menuProps}
+            name='recipientAddress'
+            variant='standard'
+            disableUnderline
+            displayEmpty
+            value={selected}
+            onChange={handleChange}
+            renderValue={selected ? undefined : () =>
+                <Typography style={styles.placeholder} >
+                    select from the list
+                </Typography>
+            }
+        >
+            {Object.entries(addressBook!).map((e, i) => {
+                const address = e[0]
+                const name = e[1]
+                return (
+                    <MenuItem value={address}>
+                        <Tooltip title={name}>
+                            <Box>{address}</Box>
+                        </Tooltip>
+                    </MenuItem>
+                )
+            })}
+        </Select>
+    )
+}
+
+export const SelectFromAddrBookBtn = (): JSX.Element => {
+
+    const dispatch = useDispatch()
+    const { addressBook } = useSelector((state: RootState) => state.userState)
+    const { selectFromAddressBook } = useSelector((state: RootState) => state.modalState)
+    const haveAddressBook: boolean = Object.keys(addressBook!).length > 0
+
+    return haveAddressBook ? selectFromAddressBook ?
+        <Button
+            style={styles.clearBtn}
+            disableRipple
+            onClick={() => dispatch(updateModalState({ selectFromAddressBook: false }))}
+        >
+            Enter Manually
+        </Button> :
+        <Button
+            style={styles.clearBtn}
+            disableRipple
+            onClick={() => dispatch(updateModalState({ selectFromAddressBook: true }))}
+        >
+            Select from Address Book
+        </Button>
+        : <></>
 }

@@ -21,6 +21,7 @@ import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
 import { handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
 import { executeMsgs, getSingleSendMsgAndFees } from '../ReusableModal/helpers'
 import { isValidCudosAddress } from 'utils/validation'
+import { SelectFromAddrBookBtn, SelectFromAddrBookDropDown } from '../MultiSend/helperComponents'
 
 import {
     CHAIN_NAME,
@@ -50,7 +51,7 @@ const SingleSend = () => {
     const detailsDropdown = useRef<HTMLInputElement>(defaultElement)
     const contentToAppear = useRef<HTMLInputElement>(defaultElement)
 
-    const { openSingleSendModal, openAssetsTable } = useSelector((state: RootState) => state.modalState)
+    const { openSingleSendModal, openAssetsTable, selectFromAddressBook } = useSelector((state: RootState) => state.modalState)
     const { selectedWallet, address, nativeBalance } = useSelector((state: RootState) => state.userState)
 
     const defaultBalance: Coin = {
@@ -282,6 +283,11 @@ const SingleSend = () => {
         }))
     }
 
+    useEffect(() => {
+        clean()
+        setRecipientAddress('')
+    }, [selectFromAddressBook])
+
     return (
         <MuiDialog
             BackdropProps={defaultStyles.defaultBackDrop}
@@ -334,16 +340,25 @@ const SingleSend = () => {
                                 <Typography marginRight={10} fontWeight={600}>
                                     Recipient address
                                 </Typography>
+                                <SelectFromAddrBookBtn />
                             </Box>
-                            <Input
-                                style={styles.formattedRecipientAddressHolder}
-                                disableUnderline
-                                placeholder='enter recipients address'
-                                type="text"
-                                name='recipientAddress'
-                                value={recipientAddress}
-                                onChange={handleChange}
-                            />
+                            {
+                                selectFromAddressBook ?
+                                    <SelectFromAddrBookDropDown
+                                        componentWidth={'100%'}
+                                        onChangeProp={handleChange}
+                                    />
+                                    :
+                                    <Input
+                                        style={styles.formattedRecipientAddressHolder}
+                                        disableUnderline
+                                        placeholder='enter recipients address'
+                                        type="text"
+                                        name='recipientAddress'
+                                        value={recipientAddress}
+                                        onChange={handleChange}
+                                    />
+                            }
                             <Box style={styles.walletAddress}>
                                 <Typography marginRight={10} fontWeight={600}>
                                     Amount
