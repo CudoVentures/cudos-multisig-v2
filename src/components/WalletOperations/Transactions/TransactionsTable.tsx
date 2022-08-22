@@ -157,9 +157,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 function Row(props: { row: ReturnType<typeof createData> }) {
   const { row } = props
   const [open, setOpen] = React.useState(false)
+  const rowRef = React.useRef(row.proposalID)
+
+  //TODO: Do we need this?
+  const autoCenterTheCollapsedRow = () => {
+    // setTimeout(() => rowRef.current.scrollIntoView({ behavior: "smooth" }), 350)
+  }
 
   return (
-    <Box>
+    <Box style={{ scrollMarginTop: "10px" }} ref={rowRef}>
       <Box style={{ margin: '9px 0' }}>
         <Box
           onClick={() => setOpen(!open)}
@@ -185,7 +191,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             }
           </TableCell>
 
-          <TableCell style={{paddingRight: '0px'}} width={220} align="left">
+          <TableCell style={{ paddingRight: '0px' }} width={220} align="left">
             <Box style={{ display: 'flex', alignItems: 'center' }}>
               <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
               <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
@@ -217,7 +223,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           </TableCell>
 
         </Box>
-        <Collapse in={open} timeout='auto'>
+        <Collapse in={open} timeout='auto' addEndListener={open ? autoCenterTheCollapsedRow : null}>
           <ProposalDetails proposalID={row.proposalID!} />
         </Collapse>
       </Box>
