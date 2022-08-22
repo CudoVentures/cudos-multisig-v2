@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { styles } from './styles'
-import copy from 'copy-to-clipboard'
 import { RootState } from 'store'
 import Dialog from 'components/Dialog'
 import Card from 'components/Card/Card'
@@ -8,35 +6,20 @@ import { CHAIN_NAME } from 'utils/constants'
 import { formatAddress } from 'utils/helpers'
 import { updateModalState } from 'store/modals'
 import TxsSummaryTable from './TxsSummaryTable'
-import LinkIcon from 'assets/vectors/link-icon.svg'
-import CopyIcon from 'assets/vectors/copy-icon.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import WalletIcon from 'assets/vectors/wallet-icon.svg'
-import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
 import AssetIconComponent from 'utils/assetsIconHandler'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
+import { CopyAndFollowComponent } from 'components/Dialog/ReusableModal/helpers'
 
 const Dashboard = ({
-    setSelected
+    setSelection
 }:{
-    setSelected: React.Dispatch<React.SetStateAction<number>>;
+    setSelection: (index: number) => void;
 }) => {
-    const [copied, setCopied] = useState<boolean>(false)
+
     const { selectedWallet, balances } = useSelector((state: RootState) => state.userState)
     const dispatch = useDispatch()
-
-    const handleCopy = (value: string) => {
-        copy(value)
-        setCopied(true)
-    
-        setTimeout(() => {
-          setCopied(false)
-        }, 3000)
-      }
-
-    const handleFundWalletClick = () => {
-        dispatch(updateModalState({ openFundWallet: true }))
-    }
 
     const showAllAssets = () => {
         dispatch(updateModalState({
@@ -44,10 +27,6 @@ const Dashboard = ({
             openFundWallet: true,
             openAssetsTable: true
         }))
-    }
-
-    const seeAllTxs = () => {
-        setSelected(1)
     }
 
     return (
@@ -66,27 +45,7 @@ const Dashboard = ({
                                     {formatAddress(selectedWallet?.walletAddress!, 30)}
                                 </div>
                             </Tooltip>
-                            <Box style={{ display: 'flex', justifyContent: 'center'}}>
-                                <Tooltip
-                                    onClick={() => handleCopy(selectedWallet?.walletAddress!)}
-                                    title={copied ? 'Copied' : 'Copy to clipboard'}
-                                >
-                                    <img
-                                    style={{ marginLeft: '10px', cursor: 'pointer' }}
-                                    src={CopyIcon}
-                                    alt="Copy"
-                                    />
-                                </Tooltip>
-                                <Tooltip title="Check address on explorer">
-                                    <a href={EXPLORER_ADDRESS_DETAILS(selectedWallet?.walletAddress!)} target='_blank'>
-                                    <img
-                                        style={{ marginLeft: '10px', cursor: 'pointer' }}
-                                        src={LinkIcon}
-                                        alt="Link"
-                                    />
-                                    </a>
-                                </Tooltip>
-                            </Box>
+                           <CopyAndFollowComponent address={selectedWallet?.walletAddress!} />
                         </Box>
                     </Box>
                     <Box style={styles.upperCardBoxHolder}>
@@ -142,7 +101,7 @@ const Dashboard = ({
                                     height: '35px',
                                     fontWeight: 700
                                     })}
-                                    onClick={() => handleFundWalletClick()}
+                                    onClick={() => dispatch(updateModalState({ openFundWallet: true }))}
                                 >
                                     Fund wallet
                                 </Button>
@@ -168,7 +127,7 @@ const Dashboard = ({
                         disableRipple
                         variant="text"
                         style={{textDecoration: 'none'}}
-                        onClick={seeAllTxs}
+                        onClick={() => setSelection(1)}
                         >
                         <span>{"See all"}</span>
                     </Button>

@@ -23,9 +23,9 @@ const DeleteMemberContent = ({
     const { dataObject } = useSelector((state: RootState) => state.modalState)
     const walletId: number = parseInt(selectedWallet!.walletID!)
     const memberAddress: string = dataObject!.memberAddress as string
-    const memberName: string = dataObject!.memberName as string
     const walletMembers: TableData[] = dataObject!.walletMembers as TableData[]
     const updatedWalletMembers: Member[] = []
+    const membersForDeletion: Member[] = []
 
     for (const [index, member] of walletMembers.entries()) {
         const updatedMember = {
@@ -36,6 +36,9 @@ const DeleteMemberContent = ({
             })
         }
         updatedWalletMembers.push(updatedMember)
+        if (updatedMember.weight === 0) {
+            membersForDeletion.push(updatedMember)
+        }
     }
 
     const createProposal = async () => {
@@ -48,10 +51,7 @@ const DeleteMemberContent = ({
         )
 
         const msgSpecificData = {
-            member: {
-                metadata: memberName,
-                address: memberAddress
-            }
+            members: membersForDeletion
         }
 
         propose(
