@@ -1,4 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material'
+import { COLORS_DARK_THEME } from 'theme/colors'
 import { styles } from './styles'
 
 const centerLinks = [
@@ -25,6 +26,11 @@ const Footer = () => {
             onClick={() => window.open(link.url, '_blank')?.focus()}
           >
             <Typography
+              sx={{
+                "&:hover": {
+                  color: COLORS_DARK_THEME.PRIMARY_BLUE
+                }
+              }}
               color="text.secondary"
               fontSize="0.8rem"
               fontWeight={500}
