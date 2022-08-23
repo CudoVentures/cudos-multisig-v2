@@ -14,18 +14,18 @@ import { useNavigate } from 'react-router-dom'
 import SlidingSwitchMenu from '../SlidingMenu/SlidingSwitchMenu'
 import { setDecimalPrecisionTo } from 'utils/regexFormatting'
 
-import { 
-    formatAddress, 
-    getCudosBalanceInUSD, 
-    updatedWalletsBalances, 
-    updateWalletBalances 
+import {
+    formatAddress,
+    getCudosBalanceInUSD,
+    updatedWalletsBalances,
+    updateWalletBalances
 } from 'utils/helpers'
 
-const LeftWalletSummary = ({ 
+const LeftWalletSummary = ({
     resizableCardRight,
-    }:{
+}: {
     resizableCardRight: MutableRefObject<HTMLInputElement>;
-    }) => {
+}) => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -47,7 +47,7 @@ const LeftWalletSummary = ({
             console.debug(error.message)
         }
     }
-    
+
     const updateSelectedWallet = async () => {
         try {
             const updatedWallet = await updateWalletBalances(selectedWallet!)
@@ -61,9 +61,9 @@ const LeftWalletSummary = ({
     const handleCopy = (value: string) => {
         copy(value)
         setCopied(true)
-    
+
         setTimeout(() => {
-          setCopied(false)
+            setCopied(false)
         }, 3000)
     }
 
@@ -71,18 +71,18 @@ const LeftWalletSummary = ({
         const getCurrencies = async () => {
             const usdValue = await getCudosBalanceInUSD(selectedWallet?.nativeBalance!)
             setUsdValue(usdValue)
-          }
-          getCurrencies()
+        }
+        getCurrencies()
 
         const timer = setInterval(async () => {
             await updateSelectedWallet()
-            }, 15000)
+        }, 15000)
 
         return () => {
-        clearInterval(timer)
+            clearInterval(timer)
         }
 
-      }, [selectedWallet?.walletBalances])
+    }, [selectedWallet?.walletBalances])
 
     useEffect(() => {
         setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '0', 400)
@@ -94,7 +94,7 @@ const LeftWalletSummary = ({
         updateSelectedWallet()
     }, [selectedWallet?.walletAddress])
 
-      
+
     const backToWallets = () => {
         dispatch(updatedSelectedWallet(emptyWallet))
         navigate("/welcome")
@@ -115,14 +115,14 @@ const LeftWalletSummary = ({
     const handleSliderClick = () => {
         setToggled(!toggled)
         setDisableButton(true)
-        
+
         if (toggled) {
             unlockBackround()
             slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'auto'
             slidingHolder.current!.children[0].firstChild.style.opacity = '0'
             setTimeout(() => slidingHolder.current!.children[0].style.backgroundColor = ' #7d87aa21', 250)
             setTimeout(() => slidingHolder.current!.children[0].style.width = "0px", 300)
-            
+
         } else {
             updateWallets()
             lockBackround()
@@ -136,13 +136,13 @@ const LeftWalletSummary = ({
     }
 
     return (
-        <ClickAwayListener onClickAway={toggled?handleSliderClick:() => {}}>
-            <Box gap={1} style={styles.summaryHolder}>     
+        <ClickAwayListener onClickAway={toggled ? handleSliderClick : () => { }}>
+            <Box gap={1} style={styles.summaryHolder}>
                 <Box ref={slidingHolder} style={styles.slidingHolder}>
                     <SlidingSwitchMenu />
                 </Box>
                 <Box style={styles.boxHolder}>
-                    <div style={{width: '100%'}}>
+                    <Box style={{ width: '100%' }}>
                         <Button
                             disableRipple
                             disabled={disableButton}
@@ -150,7 +150,7 @@ const LeftWalletSummary = ({
                             variant="text"
                             style={styles.switchBtn}
                         >
-                            {toggled?"Close":"Switch"}
+                            {toggled ? "Close" : "Switch"}
                         </Button>
                         <Button
                             disableRipple
@@ -160,51 +160,47 @@ const LeftWalletSummary = ({
                         >
                             Logout
                         </Button>
-                    </div>
-                    <div style= {styles.contentHolder}>
-                        <Typography fontWeight={600} fontSize={14} >
-                            <Tooltip title={selectedWallet?.walletName!}>
-                                <div style={styles.textContainer}>
-                                    {selectedWallet?.walletName!}
-                                </div>
-                            </Tooltip> 
-                        </Typography>
+                    </Box>
+                    <Box style={styles.contentHolder}>
+                        <Tooltip title={selectedWallet?.walletName!}>
+                            <Typography style={styles.textContainer} fontWeight={600} fontSize={14} >
+                                {selectedWallet?.walletName!}
+                            </Typography>
+                        </Tooltip>
                         <Typography variant='subtitle2' color="text.secondary" fontWeight={500} fontSize={14} >
                             {formatAddress(selectedWallet?.walletAddress!, 14)}
                         </Typography>
-                        <Box style={{ display: 'flex', justifyContent: 'center'}}>
+                        <Box style={{ display: 'flex', justifyContent: 'center' }}>
                             <Tooltip
                                 onClick={() => handleCopy(selectedWallet?.walletAddress!)}
                                 title={copied ? 'Copied' : 'Copy to clipboard'}
                             >
                                 <img
-                                style={{ marginLeft: '10px', cursor: 'pointer' }}
-                                src={CopyIcon}
-                                alt="Copy"
+                                    style={{ marginLeft: '10px', cursor: 'pointer' }}
+                                    src={CopyIcon}
+                                    alt="Copy"
                                 />
                             </Tooltip>
                             <Tooltip title="Check address on explorer">
                                 <a href={EXPLORER_ADDRESS_DETAILS(selectedWallet?.walletAddress!)} target='_blank'>
-                                <img
-                                    style={styles.linkIcon}
-                                    src={LinkIcon}
-                                    alt="Link"
-                                />
+                                    <img
+                                        style={styles.linkIcon}
+                                        src={LinkIcon}
+                                        alt="Link"
+                                    />
                                 </a>
                             </Tooltip>
                         </Box>
-                        <Divider style={{margin: '15px 0'}}/>
+                        <Divider style={{ margin: '15px 0' }} />
                         <Typography variant='subtitle2' color="text.secondary" fontWeight={600} fontSize={14} >
                             WALLET BALANCE
                         </Typography>
-                        <Typography variant='h6' margin={1} fontWeight={600} >
-                            <Tooltip title={`$ ${usdValue}`}>
-                                <div>
-                                    <span>$ {setDecimalPrecisionTo(usdValue, 2)}</span>
-                                </div>
-                            </Tooltip>
-                        </Typography>
-                    </div>
+                        <Tooltip title={`$ ${usdValue}`}>
+                            <Typography variant='h6' margin={1} fontWeight={600} >
+                                {`$ ${setDecimalPrecisionTo(usdValue, 2)}`}
+                            </Typography>
+                        </Tooltip>
+                    </Box>
                 </Box>
             </Box>
         </ClickAwayListener>

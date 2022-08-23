@@ -28,21 +28,22 @@ import {
 const MultiSendTable = () => {
 
     const dispatch = useDispatch()
-    const autoScroll = useRef()
+    const autoScroll = useRef<null | HTMLDivElement>(null)
     const { multisendRows } = useSelector((state: RootState) => state.sendFunds)
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
     let fileReader: any
     let invdalidData: boolean = false
 
     useEffect(() => {
-        setTimeout(() => {
-            //@ts-ignore
-            autoScroll.current.scrollIntoView({
-                behavior: "smooth",
-                block: 'nearest',
-                inline: 'start'
-            })
-        }, 200)
+        if (autoScroll.current) {
+            setTimeout(() => {
+                autoScroll!.current!.scrollIntoView({
+                    behavior: "smooth",
+                    block: 'nearest',
+                    inline: 'start'
+                })
+            }, 200)
+        }
     }, [multisendRows])
 
     const validDenom = (denom: string): boolean => {

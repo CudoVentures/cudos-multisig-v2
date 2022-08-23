@@ -1,4 +1,4 @@
-import { Button, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from './styles'
@@ -16,7 +16,6 @@ interface tableData {
 
 const SlidingMenuTable = () => {
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     const { wallets, selectedWallet } = useSelector((state: RootState) => state.userState)
 
     function createData(
@@ -51,59 +50,60 @@ const SlidingMenuTable = () => {
     }
 
     return (
-        <TableContainer style={{ width: '100%' }}>
-            <Table style={{ width: '100%' }} aria-label="simple table">
-                <TableBody style={styles.summaryTableBody}>
-                    {rows.map((row) => (
-                        <TableRow sx={() => (styles.summaryTableRow)} style={{ backgroundColor: row.walletAddress === selectedWallet!.walletAddress ? 'rgba(82, 166, 248, 0.2)' : '#28314E' }}>
-                            <Button
-                                disableRipple
-                                sx={{
-                                    ':hover': {
-                                        bgcolor: 'rgba(82, 166, 248, 0.1)',
-                                    },
-                                    borderRadius: '10px',
-                                    height: '50px',
-                                    width: '100%',
-                                }}
-                                onClick={() => navigateToSelected(row.walletAddress)}
-                                style={styles.slidingMenuBtn}
+        <Box style={styles.summaryTableBody}>
+            {rows.map((row, index) => (
+                <Box
+                    key={index}
+                    sx={() => (styles.summaryTableRow)}
+                    style={{
+                        backgroundColor: row.walletAddress === selectedWallet!.walletAddress ?
+                            'rgba(82, 166, 248, 0.2)' : '#28314E'
+                    }}
+                >
+                    <Button
+                        disableRipple
+                        sx={styles.btnContentHolder}
+                        onClick={() => navigateToSelected(row.walletAddress)}
+                        style={styles.slidingMenuBtn}
+                    >
+                        <Box style={styles.summaryTableCell}>
+                            <Tooltip title={row.walletName}>
+                                <Typography
+                                    color='white'
+                                    style={styles.textContainer}
+                                >
+                                    {row.walletName}
+                                </Typography>
+                            </Tooltip>
+                            <Tooltip title={row.walletAddress}>
+                                <Typography
+                                    style={{ width: '200px' }}
+                                    variant="subtitle2"
+                                    fontWeight={600}
+                                    color={
+                                        row.walletAddress === selectedWallet!.walletAddress ?
+                                            "rgba(82, 166, 248, 1)" : "text.secondary"}
+                                >
+                                    {formatAddress(row.walletAddress, 25)}
+                                </Typography>
+                            </Tooltip>
+                        </Box>
+                        <Tooltip title={row.walletBalance}>
+                            <Typography
+                                color="white"
+                                fontWeight={600}
                             >
-                                <TableCell style={styles.summaryTableCell} align='left'>
-                                    <Tooltip title={row.walletName}>
-                                        <div style={styles.textContainer}>
-                                            {row.walletName}
-                                        </div>
-                                    </Tooltip>
-                                    <Typography style={{ width: '200px' }} variant="subtitle2" fontWeight={600} color={row.walletAddress === selectedWallet!.walletAddress ? "rgba(82, 166, 248, 1)" : "text.secondary"}>
-                                        <Tooltip title={row.walletAddress}>
-                                            <div>
-                                                {formatAddress(row.walletAddress, 25)}
-                                            </div>
-                                        </Tooltip>
-                                    </Typography>
-                                </TableCell>
-                                <TableCell style={{ width: '200px' }} align='right'>
-                                    <Typography fontWeight={600}>
-                                        {row.walletDisplayBalance.length > 13 ?
-                                            <Tooltip title={row.walletBalance}>
-                                                <div>
-                                                    {`${formatAddress(row.walletDisplayBalance, 5)} CUDOS`}
-                                                </div>
-                                            </Tooltip> :
-                                            <Tooltip title={row.walletBalance}>
-                                                <div>
-                                                    {`${row.walletDisplayBalance} CUDOS`}
-                                                </div>
-                                            </Tooltip>}
-                                    </Typography>
-                                </TableCell>
-                            </Button>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                                {row.walletDisplayBalance.length > 13 ?
+                                    `${formatAddress(row.walletDisplayBalance, 5)} CUDOS`
+                                    :
+                                    `${row.walletDisplayBalance} CUDOS`
+                                }
+                            </Typography>
+                        </Tooltip>
+                    </Button>
+                </Box>
+            ))}
+        </Box>
     )
 }
 

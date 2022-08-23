@@ -9,14 +9,27 @@ export const styles = {
     },
     textContainer: {
       display: "block",
-      width: "260px",
       whiteSpace: "nowrap",
       overflow: "hidden",
-      textOverflow: "ellipsis"
+      textOverflow: "ellipsis",
+      fontWeight: "600"
     },
+    btnContentHolder: {
+      ':hover': {
+          bgcolor: 'rgba(82, 166, 248, 0.1)',
+      },
+      borderRadius: '10px',
+      height: '50px',
+      width: '100%',
+      justifyContent: 'space-between',
+      padding: '0 10px'
+  },
     summaryTableCell: {
       fontWeight: '600', 
-      width: '280px'
+      width: '280px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start'
     },
     slidingMenuBtn: {
       textDecoration: 'none'

@@ -129,8 +129,8 @@ const TxsSummaryTable = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody style={styles.summaryTableBody}>
-                            {tableData.map((row) => (
-                                <TableRow style={styles.summaryTBRow}>
+                            {tableData.map((row, index) => (
+                                <TableRow key={index} style={styles.summaryTBRow}>
                                     <TableCell width={100} align="left">
                                         {row.blockHeight}
                                     </TableCell>

@@ -124,8 +124,8 @@ const TransactionSelector = () => {
                 <TitleAndSubtitle />
                 <Box style={styles.btnHolder} gap={1}>
                     {TxTypes.map((item, index) => (
-                        <Tooltip title={item.tooltipText}>
-                            <div>
+                        <Tooltip key={index} title={item.tooltipText}>
+                            <Box>
                                 <Button
                                     disabled={item.disabled}
                                     variant="contained"
@@ -135,7 +135,7 @@ const TransactionSelector = () => {
                                 >
                                     {item.type}
                                 </Button>
-                            </div>
+                            </Box>
                         </Tooltip>
                     ))}
                 </Box>
@@ -150,8 +150,8 @@ const TransactionSelector = () => {
                 <TitleAndSubtitle />
                 <Box style={styles.btnHolder} gap={1}>
                     {SendTypes.map((item, index) => (
-                        <Tooltip title={item.tooltipText}>
-                            <div>
+                        <Tooltip key={index} title={item.tooltipText}>
+                            <Box>
                                 <Button
                                     disabled={item.disabled}
                                     variant="contained"
@@ -161,7 +161,7 @@ const TransactionSelector = () => {
                                 >
                                     {item.type}
                                 </Button>
-                            </div>
+                            </Box>
                         </Tooltip>
                     ))}
                 </Box>

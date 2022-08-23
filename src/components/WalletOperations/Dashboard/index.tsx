@@ -14,7 +14,7 @@ import { CopyAndFollowComponent } from 'components/Dialog/ReusableModal/helpers'
 
 const Dashboard = ({
     setSelection
-}:{
+}: {
     setSelection: (index: number) => void;
 }) => {
 
@@ -34,23 +34,23 @@ const Dashboard = ({
             <Dialog />
             <Box style={styles.dashboardBoxHolder}>
                 <Card style={styles.upperLeftCardHolder}>
-                    <Typography style={{ marginBottom: '15px'}} variant="subtitle1" fontWeight={600} color="text.secondary">
+                    <Typography style={{ marginBottom: '15px' }} variant="subtitle1" fontWeight={600} color="text.secondary">
                         ACCOUNT INFORMATION
                     </Typography>
-                    <Box style={{width: '100%'}}>
+                    <Box style={{ width: '100%' }}>
                         <Box style={styles.formattedAddressHolder}>
                             <img src={WalletIcon} alt="wallet-icon" />
                             <Tooltip title={selectedWallet?.walletAddress!}>
-                                <div style={{marginLeft: '10px'}}>
+                                <div style={{ marginLeft: '10px' }}>
                                     {formatAddress(selectedWallet?.walletAddress!, 30)}
                                 </div>
                             </Tooltip>
-                           <CopyAndFollowComponent address={selectedWallet?.walletAddress!} />
+                            <CopyAndFollowComponent address={selectedWallet?.walletAddress!} />
                         </Box>
                     </Box>
                     <Box style={styles.upperCardBoxHolder}>
                         <Box style={styles.upperCardChildBoxHolder}>
-                            <Typography style={{marginBottom: '10px'}} variant="subtitle2" fontWeight={600} color="text.secondary">
+                            <Typography style={{ marginBottom: '10px' }} variant="subtitle2" fontWeight={600} color="text.secondary">
                                 NETWORK
                             </Typography>
                             <Typography fontWeight={600}>
@@ -58,7 +58,7 @@ const Dashboard = ({
                             </Typography>
                         </Box>
                         <Box>
-                            <Typography style={{marginBottom: '10px'}} variant="subtitle2" fontWeight={600} color="text.secondary">
+                            <Typography style={{ marginBottom: '10px' }} variant="subtitle2" fontWeight={600} color="text.secondary">
                                 MEMBERS
                             </Typography>
                             <Typography fontWeight={600}>
@@ -66,7 +66,7 @@ const Dashboard = ({
                             </Typography>
                         </Box>
                         <Box>
-                        <Typography style={{marginBottom: '10px'}} variant="subtitle2" fontWeight={600} color="text.secondary">
+                            <Typography style={{ marginBottom: '10px' }} variant="subtitle2" fontWeight={600} color="text.secondary">
                                 REQ. APPROVALS
                             </Typography>
                             <Typography fontWeight={600}>
@@ -77,29 +77,29 @@ const Dashboard = ({
                 </Card>
                 <Card style={styles.upperRightCardHolder}>
                     <Box style={styles.upperRightBoxHolder}>
-                       <div style={styles.upperRightInfoHolder}>
-                            <Typography style= {{float: 'left'}} variant="subtitle1" fontWeight={600} color="text.secondary">
+                        <div style={styles.upperRightInfoHolder}>
+                            <Typography style={{ float: 'left' }} variant="subtitle1" fontWeight={600} color="text.secondary">
                                 BALANCE & ASSETS
                             </Typography>
                             <Box style={styles.balanceAssetsBtnHolder}>
-                                {selectedWallet!.walletBalances!.length > 2?
-                                // BUTTON VISIBLE ONLY IF MORE THAN 2 ASSETS ARE PRESENT
-                                <Button
-                                    disableRipple
-                                    variant="text"
-                                    style={{textDecoration: 'none'}}
-                                    onClick={showAllAssets}
+                                {selectedWallet!.walletBalances!.length > 2 ?
+                                    // BUTTON VISIBLE ONLY IF MORE THAN 2 ASSETS ARE PRESENT
+                                    <Button
+                                        disableRipple
+                                        variant="text"
+                                        style={{ textDecoration: 'none' }}
+                                        onClick={showAllAssets}
                                     >
-                                    <span>{"All assets"}</span>
-                                </Button>:null}
+                                        <span>{"All assets"}</span>
+                                    </Button> : null}
                                 <Button
                                     disabled={balances?.length === 0}
                                     variant="contained"
                                     color="secondary"
                                     sx={() => ({
-                                    width: '130px',
-                                    height: '35px',
-                                    fontWeight: 700
+                                        width: '130px',
+                                        height: '35px',
+                                        fontWeight: 700
                                     })}
                                     onClick={() => dispatch(updateModalState({ openFundWallet: true }))}
                                 >
@@ -107,32 +107,34 @@ const Dashboard = ({
                                 </Button>
                             </Box>
                         </div>
-                        <Box style={{height: '125px', width: '100%'}}>
-                            {selectedWallet?.walletBalances?.length === 0?<AssetIconComponent denom={'noBalance'} amount={'0'}/>:
+                        <Box style={{ height: '125px', width: '100%' }}>
+                            {selectedWallet?.walletBalances?.length === 0 ? <AssetIconComponent denom={'noBalance'} amount={'0'} /> :
                                 selectedWallet?.walletBalances?.map((balance, idx) => (
-                                idx < 2?
-                                <AssetIconComponent denom={balance.denom} amount={balance.amount}/>
-                                :null
-                            ))}
+                                    idx < 2 ?
+                                        <Box key={idx}>
+                                            <AssetIconComponent denom={balance.denom} amount={balance.amount} />
+                                        </Box>
+                                        : null
+                                ))}
                         </Box>
                     </Box>
                 </Card>
             </Box>
             <Card style={styles.lowerCardHolder}>
                 <Box style={styles.lowerBoxHolder}>
-                    <Typography style={{ marginBottom: '15px'}} variant="subtitle1" fontWeight={600} color="text.secondary">
-                            RECENT TRANSACTIONS
+                    <Typography style={{ marginBottom: '15px' }} variant="subtitle1" fontWeight={600} color="text.secondary">
+                        RECENT TRANSACTIONS
                     </Typography>
                     <Button
                         disableRipple
                         variant="text"
-                        style={{textDecoration: 'none'}}
+                        style={{ textDecoration: 'none' }}
                         onClick={() => setSelection(1)}
-                        >
+                    >
                         <span>{"See all"}</span>
                     </Button>
                 </Box>
-               <TxsSummaryTable />
+                <TxsSummaryTable />
             </Card>
         </Box>
     )

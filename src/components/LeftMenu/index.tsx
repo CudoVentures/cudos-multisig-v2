@@ -31,6 +31,7 @@ const LeftMenu = ({
     <Box gap={1} style={styles.menuHolder}>
       {MenuItems.map((item, index) => (
         <Button
+          key={index}
           disableRipple
           variant="text"
           sx={{ ...styles.menuBtn, color: menuSelection === index ? "white" : COLORS_DARK_THEME.SECONDARY_TEXT }}
