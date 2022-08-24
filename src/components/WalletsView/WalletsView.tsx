@@ -59,8 +59,8 @@ const WalletsView = () => {
         <TableContainer style={{width:'100%'}}>
             <Table style={{width:'100%'}} aria-label="simple table">
                 <TableBody style={styles.summaryTableBody}>
-                {rows.map((row) => (
-                    <TableRow sx={() => (styles.summaryTableRow)}>
+                {rows.map((row, index) => (
+                    <TableRow key={index} sx={() => (styles.summaryTableRow)}>
                         <TableCell style={styles.summaryTableCell} align='left'>
                             <Tooltip title={row.walletName}>
                                 <div style={styles.textContainer}>

@@ -28,15 +28,17 @@ const AssetsTable = () => {
         }))
     }
 
-    const balancesToWorkWith = walletRelated?selectedWallet?.walletBalances:balances
+    const balancesToWorkWith = walletRelated ? selectedWallet?.walletBalances : balances
     return (
-        <ClickAwayListener onClickAway={openAssetsTable?handleModalClose:() => {}}>
-            <Box style={{height: '125px', width: '100%'}}>
-                {openFundWallet?<CancelRoundedIcon style={styles.customIcon} onClick={handleModalClose} />:null}
-                {balancesToWorkWith!.length === 0?<AssetIconComponent denom={'noBalance'} amount={'0'} selectable={false}/>:
+        <ClickAwayListener onClickAway={openAssetsTable ? handleModalClose : () => { }}>
+            <Box style={{ height: '125px', width: '100%' }}>
+                {openFundWallet ? <CancelRoundedIcon style={styles.customIcon} onClick={handleModalClose} /> : null}
+                {balancesToWorkWith!.length === 0 ? <AssetIconComponent denom={'noBalance'} amount={'0'} selectable={false} /> :
                     balancesToWorkWith!.map((balance, idx) => (
-                        <AssetIconComponent denom={balance.denom} amount={balance.amount} selectable={true}/>
-                ))}
+                        <Box key={idx}>
+                            <AssetIconComponent denom={balance.denom} amount={balance.amount} selectable={true} />
+                        </Box>
+                    ))}
             </Box>
         </ClickAwayListener>
     )

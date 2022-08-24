@@ -377,7 +377,7 @@ export const SelectFromAddrBookDropDown = ({
                 const address = e[0]
                 const name = e[1]
                 return (
-                    <MenuItem value={address}>
+                    <MenuItem key={i} value={address}>
                         <Tooltip title={name}>
                             <Box>{address}</Box>
                         </Tooltip>

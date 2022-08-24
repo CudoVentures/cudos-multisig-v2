@@ -69,12 +69,6 @@ const SingleSend = () => {
     }, [selectedWallet!.chosenBalance])
 
     useEffect(() => {
-        setAmountToSend(0)
-
-    }, [openAssetsTable])
-
-
-    useEffect(() => {
         if (maxOut && isValidCudosAddress(recipientAddress)) {
             generateMsgAndFees()
         }
@@ -86,7 +80,10 @@ const SingleSend = () => {
 
     const clean = () => {
         setAmountToSend(0)
-        hideDropdownDetails()
+        setRecipientAddress('')
+        if (toggled) {
+            hideDropdownDetails()
+        }
         setToggled(false)
         setMaxOut(false)
         setFees({ gas: '', amount: [] })
@@ -285,8 +282,7 @@ const SingleSend = () => {
 
     useEffect(() => {
         clean()
-        setRecipientAddress('')
-    }, [selectFromAddressBook])
+    }, [selectFromAddressBook, openAssetsTable])
 
     return (
         <MuiDialog
