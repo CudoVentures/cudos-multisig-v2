@@ -21,12 +21,13 @@ import { updateUser } from 'store/user'
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 import WalletDetails from 'containers/WalletDetails'
 import RequireWallet from 'components/RequireWallet/RequireWallet'
+import { Firebase } from 'utils/firebase'
 
 const App = () => {
   const location = useLocation()
   const apolloClient = useApollo(null)
   const themeColor = useSelector((state: RootState) => state.settings.theme)
-  const { lastLoggedAddress, addressBook } = useSelector((state: RootState) => state.userState)
+  const { lastLoggedAddress } = useSelector((state: RootState) => state.userState)
   const dispatch = useDispatch()
 
   const connectAccount = useCallback(async () => {
@@ -39,6 +40,7 @@ const App = () => {
       const currentBalances = await getAccountBalances(address)
       const admin = checkForAdminToken(currentBalances)
       const userBalance = getNativeBalance(currentBalances)
+      const addressBook = await Firebase.getAddressBook(address)
 
       dispatch(updateUser({
         keplrName: keplrName,
