@@ -158,6 +158,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
   const { row } = props
   const [open, setOpen] = React.useState(false)
   const rowRef = React.useRef(row.proposalID)
+  const toolTipMsg = row.txHash === NO_TX_HASH_MSG ? '' : row.txHash
 
   //TODO: Do we need this?
   const autoCenterTheCollapsedRow = () => {
@@ -165,71 +166,62 @@ function Row(props: { row: ReturnType<typeof createData> }) {
   }
 
   return (
-    <Box style={{ scrollMarginTop: "10px" }} ref={rowRef}>
-      <Box style={{ margin: '9px 0' }}>
-        <Box
-          onClick={() => setOpen(!open)}
-          key={row.date}
-          sx={styles.selectableBox}
-        >
+    <TableRow style={{ display: 'flex', flexDirection: 'column', scrollMarginTop: "10px" }} ref={rowRef}>
+      <Box
+        component={'td'}
+        onClick={() => setOpen(!open)}
+        key={row.date}
+        sx={styles.selectableBox}
+      >
+        <TableCell component={'span'} style={{width: '70px'}}>
+          {row.blockHeight}
+        </TableCell>
 
-          <TableCell width={70}>
-            {row.blockHeight}
-          </TableCell>
+        <TableCell component={'span'} style={{width: '170px'}}>
+          <TxTypeComponent type={row.type!.toString()} />
+        </TableCell>
 
-          <TableCell width={170} align="left">
-            <TxTypeComponent type={row.type!.toString()} />
-          </TableCell>
+        <TableCell component={'span'}  style={{width: '150px'}}>
+          <Tooltip title={toolTipMsg}>
+            <Typography style={{ fontSize: '14px', color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
+              {row.txHash === NO_TX_HASH_MSG ? NO_TX_HASH_MSG : formatAddress(row.txHash!.toString(), 8)}
+            </Typography>
+          </Tooltip>
+        </TableCell>
 
-          <TableCell style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} width={150} align="left">
-            {row.txHash === NO_TX_HASH_MSG ? row.txHash :
-              <Tooltip title={row.txHash}>
-                <div style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
-                  {formatAddress(row.txHash!.toString(), 9)}
-                </div>
-              </Tooltip>
-            }
-          </TableCell>
+        <TableCell component={'span'}  style={styles.dateHolderCell}>
+          <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
+          {formatDateTime(row.date?.toString()!)}
+        </TableCell>
 
-          <TableCell style={{ paddingRight: '0px' }} width={220} align="left">
-            <Box style={{ display: 'flex', alignItems: 'center' }}>
-              <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
-              <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
-                {formatDateTime(row.date?.toString()!)}
-              </Typography>
-            </Box>
-          </TableCell>
+        <TableCell component={'span'}  style={styles.votesCountHolder}>
+          <img style={{ width: '20px', marginRight: '10px' }} src={MembersIcon} alt="Members Icon" />
+          {`${row.votesCount} of ${row.membersCount}`}
+        </TableCell>
 
-          <TableCell align="left" width={120}>
-            <Box style={styles.votesBox}>
-              <img style={{ width: '20px' }} src={MembersIcon} alt="Members Icon" />
-              <Typography style={{ margin: '0 10px' }} variant="inherit" color="text.secondary">
-                {`${row.votesCount} of ${row.membersCount}`}
-              </Typography>
-            </Box>
-          </TableCell>
+        <TableCell component={'span'}  style={{width: '175px'}}>
+          <Box style={styles.proposalStatusBox}>
+            <ProposalStatusComponent status={row.status!.toString()} />
+          </Box>
+        </TableCell>
 
-          <TableCell width={175}>
-            <Box style={styles.proposalStatusBox}>
-              <ProposalStatusComponent status={row.status!.toString()} />
-            </Box>
-          </TableCell>
-          <TableCell width={50}>
-            <IconButton
-              size="small"
-            >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-          </TableCell>
+        <TableCell component={'span'}  style={{width: '50px'}}>
+          <IconButton
+            size="small"
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
 
-        </Box>
+      </Box>
+
+      <Box component={'td'}>
         <Collapse in={open} timeout='auto' addEndListener={open ? autoCenterTheCollapsedRow : null}>
           <ProposalDetails proposalID={row.proposalID!} />
         </Collapse>
       </Box>
 
-    </Box>
-
+    </TableRow>
   )
 }
 
@@ -297,7 +289,7 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
             rows.length > rowsPerPage ?
               <TableFooter>
                 <TableRow>
-                  <Stack alignItems={'center'} spacing={2}>
+                  <Stack component={'td'} alignItems={'center'} spacing={2}>
                     <Pagination
                       onChange={handlePageChange}
                       count={Math.ceil(rows.length / rowsPerPage)}

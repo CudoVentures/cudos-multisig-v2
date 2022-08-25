@@ -9,11 +9,12 @@ export const styles = {
     },
     selectableBox: {
         backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND,
+        margin: '6.25px 0px 0px 0px',
         position: 'relative',
         borderRadius: '10px',
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'flex-start',
         display: 'flex',
         boxShadow: '0 2px 2px -2px black',
         "&:hover": {
@@ -54,6 +55,22 @@ export const styles = {
         borderRadius: '10px',
         display: 'block',        
         backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND
+    },
+    dateHolderCell: {
+        paddingRight: '0px', 
+        display: 'flex', 
+        alignItems: 'center',
+        fontWeight: '600',
+        width: '220px',
+        color: COLORS_DARK_THEME.SECONDARY_TEXT
+    },
+    votesCountHolder: {
+        paddingRight: '0px', 
+        display: 'flex', 
+        alignItems: 'center',
+        fontWeight: '600',
+        width: '120px',
+        color: COLORS_DARK_THEME.SECONDARY_TEXT
     },
     addressHolderCell: {
         alignItems: 'center',
