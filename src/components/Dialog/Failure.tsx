@@ -7,7 +7,7 @@ import FailureIcon from 'assets/vectors/failure.svg'
 import { useNavigate } from 'react-router-dom'
 import { updateModalState } from 'store/modals'
 import { initialState as initialModalState } from 'store/modals'
-import { updateWalletCreationSteps } from 'store/walletCreation'
+import { initialState as initialWalletCreationState, updateWalletCreationState } from 'store/walletCreation'
 import { updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialWalletObject } from 'store/walletObject'
 import { initialState as initialSendFundsState, updateSendFunds } from 'store/sendFunds'
@@ -24,7 +24,7 @@ const Failure = () => {
   const dispatch = useDispatch()
 
   const clearState = async () => {
-    dispatch(updateWalletCreationSteps({ currentStep: '' }))
+    dispatch(updateWalletCreationState({...initialWalletCreationState}))
     dispatch(updateSendFunds({ ...initialSendFundsState }))
     dispatch(updateWalletObjectState({ ...initialWalletObject }))
   }

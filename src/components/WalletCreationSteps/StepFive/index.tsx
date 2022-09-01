@@ -6,7 +6,7 @@ import SummaryTable from './SummaryTable'
 import SummaryAccInfo from './SummaryAccInfo'
 import SummaryFeeDetails from './SummaryFeeDetails'
 
-const StepFfive = () => {
+const StepFive = () => {
 
     return (
         <Box id='step-five-holder' style={{...styles.stepFiveHolder}}>
@@ -27,4 +27,4 @@ const StepFfive = () => {
     )
 }
 
-export default StepFfive
+export default StepFive

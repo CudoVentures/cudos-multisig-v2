@@ -12,7 +12,6 @@ import { initialState as initialModalState } from 'store/modals'
 import { Box, Typography, Dialog as MuiDialog } from '@mui/material'
 import { CancelRoundedIcon, ModalContainer, styles } from '../styles'
 import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
-import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 
 const AddressBook = () => {
 
@@ -24,7 +23,7 @@ const AddressBook = () => {
     } = useSelector((state: RootState) => state.modalState)
 
     const { addressBook } = useSelector((state: RootState) => state.userState)
-    const currentStep = parseInt(getCurrentWalletCreationStep())
+    const { currentStep } = useSelector((state: RootState) => state.walletCreationState)
     let addressesInAddressBook: number = 0
 
     if (addressBook) {

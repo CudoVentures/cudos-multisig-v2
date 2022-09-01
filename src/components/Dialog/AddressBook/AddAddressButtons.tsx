@@ -9,7 +9,6 @@ import React, { useEffect, useState } from 'react'
 import { isValidCudosAddress } from 'utils/validation'
 import { updateUser } from 'store/user'
 import { RootState } from 'store'
-import { getCurrentWalletCreationStep } from 'components/WalletCreationSteps'
 import { initialState as initialModalState } from 'store/modals'
 import { CSVLink } from "react-csv"
 import { HtmlTooltip } from 'utils/multiSendTableHelper'
@@ -39,7 +38,7 @@ const AddAddressButtons = () => {
     const [userAddress, setUserAddress] = useState('')
     const { addNewAddress, editAddressBookRecord, dataObject } = useSelector((state: RootState) => state.modalState)
     const { addressBook } = useSelector((state: RootState) => state.userState)
-    const currentStep = parseInt(getCurrentWalletCreationStep())
+    const { currentStep } = useSelector((state: RootState) => state.walletCreationState)
     const dataFromObject: DataObject = new Object(dataObject) as DataObject
 
     let fileReader: any

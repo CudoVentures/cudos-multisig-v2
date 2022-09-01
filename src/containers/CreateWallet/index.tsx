@@ -6,16 +6,16 @@ import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
 import { useEffect, useState } from 'react'
-import Steps, { getCurrentWalletCreationStep, StepInfo, StringStep } from 'components/WalletCreationSteps'
+import { WalletCreationProgressBar, CurrentStepInfo, CurrentStepToStringSpan, FIRST_STEP, SECOND_STEP, THIRD_STEP, FOURTH_STEP, LAST_STEP } from 'components/WalletCreationSteps'
 import { useNavigate } from 'react-router-dom'
-import { updateWalletCreationSteps } from 'store/walletCreation'
+import { initialState as initialWalletCreationState, updateWalletCreationState } from 'store/walletCreation'
 import StepOne from 'components/WalletCreationSteps/StepOne'
 import StepTwo from 'components/WalletCreationSteps/StepTwo'
 import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialModalState } from 'store/modals'
 import StepThree from 'components/WalletCreationSteps/StepThree'
 import StepFour from 'components/WalletCreationSteps/StepFour'
-import StepFfive from 'components/WalletCreationSteps/StepFive'
+import StepFive from 'components/WalletCreationSteps/StepFive'
 import { getSigningClient } from 'utils/config'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice } from 'cudosjs'
 import { updateModalState } from 'store/modals'
@@ -41,19 +41,65 @@ import {
 const CreateWallet = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const currentStep = parseInt(getCurrentWalletCreationStep())
     const { groupMetadata, members, threshold, votingPeriod, feeForCreation } = useSelector((state: RootState) => state.walletObject)
-    const { address, wallets } = useSelector((state: RootState) => state.userState)
+    const { address } = useSelector((state: RootState) => state.userState)
+    const { currentStep } = useSelector((state: RootState) => state.walletCreationState)
     const [msg, setMsg] = useState<EncodeObject>({ typeUrl: '', value: '' })
 
+    const stepComponents = new Map<number, JSX.Element>([
+        [FIRST_STEP, <StepOne/>],
+        [SECOND_STEP, <StepTwo/>],
+        [THIRD_STEP, <StepThree/>],
+        [FOURTH_STEP, <StepFour/>],
+        [LAST_STEP, <StepFive/>]
+    ]);
+
+    const stepDataValidations = new Map<number, boolean>([
+        [FIRST_STEP, true],
+        [SECOND_STEP, groupMetadata?.walletName],
+        [THIRD_STEP, members?.length!],
+        [FOURTH_STEP, threshold && votingPeriod?.seconds],
+        [LAST_STEP, true]
+    ]);
+
     const clearState = async () => {
-        dispatch(updateWalletCreationSteps({ currentStep: '' }))
+        dispatch(updateWalletCreationState({...initialWalletCreationState}))
         dispatch(updateWalletObjectState({ ...initialWalletObject }))
     }
 
-    const goHome = () => {
-        clearState()
-        navigate("/welcome")
+    const handleOnClickBackButton = () => {
+        if (currentStep === FIRST_STEP) {
+            clearState()
+            return navigate("/welcome")
+        }
+
+        const previousStep = currentStep - 1
+        dispatch(updateWalletCreationState({ currentStep: previousStep }))
+    }
+
+    const handleOnClickNextButton = async () => {
+        if (currentStep === LAST_STEP) {
+            return broadcastCreateWalletMsg()
+        }
+
+        if (currentStep === FOURTH_STEP) {
+            try {
+                const { msg, fee } = await getCreateWalletMsgAndFees()
+                dispatch(updateWalletObjectState({ feeForCreation: fee }))
+                setMsg(msg)
+            } catch (error: any) {
+                dispatch(updateModalState({
+                    failure: true,
+                    title: WALLET_PROCESS_FAIL_TITLE,
+                    msgType: WALLET_CORRUPTED_PROCESS_TYPE,
+                    message: GENERAL_FAILURE_MSG
+                }))
+                console.debug(error.message)
+            }
+        }
+
+        const nextStep = currentStep + 1
+        dispatch(updateWalletCreationState({ currentStep: nextStep }))
     }
 
     const broadcastCreateWalletMsg = async () => {
@@ -83,6 +129,7 @@ const CreateWallet = () => {
             }
 
             clearState()
+
             dispatch(updateModalState({
                 loading: false,
                 success: true,
@@ -120,42 +167,8 @@ const CreateWallet = () => {
         )
     }
 
-    const renderStep = (step: string) => {
-        let tempStep: number = parseInt(step)
-        if (tempStep < 1) { tempStep = 1 }
-        if (tempStep > 5) { tempStep = 5 }
-        const stepToSet = tempStep.toString()
-        dispatch(updateWalletCreationSteps({ currentStep: stepToSet }))
-    }
-
-    const renderPreviousStep = () => {
-        const stepToRender = (currentStep - 1).toString()
-        renderStep(stepToRender)
-    }
-
-    const renderNextStep = async () => {
-
-        if (currentStep === 4) {
-            try {
-                const { msg, fee } = await getCreateWalletMsgAndFees()
-                dispatch(updateWalletObjectState({ feeForCreation: fee }))
-                setMsg(msg)
-            } catch (error: any) {
-                dispatch(updateModalState({
-                    failure: true,
-                    title: WALLET_PROCESS_FAIL_TITLE,
-                    msgType: WALLET_CORRUPTED_PROCESS_TYPE,
-                    message: GENERAL_FAILURE_MSG
-                }))
-                console.debug(error.message)
-            }
-        }
-        const stepToRender = (currentStep + 1).toString()
-        renderStep(stepToRender)
-    }
-
     useEffect(() => {
-        dispatch(updateWalletCreationSteps({ currentStep: '1' }))
+        dispatch(updateWalletCreationState({...initialWalletCreationState}))
         dispatch(updateModalState({ ...initialModalState }))
         document.getElementById("right-card-appear")!.style.display = 'none'
         setTimeout(() => document.getElementById("entire-create-wallet-page-appear")!.style.opacity = '1', 50)
@@ -167,14 +180,6 @@ const CreateWallet = () => {
         setTimeout(() => document.getElementById("right-card-appear")!.style.opacity = '1', 550)
     }, [])
 
-    let validData =
-        currentStep === 1 ? true :
-            currentStep === 2 ? groupMetadata?.walletName !== '' :
-                currentStep === 3 ? members?.length! > 0 :
-                    currentStep === 4 ? threshold !== 0 && votingPeriod?.seconds !== 0 :
-                        currentStep === 5 ? true :
-                            false
-
     return (
         <Box id='entire-create-wallet-page-appear' style={{ ...styles.holder, ...styles.contentAppear }}>
             <Dialog />
@@ -182,7 +187,7 @@ const CreateWallet = () => {
             {/* ////LEFT CARD - STEPS////// */}
             <Card id='resizable-card-left' style={styles.leftSteps}>
                 <div id='left-steps-appear' style={{ ...styles.contentAppear }}>
-                    <Steps />
+                    <WalletCreationProgressBar />
                 </div>
             </Card>
 
@@ -190,20 +195,15 @@ const CreateWallet = () => {
             <Card id='resizable-card-right' style={styles.Card}>
                 <div id='right-card-appear' style={{ ...styles.contentAppear }}>
                     <Box id='informative-block' style={styles.informativeBlock}>
-                        <StringStep />
-                        <StepInfo />
+                        <CurrentStepToStringSpan />
+                        <CurrentStepInfo />
                     </Box>
 
-                    <Box id='dynamic-content-holder' style={{ width: '100%', height: '320px' }}>{
-                        currentStep === 1 ? <StepOne /> :
-                            currentStep === 2 ? <StepTwo /> :
-                                currentStep === 3 ? <StepThree /> :
-                                    currentStep === 4 ? <StepFour /> :
-                                        currentStep === 5 ? <StepFfive /> :
-                                            null}
+                    <Box id='dynamic-content-holder' style={{ width: '100%', height: '320px' }}>
+                        {stepComponents.get(currentStep)}
                     </Box>
 
-                    <Box id='navigation-holder' style={{ width: '100%' }}>
+                    <Box id='navigation-holder' style={{ width: '100%' }} >
                         <Button
                             variant="contained"
                             color="secondary"
@@ -214,13 +214,11 @@ const CreateWallet = () => {
                                 height: '50px',
                                 fontWeight: 700
                             })}
-                            onClick={
-                                currentStep === 1 ? goHome :
-                                    renderPreviousStep}>
-                            {currentStep === 1 ? "Cancel" : "Back"}
+                            onClick={handleOnClickBackButton}>
+                            {currentStep === FIRST_STEP ? "Cancel" : "Back"}
                         </Button>
                         <Button
-                            disabled={!validData}
+                            disabled={!stepDataValidations.get(currentStep)}
                             variant="contained"
                             color="primary"
                             sx={() => ({
@@ -230,11 +228,9 @@ const CreateWallet = () => {
                                 height: '50px',
                                 fontWeight: 700
                             })}
-                            onClick={
-                                currentStep < 5 ? renderNextStep :
-                                    broadcastCreateWalletMsg}
+                            onClick={handleOnClickNextButton}
                         >
-                            {currentStep === 5 ? "Create" : "Next Step"}
+                            {currentStep === LAST_STEP ? "Create" : "Next Step"}
                         </Button>
                     </Box>
                 </div>

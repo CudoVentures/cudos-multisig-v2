@@ -1,24 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { FIRST_STEP } from 'components/WalletCreationSteps'
 
-export interface WalletCreationStepsState {
-  currentStep: string
+export interface WalletCreationState {
+  currentStep: number
 }
 
-const initialState: WalletCreationStepsState = {
-  currentStep: ''
+export const initialState: WalletCreationState = {
+  currentStep: FIRST_STEP
 }
 
-export const WalletCreationStepsSlice = createSlice({
+export const WalletCreationSlice = createSlice({
   name: 'steps',
   initialState,
   reducers: {
-    updateWalletCreationSteps: (state, action: PayloadAction<WalletCreationStepsState>) => {
+    updateWalletCreationState: (state, action: PayloadAction<WalletCreationState>) => {
       return { ...state, ...action.payload }
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { updateWalletCreationSteps } = WalletCreationStepsSlice.actions
+export const { updateWalletCreationState } = WalletCreationSlice.actions
 
-export default WalletCreationStepsSlice.reducer
+export default WalletCreationSlice.reducer

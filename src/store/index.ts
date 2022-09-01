@@ -9,13 +9,13 @@ import menuSelectionReducer from './menu'
 import settingsReducer from './settings'
 import sendFundsReducer from './sendFunds'
 import walletObjectReducer from './walletObject'
-import walletCreationStepsReducer from './walletCreation'
+import walletCreationStateReducer from './walletCreation'
 
 const rootReducer = combineReducers({
     settings: settingsReducer,
     modalState: modalStateReducer,
     userState: userStateReducer,
-    walletCreationSteps: walletCreationStepsReducer,
+    walletCreationState: walletCreationStateReducer,
     walletObject: walletObjectReducer,
     menu: menuSelectionReducer,
     sendFunds: sendFundsReducer,
