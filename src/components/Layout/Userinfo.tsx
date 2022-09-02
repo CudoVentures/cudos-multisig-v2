@@ -17,7 +17,7 @@ import { initialState as initialUserState } from 'store/user'
 import { initialState as initialSendFundsState } from 'store/sendFunds'
 import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
-import { updateWalletCreationSteps } from 'store/walletCreation'
+import { initialState as initialWalletCreationState, updateWalletCreationState } from 'store/walletCreation'
 import { updateSendFunds } from 'store/sendFunds'
 
 import {
@@ -56,7 +56,7 @@ const UserInfo = () => {
     dispatch(updateUser({ ...initialUserState }))
     dispatch(updateWalletObjectState({ ...initialWalletObject }))
     dispatch(updateModalState({ ...initialModalState }))
-    dispatch(updateWalletCreationSteps({ currentStep: ''}))
+    dispatch(updateWalletCreationState({...initialWalletCreationState}))
     dispatch(updateSendFunds({ ...initialSendFundsState }))
     navigate("/")
   }

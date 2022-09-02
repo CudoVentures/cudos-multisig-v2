@@ -7,7 +7,7 @@ import NoWallet from 'components/NoWallets/NoWallet'
 import { updateModalState } from 'store/modals'
 import Dialog from 'components/Dialog'
 import { useEffect } from 'react'
-import { updateWalletCreationSteps } from 'store/walletCreation'
+import { initialState as initialWalletCreationState, updateWalletCreationState } from 'store/walletCreation'
 import { initialState as initialModalState } from 'store/modals'
 import { initialState as initialWalletObjectState, updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialSendFundsState, updateSendFunds } from 'store/sendFunds'
@@ -59,14 +59,14 @@ const Welcome = () => {
   }
 
   const handleAddressBookOpen = () => {
-    dispatch(updateWalletCreationSteps({currentStep: ''}))
+    dispatch(updateWalletCreationState({...initialWalletCreationState}))
     dispatch(updateModalState({ openAddressBook: true }))
   }
 
   const clearState = async () => {
     localStorage.clear()
     sessionStorage.clear()
-    dispatch(updateWalletCreationSteps({currentStep: ''}))
+    dispatch(updateWalletCreationState({...initialWalletCreationState}))
     dispatch(updateSendFunds({ ...initialSendFundsState }))
     dispatch(updateModalState({ ...initialModalState }))
     dispatch(updateWalletObjectState({ ...initialWalletObjectState }))
