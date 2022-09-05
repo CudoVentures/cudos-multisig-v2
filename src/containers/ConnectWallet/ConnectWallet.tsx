@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Typography } from '@mui/material'
 import InfoIcon from 'assets/vectors/info-icon.svg'
 import KeplrLogo from 'assets/vectors/keplr-logo.svg'
 import CosmostationLogo from 'assets/vectors/cosmostation-logo.svg'
@@ -12,12 +12,13 @@ import { updateUser } from 'store/user'
 import { RootState } from 'store'
 import Header from 'components/Layout/Header'
 import { connectUser } from 'utils/config'
+import { useState } from 'react'
 
-import { 
-  COSMOSTATION_LEDGER, 
-  DEFAULT_LOGIN_FAILURE_MSG, 
-  KEPLR_LEDGER, 
-  LOGIN_FAIL_TITLE 
+import {
+  COSMOSTATION_LEDGER,
+  DEFAULT_LOGIN_FAILURE_MSG,
+  KEPLR_LEDGER,
+  LOGIN_FAIL_TITLE
 } from 'utils/constants'
 
 const ConnectWallet = () => {
@@ -26,14 +27,12 @@ const ConnectWallet = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { address } = useSelector((state: RootState) => state.userState)
+  const [loading, setLoading] = useState(new Map())
 
   const connect = async (ledgerType: string) => {
 
     try {
-      dispatch(updateModalState({
-        loading: true,
-        loadingType: true
-      }))
+      setLoading(new Map(loading.set(ledgerType, true)))
       const connectedUser = await connectUser(ledgerType)
       dispatch(updateUser(connectedUser))
       navigate('/welcome')
@@ -47,10 +46,7 @@ const ConnectWallet = () => {
       console.debug(error.message)
 
     } finally {
-      dispatch(updateModalState({
-        loading: false,
-        loadingType: false
-      }))
+      setLoading(new Map())
     }
   }
 
@@ -84,7 +80,7 @@ const ConnectWallet = () => {
             <Box gap={2} style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-evenly' }}>
 
               <Button
-                disabled={!window.keplr}
+                disabled={!window.keplr || loading.get(COSMOSTATION_LEDGER)}
                 variant="contained"
                 color="primary"
                 onClick={() => connect(KEPLR_LEDGER)}
@@ -95,11 +91,20 @@ const ConnectWallet = () => {
                   src={KeplrLogo}
                   alt={`${KEPLR_LEDGER} logo`}
                 />
-                {`Connect ${KEPLR_LEDGER.toUpperCase()}`}
+                {loading.get(KEPLR_LEDGER) ?
+                  <Box style={styles.keplrLoadingHolder}>
+                    <CircularProgress
+                      color='inherit'
+                      size={25}
+                      thickness={5}
+                    />
+                  </Box>
+                  :
+                  `Connect ${KEPLR_LEDGER.toUpperCase()}`}
               </Button>
               <Button
                 //@ts-ignore
-                disabled={!window.cosmostation}
+                disabled={!window.cosmostation || loading.get(KEPLR_LEDGER)}
                 variant="contained"
                 color="primary"
                 onClick={() => connect(COSMOSTATION_LEDGER)}
@@ -110,7 +115,16 @@ const ConnectWallet = () => {
                   src={CosmostationLogo}
                   alt={`${COSMOSTATION_LEDGER} logo`}
                 />
-                {`Connect ${COSMOSTATION_LEDGER.toUpperCase()}`}
+                {loading.get(COSMOSTATION_LEDGER) ?
+                  <Box style={styles.cosmoLoadingHolder}>
+                    <CircularProgress
+                      color='inherit'
+                      size={25}
+                      thickness={5}
+                    />
+                  </Box>
+                  :
+                  `Connect ${COSMOSTATION_LEDGER.toUpperCase()}`}
               </Button>
             </Box>
             <Box sx={styles.pluginWarning} color="primary.main">
