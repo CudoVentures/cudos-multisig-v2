@@ -30,6 +30,10 @@ const ConnectWallet = () => {
   const connect = async (ledgerType: string) => {
 
     try {
+      dispatch(updateModalState({
+        loading: true,
+        loadingType: true
+      }))
       const connectedUser = await connectUser(ledgerType)
       dispatch(updateUser(connectedUser))
       navigate('/welcome')
@@ -41,6 +45,12 @@ const ConnectWallet = () => {
         message: DEFAULT_LOGIN_FAILURE_MSG
       }))
       console.debug(error.message)
+
+    } finally {
+      dispatch(updateModalState({
+        loading: false,
+        loadingType: false
+      }))
     }
   }
 

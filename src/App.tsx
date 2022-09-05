@@ -21,6 +21,7 @@ import RequireWallet from 'components/RequireWallet/RequireWallet'
 import { COSMOSTATION_LEDGER, KEPLR_LEDGER } from 'utils/constants'
 import { connectUser } from 'utils/config'
 import { initialState as initialUserState } from 'store/user'
+import { updateModalState } from 'store/modals'
 
 const App = () => {
   const location = useLocation()
@@ -31,12 +32,22 @@ const App = () => {
   const connectAccount = useCallback(async (ledgerType: string) => {
 
     try {
+      dispatch(updateModalState({
+        loading: true,
+        loadingType: true
+      }))
       dispatch(updateUser(initialUserState))
       const connectedUser = await connectUser(ledgerType)
       dispatch(updateUser(connectedUser))
 
     } catch (error: any) {
       console.debug(error.message)
+
+    } finally {
+      dispatch(updateModalState({
+        loading: false,
+        loadingType: false
+      }))
     }
   }, []);
 
