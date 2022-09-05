@@ -13,7 +13,7 @@ declare global {
     interface Window extends KeplrWindow { }
 }
 
-export const connectLedger = async (): Promise<{ address: string; keplrName: string; }> => {
+export const connectKeplrLedger = async (): Promise<{ address: string; accountName: string; }> => {
     if (!window.keplr) {
         throw new Error("Keplr extension not found")
     }
@@ -30,7 +30,7 @@ export const connectLedger = async (): Promise<{ address: string; keplrName: str
     await wallet.connect()
 
     const key = await window.keplr.getKey(CHAIN_ID)
-    return { address: key.bech32Address, keplrName: key.name }
+    return { address: key.bech32Address, accountName: key.name }
 }
 
 export const getKeplrAddress = async (): Promise<string> => {

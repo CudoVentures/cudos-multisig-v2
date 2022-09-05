@@ -32,7 +32,7 @@ import {
 const UserInfo = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { address, isAdmin, keplrName } = useSelector((state: RootState) => state.userState)
+  const { address, isAdmin, accountName } = useSelector((state: RootState) => state.userState)
 
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState<boolean>(false)
@@ -81,7 +81,7 @@ const UserInfo = () => {
               />
             </Box>
             <Typography>
-              {`Hi, ${keplrName}`}
+              {`Hi, ${accountName}`}
               {/* {formatAddress(address!, 10)} */}
             </Typography>
           </div>

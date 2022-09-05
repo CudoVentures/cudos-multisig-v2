@@ -30,7 +30,7 @@ const UpdateWalletSettings = ({
     const [walletName, setWalletName] = useState<string>('')
     const [walletInfo, setWalletInfo] = useState<string>('')
     const [oldData, setOldData] = useState<FetchedWalletMetadata>(emptyFetchedWalletMetadata)
-    const { address, selectedWallet } = useSelector((state: RootState) => state.userState)
+    const { address, selectedWallet, connectedLedger } = useSelector((state: RootState) => state.userState)
     const walletId: number = parseInt(selectedWallet!.walletID!)
     const { loading, error, data } = useGetWalletSettingsQuery({
         variables: { id: walletId }
@@ -88,7 +88,8 @@ const UpdateWalletSettings = ({
             JSON.stringify(updatedGroupMetadata),
             walletId,
             selectedWallet?.walletAddress!,
-            address!
+            address!,
+            connectedLedger!
         )
 
         const msgSpecificData = {

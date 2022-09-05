@@ -52,7 +52,7 @@ const SingleSend = () => {
     const contentToAppear = useRef<HTMLInputElement>(defaultElement)
 
     const { openSingleSendModal, openAssetsTable, selectFromAddressBook } = useSelector((state: RootState) => state.modalState)
-    const { selectedWallet, address, nativeBalance } = useSelector((state: RootState) => state.userState)
+    const { selectedWallet, address, nativeBalance, connectedLedger } = useSelector((state: RootState) => state.userState)
 
     const defaultBalance: Coin = {
         denom: NATIVE_TOKEN_DENOM,
@@ -109,7 +109,8 @@ const SingleSend = () => {
                     amount: isAdminTransfer() ? amountToSend.toString() : amountToAcudos(amountToSend)
                 }],
                 selectedWallet?.walletAddress!,
-                address!
+                address!,
+                connectedLedger!
             )
 
             setMsg(msg)
@@ -193,7 +194,7 @@ const SingleSend = () => {
         }))
 
         try {
-            const result = await executeMsgs(address!, [msg], fees)
+            const result = await executeMsgs(address!, [msg], fees, connectedLedger!)
             assertIsDeliverTxSuccess(result)
 
             const tempFee = calculateFeeFromGas(result.gasUsed)

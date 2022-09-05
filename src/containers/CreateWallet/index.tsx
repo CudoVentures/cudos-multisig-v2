@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { Box, Button } from '@mui/material'
@@ -42,19 +42,19 @@ const CreateWallet = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { groupMetadata, members, threshold, votingPeriod, feeForCreation } = useSelector((state: RootState) => state.walletObject)
-    const { address } = useSelector((state: RootState) => state.userState)
+    const { address, connectedLedger } = useSelector((state: RootState) => state.userState)
     const { currentStep } = useSelector((state: RootState) => state.walletCreationState)
     const [msg, setMsg] = useState<EncodeObject>({ typeUrl: '', value: '' })
 
     const stepComponents = new Map<number, JSX.Element>([
-        [FIRST_STEP, <StepOne/>],
-        [SECOND_STEP, <StepTwo/>],
-        [THIRD_STEP, <StepThree/>],
-        [FOURTH_STEP, <StepFour/>],
-        [LAST_STEP, <StepFive/>]
+        [FIRST_STEP, <StepOne />],
+        [SECOND_STEP, <StepTwo />],
+        [THIRD_STEP, <StepThree />],
+        [FOURTH_STEP, <StepFour />],
+        [LAST_STEP, <StepFive />]
     ]);
 
-    const stepDataValidations = new Map<number, boolean>([
+    const stepDataValidations = new Map<number, boolean | string | number | undefined>([
         [FIRST_STEP, true],
         [SECOND_STEP, groupMetadata?.walletName],
         [THIRD_STEP, members?.length!],
@@ -63,7 +63,7 @@ const CreateWallet = () => {
     ]);
 
     const clearState = async () => {
-        dispatch(updateWalletCreationState({...initialWalletCreationState}))
+        dispatch(updateWalletCreationState({ ...initialWalletCreationState }))
         dispatch(updateWalletObjectState({ ...initialWalletObject }))
     }
 
@@ -110,7 +110,7 @@ const CreateWallet = () => {
         }))
 
         try {
-            const client = await getSigningClient()
+            const client = await getSigningClient(connectedLedger!)
             const result = await client.signAndBroadcast(address!, [msg], feeForCreation!, DEFAULT_MEMO)
             assertIsDeliverTxSuccess(result)
 
@@ -150,7 +150,7 @@ const CreateWallet = () => {
     }
 
     const getCreateWalletMsgAndFees = async () => {
-        const client = await getSigningClient()
+        const client = await getSigningClient(connectedLedger!)
         return await client.groupModule.msgCreateGroupWithPolicy(
             address!,
             members!,
@@ -168,7 +168,7 @@ const CreateWallet = () => {
     }
 
     useEffect(() => {
-        dispatch(updateWalletCreationState({...initialWalletCreationState}))
+        dispatch(updateWalletCreationState({ ...initialWalletCreationState }))
         dispatch(updateModalState({ ...initialModalState }))
         document.getElementById("right-card-appear")!.style.display = 'none'
         setTimeout(() => document.getElementById("entire-create-wallet-page-appear")!.style.opacity = '1', 50)

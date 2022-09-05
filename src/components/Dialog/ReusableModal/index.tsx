@@ -29,7 +29,7 @@ import {
 const ReusableModal = () => {
 
     const dispatch = useDispatch()
-    const { address } = useSelector((state: RootState) => state.userState)
+    const { address, connectedLedger } = useSelector((state: RootState) => state.userState)
     const { openReusableModal, dataObject } = useSelector((state: RootState) => state.modalState)
     const msgType: string = dataObject!.msgType as string
 
@@ -74,7 +74,7 @@ const ReusableModal = () => {
                 message: DEFAULT_LOADING_MODAL_MSG
             }))
 
-            const result = await executeMsgs(address!, msgs, fees)
+            const result = await executeMsgs(address!, msgs, fees, connectedLedger!)
 
             assertIsDeliverTxSuccess(result)
 

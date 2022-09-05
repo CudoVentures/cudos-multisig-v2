@@ -30,9 +30,15 @@ import {
     NATIVE_TOKEN_DENOM
 } from "utils/constants"
 
-export const executeMsgs = async (signer: string, msgs: EncodeObject[], fee: StdFee): Promise<DeliverTxResponse> => {
+export const executeMsgs = async (
+    signer: string,
+    msgs: EncodeObject[],
+    fee: StdFee,
+    connectedLedger: string
+):
+    Promise<DeliverTxResponse> => {
 
-    const client = await getSigningClient()
+    const client = await getSigningClient(connectedLedger)
     return client.signAndBroadcast(
         signer,
         msgs,
@@ -44,7 +50,8 @@ export const executeMsgs = async (signer: string, msgs: EncodeObject[], fee: Std
 export const getMultiSendMsgAndFees = async (
     multisendRows: multisendRow[],
     walletAddress: string,
-    signerAddress: string
+    signerAddress: string,
+    connectedLedger: string
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
@@ -56,7 +63,7 @@ export const getMultiSendMsgAndFees = async (
         coins: totalCoinsDue
     }]
 
-    const client = await getSigningClient()
+    const client = await getSigningClient(connectedLedger)
     return client.groupModule.msgMultiSendProposal(
         sender,
         recipients,
@@ -73,12 +80,13 @@ export const getSingleSendMsgAndFees = async (
     recipient: string,
     amount: Coin[],
     walletAddress: string,
-    signerAddress: string
+    signerAddress: string,
+    connectedLedger: string
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
 }> => {
-    const client = await getSigningClient()
+    const client = await getSigningClient(connectedLedger)
     return client.groupModule.msgSingleSendProposal(
         recipient,
         amount,
@@ -95,12 +103,13 @@ export const getMembersUpdateMsgAndFees = async (
     members: Member[],
     walletId: number,
     walletAddress: string,
-    signerAddress: string
+    signerAddress: string,
+    connectedLedger: string
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
 }> => {
-    const client = await getSigningClient()
+    const client = await getSigningClient(connectedLedger)
     return client.groupModule.msgUpdateMembersProposal(
         members,
         walletId,
@@ -117,14 +126,15 @@ export const getWalletDecisionPolicyUpdateMsgAndFees = async (
     threshold: number,
     votingPeriod: number,
     walletAddress: string,
-    signerAddress: string
+    signerAddress: string,
+    connectedLedger: string
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
 }> => {
 
     const compatibleTime: votingPeriod = convertVotingPeriodToSeconds(votingPeriod)
-    const client = await getSigningClient()
+    const client = await getSigningClient(connectedLedger)
     return client.groupModule.msgUpdateGroupDecisionPolicy(
         {
             threshold: threshold,
@@ -144,12 +154,13 @@ export const getWalletMetadataUpdateMsgAndFees = async (
     metadata: string,
     walletId: number,
     walletAddress: string,
-    signerAddress: string
+    signerAddress: string,
+    connectedLedger: string
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
 }> => {
-    const client = await getSigningClient()
+    const client = await getSigningClient(connectedLedger)
     return client.groupModule.msgUpdateGroupMetadata(
         metadata,
         walletId,

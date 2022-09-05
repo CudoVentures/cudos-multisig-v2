@@ -26,7 +26,7 @@ export interface wallet {
 
 export interface userState {
   isAdmin?: boolean
-  keplrName?: string
+  accountName?: string
   address?: string
   lastLoggedAddress?: string
   nativeBalance?: string
@@ -35,6 +35,7 @@ export interface userState {
   selectedWallet?: wallet
   addressBook?: AddressBook
   chosenBalance?: Coin
+  connectedLedger?: string
 }
 
 export const emptyWallet: wallet = {
@@ -57,14 +58,15 @@ export const emptyWallet: wallet = {
 export const initialState: userState = {
   isAdmin: false,
   address: '',
-  keplrName: '',
+  accountName: '',
   lastLoggedAddress: '',
   nativeBalance: '',
   balances: [],
   wallets: [],
   selectedWallet: emptyWallet,
   addressBook: {},
-  chosenBalance: { denom: '', amount: '' }
+  chosenBalance: { denom: '', amount: '' },
+  connectedLedger: ''
 }
 
 export const userStateSlice = createSlice({

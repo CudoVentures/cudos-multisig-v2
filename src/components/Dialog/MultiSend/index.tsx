@@ -45,7 +45,7 @@ const MultiSend = () => {
     const [msg, setMsg] = useState<EncodeObject>({ typeUrl: '', value: '' })
     const [fees, setFees] = useState<StdFee>({ gas: '', amount: [] })
     const { openMultiSendModal, openAssetsTable } = useSelector((state: RootState) => state.modalState)
-    const { selectedWallet, address, nativeBalance } = useSelector((state: RootState) => state.userState)
+    const { selectedWallet, address, nativeBalance, connectedLedger } = useSelector((state: RootState) => state.userState)
     const { multisendRows } = useSelector((state: RootState) => state.sendFunds)
 
     useEffect(() => {
@@ -168,7 +168,8 @@ const MultiSend = () => {
             const { msg, fee } = await getMultiSendMsgAndFees(
                 multisendRows!,
                 selectedWallet?.walletAddress!,
-                address!
+                address!,
+                connectedLedger!
             )
 
             setMsg(msg)
@@ -197,7 +198,7 @@ const MultiSend = () => {
         }))
 
         try {
-            const result = await executeMsgs(address!, [msg], fees)
+            const result = await executeMsgs(address!, [msg], fees, connectedLedger!)
             assertIsDeliverTxSuccess(result)
 
             const tempFee = calculateFeeFromGas(result.gasUsed)
