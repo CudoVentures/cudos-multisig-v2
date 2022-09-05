@@ -16,7 +16,8 @@ import { formatAddress } from 'utils/helpers';
 import { updateUser } from 'store/user';
 import { updateModalState } from 'store/modals';
 import { Firebase } from 'utils/firebase'
-import { getKeplrAddress } from 'ledgers/KeplrLedger';
+import { getConnectedUserAddressAndName } from 'utils/config'
+
 import { 
   Order, 
   stableSort, 
@@ -151,7 +152,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 export default function AddressBookTable() {
-  const { addressBook } = useSelector((state: RootState) => state.userState)
+  const { addressBook, connectedLedger } = useSelector((state: RootState) => state.userState)
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('name');
   const [copied, setCopied] = React.useState<boolean>(false)
@@ -164,7 +165,7 @@ export default function AddressBookTable() {
       delete newAddressBook![address]
     }
 
-    const address = await getKeplrAddress();
+    const { address } = await getConnectedUserAddressAndName(connectedLedger!)
     await Firebase.saveAddressBook(address, newAddressBook);
     dispatch(updateUser({
       addressBook: newAddressBook

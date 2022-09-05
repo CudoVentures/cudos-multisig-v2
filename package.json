@@ -12,6 +12,8 @@
   "dependencies": {
     "@apollo/client": "^3.6.9",
     "@babel/core": "^7.0.0-0",
+    "@cosmostation/cosmos-client": "^0.0.1",
+    "@cosmostation/extension-client": "^0.1.7",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@fontsource/poppins": "^4.5.8",

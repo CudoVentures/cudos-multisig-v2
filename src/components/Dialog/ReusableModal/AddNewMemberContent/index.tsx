@@ -29,7 +29,7 @@ const AddNewMemberContent = ({
 }) => {
 
     const dispatch = useDispatch()
-    const { address, selectedWallet, addressBook } = useSelector((state: RootState) => state.userState)
+    const { address, selectedWallet, addressBook, connectedLedger } = useSelector((state: RootState) => state.userState)
     const { selectFromAddressBook } = useSelector((state: RootState) => state.modalState)
     const { members } = useSelector((state: RootState) => state.walletObject)
     const [newMemberName, setNewMemberName] = useState<string>('')
@@ -109,7 +109,8 @@ const AddNewMemberContent = ({
             updatedWalletMembers,
             walletId,
             selectedWallet?.walletAddress!,
-            address!
+            address!,
+            connectedLedger!
         )
 
         const msgSpecificData = {

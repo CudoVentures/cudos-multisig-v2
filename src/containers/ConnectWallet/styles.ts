@@ -18,11 +18,10 @@ export const styles = {
     connectButton: {
       height: '50px',
       width: '250px',
-      marginTop: '50px',
       marginBottom: '40px'
     },
     pluginWarning: {
-      maxWidth: '490px',
+      maxWidth: '550px',
       fontSize: '14px',
       height: '60px',
       backgroundColor: 'rgba(82, 166, 248, 0.1)',
@@ -34,6 +33,10 @@ export const styles = {
     },
     keplrLogo: {
       marginRight: '10px'
+    },
+    cosmostationLogo: {
+      marginRight: '10px',
+      height: '25px'
     },
     infoIcon: {
       display: 'flex',

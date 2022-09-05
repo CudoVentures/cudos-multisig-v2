@@ -12,6 +12,8 @@ import { RootState } from 'store'
 import { initialState as initialModalState } from 'store/modals'
 import { CSVLink } from "react-csv"
 import { HtmlTooltip } from 'utils/multiSendTableHelper'
+import { Firebase } from 'utils/firebase'
+import { getConnectedUserAddressAndName } from 'utils/config'
 
 import {
     DUPLICATED_ADDRESS_EDITING_FAILUTE_TITLE,
@@ -21,8 +23,6 @@ import {
     FILE_ERROR_TITLE,
     INVALID_DATA_PROMPT_MSG
 } from 'utils/constants'
-import { Firebase } from 'utils/firebase'
-import { getKeplrAddress } from 'ledgers/KeplrLedger'
 
 interface DataObject {
     index: number,
@@ -37,7 +37,7 @@ const AddAddressButtons = () => {
     const [userName, setUserName] = useState('')
     const [userAddress, setUserAddress] = useState('')
     const { addNewAddress, editAddressBookRecord, dataObject } = useSelector((state: RootState) => state.modalState)
-    const { addressBook } = useSelector((state: RootState) => state.userState)
+    const { addressBook, connectedLedger } = useSelector((state: RootState) => state.userState)
     const { currentStep } = useSelector((state: RootState) => state.walletCreationState)
     const dataFromObject: DataObject = new Object(dataObject) as DataObject
 
@@ -85,7 +85,7 @@ const AddAddressButtons = () => {
         } else {
             dispatch(updateUser({ addressBook: txBatch }))
 
-            const address = await getKeplrAddress();
+            const { address } = await getConnectedUserAddressAndName(connectedLedger!)
             await Firebase.saveAddressBook(address, txBatch);
         }
     }
@@ -119,7 +119,7 @@ const AddAddressButtons = () => {
                     addressBook: newAddressBook
                 }))
 
-                const address = await getKeplrAddress();
+                const { address } = await getConnectedUserAddressAndName(connectedLedger!)
                 await Firebase.saveAddressBook(address, newAddressBook);
 
                 localStorage.removeItem('addressBookAccountName')
@@ -168,7 +168,7 @@ const AddAddressButtons = () => {
                 }))
                 dispatch(updateModalState({ editAddressBookRecord: false }))
 
-                const address = await getKeplrAddress();
+                const { address } = await getConnectedUserAddressAndName(connectedLedger!)
                 await Firebase.saveAddressBook(address, newAddressBook);
 
                 return

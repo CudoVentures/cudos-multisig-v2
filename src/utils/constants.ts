@@ -25,10 +25,13 @@ export const FIREBASE_COLLECTION_NAME = import.meta.env.VITE_APP_FIREBASE_COLLEC
 // General config
 export const ADMIN_TOKEN_DENOM = 'cudosAdmin'
 export const NATIVE_TOKEN_DENOM = 'acudos'
+export const CURRENCY_DISPLAY_NAME = 'CUDOS'
 export const DEFAULT_META_DATA = 'default-metadata'
 export const DEFAULT_MEMO = 'Created with CUDOS MultiSig'
 export const DEFAULT_VOTING_WEIGHT = 1
 export const DEFAULT_MULTIPLIER = 1.3
+export const KEPLR_LEDGER = 'Keplr'
+export const COSMOSTATION_LEDGER = 'Cosmostation'
 
 // Modal Msg Titles
 export const FILE_ERROR_TITLE = 'File Error'

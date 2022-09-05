@@ -53,7 +53,13 @@ const FundWallet = () => {
     const input = useRef<HTMLInputElement>(defaultElement)
     const contentToAppear = useRef<HTMLInputElement>(defaultElement)
     const { openFundWallet, openAssetsTable} = useSelector((state: RootState) => state.modalState)
-    const { selectedWallet, address, nativeBalance, chosenBalance } = useSelector((state: RootState) => state.userState)
+    const { 
+        selectedWallet, 
+        address, 
+        nativeBalance, 
+        chosenBalance, 
+        connectedLedger 
+    } = useSelector((state: RootState) => state.userState)
     
     const defaultBalance: Coin = {
         denom: NATIVE_TOKEN_DENOM,
@@ -171,7 +177,7 @@ const FundWallet = () => {
         }))
 
         try {
-            const client = await getSigningClient();
+            const client = await getSigningClient(connectedLedger!);
             const result = await client.signAndBroadcast(
                 address!, 
                 [msg], 
@@ -272,7 +278,7 @@ const FundWallet = () => {
             }]
         }]
 
-        const client = await getSigningClient();
+        const client = await getSigningClient(connectedLedger!);
         return client.msgMultisend(
             sender,
             recipient,

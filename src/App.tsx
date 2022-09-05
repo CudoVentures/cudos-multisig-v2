@@ -4,53 +4,36 @@ import { CssBaseline, Container } from '@mui/material'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 
 import Layout from 'components/Layout'
-import RequireKeplr from 'components/RequireKeplr/RequireKeplr'
+import RequireLedger from 'components/RequireLedger/RequireLedger'
 import ConnectWallet from 'containers/ConnectWallet/ConnectWallet'
 import Welcome from 'containers/Welcome'
 import CreateWallet from 'containers/CreateWallet'
 import theme from 'theme'
 import { RootState } from 'store'
 import { useCallback, useEffect } from 'react'
-import { connectLedger } from 'ledgers/KeplrLedger'
-import { initialState as initialUserState } from 'store/user'
 import { ApolloProvider } from '@apollo/client'
 import { useApollo } from './graphql/client'
 
 import '@fontsource/poppins'
 import { updateUser } from 'store/user'
-import { checkForAdminToken, getAccountBalances, getNativeBalance } from 'utils/helpers'
 import WalletDetails from 'containers/WalletDetails'
 import RequireWallet from 'components/RequireWallet/RequireWallet'
-import { Firebase } from 'utils/firebase'
+import { COSMOSTATION_LEDGER, KEPLR_LEDGER } from 'utils/constants'
+import { connectUser } from 'utils/config'
+import { initialState as initialUserState } from 'store/user'
 
 const App = () => {
   const location = useLocation()
   const apolloClient = useApollo(null)
   const themeColor = useSelector((state: RootState) => state.settings.theme)
-  const { lastLoggedAddress } = useSelector((state: RootState) => state.userState)
   const dispatch = useDispatch()
 
-  const connectAccount = useCallback(async () => {
-    try {
-      const { address, keplrName } = await connectLedger()
-      if (address !== lastLoggedAddress) {
-        dispatch(updateUser({ ...initialUserState })
-        )
-      }
-      const currentBalances = await getAccountBalances(address)
-      const admin = checkForAdminToken(currentBalances)
-      const userBalance = getNativeBalance(currentBalances)
-      const addressBook = await Firebase.getAddressBook(address)
+  const connectAccount = useCallback(async (ledgerType: string) => {
 
-      dispatch(updateUser({
-        keplrName: keplrName,
-        address: address,
-        lastLoggedAddress: address,
-        balances: currentBalances,
-        nativeBalance: userBalance,
-        isAdmin: admin,
-        addressBook
-      }))
+    try {
+      dispatch(updateUser(initialUserState))
+      const connectedUser = await connectUser(ledgerType)
+      dispatch(updateUser(connectedUser))
 
     } catch (error: any) {
       console.debug(error.message)
@@ -58,9 +41,19 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("keplr_keystorechange", async () => {
-      await connectAccount()
-    });
+    window.addEventListener("keplr_keystorechange",
+      async () => {
+        await connectAccount(KEPLR_LEDGER)
+        return
+      });
+
+    //@ts-ignore
+    window.cosmostation.cosmos.on("accountChanged",
+      async () => {
+        await connectAccount(COSMOSTATION_LEDGER)
+        return
+      });
+
   }, [connectAccount])
 
   return (
@@ -76,7 +69,7 @@ const App = () => {
           {location.pathname === '/' ? null : (
             <Layout>
               <Routes>
-                <Route element={<RequireKeplr />}>
+                <Route element={<RequireLedger />}>
                   <Route path="welcome" element={<Welcome />} />
                   <Route path="create-wallet" element={<CreateWallet />} />
                   <Route element={<RequireWallet />}>

@@ -35,7 +35,7 @@ const VotingModal = () => {
 
     const dispatch = useDispatch()
     const { openVotingModal, dataObject } = useSelector((state: RootState) => state.modalState)
-    const { address } = useSelector((state: RootState) => state.userState)
+    const { address, connectedLedger } = useSelector((state: RootState) => state.userState)
     const [textArea, setTextArea] = useState<string>('')
     const [collapsed, setCollapsed] = useState<boolean>(false)
     const proposalID: number = parseInt(dataObject!.proposalID as string)
@@ -56,7 +56,7 @@ const VotingModal = () => {
     }
 
     const getExecutionMsgAndFees = async () => {
-        const client = await getSigningClient();
+        const client = await getSigningClient(connectedLedger!);
         return client.groupModule.msgExec(
             proposalID,
             address!,
@@ -67,7 +67,7 @@ const VotingModal = () => {
     }
 
     const getVotingMsgAndFees = async (voteOption: number) => {
-        const client = await getSigningClient();
+        const client = await getSigningClient(connectedLedger!);
         return client.groupModule.msgVote(
             proposalID,
             address!,
@@ -114,7 +114,7 @@ const VotingModal = () => {
             }))
 
             try {
-                const client = await getSigningClient();
+                const client = await getSigningClient(connectedLedger!);
                 const result = await client.signAndBroadcast(
                     address!,
                     [msg],
