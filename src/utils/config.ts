@@ -14,12 +14,22 @@ export const queryClient = (async (): Promise<StargateClient> => {
     return client
 })()
 
+const getOfflineSignerByType = async (ledgerType: string): Promise<OfflineSigner | undefined> => {
+
+    if (ledgerType === KEPLR_LEDGER) {
+        window.getOfflineSigner!(CHAIN_ID)
+    }
+
+    if (ledgerType === COSMOSTATION_LEDGER) {
+        return cosmostationSigner(CHAIN_ID)
+    }
+
+    return undefined
+}
+
 export const getSigningClient = async (ledgerType: string): Promise<SigningStargateClient> => {
 
-    const offlineSigner: OfflineSigner | undefined =
-        ledgerType === KEPLR_LEDGER ? window.getOfflineSigner!(CHAIN_ID) :
-            ledgerType === COSMOSTATION_LEDGER ? await cosmostationSigner(CHAIN_ID) :
-                undefined
+    const offlineSigner = await getOfflineSignerByType(ledgerType)
 
     if (window.keplr) {
         window.keplr.defaultOptions = {
@@ -36,18 +46,28 @@ export const getSigningClient = async (ledgerType: string): Promise<SigningStarg
     return SigningStargateClient.connectWithSigner(RPC_ADDRESS, offlineSigner)
 }
 
+const connectLedgerByType = async (ledgerType: string) => {
+
+    if (ledgerType === KEPLR_LEDGER) {
+        return connectKeplrLedger()
+    }
+
+    if (ledgerType === COSMOSTATION_LEDGER) {
+        return connectCosmostationLedger()
+    }
+
+    return { address: '', accountName: '' }
+}
+
 export const getConnectedUserAddressAndName = async (ledgerType: string): Promise<{ address: string; accountName: string; }> => {
-    
-    const { address, accountName } =
-        ledgerType === KEPLR_LEDGER ? await connectKeplrLedger() :
-            ledgerType === COSMOSTATION_LEDGER ? await connectCosmostationLedger() :
-                { address: '', accountName: '' }
+
+    const { address, accountName } = await connectLedgerByType(ledgerType)
 
     if (!isValidCudosAddress(address)) {
         throw new Error("Invalid ledger");
     }
 
-    return { address: address, accountName: accountName}
+    return { address: address, accountName: accountName }
 }
 
 export const connectUser = async (ledgerType: string): Promise<userState> => {
