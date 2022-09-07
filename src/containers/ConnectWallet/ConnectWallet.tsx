@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import InfoIcon from 'assets/vectors/info-icon.svg'
 import KeplrLogo from 'assets/vectors/keplr-logo.svg'
 import CosmostationLogo from 'assets/vectors/cosmostation-logo.svg'
@@ -13,6 +13,7 @@ import { RootState } from 'store'
 import Header from 'components/Layout/Header'
 import { connectUser } from 'utils/config'
 import { useState } from 'react'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 import {
   COSMOSTATION_LEDGER,
@@ -77,55 +78,40 @@ const ConnectWallet = () => {
               </Typography>
             </Box>
 
-            <Box gap={2} style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-evenly' }}>
-
-              <Button
+            <Box gap={2} style={styles.btnsHolder}>
+              <LoadingButton
                 disabled={!window.keplr || loading.get(COSMOSTATION_LEDGER)}
+                loading={loading.get(KEPLR_LEDGER)}
                 variant="contained"
                 color="primary"
                 onClick={() => connect(KEPLR_LEDGER)}
                 sx={styles.connectButton}
               >
                 <img
+                  hidden={loading.get(KEPLR_LEDGER)}
                   style={styles.keplrLogo}
                   src={KeplrLogo}
                   alt={`${KEPLR_LEDGER} logo`}
                 />
-                {loading.get(KEPLR_LEDGER) ?
-                  <Box style={styles.keplrLoadingHolder}>
-                    <CircularProgress
-                      color='inherit'
-                      size={25}
-                      thickness={5}
-                    />
-                  </Box>
-                  :
-                  `Connect ${KEPLR_LEDGER.toUpperCase()}`}
-              </Button>
-              <Button
+                {`Connect ${KEPLR_LEDGER.toUpperCase()}`}
+              </LoadingButton>
+              <LoadingButton
                 //@ts-ignore
                 disabled={!window.cosmostation || loading.get(KEPLR_LEDGER)}
+                loading={loading.get(COSMOSTATION_LEDGER)}
                 variant="contained"
                 color="primary"
                 onClick={() => connect(COSMOSTATION_LEDGER)}
                 sx={styles.connectButton}
               >
                 <img
+                  hidden={loading.get(COSMOSTATION_LEDGER)}
                   style={styles.cosmostationLogo}
                   src={CosmostationLogo}
                   alt={`${COSMOSTATION_LEDGER} logo`}
                 />
-                {loading.get(COSMOSTATION_LEDGER) ?
-                  <Box style={styles.cosmoLoadingHolder}>
-                    <CircularProgress
-                      color='inherit'
-                      size={25}
-                      thickness={5}
-                    />
-                  </Box>
-                  :
-                  `Connect ${COSMOSTATION_LEDGER.toUpperCase()}`}
-              </Button>
+                {`Connect ${COSMOSTATION_LEDGER.toUpperCase()}`}
+              </LoadingButton>
             </Box>
             <Box sx={styles.pluginWarning} color="primary.main">
               <img style={styles.infoIcon} src={InfoIcon} alt="Info" />

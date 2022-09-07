@@ -1,15 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 export const styles = {
-  keplrLoadingHolder: {
-    display: 'flex',
-    width: '102px',
-    paddingLeft: '24%'
-  },
-  cosmoLoadingHolder: {
-    display: 'flex',
-    width: '174px',
-    paddingLeft: '30%'
-  },
   connectContainer: {
     display: 'grid',
     justifyContent: 'center',
@@ -51,5 +41,10 @@ export const styles = {
   infoIcon: {
     display: 'flex',
     marginRight: '10px'
+  },
+  btnsHolder: {
+    marginTop: '50px', 
+    display: 'flex', 
+    justifyContent: 'space-evenly'
   }
 } as const
