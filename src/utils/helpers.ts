@@ -107,7 +107,7 @@ export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet =
     }
 
     if (walletfound === emptyWallet) {
-        console.debug('Wallet not found')
+        console.error('Wallet not found')
     }
     return walletfound
 }

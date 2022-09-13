@@ -95,7 +95,7 @@ const ReusableModal = () => {
                 message: PROPOSAL_CREATION_SUCCESS_MSG
             }))
 
-        } catch (e: any) {
+        } catch (error: any) {
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
@@ -103,7 +103,7 @@ const ReusableModal = () => {
                 msgType: msgType,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(e.message)
+            console.error(error.message)
         }
     }
 

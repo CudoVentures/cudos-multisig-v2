@@ -143,7 +143,7 @@ const MultiSend = () => {
                     title: GENERAL_FAILURE_TITLE,
                     message: GENERAL_FAILURE_MSG
                 }))
-                console.debug('Missmatching balances')
+                console.error('Missmatching balances')
                 break
             }
 
@@ -184,7 +184,7 @@ const MultiSend = () => {
                 message: GENERAL_FAILURE_MSG
             }))
 
-            console.debug(error.message)
+            console.error(error.message)
         }
     }
 
@@ -222,14 +222,14 @@ const MultiSend = () => {
                 message: PROPOSAL_CREATION_SUCCESS_MSG
             }))
 
-        } catch (e: any) {
+        } catch (error: any) {
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
                 title: PROPOSAL_CREATION_FAILURE_TITLE,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(e.message)
+            console.error(error.message)
         }
     }
 

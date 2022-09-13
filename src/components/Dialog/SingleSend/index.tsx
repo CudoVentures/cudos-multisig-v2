@@ -123,7 +123,7 @@ const SingleSend = () => {
                 msgType: FEE_ESTIMATION_ERROR,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(error.message)
+            console.error(error.message)
         }
     }
 
@@ -216,14 +216,14 @@ const SingleSend = () => {
                 message: PROPOSAL_CREATION_SUCCESS_MSG
             }))
 
-        } catch (e: any) {
+        } catch (error: any) {
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
                 title: PROPOSAL_CREATION_FAILURE_TITLE,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(e.message)
+            console.error(error.message)
         }
     }
 

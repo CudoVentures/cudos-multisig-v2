@@ -44,7 +44,7 @@ const ConnectWallet = () => {
         title: LOGIN_FAIL_TITLE,
         message: DEFAULT_LOGIN_FAILURE_MSG
       }))
-      console.debug(error.message)
+      console.error(error.message)
 
     } finally {
       setLoading(new Map())

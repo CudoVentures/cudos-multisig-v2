@@ -41,8 +41,7 @@ const App = () => {
       dispatch(updateUser(connectedUser))
 
     } catch (error: any) {
-      console.debug(error.message)
-
+      console.error(error.message)
     } finally {
       dispatch(updateModalState({
         loading: false,

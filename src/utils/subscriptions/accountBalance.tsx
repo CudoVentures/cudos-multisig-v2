@@ -34,7 +34,7 @@ const AccountBalance = (): JSX.Element => {
         }))
 
       } catch (error: any) {
-        console.debug(error.message)
+        console.error(error.message)
       }
     }
     const timer = setInterval(async () => {

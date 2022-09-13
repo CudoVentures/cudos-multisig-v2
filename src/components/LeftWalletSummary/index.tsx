@@ -44,7 +44,7 @@ const LeftWalletSummary = ({
             dispatch(updateUser({ wallets: updatedWallets }))
 
         } catch (error: any) {
-            console.debug(error.message)
+            console.error(error.message)
         }
     }
 
@@ -54,7 +54,7 @@ const LeftWalletSummary = ({
             dispatch(updatedSelectedWallet(updatedWallet))
 
         } catch (error: any) {
-            console.debug(error.message)
+            console.error(error.message)
         }
     }
 

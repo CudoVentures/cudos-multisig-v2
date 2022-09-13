@@ -17,7 +17,7 @@ const NoWallet = () => {
       navigate('/create-wallet')
   
     } catch (error: any) {
-      console.debug(error.message)
+      console.error(error.message)
     }
   }
   

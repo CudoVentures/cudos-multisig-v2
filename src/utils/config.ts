@@ -17,7 +17,7 @@ export const queryClient = (async (): Promise<StargateClient> => {
 const getOfflineSignerByType = async (ledgerType: string): Promise<OfflineSigner | undefined> => {
 
     if (ledgerType === KEPLR_LEDGER) {
-        window.getOfflineSigner!(CHAIN_ID)
+        return window.getOfflineSigner!(CHAIN_ID)
     }
 
     if (ledgerType === COSMOSTATION_LEDGER) {

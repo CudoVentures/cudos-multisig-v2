@@ -114,7 +114,7 @@ const FundWallet = () => {
                 msgType: FEE_ESTIMATION_ERROR,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(error.message)
+            console.error(error.message)
         }
     }
 
@@ -207,14 +207,14 @@ const FundWallet = () => {
                 message: WALLET_FUNDING_SUCCESS_MSG
             }))
 
-        } catch (e: any){
+        } catch (error: any){
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
                 title: WALLET_FUNDING_FAILURE_TITLE, 
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(e.message)
+            console.error(error.message)
         }
     }
 

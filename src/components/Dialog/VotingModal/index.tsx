@@ -143,7 +143,7 @@ const VotingModal = () => {
                             PROPOSAL_VOTING_SUCCESS_MSG
                 }))
 
-            } catch (e: any) {
+            } catch (error: any) {
                 dispatch(updateModalState({
                     loading: false,
                     failure: true,
@@ -151,7 +151,7 @@ const VotingModal = () => {
                     msgType: PROPOSAL_VOTING_ERROR_TYPE,
                     message: GENERAL_FAILURE_MSG
                 }))
-                console.debug(e.message)
+                console.error(error.message)
             }
 
         } catch (error: any) {
@@ -161,7 +161,7 @@ const VotingModal = () => {
                 msgType: PROPOSAL_VOTING_ERROR_TYPE,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(error.message)
+            console.error(error.message)
         }
     }
 
