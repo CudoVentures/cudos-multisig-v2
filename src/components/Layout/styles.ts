@@ -3,6 +3,11 @@ import { styled, Box } from '@mui/material'
 import theme from '../../theme'
 
 export const styles = {
+  anchorStyle: {
+    alignItems: 'center', 
+    textDecoration: 'none', 
+    display: 'flex'
+  },
   networkInfoHolder: {
     width: 'max-content', 
     marginRight: '20px', 
@@ -34,7 +39,7 @@ export const styles = {
     fontSize: '14px',
     fontWeight: '500',
     display: 'flex',
-    justifyContent: 'center',
+
     alignItems: "center"
   },
   fancyLine: {
@@ -55,6 +60,18 @@ export const styles = {
     marginTop: '3px',
     justifyContent: 'center'
   },
+  networkSelectionMenuContainer: {
+    background: theme.dark.custom.backgrounds.light,
+    fontSize: '14px',
+    minWidth: '224px',
+    fontWeight: '500',
+    display: 'flex',
+    borderRadius: '0px 0px 20px 20px',
+    paddingLeft: '20px',
+    marginTop: '3px',
+    padding: '40px 0px 20px 20px',
+    flexDirection: 'column'
+  },
   footerContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -69,16 +86,21 @@ export const styles = {
 
 export const StyledNetwork = styled(Box)(({ theme }) => ({
   maxWidth: '100%',
+  minWidth: '250px',
   maxHeight: '48px',
   borderRadius: '55px',
+  height: '35px',
+  marginRight: '20px',
   backgroundColor: theme.custom.backgrounds.primary,
-  padding: '15px 20px 15px 20px'
+  zIndex: '10',
+  cursor: 'pointer'
 }))
 
 export const StyledUser = styled(Box)(({ theme }) => ({
   minWidth: 'max-content',
   maxHeight: '48px',
   borderRadius: '55px',
+  height: '35px',
   background: theme.custom.backgrounds.primary,
   zIndex: '10',
   cursor: 'pointer'
