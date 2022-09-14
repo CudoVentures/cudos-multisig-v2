@@ -34,7 +34,7 @@ const UpdateWalletPolicies = ({
     const [threshold, setThreshold] = useState<number>(0)
     const [oldData, setOldData] = useState<FetchedWalletPolicies>(emptyFetchedWalletPolicies)
     const { address, selectedWallet, connectedLedger } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletSettingsQuery({
         variables: { id: walletId }
     })

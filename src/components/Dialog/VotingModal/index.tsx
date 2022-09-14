@@ -80,7 +80,7 @@ const VotingModal = () => {
         )
     }
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextArea(e.target.value)
     }
 
@@ -90,7 +90,7 @@ const VotingModal = () => {
         }))
     }
 
-    const closeModal = (ev: any, reason: string) => {
+    const closeModal = (e: {}, reason: string) => {
         if (reason !== 'backdropClick') {
             closeVotingModal()
         }

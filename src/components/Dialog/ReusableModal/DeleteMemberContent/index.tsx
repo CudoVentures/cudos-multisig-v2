@@ -21,7 +21,7 @@ const DeleteMemberContent = ({
 
     const { address, selectedWallet, connectedLedger } = useSelector((state: RootState) => state.userState)
     const { dataObject } = useSelector((state: RootState) => state.modalState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const memberAddress: string = dataObject!.memberAddress as string
     const walletMembers: TableData[] = dataObject!.walletMembers as TableData[]
     const updatedWalletMembers: Member[] = []

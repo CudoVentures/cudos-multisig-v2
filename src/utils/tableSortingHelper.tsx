@@ -7,8 +7,8 @@ export type Order = 'asc' | 'desc'
 export interface EnhancedTableProps {
     headCells?: readonly HeadCell[];
     numSelected?: number;
-    onRequestSort?: (event: React.MouseEvent<unknown>, property: keyof TableData) => void;
-    onSelectAllClick?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onRequestSort?: (e: React.MouseEvent<unknown>, property: keyof TableData) => void;
+    onSelectAllClick?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     deleteSelected?: () => void;
     order: Order;
     orderBy: string;

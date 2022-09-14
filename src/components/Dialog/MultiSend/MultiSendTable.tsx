@@ -31,7 +31,7 @@ const MultiSendTable = () => {
     const autoScroll = useRef<null | HTMLDivElement>(null)
     const { multisendRows } = useSelector((state: RootState) => state.sendFunds)
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
-    let fileReader: any
+    let fileReader: FileReader
     let invdalidData: boolean = false
 
     useEffect(() => {
@@ -59,9 +59,9 @@ const MultiSendTable = () => {
         document.getElementById("csv-file")?.click()
     }
 
-    const handleFileRead = (e: any) => {
+    const handleFileRead = (e: ProgressEvent<FileReader>) => {
 
-        const content = fileReader.result.split('\n')
+        const content = fileReader.result!.toString().split('\n')
         let txBatch: TableRecipients = {}
 
         for (let line of content) {
@@ -122,15 +122,15 @@ const MultiSendTable = () => {
         dispatch(updateSendFunds({ multisendRows: updatedData }))
     }
 
-    const handleFileChosen = (e: any) => {
-        let file = e.target.files[0]
+    const handleFileChosen = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let file = e.target.files![0]
         fileReader = new FileReader()
         fileReader.onloadend = handleFileRead
         fileReader.readAsText(file)
         e.target.value = ''
     }
 
-    const handleRemoveSpecificRow = (idx: any) => () => {
+    const handleRemoveSpecificRow = (idx: number) => () => {
         const newRows = [...multisendRows!]
         newRows.splice(idx, 1)
         dispatch(updateSendFunds({ multisendRows: newRows }))
@@ -167,7 +167,7 @@ const MultiSendTable = () => {
                 type='file'
                 id='csv-file'
                 accept='.csv'
-                onChange={e => handleFileChosen(e)}
+                onChange={handleFileChosen}
                 hidden
             />
             <Table id='table'>

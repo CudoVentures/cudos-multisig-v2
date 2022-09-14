@@ -58,7 +58,7 @@ const TransactionSelector = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const closeModal = (ev: any, reason: string) => {
+    const closeModal = (e: {}, reason: string) => {
         if (reason !== 'backdropClick') {
             handleModalClose()
         }

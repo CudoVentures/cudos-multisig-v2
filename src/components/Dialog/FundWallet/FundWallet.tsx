@@ -95,7 +95,7 @@ const FundWallet = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
       
-    const closeModal = (ev: any, reason: string) => {
+    const closeModal = (e: {}, reason: string) => {
         if (reason !== 'backdropClick') {
           handleModalClose()
         }
@@ -133,9 +133,9 @@ const FundWallet = () => {
         setTimeout(() => detailsDropdown.current.style.display = 'none', 650)
     }
 
-    const handleChange = (event: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         if (toggled) { clean() }
-        setAmountToSend(event.target.value as number)
+        setAmountToSend(parseInt(e.target.value))
     }
 
     const validInput = () => {
@@ -403,7 +403,7 @@ const FundWallet = () => {
                                         ['e', 'E', '+', "-"]
                                     if (forbiddenSymbols.includes(event.key)) {event!.preventDefault()}
                                 }}
-                                onPaste={(e: any)=>{e.preventDefault()}} 
+                                onPaste={e=>{e.preventDefault()}} 
                                 onChange={handleChange}
                             />
                             <Box style={{width: '90%'}}>

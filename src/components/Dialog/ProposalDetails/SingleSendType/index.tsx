@@ -1,5 +1,5 @@
 import { styles } from './styles'
-import { FetchedProposalDetailsData } from '..'
+import { FetchedProposalDetailsData, MsgSend } from '..'
 import { denomToAlias, denomToIcon } from 'utils/helpers'
 import { handleFullBalanceToPrecision } from 'utils/regexFormatting'
 import { Box, Typography } from '@mui/material'
@@ -8,7 +8,7 @@ import { AddressWithCopyAndFollowComponent } from 'components/Dialog/ReusableMod
 const SingleSendType = ({ proposalDetails }: {
     proposalDetails: FetchedProposalDetailsData
 }) => {
-    const message: any = proposalDetails.message
+    const message: MsgSend = proposalDetails.message as MsgSend
     const denom: string = denomToAlias[message.amount[0]!.denom as keyof typeof denomToAlias]
     const amount: string = message.amount[0]!.amount
     const amountToDisplay = handleFullBalanceToPrecision(amount, 2, denom)

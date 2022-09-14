@@ -4,7 +4,7 @@ import { styles } from '../styles'
 
 const AddressInput = () => {
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         localStorage.setItem(e.target.name, e.target.value)
         dispatchEvent(new Event("storage"))
     }

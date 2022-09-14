@@ -31,7 +31,7 @@ const UpdateWalletSettings = ({
     const [walletInfo, setWalletInfo] = useState<string>('')
     const [oldData, setOldData] = useState<FetchedWalletMetadata>(emptyFetchedWalletMetadata)
     const { address, selectedWallet, connectedLedger } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletSettingsQuery({
         variables: { id: walletId }
     })

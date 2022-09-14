@@ -9,7 +9,7 @@ const StepTwo = () => {
     const dispatch = useDispatch()
     const { groupMetadata } = useSelector((state: RootState) => state.walletObject)
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         switch(e.target.name){
             case "walletName":
                 dispatch(updateWalletObjectState({

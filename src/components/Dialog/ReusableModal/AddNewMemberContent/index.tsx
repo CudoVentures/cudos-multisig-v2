@@ -34,7 +34,7 @@ const AddNewMemberContent = ({
     const { members } = useSelector((state: RootState) => state.walletObject)
     const [newMemberName, setNewMemberName] = useState<string>('')
     const [newMemberAddress, setNewMemberAddress] = useState<string>('')
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const haveAddressBook: boolean = Object.keys(addressBook!).length > 0
     const { loading, error, data } = useGetWalletMembersQuery({
         variables: { id: walletId }

@@ -180,8 +180,8 @@ const StepThree = () => {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
+  const handleSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
       const newSelecteds = rows.map((n) => n.address);
       addSelectedMembersToWalletObject(newSelecteds)
       setSelected(newSelecteds);

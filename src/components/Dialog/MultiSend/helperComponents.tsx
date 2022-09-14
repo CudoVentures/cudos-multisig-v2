@@ -31,6 +31,7 @@ import {
     Input,
     MenuItem,
     Select,
+    SelectChangeEvent,
     Table,
     TableContainer,
     TableRow,
@@ -147,14 +148,14 @@ export const SingleUserInput = (): JSX.Element => {
 
     }, [openAssetsTable])
 
-    const handleChange = (event: any) => {
+    const handleChange = (e: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
-        if (event.target.name === 'recipientAddress') {
-            setRecipientAddress(event.target.value)
+        if (e.target.name === 'recipientAddress') {
+            setRecipientAddress(e.target.value)
             return
         }
 
-        setAmountToSend(event.target.value as number)
+        setAmountToSend(parseInt(e.target.value))
     }
 
     const validInput = () => {
@@ -259,14 +260,14 @@ export const SingleUserInput = (): JSX.Element => {
                         placeholder='enter amount'
                         type="number"
                         value={amountToSend ? amountToSend : ""}
-                        onKeyDown={event => {
+                        onKeyDown={e => {
                             const forbiddenSymbols =
                                 chosenBalance!.denom === 'cudosAdmin' ?
                                     ['e', 'E', '+', "-", ",", "."] :
                                     ['e', 'E', '+', "-"]
-                            if (forbiddenSymbols.includes(event.key)) { event!.preventDefault() }
+                            if (forbiddenSymbols.includes(e.key)) { e!.preventDefault() }
                         }}
-                        onPaste={(e: any) => { e.preventDefault() }}
+                        onPaste={e => { e.preventDefault() }}
                         onChange={handleChange}
                     />
                     <Box>
@@ -340,7 +341,7 @@ export const SelectFromAddrBookDropDown = ({
     onChangeProp,
     componentWidth
 }: {
-    onChangeProp: (event: any) => void,
+    onChangeProp: (event: SelectChangeEvent<string>) => void,
     componentWidth: string
 }): JSX.Element => {
 
@@ -352,7 +353,7 @@ export const SelectFromAddrBookDropDown = ({
         setSelected('')
     }, [multisendRows])
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: SelectChangeEvent<string>) => {
         onChangeProp(e)
         setSelected(e.target.value)
     }

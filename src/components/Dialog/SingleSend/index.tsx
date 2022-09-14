@@ -7,7 +7,7 @@ import Card from 'components/Card/Card'
 import { amountToAcudos, calculateFeeFromGas, formatAddress } from 'utils/helpers'
 import { updateModalState } from 'store/modals'
 import { COLORS_DARK_THEME } from 'theme/colors'
-import { Dialog as MuiDialog } from '@mui/material'
+import { Dialog as MuiDialog, SelectChangeEvent } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import InfoIcon from 'assets/vectors/info-icon.svg'
 import ArrowIcon from 'assets/vectors/arrow-right.svg'
@@ -94,7 +94,7 @@ const SingleSend = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const closeModal = (ev: any, reason: string) => {
+    const closeModal = (e: {}, reason: string) => {
         if (reason !== 'backdropClick') {
             handleModalClose()
         }
@@ -142,19 +142,19 @@ const SingleSend = () => {
         setTimeout(() => detailsDropdown.current.style.display = 'none', 650)
     }
 
-    const handleChange = (event: any) => {
+    const handleChange = (e: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
         if (toggled) {
             clean()
         }
 
-        if (event.target.name === 'recipientAddress') {
-            setRecipientAddress(event.target.value)
+        if (e.target.name === 'recipientAddress') {
+            setRecipientAddress(e.target.value)
             return
         }
 
         setMaxOut(false)
-        setAmountToSend(event.target.value as number)
+        setAmountToSend(parseInt(e.target.value))
     }
 
     const validInput = () => {
@@ -391,14 +391,14 @@ const SingleSend = () => {
                                     placeholder='enter amount'
                                     type="number"
                                     value={amountToSend ? amountToSend : ""}
-                                    onKeyDown={event => {
+                                    onKeyDown={e => {
                                         const forbiddenSymbols =
                                             chosenBalance!.denom === 'cudosAdmin' ?
                                                 ['e', 'E', '+', "-", ",", "."] :
                                                 ['e', 'E', '+', "-"]
-                                        if (forbiddenSymbols.includes(event.key)) { event!.preventDefault() }
+                                        if (forbiddenSymbols.includes(e.key)) { e!.preventDefault() }
                                     }}
-                                    onPaste={(e: any) => { e.preventDefault() }}
+                                    onPaste={e => { e.preventDefault() }}
                                     onChange={handleChange}
                                 />
                                 <Box style={{ width: '90%' }}>

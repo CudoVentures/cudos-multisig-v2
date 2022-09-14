@@ -13,7 +13,7 @@ import { EditBtn } from 'components/Dialog/ReusableModal/helpers'
 const Settings = () => {
 
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     let fetchedSettings: FetchedWalletSettings = emptyFetchedWalletSettings
     const { loading, error, data } = useGetWalletSettingsQuery({
         variables: { id: walletId }

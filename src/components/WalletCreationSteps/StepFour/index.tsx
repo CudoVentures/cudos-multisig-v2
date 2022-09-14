@@ -12,6 +12,7 @@ import {
     Input,
     MenuItem,
     Select,
+    SelectChangeEvent,
     Typography
 } from '@mui/material'
 
@@ -21,15 +22,15 @@ const StepFour = () => {
     const [threshold, setThreshold] = useState('')
     const { members } = useSelector((state: RootState) => state.walletObject)
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
         if (e.target.name === "threshold") {
             setThreshold(e.target.value)
-            dispatch(updateWalletObjectState({ threshold: e.target.value }))
+            dispatch(updateWalletObjectState({ threshold: parseInt(e.target.value) }))
             return
         }
 
-        const walletCompatibleTime = convertVotingPeriodToSeconds(e.target.value)
+        const walletCompatibleTime = convertVotingPeriodToSeconds(parseInt(e.target.value))
         dispatch(updateWalletObjectState({ votingPeriod: walletCompatibleTime }))
     }
 

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { styles } from './styles'
 import copy from 'copy-to-clipboard'
-import { FetchedProposalDetailsData } from '../'
+import { FetchedProposalDetailsData, MsgMultisend } from '../'
 import { formatAddress } from 'utils/helpers'
 import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
@@ -17,6 +17,7 @@ const MultiSendType = ({ proposalDetails }: {
     const [copied, setCopied] = useState<boolean>(false)
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
     const open = Boolean(anchorEl)
+    const msg: MsgMultisend = proposalDetails.message as MsgMultisend;
 
     // When more than 1, this will be showing in a pop-up like scrolling list all recipients 
     const ShowRecipients = useCallback(() => {
@@ -31,9 +32,9 @@ const MultiSendType = ({ proposalDetails }: {
                         Recipients
                     </Typography>
                     <Box style={{ overflow: 'scroll', maxHeight: '250px' }}>
-                        {proposalDetails.message.outputs.map((item: any, userIndex: number) => (
+                        {msg.outputs.map((item, userIndex) => (
                             <Box>
-                                {item.coins.map((coin: any, index: number) => (
+                                {item.coins.map((coin, index) => (
                                     <Box style={styles.recipientsBox}>
                                         <Typography
                                             style={{ width: '50px' }}
@@ -128,16 +129,16 @@ const MultiSendType = ({ proposalDetails }: {
                     Amount:
                 </Typography>
                 <Box style={{ display: 'inline-flex' }}>
-                    {proposalDetails.message.inputs[0].coins.length === 1 ?
+                    {msg.inputs[0].coins.length === 1 ?
                         <Typography style={{ display: 'flex', alignItems: 'flex-end' }}>
                             <img
                                 style={{ paddingBottom: '3px', margin: '10px 10px 0 0' }}
-                                src={denomToIcon[proposalDetails.message.inputs[0].coins[0]!.denom as keyof typeof denomToIcon]}
+                                src={denomToIcon[msg.inputs[0].coins[0]!.denom as keyof typeof denomToIcon]}
                             />
                             {handleFullBalanceToPrecision(
-                                proposalDetails.message.inputs[0].coins[0]!.amount,
+                                msg.inputs[0].coins[0]!.amount,
                                 2,
-                                denomToAlias[proposalDetails.message.inputs[0].coins[0]!.denom as keyof typeof denomToAlias])}
+                                denomToAlias[msg.inputs[0].coins[0]!.denom as keyof typeof denomToAlias])}
                         </Typography>
 
                         :
@@ -165,11 +166,11 @@ const MultiSendType = ({ proposalDetails }: {
                     variant='subtitle1'
                     color='text.primary'
                 >
-                    {formatAddress(proposalDetails.message.inputs[0].address, 30)}
+                    {formatAddress(msg.inputs[0].address, 30)}
                 </Typography>
                 <Box style={{ display: 'flex', justifyContent: 'center' }}>
                     <Tooltip
-                        onClick={() => handleCopy(proposalDetails.message.inputs[0].address)}
+                        onClick={() => handleCopy(msg.inputs[0].address)}
                         title={copied ? 'Copied' : 'Copy to clipboard'}
                     >
                         <img
@@ -179,7 +180,7 @@ const MultiSendType = ({ proposalDetails }: {
                         />
                     </Tooltip>
                     <Tooltip title="Check address on explorer">
-                        <a href={EXPLORER_ADDRESS_DETAILS(proposalDetails.message.inputs[0].address)} target='_blank'>
+                        <a href={EXPLORER_ADDRESS_DETAILS(msg.inputs[0].address)} target='_blank'>
                             <img
                                 style={{ paddingTop: '5px', ...styles.icons }}
                                 src={LinkIcon}
@@ -198,13 +199,13 @@ const MultiSendType = ({ proposalDetails }: {
                 >
                     To:
                 </Typography>
-                {proposalDetails.message.outputs.length > 1 ?
+                {msg.outputs.length > 1 ?
                     <Button
                         disableRipple
                         onClick={handleClick}
                         variant="text"
                     >
-                        {`${proposalDetails.message.outputs.length} Recipients`}
+                        {`${msg.outputs.length} Recipients`}
                     </Button>
                     :
                     <Box style={{ display: 'flex', justifyContent: 'center' }}>
@@ -213,11 +214,11 @@ const MultiSendType = ({ proposalDetails }: {
                             variant='subtitle1'
                             color='text.primary'
                         >
-                            {formatAddress(proposalDetails.message.outputs[0].address, 30)}
+                            {formatAddress(msg.outputs[0].address, 30)}
                         </Typography>
                         <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Tooltip
-                                onClick={() => handleCopy(proposalDetails.message.outputs[0].address)}
+                                onClick={() => handleCopy(msg.outputs[0].address)}
                                 title={copied ? 'Copied' : 'Copy to clipboard'}
                             >
                                 <img
@@ -227,7 +228,7 @@ const MultiSendType = ({ proposalDetails }: {
                                 />
                             </Tooltip>
                             <Tooltip title="Check address on explorer">
-                                <a href={EXPLORER_ADDRESS_DETAILS(proposalDetails.message.outputs[0].address)} target='_blank'>
+                                <a href={EXPLORER_ADDRESS_DETAILS(msg.outputs[0].address)} target='_blank'>
                                     <img
                                         style={{ paddingTop: '5px', ...styles.icons }}
                                         src={LinkIcon}

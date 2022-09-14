@@ -45,9 +45,39 @@ import {
     PROPOSAL_STATUS_ABORTED,
     PROPOSAL_STATUS_EXPIRED
 } from 'utils/constants'
+import { Member } from 'store/walletObject'
+import { Coin } from 'cudosjs'
+
+export interface MsgSend {
+    from_address: string;
+    to_address: string;
+    amount: Coin[];
+}
+
+export interface MsgMultisend {
+    inputs: { address: string, coins: Coin[] }[];
+    outputs: { address: string, coins: Coin[] }[];
+}
+
+export interface MsgUpdateMember { 
+    member_updates: Member[]
+}
+
+export interface MsgUpdateDecisionPolicy {
+    decision_policy: {
+        threshold: string;
+        windows: { voting_period: string, min_execution_period: string }
+    }
+}
+
+export interface MsgUpdateGroupMetadata {
+    metadata: string
+}
+
+export type ProposalMsg = ((MsgSend | MsgMultisend | MsgUpdateMember | MsgUpdateDecisionPolicy | MsgUpdateGroupMetadata) & { "@type": string }) | undefined
 
 export interface FetchedProposalDetailsData {
-    message: any;
+    message: ProposalMsg;
     msgType: string;
     txHash: string;
     votes: Vote[];
@@ -59,7 +89,7 @@ export interface FetchedProposalDetailsData {
     submissionTime: string;
     threshold: number;
     totalMembers: number;
-    groupMembers: any[];
+    groupMembers: { address: string }[];
     executor: string;
     executionTime: string;
     executionLog: string;
@@ -109,11 +139,11 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
         const proposalTimeStamp: string = proposal?.submit_time
         const txHash: string = proposal?.transaction_hash ? proposal?.transaction_hash : NO_TX_HASH_MSG
         const proposalMessage = proposal?.messages[0] ? proposal?.messages[0] : null
-        const msgType: string = determineType(proposal)
-        const status: string = determineStatus(address!, proposal)
-        const expirationTime: string = getExpirationTime(proposal)
+        const msgType: string = determineType(proposal?.messages)
+        const status: string = determineStatus(address!, proposal!)
+        const expirationTime: string = getExpirationTime(proposal!)
         const threshold: number = proposal?.group_with_policy.threshold!
-        const groupMembers: any[] = proposal?.group_with_policy.group_members!
+        const groupMembers: { address: string }[] = proposal?.group_with_policy.group_members!
         const totalMembers: number = proposal?.member_count!
         const proposer: string = proposal?.proposer!
         const votes: Vote[] = []

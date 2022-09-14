@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { ProposalMsg } from 'components/Dialog/ProposalDetails'
 import moment from 'moment'
 
 import {
@@ -36,7 +37,20 @@ const statuses = {
     [UNDEFINED]: UNKNOWN
 }
 
-export const getExpirationTime = (proposal: any): string => {
+interface  Vote {
+    voter?: string | undefined | null,
+    group_member?: {address: string} | undefined | null
+}
+
+interface Proposal {
+    status: string,
+    group_proposal_votes: Vote[],
+    executor_result: string,
+    group_with_policy?: { voting_period: string},
+    submit_time: any,
+    messages: ProposalMsg[] | undefined
+}
+export const getExpirationTime = (proposal: Proposal): string => {
 
     const votingTime: number = proposal?.group_with_policy ? parseInt(proposal?.group_with_policy.voting_period) : 0
     const proposalTimeStamp: string = formatDateTime(proposal?.submit_time)
@@ -60,33 +74,14 @@ export const isExpired = (expirationTime: string): boolean => {
         .isSameOrBefore(currentTime)
 }
 
-export const isVoted = (userAddress: string, votes: any[]): boolean => {
-
-    if (votes.length > 0) {
-        
-        for (const vote of votes) {
-            let voterAddress: string = ''
-
-            if (vote.voter) {
-                voterAddress = vote.voter
-            }
-
-            if (vote.group_member) {
-                voterAddress = vote.group_member.address
-            }
-
-            if (voterAddress !== '' && voterAddress === userAddress) {
-                return true
-            }
-        }
-    }
-
-    return false
+//cudos-noded tx bank send faucet cudos1vlq80lkrgl689vgyl38nz5k2v3klypms0pwwar 9000185000000000000acudos --chain-id=cudos-local-network --gas=auto --fees=4460400000acudos
+export const isVoted = (userAddress: string, votes: Vote[]): boolean => {
+    return votes.some(v => (v.voter && v.voter === userAddress) || (v.group_member && v.group_member.address === userAddress))
 }
 
-export const determineStatus = (userAddress: string, proposal: any): string => {
+export const determineStatus = (userAddress: string, proposal: Proposal): string => {
     let proposalStatus: string = proposal.status
-    const proposalVotes: any[] = proposal.group_proposal_votes
+    const proposalVotes = proposal.group_proposal_votes
     const executionStatus: string = proposal.executor_result
     const proposalIsExecuted: boolean = isExecuted(executionStatus)
     const userVoted: boolean = isVoted(userAddress, proposalVotes)
@@ -100,7 +95,7 @@ export const determineStatus = (userAddress: string, proposal: any): string => {
         proposalStatus = PROPOSAL_STATUS_EXPIRED
     }
 
-    proposalStatus = !proposalIsExecuted ? proposalStatus : executionStatus
+    proposalStatus = proposalIsExecuted ? executionStatus : proposalStatus
 
     return proposalStatus
 }

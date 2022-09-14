@@ -55,7 +55,7 @@ const SelectFromAddressBook = () => {
     const oldWalletMembers: AddressBook = {}
     const [orderBy, setOrderBy] = useState<keyof TableData>('name')
     const [selected, setSelected] = useState<readonly string[]>([])
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletMembersQuery({
         variables: { id: walletId }
     })
@@ -101,8 +101,8 @@ const SelectFromAddressBook = () => {
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
+    const handleSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
             const newSelecteds = rows.map((n) => n.address);
             addSelectedMembersToWalletObject(newSelecteds as string[])
             setSelected(newSelecteds as string[]);

@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Input }  from '@mui/material'
-import { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from '../styles'
@@ -14,7 +14,7 @@ const AddressEdit = () => {
     localStorage.setItem("addressBookAccountAddress", address)
     dispatchEvent(new Event("storage"))
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
         if ( e.target.name === "addressBookAccountName") {
             setName(e.target.value)

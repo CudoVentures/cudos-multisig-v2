@@ -3,14 +3,14 @@ import BigNumber from "bignumber.js"
 
 import { queryClient } from "./config"
 import { getCurrencyRate } from "api/calls"
-import { emptyWallet, wallet } from "store/user"
+import { emptyWallet, Wallet } from "store/user"
 import { handleFullBalanceToPrecision, separateDecimals, separateFractions } from "./regexFormatting"
 import { ADMIN_TOKEN_DENOM, GAS_PRICE, NATIVE_TOKEN_DENOM } from "./constants"
 
 import cudosLogo from 'assets/vectors/balances/cudos.svg'
 import cudosAdminLogo from 'assets/vectors/balances/cudos-admin.svg'
 import { votingPeriod } from "store/walletObject"
-import { StdFee } from "cudosjs"
+import { Coin, StdFee } from "cudosjs"
 
 export const formatDateTime = (dateTimeString: string): string => {
     const localTimeString: string = moment(dateTimeString).parseZone().toLocaleString()
@@ -64,9 +64,9 @@ export const calculateFeeFromGas = (gasAmount: number): string => {
     return new BigNumber(GAS_PRICE).multipliedBy(new BigNumber(gasAmount)).valueOf()
 }
 
-export const updatedWalletsBalances = async (wallets: wallet[]): Promise<wallet[]> => {
+export const updatedWalletsBalances = async (wallets: Wallet[]): Promise<Wallet[]> => {
 
-    const tempWallets: wallet[] = []
+    const tempWallets: Wallet[] = []
     for await (const obj of wallets!) {
         const updatedWallet = await updateWalletBalances(obj)
         tempWallets.push(updatedWallet)
@@ -74,10 +74,10 @@ export const updatedWalletsBalances = async (wallets: wallet[]): Promise<wallet[
     return tempWallets
 }
 
-export const updateWalletBalances = async (wallet: wallet): Promise<wallet> => {
+export const updateWalletBalances = async (wallet: Wallet): Promise<Wallet> => {
 
-    const tempWallet: wallet = { ...wallet }
-    const currentWalletBalances: any = await getAccountBalances(tempWallet.walletAddress)
+    const tempWallet: Wallet = { ...wallet }
+    const currentWalletBalances = await getAccountBalances(tempWallet.walletAddress)
     let isAdmin: boolean = false
     let nativeBalance: string = ''
 
@@ -86,7 +86,7 @@ export const updateWalletBalances = async (wallet: wallet): Promise<wallet> => {
         nativeBalance = getNativeBalance(currentWalletBalances)
     }
 
-    const updatedWallet: wallet = {
+    const updatedWallet: Wallet = {
         ...tempWallet,
         isAdmin: isAdmin,
         walletBalances: currentWalletBalances,
@@ -96,9 +96,9 @@ export const updateWalletBalances = async (wallet: wallet): Promise<wallet> => {
     return updatedWallet
 }
 
-export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet => {
+export const findOneWallet = (wallets: Wallet[], givenAddress: string): Wallet => {
 
-    let walletfound: wallet = emptyWallet
+    let walletfound: Wallet = emptyWallet
     for (let i = 0; i < wallets.length; i++) {
         if (wallets[i].walletAddress === givenAddress) {
             walletfound = { ...wallets[i] }
@@ -113,7 +113,7 @@ export const findOneWallet = (wallets: wallet[], givenAddress: string): wallet =
 }
 
 // The wrapper function is merely for the purpose of escaping the double await later in code.
-export const getAccountBalances = async (accountAddress: string): Promise<any> => {
+export const getAccountBalances = async (accountAddress: string): Promise<readonly Coin[]> => {
     return await (await queryClient).getAllBalances(accountAddress)
 }
 
@@ -126,7 +126,7 @@ export const getCudosBalanceInUSD = async (balance: string): Promise<string> => 
     return fullUsdBalance
 }
 
-export const checkForAdminToken = (balances: any[]): boolean => {
+export const checkForAdminToken = (balances: readonly Coin[]): boolean => {
     let isAdmin: boolean = false
     balances.map((balance) => {
         if (balance.denom === ADMIN_TOKEN_DENOM && parseInt(balance.amount) > 0) {
@@ -145,9 +145,9 @@ export const formatAddress = (text: string, sliceIndex: number): string => {
     return `${text.slice(0, sliceIndex)}...${text.slice(len - 4, len)}`
 }
 
-export const getNativeBalance = (balances: any[]): string => {
+export const getNativeBalance = (balances: readonly Coin[]): string => {
     let nativeBalance = '0'
-    balances.map((balance: any) => {
+    balances.map((balance) => {
         if (balance.denom === NATIVE_TOKEN_DENOM && new BigNumber(balance.amount).gt(0)) {
             nativeBalance = balance.amount
         }
