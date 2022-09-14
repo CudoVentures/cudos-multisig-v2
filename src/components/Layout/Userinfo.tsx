@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { StyledUser, styles } from './styles'
 import WalletIcon from 'assets/vectors/wallet-icon.svg'
+import KeplrLogo from 'assets/vectors/keplr-logo.svg'
+import CosmostationLogo from 'assets/vectors/cosmostation-logo.svg'
 import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
 import CudosLogo from 'assets/vectors/cudos-logo.svg'
@@ -19,6 +21,7 @@ import { initialState as initialWalletObject, updateWalletObjectState } from 'st
 import { initialState as initialModalState, updateModalState } from 'store/modals'
 import { initialState as initialWalletCreationState, updateWalletCreationState } from 'store/walletCreation'
 import { updateSendFunds } from 'store/sendFunds'
+import { COSMOSTATION_LEDGER, KEPLR_LEDGER } from 'utils/constants'
 
 import {
   Typography,
@@ -32,7 +35,7 @@ import {
 const UserInfo = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { address, isAdmin, accountName } = useSelector((state: RootState) => state.userState)
+  const { address, isAdmin, accountName, connectedLedger } = useSelector((state: RootState) => state.userState)
 
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState<boolean>(false)
@@ -76,7 +79,11 @@ const UserInfo = () => {
             >
               <Avatar
                 style={styles.avatarStyling}
-                src={WalletIcon}
+                src={
+                  connectedLedger === KEPLR_LEDGER ? KeplrLogo :
+                  connectedLedger === COSMOSTATION_LEDGER ? CosmostationLogo :
+                  WalletIcon
+                }
                 alt="Wallet Logo"
               />
             </Box>
