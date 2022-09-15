@@ -83,7 +83,7 @@ const AddNewMemberContent = ({
 
     const createProposal = async () => {
 
-        const newMembers = []
+        const newMembers: Member[] = []
         selectFromAddressBook ?
             members?.forEach((newMember) => {
                 newMembers.push({

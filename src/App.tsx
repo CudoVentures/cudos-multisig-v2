@@ -40,8 +40,8 @@ const App = () => {
       const connectedUser = await connectUser(ledgerType)
       dispatch(updateUser(connectedUser))
 
-    } catch (error: any) {
-      console.error(error.message)
+    } catch (error) {
+      console.error((error as Error).message)
     } finally {
       dispatch(updateModalState({
         loading: false,
