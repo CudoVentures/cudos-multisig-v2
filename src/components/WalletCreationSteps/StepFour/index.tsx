@@ -34,6 +34,12 @@ const StepFour = () => {
         dispatch(updateWalletObjectState({ votingPeriod: walletCompatibleTime }))
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (['e', 'E', '+', "-", ".", ","].includes(event.key)) {
+            event.preventDefault()
+        }
+    }
+
     useEffect(() => {
         dispatch(updateWalletObjectState({
             threshold: parseInt(threshold),
@@ -84,7 +90,7 @@ const StepFour = () => {
                         name="selectedVotingPeriod"
                         id='selectedVotingPeriod'
                         placeholder="30 days"
-                        onKeyDown={event => { if (['e', 'E', '+', "-", ".", ","].includes(event.key)) { event.preventDefault() } }}
+                        onKeyDown={handleKeyDown}
                         onPaste={event => { event.preventDefault() }}
                         onChange={handleChange}
                         className="form-control"

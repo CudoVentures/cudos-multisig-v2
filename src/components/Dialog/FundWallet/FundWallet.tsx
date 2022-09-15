@@ -288,6 +288,14 @@ const FundWallet = () => {
          )
      }
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const forbiddenSymbols = 
+            chosenBalance!.denom === 'cudosAdmin'?
+            ['e', 'E', '+', "-", ",", "."]:
+            ['e', 'E', '+', "-"]
+        if (forbiddenSymbols.includes(event.key)) {event!.preventDefault()}
+    }
+    
     return (
         <MuiDialog
         BackdropProps={defaultStyles.defaultBackDrop}
@@ -396,13 +404,7 @@ const FundWallet = () => {
                                 type="number"
                                 ref={input}
                                 value={amountToSend?amountToSend:""}
-                                onKeyDown={event => {
-                                    const forbiddenSymbols = 
-                                        chosenBalance!.denom === 'cudosAdmin'?
-                                        ['e', 'E', '+', "-", ",", "."]:
-                                        ['e', 'E', '+', "-"]
-                                    if (forbiddenSymbols.includes(event.key)) {event!.preventDefault()}
-                                }}
+                                onKeyDown={handleKeyDown}
                                 onPaste={event=>{event.preventDefault()}} 
                                 onChange={handleChange}
                             />

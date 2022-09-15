@@ -104,6 +104,12 @@ const UpdateWalletPolicies = ({
         )
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (['e', 'E', '+', "-", ".", ","].includes(event.key)) {
+            event.preventDefault()
+        }
+    }
+    
     return (
         <Box style={{ width: '100%' }}>
             {/* CONTENT */}
@@ -134,11 +140,7 @@ const UpdateWalletPolicies = ({
                             type="number"
                             value={votingPeriod}
                             placeholder="in days"
-                            onKeyDown={event => {
-                                if (['e', 'E', '+', "-", ".", ","].includes(event.key)) {
-                                    event.preventDefault()
-                                }
-                            }}
+                            onKeyDown={handleKeyDown}
                             onPaste={event => { event.preventDefault() }}
                             onChange={event => setVotingPeriod(parseInt(event.target.value))}
                             className="form-control"

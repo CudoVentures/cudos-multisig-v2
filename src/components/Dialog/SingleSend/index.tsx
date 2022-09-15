@@ -281,6 +281,14 @@ const SingleSend = () => {
         }))
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const forbiddenSymbols =
+            chosenBalance!.denom === 'cudosAdmin' ?
+                ['e', 'E', '+', "-", ",", "."] :
+                ['e', 'E', '+', "-"]
+        if (forbiddenSymbols.includes(event.key)) { event!.preventDefault() }
+    }
+
     useEffect(() => {
         clean()
     }, [selectFromAddressBook, openAssetsTable])
@@ -391,13 +399,7 @@ const SingleSend = () => {
                                     placeholder='enter amount'
                                     type="number"
                                     value={amountToSend ? amountToSend : ""}
-                                    onKeyDown={event => {
-                                        const forbiddenSymbols =
-                                            chosenBalance!.denom === 'cudosAdmin' ?
-                                                ['e', 'E', '+', "-", ",", "."] :
-                                                ['e', 'E', '+', "-"]
-                                        if (forbiddenSymbols.includes(event.key)) { event!.preventDefault() }
-                                    }}
+                                    onKeyDown={handleKeyDown}
                                     onPaste={event => { event.preventDefault() }}
                                     onChange={handleChange}
                                 />
