@@ -117,7 +117,7 @@ const UpdateWalletPolicies = ({
                                 variant='standard'
                                 disableUnderline
                                 value={threshold}
-                                onChange={(e) => setThreshold(e.target.value as number)}
+                                onChange={event => setThreshold(event.target.value as number)}
                             >
                                 {[...Array(selectedWallet?.memberCount)].map((e, i) => {
                                     return <MenuItem value={i + 1}>{i + 1}</MenuItem>
@@ -139,8 +139,8 @@ const UpdateWalletPolicies = ({
                                     event.preventDefault()
                                 }
                             }}
-                            onPaste={(e) => { e.preventDefault() }}
-                            onChange={(e) => setVotingPeriod(parseInt(e.target.value))}
+                            onPaste={event => { event.preventDefault() }}
+                            onChange={event => setVotingPeriod(parseInt(event.target.value))}
                             className="form-control"
                         />
                     </Box>

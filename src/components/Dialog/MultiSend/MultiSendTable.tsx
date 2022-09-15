@@ -59,9 +59,9 @@ const MultiSendTable = () => {
         document.getElementById("csv-file")?.click()
     }
 
-    const handleFileRead = (e: ProgressEvent<FileReader>) => {
+    const handleFileRead = (event: ProgressEvent<FileReader>) => {
 
-        const content = fileReader.result!.toString().split('\n')
+        const content = (fileReader.result as string).split('\n')
         let txBatch: TableRecipients = {}
 
         for (let line of content) {
@@ -122,12 +122,12 @@ const MultiSendTable = () => {
         dispatch(updateSendFunds({ multisendRows: updatedData }))
     }
 
-    const handleFileChosen = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let file = e.target.files![0]
+    const handleFileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let file = event.target.files![0]
         fileReader = new FileReader()
         fileReader.onloadend = handleFileRead
         fileReader.readAsText(file)
-        e.target.value = ''
+        event.target.value = ''
     }
 
     const handleRemoveSpecificRow = (idx: number) => () => {

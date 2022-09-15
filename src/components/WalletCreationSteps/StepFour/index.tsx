@@ -22,15 +22,15 @@ const StepFour = () => {
     const [threshold, setThreshold] = useState('')
     const { members } = useSelector((state: RootState) => state.walletObject)
 
-    const handleChange = (e: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const handleChange = (event: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
-        if (e.target.name === "threshold") {
-            setThreshold(e.target.value)
-            dispatch(updateWalletObjectState({ threshold: parseInt(e.target.value) }))
+        if (event.target.name === "threshold") {
+            setThreshold(event.target.value)
+            dispatch(updateWalletObjectState({ threshold: parseInt(event.target.value) }))
             return
         }
 
-        const walletCompatibleTime = convertVotingPeriodToSeconds(parseInt(e.target.value))
+        const walletCompatibleTime = convertVotingPeriodToSeconds(parseInt(event.target.value))
         dispatch(updateWalletObjectState({ votingPeriod: walletCompatibleTime }))
     }
 
@@ -85,7 +85,7 @@ const StepFour = () => {
                         id='selectedVotingPeriod'
                         placeholder="30 days"
                         onKeyDown={event => { if (['e', 'E', '+', "-", ".", ","].includes(event.key)) { event.preventDefault() } }}
-                        onPaste={(e) => { e.preventDefault() }}
+                        onPaste={event => { event.preventDefault() }}
                         onChange={handleChange}
                         className="form-control"
                     />

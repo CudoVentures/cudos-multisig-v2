@@ -52,10 +52,6 @@ const LeftWalletSummary = ({
         try {
             const updatedWallet = await updateWalletBalances(selectedWallet!)
             dispatch(updateSelectedWallet(updatedWallet))
-            // console.log(data)
-            // updatedWallet.walletName = JSON.parse(data?.group_with_policy_by_pk?.group_metadata!).walletName
-
-            // dispatch(updateSelectedWallet(updatedWallet))
         } catch (error) {
             console.error((error as Error).message)
         }

@@ -94,7 +94,7 @@ const SingleSend = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const closeModal = (e: {}, reason: string) => {
+    const closeModal = (event: {}, reason: string) => {
         if (reason !== 'backdropClick') {
             handleModalClose()
         }
@@ -142,19 +142,19 @@ const SingleSend = () => {
         setTimeout(() => detailsDropdown.current.style.display = 'none', 650)
     }
 
-    const handleChange = (e: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const handleChange = (event: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
         if (toggled) {
             clean()
         }
 
-        if (e.target.name === 'recipientAddress') {
-            setRecipientAddress(e.target.value)
+        if (event.target.name === 'recipientAddress') {
+            setRecipientAddress(event.target.value)
             return
         }
 
         setMaxOut(false)
-        setAmountToSend(parseInt(e.target.value))
+        setAmountToSend(parseInt(event.target.value))
     }
 
     const validInput = () => {
@@ -391,14 +391,14 @@ const SingleSend = () => {
                                     placeholder='enter amount'
                                     type="number"
                                     value={amountToSend ? amountToSend : ""}
-                                    onKeyDown={e => {
+                                    onKeyDown={event => {
                                         const forbiddenSymbols =
                                             chosenBalance!.denom === 'cudosAdmin' ?
                                                 ['e', 'E', '+', "-", ",", "."] :
                                                 ['e', 'E', '+', "-"]
-                                        if (forbiddenSymbols.includes(e.key)) { e!.preventDefault() }
+                                        if (forbiddenSymbols.includes(event.key)) { event!.preventDefault() }
                                     }}
-                                    onPaste={e => { e.preventDefault() }}
+                                    onPaste={event => { event.preventDefault() }}
                                     onChange={handleChange}
                                 />
                                 <Box style={{ width: '90%' }}>

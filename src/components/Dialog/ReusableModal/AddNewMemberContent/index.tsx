@@ -149,7 +149,7 @@ const AddNewMemberContent = ({
                             style={styles.addressInput}
                             type="text"
                             placeholder="e.g James Bond"
-                            onChange={(e) => setNewMemberName(e.target.value)}
+                            onChange={event => setNewMemberName(event.target.value)}
                         />
                     </Box>
                     <Box>
@@ -160,7 +160,7 @@ const AddNewMemberContent = ({
                             type="text"
                             value={newMemberAddress}
                             placeholder="e.g cudos1nkf0flyugd2ut40cg4tn48sp70p2e65wse8abc"
-                            onChange={(e) => setNewMemberAddress(e.target.value)}
+                            onChange={event => setNewMemberAddress(event.target.value)}
                         />
                     </Box>
                 </Box>

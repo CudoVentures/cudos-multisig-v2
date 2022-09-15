@@ -81,7 +81,7 @@ const Success = () => {
     navigate(navPath)
   }
 
-  const closeModal = (e: {}, reason: string) => {
+  const closeModal = (event: {}, reason: string) => {
     if (reason !== 'backdropClick') {
       handleModalClose()
     }

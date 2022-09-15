@@ -117,7 +117,7 @@ const UpdateWalletSettings = ({
                     name="walletName"
                     value={walletName}
                     placeholder="e.g Cudos Wallet"
-                    onChange={(e) => setWalletName(e.target.value)}
+                    onChange={event => setWalletName(event.target.value)}
                 />
 
                 <Box marginBottom={1} marginTop={2}>General Info</Box>
@@ -126,7 +126,7 @@ const UpdateWalletSettings = ({
                     value={walletInfo}
                     placeholder={!walletInfo ? "Your wallet have no general info" : ""}
                     style={styles.textArea}
-                    onChange={(e) => setWalletInfo(e.target.value)}
+                    onChange={event => setWalletInfo(event.target.value)}
                 />
             </Box>
 

@@ -118,7 +118,7 @@ const CreateWallet = () => {
             const displayWorthyFee = handleFullBalanceToPrecision(tempFee, 4, 'CUDOS')
 
             const walletAddress = JSON.parse(result.rawLog!)[0]
-                .events.find(e => e.type === 'cosmos.group.v1.EventCreateGroupPolicy')
+                .events.find(event => event.type === 'cosmos.group.v1.EventCreateGroupPolicy')
                 .attributes[0].value.replaceAll('"', '')
 
             const dataObjectForSuccessModal = {

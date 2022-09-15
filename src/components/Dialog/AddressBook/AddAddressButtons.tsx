@@ -48,8 +48,8 @@ const AddAddressButtons = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const handleFileRead = async (e: ProgressEvent<FileReader>) => {
-        const content = fileReader.result!.toString().split('\n')
+    const handleFileRead = async (event: ProgressEvent<FileReader>) => {
+        const content = (fileReader.result as string).split('\n')
 
         let txBatch = {}
         for (let line of content) {
@@ -90,12 +90,12 @@ const AddAddressButtons = () => {
         }
     }
 
-    const handleFileChosen = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let file = e.target.files![0]
+    const handleFileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let file = event.target.files![0]
         fileReader = new FileReader()
         fileReader.onloadend = handleFileRead
         fileReader.readAsText(file)
-        e.target.value = ''
+        event.target.value = ''
     }
 
     const handleCsvClick = () => {

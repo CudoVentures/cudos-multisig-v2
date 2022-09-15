@@ -82,7 +82,7 @@ const MultiSend = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const closeModal = (e: {}, reason: string) => {
+    const closeModal = (event: {}, reason: string) => {
         if (reason !== 'backdropClick') {
             handleModalClose()
         }
@@ -143,7 +143,7 @@ const MultiSend = () => {
                     title: GENERAL_FAILURE_TITLE,
                     message: GENERAL_FAILURE_MSG
                 }))
-                console.error('Missmatching balances')
+                console.error('Mismatching balances')
                 break
             }
 
