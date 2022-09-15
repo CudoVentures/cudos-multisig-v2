@@ -18,6 +18,7 @@ import {
     Select,
     Tooltip
 } from '@mui/material'
+import { MsgSpecificData } from '..'
 
 const UpdateWalletPolicies = ({
     propose,
@@ -26,7 +27,7 @@ const UpdateWalletPolicies = ({
     propose: (
         msgs: EncodeObject[],
         fee: StdFee,
-        msgSpecificData: any) => void,
+        msgSpecificData: MsgSpecificData) => void,
     close: () => void,
 }) => {
 

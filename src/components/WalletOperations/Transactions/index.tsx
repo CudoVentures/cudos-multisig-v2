@@ -81,7 +81,7 @@ const Transactions = () => {
         }
     ]
 
-    const onSwitchChange = (newValue: any) => {
+    const onSwitchChange = (newValue) => {
         setToggleOption(newValue as number)
     }
 

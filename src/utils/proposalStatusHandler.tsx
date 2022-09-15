@@ -47,7 +47,7 @@ interface Proposal {
     group_proposal_votes: Vote[],
     executor_result: string,
     group_with_policy?: { voting_period: string},
-    submit_time: any,
+    submit_time: string,
     messages: ProposalMsg[] | undefined
 }
 export const getExpirationTime = (proposal: Proposal): string => {

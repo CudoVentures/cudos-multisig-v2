@@ -25,6 +25,17 @@ import {
     GROUP_UPDATE_METADATA_TYPE_URL,
     PROPOSAL_CREATION_SUCCESS_MSG,
 } from 'utils/constants'
+import { Member } from 'store/walletObject'
+
+export interface MsgSpecificData {
+    proposedWalletSettings?: {
+        walletName?: string;
+        walletInfo?: string;
+        votingPeriod?: number;
+        threshold?: number;
+    },
+    members?: Member[]
+}
 
 const ReusableModal = () => {
 
@@ -65,7 +76,7 @@ const ReusableModal = () => {
     const propose = async (
         msgs: EncodeObject[],
         fees: StdFee,
-        msgSpecificData: any
+        msgSpecificData: MsgSpecificData
     ) => {
         try {
             dispatch(updateModalState({

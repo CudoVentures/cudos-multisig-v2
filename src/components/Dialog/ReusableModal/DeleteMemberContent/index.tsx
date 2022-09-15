@@ -7,6 +7,7 @@ import { TableData } from 'utils/tableSortingHelper'
 import { DEFAULT_VOTING_WEIGHT } from 'utils/constants'
 import { EncodeObject, StdFee } from 'cudosjs'
 import { getMembersUpdateMsgAndFees } from '../helpers'
+import { MsgSpecificData } from '..'
 
 const DeleteMemberContent = ({
     propose,
@@ -15,7 +16,7 @@ const DeleteMemberContent = ({
     propose: (
         msgs: EncodeObject[],
         fee: StdFee,
-        msgSpecificData: any) => void,
+        msgSpecificData: MsgSpecificData) => void,
     close: () => void,
 }) => {
 

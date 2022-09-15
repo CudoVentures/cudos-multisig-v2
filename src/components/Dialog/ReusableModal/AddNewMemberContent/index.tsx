@@ -16,6 +16,7 @@ import {
     INVALID_DATA_PROMPT_MSG
 } from 'utils/constants'
 import { Member } from 'store/walletObject'
+import { MsgSpecificData } from '..'
 
 const AddNewMemberContent = ({
     propose,
@@ -24,7 +25,7 @@ const AddNewMemberContent = ({
     propose: (
         msgs: EncodeObject[],
         fee: StdFee,
-        msgSpecificData: any) => void,
+        msgSpecificData: MsgSpecificData) => void,
     close: () => void,
 }) => {
 
