@@ -74,7 +74,7 @@ export interface MsgUpdateGroupMetadata {
     metadata: string
 }
 
-export type ProposalMsg = ((MsgSend | MsgMultisend | MsgUpdateMember | MsgUpdateDecisionPolicy | MsgUpdateGroupMetadata) & { "@type": string }) | undefined
+export type ProposalMsg = MsgSend | MsgMultisend | MsgUpdateMember | MsgUpdateDecisionPolicy | MsgUpdateGroupMetadata | undefined
 
 export interface FetchedProposalDetailsData {
     message: ProposalMsg;

@@ -282,11 +282,16 @@ const SingleSend = () => {
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const forbiddenSymbols =
-            chosenBalance!.denom === 'cudosAdmin' ?
-                ['e', 'E', '+', "-", ",", "."] :
-                ['e', 'E', '+', "-"]
-        if (forbiddenSymbols.includes(event.key)) { event!.preventDefault() }
+        let forbiddenSymbols: string[]
+        if (chosenBalance!.denom === 'cudosAdmin') {
+            forbiddenSymbols = ['e', 'E', '+', '-', ',', '.']
+        } else {
+            forbiddenSymbols = ['e', 'E', '+', '-']
+        }
+
+        if (forbiddenSymbols.includes(event.key)) {
+            event!.preventDefault()
+        }
     }
 
     useEffect(() => {

@@ -50,6 +50,7 @@ interface Proposal {
     submit_time: string,
     messages: ProposalMsg[] | undefined
 }
+
 export const getExpirationTime = (proposal: Proposal): string => {
 
     const votingTime: number = proposal?.group_with_policy ? parseInt(proposal?.group_with_policy.voting_period) : 0
@@ -74,7 +75,6 @@ export const isExpired = (expirationTime: string): boolean => {
         .isSameOrBefore(currentTime)
 }
 
-//cudos-noded tx bank send faucet cudos1vlq80lkrgl689vgyl38nz5k2v3klypms0pwwar 9000185000000000000acudos --chain-id=cudos-local-network --gas=auto --fees=4460400000acudos
 export const isVoted = (userAddress: string, votes: Vote[]): boolean => {
     return votes.some(v => (v.voter && v.voter === userAddress) || (v.group_member && v.group_member.address === userAddress))
 }

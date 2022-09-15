@@ -39,8 +39,8 @@ const Welcome = () => {
         const fetchedWallet: Wallet = {
           ...defaultWallet,
           walletAddress: walletObject.address,
-          walletName: JSON.parse(walletObject.group_metadata as string).walletName,
-          members: walletObject.group_members.map(m => ({ address: m.address, metadata: m.metadata! as string, weight: '1' })),
+          walletName: JSON.parse(walletObject.group_metadata!).walletName,
+          members: walletObject.group_members.map(m => ({ address: m.address, metadata: m.metadata!, weight: m.weight })),
           memberCount: walletObject.group_members.length,
           threshold: walletObject.threshold,
           votingPeriod: walletObject.voting_period,

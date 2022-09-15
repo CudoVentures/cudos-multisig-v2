@@ -27,7 +27,7 @@ const DeleteMemberContent = ({
     const walletMembers: TableData[] = dataObject!.walletMembers as TableData[]
     const membersForDeletion: Member[] = walletMembers.filter(m => m.address === memberAddress).map(m => ({
         address: m.address!,
-        weight: '0',
+        weight: 0,
         metadata: JSON.stringify({
             memberName: m.name
         })

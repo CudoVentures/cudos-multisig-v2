@@ -27,17 +27,15 @@ export const AddressBookBtn = ({ onClickProp }: {onClickProp: Function}): JSX.El
     )
 }
 
-export const DownloadToCsvBtn = ({ CsvData }: {CsvData: TableData[]}): JSX.Element => {
+export const DownloadToCsvBtn = ({ csvData }: {csvData: TableData[]}): JSX.Element => {
     return (
         <Button 
             disableRipple 
             style={styles.csvBtn}
         >
             <CSVLink
-                data={CsvData}
-                onClick={() => {
-                    if (CsvData.length < 1) { return false}
-                  }}
+                data={csvData}
+                onClick={() => csvData.length}
                 filename={"MultiSig-export.csv"}
                 className="btn btn-primary"
                 target="_blank"

@@ -43,9 +43,7 @@ export const determineType = (msgs: ProposalMsg[] | undefined): string => {
     if ('metadata' in msg) {
         return GROUP_UPDATE_METADATA_TYPE_URL
     }
-    
-    const updatedMembers = (msg as MsgUpdateMember).member_updates
-    if (updatedMembers.some(m => m.weight === '0')) {
+    if ((msg as MsgUpdateMember).member_updates.some(m => m.weight === 0)) {
         return DELETE_MEMBER_TYPE_URL
     }
 

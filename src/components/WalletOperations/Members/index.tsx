@@ -41,7 +41,7 @@ const Members = () => {
                 <Card style={styles.cardHolder}>
                     <Box style={{ float: 'right' }}>
                         <AddressBookBtn onClickProp={handleAddressBookOpen} />
-                        <DownloadToCsvBtn CsvData={walletMembers} />
+                        <DownloadToCsvBtn csvData={walletMembers} />
                     </Box>
                     <Box style={styles.adressCounterHolder}>
                         <Typography

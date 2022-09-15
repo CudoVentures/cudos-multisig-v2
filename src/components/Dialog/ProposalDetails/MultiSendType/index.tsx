@@ -17,7 +17,7 @@ const MultiSendType = ({ proposalDetails }: {
     const [copied, setCopied] = useState<boolean>(false)
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
     const open = Boolean(anchorEl)
-    const msg: MsgMultisend = proposalDetails.message as MsgMultisend;
+    const msg = proposalDetails.message as MsgMultisend;
 
     // When more than 1, this will be showing in a pop-up like scrolling list all recipients 
     const ShowRecipients = useCallback(() => {

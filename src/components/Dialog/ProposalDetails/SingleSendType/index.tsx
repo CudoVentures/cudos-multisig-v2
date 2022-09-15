@@ -8,7 +8,7 @@ import { AddressWithCopyAndFollowComponent } from 'components/Dialog/ReusableMod
 const SingleSendType = ({ proposalDetails }: {
     proposalDetails: FetchedProposalDetailsData
 }) => {
-    const message: MsgSend = proposalDetails.message as MsgSend
+    const message = proposalDetails.message as MsgSend
     const denom: string = denomToAlias[message.amount[0]!.denom as keyof typeof denomToAlias]
     const amount: string = message.amount[0]!.amount
     const amountToDisplay = handleFullBalanceToPrecision(amount, 2, denom)
