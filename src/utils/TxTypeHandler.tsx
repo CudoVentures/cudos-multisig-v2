@@ -45,7 +45,7 @@ export const determineType = (msgs: ProposalMsg[] | undefined): string => {
     }
     
     const updatedMembers = (msg as MsgUpdateMember).member_updates
-    if (updatedMembers.some(m => m.weight === 0)) {
+    if (updatedMembers.some(m => m.weight === '0')) {
         return DELETE_MEMBER_TYPE_URL
     }
 

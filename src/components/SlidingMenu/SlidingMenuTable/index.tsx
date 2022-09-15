@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from './styles'
 import { findOneWallet, formatAddress } from 'utils/helpers'
-import { useNavigate } from 'react-router-dom'
 import { cutFractions, separateDecimals, separateFractions } from 'utils/regexFormatting'
-import { updatedSelectedWallet } from 'store/user'
+import { updateSelectedWallet } from 'store/user'
 
 interface tableData {
     walletName: string;
@@ -46,7 +45,7 @@ const SlidingMenuTable = () => {
 
     const navigateToSelected = (walletAddress: string) => {
         const walletFound = findOneWallet(wallets!, walletAddress)
-        dispatch(updatedSelectedWallet(walletFound))
+        dispatch(updateSelectedWallet(walletFound))
     }
 
     return (

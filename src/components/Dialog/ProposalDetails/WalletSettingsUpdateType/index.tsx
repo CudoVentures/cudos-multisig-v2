@@ -62,9 +62,10 @@ export const WalletSettingsUpdateType = ({ proposalDetails }: {
 
     const DetailsContent = (): JSX.Element => {
         const msg = proposalDetails.message as MsgUpdateGroupMetadata
+        const metadata = JSON.parse(msg.metadata)
         const proposalData: FetchedWalletMetadata = {
-            walletName: JSON.parse(msg.metadata).groupMetadata.walletName,
-            generalInfo: JSON.parse(msg.metadata).groupMetadata.generalInfo
+            walletName: metadata.walletName,
+            generalInfo: metadata.generalInfo
         }
 
         return (

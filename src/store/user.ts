@@ -76,7 +76,7 @@ export const userStateSlice = createSlice({
     updateUser: (state, action: PayloadAction<userState>) => {
       return { ...state, ...action.payload }
     },
-    updatedSelectedWallet: (state, action) => {
+    updateSelectedWallet: (state, action) => {
       state.selectedWallet = action.payload
       return state
     },
@@ -88,6 +88,6 @@ export const userStateSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { updateUser, updatedSelectedWallet, updateUserWallets } = userStateSlice.actions
+export const { updateUser, updateSelectedWallet, updateUserWallets } = userStateSlice.actions
 
 export default userStateSlice.reducer

@@ -40,7 +40,7 @@ const Welcome = () => {
           ...defaultWallet,
           walletAddress: walletObject.address,
           walletName: JSON.parse(walletObject.group_metadata as string).walletName,
-          members: walletObject.group_members.map(m => ({ address: m.address, metadata: m.metadata! as string, weight: 0 })),
+          members: walletObject.group_members.map(m => ({ address: m.address, metadata: m.metadata! as string, weight: '1' })),
           memberCount: walletObject.group_members.length,
           threshold: walletObject.threshold,
           votingPeriod: walletObject.voting_period,

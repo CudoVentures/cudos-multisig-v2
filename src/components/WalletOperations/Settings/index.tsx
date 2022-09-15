@@ -21,8 +21,7 @@ const Settings = () => {
 
     if (data) {
         const fetchedWallet = data.group_with_policy_by_pk!
-        const metaData: FetchedWalletMetadata = JSON.parse(fetchedWallet.group_metadata!)
-
+        const metaData = JSON.parse(fetchedWallet.group_metadata!)
         fetchedSettings = {
             metaData: {
                 walletName: metaData.walletName,

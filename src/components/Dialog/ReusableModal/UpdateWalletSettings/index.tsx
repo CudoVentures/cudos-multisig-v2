@@ -39,8 +39,7 @@ const UpdateWalletSettings = ({
     useEffect(() => {
         if (data) {
             const fetchedWallet = data.group_with_policy_by_pk!
-            const metaData: FetchedWalletMetadata = JSON.parse(fetchedWallet.group_metadata!)
-
+            const metaData = JSON.parse(fetchedWallet.group_metadata!)
             setWalletName(metaData.walletName)
             setWalletInfo(metaData.generalInfo)
             setOldData({
@@ -78,10 +77,8 @@ const UpdateWalletSettings = ({
     const createProposal = async () => {
 
         const updatedGroupMetadata = {
-            groupMetadata: {
-                walletName: walletName,
-                generalInfo: walletInfo
-            }
+            walletName: walletName,
+            generalInfo: walletInfo
         }
 
         const { msg, fee } = await getWalletMetadataUpdateMsgAndFees(

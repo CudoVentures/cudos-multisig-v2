@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from './styles'
 import { denomToIcon, denomToAlias } from './helpers'
-import { updatedSelectedWallet, updateUser } from 'store/user'
+import { updateSelectedWallet, updateUser } from 'store/user'
 import { updateModalState } from 'store/modals'
 
 const AssetIconComponent = ({ 
@@ -46,7 +46,7 @@ const AssetIconComponent = ({
                 ...selectedWallet,
                 chosenBalance: selectedBalance
             }
-            dispatch(updatedSelectedWallet(tempWallet))
+            dispatch(updateSelectedWallet(tempWallet))
 
             return
         }

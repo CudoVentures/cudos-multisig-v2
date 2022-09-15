@@ -85,7 +85,7 @@ const AddNewMemberContent = ({
 
         const newMembers = []
         selectFromAddressBook ?
-            members?.map((newMember) => {
+            members?.forEach((newMember) => {
                 newMembers.push({
                     address: newMember.address,
                     weight: DEFAULT_VOTING_WEIGHT,
@@ -101,7 +101,6 @@ const AddNewMemberContent = ({
             })
 
         const updatedWalletMembers = [
-            ...oldWalletMembers,
             ...newMembers
         ]
 

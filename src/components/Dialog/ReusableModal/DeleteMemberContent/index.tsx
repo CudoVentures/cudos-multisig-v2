@@ -24,27 +24,18 @@ const DeleteMemberContent = ({
     const walletId: number = selectedWallet!.walletID!
     const memberAddress: string = dataObject!.memberAddress as string
     const walletMembers: TableData[] = dataObject!.walletMembers as TableData[]
-    const updatedWalletMembers: Member[] = []
-    const membersForDeletion: Member[] = []
-
-    for (const [index, member] of walletMembers.entries()) {
-        const updatedMember = {
-            address: member.address!,
-            weight: member.address === memberAddress ? 0 : DEFAULT_VOTING_WEIGHT,
-            metadata: JSON.stringify({
-                memberName: member.name
-            })
-        }
-        updatedWalletMembers.push(updatedMember)
-        if (updatedMember.weight === 0) {
-            membersForDeletion.push(updatedMember)
-        }
-    }
+    const membersForDeletion: Member[] = walletMembers.filter(m => m.address === memberAddress).map(m => ({
+        address: m.address!,
+        weight: '0',
+        metadata: JSON.stringify({
+            memberName: m.name
+        })
+    }))
 
     const createProposal = async () => {
 
         const { msg, fee } = await getMembersUpdateMsgAndFees(
-            updatedWalletMembers,
+            membersForDeletion,
             walletId,
             selectedWallet?.walletAddress!,
             address!,
