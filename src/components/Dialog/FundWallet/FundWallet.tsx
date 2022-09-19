@@ -22,9 +22,10 @@ import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
 import { handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
 import { getSigningClient } from 'utils/config'
 import { MultiSendUser } from 'utils/multiSendTableHelper'
+import { chainIDToAlias } from 'components/Layout/Networkinfo'
 
 import { 
-    CHAIN_NAME, 
+    CHAIN_ID,
     DEFAULT_LOADING_MODAL_MSG, 
     DEFAULT_MEMO, DEFAULT_MULTIPLIER, 
     FEE_ESTIMATION_ERROR, 
@@ -338,7 +339,7 @@ const FundWallet = () => {
                                     variant='subtitle2' 
                                     color={COLORS_DARK_THEME.PRIMARY_BLUE}>
                                     
-                                    {CHAIN_NAME}
+                                    {chainIDToAlias(CHAIN_ID)}
                                 </Typography>
                             </Box>
                         </Box>
