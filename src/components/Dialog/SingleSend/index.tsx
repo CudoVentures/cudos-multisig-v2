@@ -22,9 +22,10 @@ import { handleFullBalanceToPrecision, separateFractions } from 'utils/regexForm
 import { executeMsgs, getSingleSendMsgAndFees } from '../ReusableModal/helpers'
 import { isValidCudosAddress } from 'utils/validation'
 import { SelectFromAddrBookBtn, SelectFromAddrBookDropDown } from '../MultiSend/helperComponents'
+import { chainIDToAlias } from 'components/Layout/Networkinfo'
 
 import {
-    CHAIN_NAME,
+    CHAIN_ID,
     DEFAULT_LOADING_MODAL_MSG,
     FEE_ESTIMATION_ERROR,
     GENERAL_FAILURE_MSG,
@@ -326,7 +327,7 @@ const SingleSend = () => {
                                         variant='subtitle2'
                                         color={COLORS_DARK_THEME.PRIMARY_BLUE}>
 
-                                        {CHAIN_NAME}
+                                        {chainIDToAlias(CHAIN_ID)}
                                     </Typography>
                                 </Box>
                             </Box>

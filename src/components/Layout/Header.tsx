@@ -9,7 +9,7 @@ const Header = () => {
 
   return (
     <Box sx= {location.pathname === '/' ? {padding: '1.45rem 1rem 1rem 1rem'}:{ padding: '1rem 1rem 1rem 1rem'}}>
-      <Box sx={{alignItems: 'center', display: 'flex', flex: '1' }}>
+      <Box sx={{marginBottom: '10px', alignItems: 'center', display: 'flex', flex: '1' }}>
         <a href={window.location.origin}>
           <img src={LogoHeader} alt="logo"/>
         </a>
