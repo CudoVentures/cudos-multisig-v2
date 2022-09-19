@@ -37,7 +37,7 @@ import {
     PROPOSAL_CREATION_SUCCESS_MSG,
     SINGLE_SEND_TYPE_URL,
 } from 'utils/constants'
-import { handleKeyDownBalance } from 'utils/keyHandler'
+import { handleKeyDown } from 'utils/keyHandler'
 
 const SingleSend = () => {
 
@@ -392,7 +392,7 @@ const SingleSend = () => {
                                     placeholder='enter amount'
                                     type="number"
                                     value={amountToSend ? amountToSend : ""}
-                                    onKeyDown={event => handleKeyDownBalance(event, chosenBalance)}
+                                    onKeyDown={event => handleKeyDown(event, chosenBalance?.denom)}
                                     onPaste={event => { event.preventDefault() }}
                                     onChange={handleChange}
                                 />

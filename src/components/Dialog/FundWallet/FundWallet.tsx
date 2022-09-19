@@ -38,7 +38,7 @@ import {
      WALLET_FUNDING_SUCCESS_MSG, 
      WALLET_FUNDING_SUCCESS_TYPE 
 } from 'utils/constants'
-import { handleKeyDownBalance } from 'utils/keyHandler'
+import { handleKeyDown } from 'utils/keyHandler'
 
 const FundWallet = () => {
 
@@ -397,7 +397,7 @@ const FundWallet = () => {
                                 type="number"
                                 ref={input}
                                 value={amountToSend?amountToSend:""}
-                                onKeyDown={event => handleKeyDownBalance(event, chosenBalance)}
+                                onKeyDown={event => handleKeyDown(event, chosenBalance?.denom)}
                                 onPaste={event=>{event.preventDefault()}} 
                                 onChange={handleChange}
                             />

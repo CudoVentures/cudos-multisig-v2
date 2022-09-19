@@ -38,7 +38,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material"
-import { handleKeyDownBalance } from "utils/keyHandler"
+import { handleKeyDown } from "utils/keyHandler"
 
 export const Preview = ({ displayWorthyFee }: { displayWorthyFee: string }): JSX.Element => {
 
@@ -262,7 +262,7 @@ export const SingleUserInput = (): JSX.Element => {
                         placeholder='enter amount'
                         type="number"
                         value={amountToSend ? amountToSend : ""}
-                        onKeyDown={event => handleKeyDownBalance(event, chosenBalance)}
+                        onKeyDown={event => handleKeyDown(event, chosenBalance?.denom)}
                         onPaste={event => { event.preventDefault() }}
                         onChange={handleChange}
                     />
