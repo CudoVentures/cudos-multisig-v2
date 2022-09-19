@@ -21,7 +21,7 @@ const chainDetails = {
   },
 }
 
-const chainIDToAlias = (chainID: string): string => {
+export const chainIDToAlias = (chainID: string): string => {
 
   if (chainID.toLowerCase().includes('local')) {
     return chainDetails.local.aliasName

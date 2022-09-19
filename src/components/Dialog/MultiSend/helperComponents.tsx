@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "store"
 import { COLORS_DARK_THEME } from "theme/colors"
-import { CHAIN_NAME, INVALID_DATA_PROMPT_MSG, NATIVE_TOKEN_DENOM } from "utils/constants"
+import { CHAIN_ID, INVALID_DATA_PROMPT_MSG, NATIVE_TOKEN_DENOM } from "utils/constants"
 import WalletIcon from 'assets/vectors/wallet-icon.svg'
 import { styles } from "./styles"
 import { handleFullBalanceToPrecision, separateFractions } from "utils/regexFormatting"
@@ -16,6 +16,7 @@ import { updateModalState } from "store/modals"
 import ToolTipIcon from 'assets/vectors/tooltip-icon.svg'
 import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
 import AccountBalance from "utils/subscriptions/accountBalance"
+import { chainIDToAlias } from "components/Layout/Networkinfo"
 
 import {
     displayTooltipDueBalances,
@@ -324,7 +325,7 @@ export const ConnectedAddressAndNetwork = (): JSX.Element => {
                         variant='subtitle2'
                         color={COLORS_DARK_THEME.PRIMARY_BLUE}
                     >
-                        {CHAIN_NAME}
+                        {chainIDToAlias(CHAIN_ID)}
                     </Typography>
                 </Box>
             </Box>

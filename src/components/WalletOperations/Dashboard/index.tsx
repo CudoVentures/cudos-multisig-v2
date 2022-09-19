@@ -2,7 +2,7 @@ import { styles } from './styles'
 import { RootState } from 'store'
 import Dialog from 'components/Dialog'
 import Card from 'components/Card/Card'
-import { CHAIN_NAME } from 'utils/constants'
+import { CHAIN_ID } from 'utils/constants'
 import { formatAddress } from 'utils/helpers'
 import { updateModalState } from 'store/modals'
 import TxsSummaryTable from './TxsSummaryTable'
@@ -11,6 +11,7 @@ import WalletIcon from 'assets/vectors/wallet-icon.svg'
 import AssetIconComponent from 'utils/assetsIconHandler'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { CopyAndFollowComponent } from 'components/Dialog/ReusableModal/helpers'
+import { chainIDToAlias } from 'components/Layout/Networkinfo'
 
 const Dashboard = ({
     setSelection
@@ -54,7 +55,7 @@ const Dashboard = ({
                                 NETWORK
                             </Typography>
                             <Typography fontWeight={600}>
-                                {CHAIN_NAME.toUpperCase()}
+                                {chainIDToAlias(CHAIN_ID).toUpperCase()}
                             </Typography>
                         </Box>
                         <Box>

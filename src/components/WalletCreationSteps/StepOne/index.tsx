@@ -4,8 +4,9 @@ import { styles } from '../styles'
 import KeplrLogo from 'assets/vectors/small-keplr-logo.svg'
 import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
 import { RootState } from 'store'
-import { CHAIN_NAME } from 'utils/constants'
+import { CHAIN_ID } from 'utils/constants'
 import Card from 'components/Card/Card'
+import { chainIDToAlias } from 'components/Layout/Networkinfo'
 
 const StepOne = () => {
 
@@ -25,7 +26,7 @@ const StepOne = () => {
         </Card>
         <Card style={styles.connectedAccountInfo}>
           <Typography>
-            {CHAIN_NAME}
+            {chainIDToAlias(CHAIN_ID)}
           </Typography>
         </Card>
       </Card>
