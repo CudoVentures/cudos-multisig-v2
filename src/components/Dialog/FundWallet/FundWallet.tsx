@@ -38,6 +38,7 @@ import {
      WALLET_FUNDING_SUCCESS_MSG, 
      WALLET_FUNDING_SUCCESS_TYPE 
 } from 'utils/constants'
+import { handleKeyDownBalance } from 'utils/keyHandler'
 
 const FundWallet = () => {
 
@@ -287,19 +288,6 @@ const FundWallet = () => {
             DEFAULT_MEMO
          )
      }
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        let forbiddenSymbols: string[]
-        if (chosenBalance!.denom === 'cudosAdmin') {
-            forbiddenSymbols = ['e', 'E', '+', '-', ',', '.']
-        } else {
-            forbiddenSymbols = ['e', 'E', '+', '-']
-        }
-
-        if (forbiddenSymbols.includes(event.key)) {
-            event!.preventDefault()
-        }
-    }
     
     return (
         <MuiDialog
@@ -409,7 +397,7 @@ const FundWallet = () => {
                                 type="number"
                                 ref={input}
                                 value={amountToSend?amountToSend:""}
-                                onKeyDown={handleKeyDown}
+                                onKeyDown={event => handleKeyDownBalance(event, chosenBalance)}
                                 onPaste={event=>{event.preventDefault()}} 
                                 onChange={handleChange}
                             />

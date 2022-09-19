@@ -15,6 +15,7 @@ import {
     SelectChangeEvent,
     Typography
 } from '@mui/material'
+import { handleKeyDown } from 'utils/keyHandler'
 
 const StepFour = () => {
 
@@ -32,12 +33,6 @@ const StepFour = () => {
 
         const walletCompatibleTime = convertVotingPeriodToSeconds(parseInt(event.target.value))
         dispatch(updateWalletObjectState({ votingPeriod: walletCompatibleTime }))
-    }
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (['e', 'E', '+', "-", ".", ","].includes(event.key)) {
-            event.preventDefault()
-        }
     }
 
     useEffect(() => {

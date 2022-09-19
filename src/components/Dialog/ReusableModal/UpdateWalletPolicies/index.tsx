@@ -19,6 +19,7 @@ import {
     Tooltip
 } from '@mui/material'
 import { MsgSpecificData } from '..'
+import { handleKeyDown } from 'utils/keyHandler'
 
 const UpdateWalletPolicies = ({
     propose,
@@ -102,12 +103,6 @@ const UpdateWalletPolicies = ({
             fee,
             msgSpecificData
         )
-    }
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (['e', 'E', '+', "-", ".", ","].includes(event.key)) {
-            event.preventDefault()
-        }
     }
     
     return (

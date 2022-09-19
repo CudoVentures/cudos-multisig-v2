@@ -38,6 +38,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material"
+import { handleKeyDownBalance } from "utils/keyHandler"
 
 export const Preview = ({ displayWorthyFee }: { displayWorthyFee: string }): JSX.Element => {
 
@@ -193,18 +194,6 @@ export const SingleUserInput = (): JSX.Element => {
         }))
     }
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        let forbiddenSymbols: string[]
-        if (chosenBalance!.denom === 'cudosAdmin') {
-            forbiddenSymbols = ['e', 'E', '+', '-', ',', '.']
-        } else {
-            forbiddenSymbols = ['e', 'E', '+', '-']
-        }
-
-        if (forbiddenSymbols.includes(event.key)) {
-            event!.preventDefault()
-        }
-    }
 
     useEffect(() => {
         setRecipientAddress('')
@@ -273,7 +262,7 @@ export const SingleUserInput = (): JSX.Element => {
                         placeholder='enter amount'
                         type="number"
                         value={amountToSend ? amountToSend : ""}
-                        onKeyDown={handleKeyDown}
+                        onKeyDown={event => handleKeyDownBalance(event, chosenBalance)}
                         onPaste={event => { event.preventDefault() }}
                         onChange={handleChange}
                     />

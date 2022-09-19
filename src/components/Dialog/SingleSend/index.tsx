@@ -37,6 +37,7 @@ import {
     PROPOSAL_CREATION_SUCCESS_MSG,
     SINGLE_SEND_TYPE_URL,
 } from 'utils/constants'
+import { handleKeyDownBalance } from 'utils/keyHandler'
 
 const SingleSend = () => {
 
@@ -281,19 +282,6 @@ const SingleSend = () => {
         }))
     }
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        let forbiddenSymbols: string[]
-        if (chosenBalance!.denom === 'cudosAdmin') {
-            forbiddenSymbols = ['e', 'E', '+', '-', ',', '.']
-        } else {
-            forbiddenSymbols = ['e', 'E', '+', '-']
-        }
-
-        if (forbiddenSymbols.includes(event.key)) {
-            event!.preventDefault()
-        }
-    }
-
     useEffect(() => {
         clean()
     }, [selectFromAddressBook, openAssetsTable])
@@ -404,7 +392,7 @@ const SingleSend = () => {
                                     placeholder='enter amount'
                                     type="number"
                                     value={amountToSend ? amountToSend : ""}
-                                    onKeyDown={handleKeyDown}
+                                    onKeyDown={event => handleKeyDownBalance(event, chosenBalance)}
                                     onPaste={event => { event.preventDefault() }}
                                     onChange={handleChange}
                                 />
