@@ -82,7 +82,7 @@ const MultiSend = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const closeModal = (ev: any, reason: string) => {
+    const closeModal = (event: {}, reason: string) => {
         if (reason !== 'backdropClick') {
             handleModalClose()
         }
@@ -143,7 +143,7 @@ const MultiSend = () => {
                     title: GENERAL_FAILURE_TITLE,
                     message: GENERAL_FAILURE_MSG
                 }))
-                console.debug('Missmatching balances')
+                console.error('Mismatching balances')
                 break
             }
 
@@ -176,7 +176,7 @@ const MultiSend = () => {
             setFees(fee)
             setPreview(true)
 
-        } catch (error: any) {
+        } catch (error) {
             dispatch(updateModalState({
                 failure: true,
                 title: GENERAL_FAILURE_TITLE,
@@ -184,7 +184,7 @@ const MultiSend = () => {
                 message: GENERAL_FAILURE_MSG
             }))
 
-            console.debug(error.message)
+            console.error((error as Error).message)
         }
     }
 
@@ -222,14 +222,14 @@ const MultiSend = () => {
                 message: PROPOSAL_CREATION_SUCCESS_MSG
             }))
 
-        } catch (e: any) {
+        } catch (error) {
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
                 title: PROPOSAL_CREATION_FAILURE_TITLE,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(e.message)
+            console.error((error as Error).message)
         }
     }
 

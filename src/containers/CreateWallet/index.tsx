@@ -87,14 +87,14 @@ const CreateWallet = () => {
                 const { msg, fee } = await getCreateWalletMsgAndFees()
                 dispatch(updateWalletObjectState({ feeForCreation: fee }))
                 setMsg(msg)
-            } catch (error: any) {
+            } catch (error) {
                 dispatch(updateModalState({
                     failure: true,
                     title: WALLET_PROCESS_FAIL_TITLE,
                     msgType: WALLET_CORRUPTED_PROCESS_TYPE,
                     message: GENERAL_FAILURE_MSG
                 }))
-                console.debug(error.message)
+                console.error((error as Error).message)
             }
         }
 
@@ -118,7 +118,7 @@ const CreateWallet = () => {
             const displayWorthyFee = handleFullBalanceToPrecision(tempFee, 4, 'CUDOS')
 
             const walletAddress = JSON.parse(result.rawLog!)[0]
-                .events.find((e: any) => e.type === 'cosmos.group.v1.EventCreateGroupPolicy')
+                .events.find(event => event.type === 'cosmos.group.v1.EventCreateGroupPolicy')
                 .attributes[0].value.replaceAll('"', '')
 
             const dataObjectForSuccessModal = {
@@ -138,14 +138,14 @@ const CreateWallet = () => {
                 message: WALLET_CREATION_SUCCESS_MSG
             }))
 
-        } catch (e: any) {
+        } catch (error) {
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
                 title: WALLET_CREATION_FAILURE_TITLE,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(e.message)
+            console.error((error as Error).message)
         }
     }
 

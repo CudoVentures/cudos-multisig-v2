@@ -27,7 +27,7 @@ const Transactions = () => {
 
     const [toggleOption, setToggleOption] = useState<number>(0)
     const { selectedWallet, address } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletProposalsSummarySubscription({
         variables: { id: walletId }
     })
@@ -45,7 +45,7 @@ const Transactions = () => {
     if (data) {
         for (const proposal of data.group_with_policy_by_pk!.group_proposals) {
             const txHash = proposal.transaction_hash ? proposal.transaction_hash : NO_TX_HASH_MSG
-            const msgType = determineType(proposal)
+            const msgType = determineType(proposal!.messages)
             const status = determineStatus(address!, proposal)
 
             const tableObject: TableData = {
@@ -81,7 +81,7 @@ const Transactions = () => {
         }
     ]
 
-    const onSwitchChange = (newValue: any) => {
+    const onSwitchChange = (newValue) => {
         setToggleOption(newValue as number)
     }
 

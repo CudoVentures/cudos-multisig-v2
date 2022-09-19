@@ -20,7 +20,7 @@ const Loading = () => {
     dispatch(updateModalState({ ...initialModalState }))
   }
 
-  const closeModal = (ev: any, reason: string) => {
+  const closeModal = (event: {}, reason: string) => {
     if (reason !== 'backdropClick') {
       handleModalClose()
     }

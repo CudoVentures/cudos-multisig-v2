@@ -1,5 +1,5 @@
 import { styles } from './styles'
-import { FetchedProposalDetailsData } from '..'
+import { FetchedProposalDetailsData, MsgUpdateMember } from '..'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { ADD_MEMBER_TYPE_URL, DELETE_MEMBER_TYPE_URL, FAIL, SUCCESS } from 'utils/constants'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
@@ -11,29 +11,17 @@ import { CopyAndFollowComponent } from 'components/Dialog/ReusableModal/helpers'
 export const MembersUpdateTypes = ({ proposalDetails }: {
     proposalDetails: FetchedProposalDetailsData
 }) => {
-
-    const members: Member[] = []
+    const members: Member[] = (proposalDetails.message as MsgUpdateMember).member_updates
     const coloring: string = proposalDetails.msgType === ADD_MEMBER_TYPE_URL ? SUCCESS.color : FAIL.color
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
     const open = Boolean(anchorEl)
-
-    for (const [index, member] of proposalDetails.message.member_updates.entries()) {
-        if (parseInt(member.weight) === 1) {
-            const foundMember = proposalDetails.groupMembers.find(m => m.address === member.address)
-            if (foundMember || proposalDetails.msgType === DELETE_MEMBER_TYPE_URL) {
-                continue
-            }
-        }
-
-        members.push(member)
-    }
-
+    
     const ShowMultipleMembers = useCallback(() => {
         return (
             <Box style={styles.componentHolderBox}>
                 <Typography sx={{ p: 2 }}>
                     <Box style={styles.scrollablePopOver}>
-                        {members.map((item: any, userIndex: number) => (
+                        {members.map((item, userIndex) => (
                             <Box margin={2}>
                                 <Typography
                                     style={{ width: 'max-content' }}

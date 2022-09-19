@@ -16,8 +16,8 @@ const NoWallet = () => {
       await new Promise(resolve => setTimeout(resolve, 500))
       navigate('/create-wallet')
   
-    } catch (error: any) {
-      console.debug(error.message)
+    } catch (error) {
+      console.error((error as Error).message)
     }
   }
   

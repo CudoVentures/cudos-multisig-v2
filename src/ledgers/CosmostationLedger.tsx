@@ -40,13 +40,13 @@ export const connectCosmostationLedger = async (): Promise<{ address: string; ac
     userAccountAddress = acccount.address
     userAccountName = acccount.name
 
-  } catch (e: any) {
+  } catch (error) {
 
-    if (e instanceof InstallError) {
+    if (error instanceof InstallError) {
       throw new Error("Cosmostation extension not found")
     }
 
-    if (e.code === 4001) {
+    if ((error as { code: number }).code === 4001) {
       throw new Error("user rejected request")
     }
 

@@ -16,6 +16,7 @@ import {
     INVALID_DATA_PROMPT_MSG
 } from 'utils/constants'
 import { Member } from 'store/walletObject'
+import { MsgSpecificData } from '..'
 
 const AddNewMemberContent = ({
     propose,
@@ -24,7 +25,7 @@ const AddNewMemberContent = ({
     propose: (
         msgs: EncodeObject[],
         fee: StdFee,
-        msgSpecificData: any) => void,
+        msgSpecificData: MsgSpecificData) => void,
     close: () => void,
 }) => {
 
@@ -34,7 +35,7 @@ const AddNewMemberContent = ({
     const { members } = useSelector((state: RootState) => state.walletObject)
     const [newMemberName, setNewMemberName] = useState<string>('')
     const [newMemberAddress, setNewMemberAddress] = useState<string>('')
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const haveAddressBook: boolean = Object.keys(addressBook!).length > 0
     const { loading, error, data } = useGetWalletMembersQuery({
         variables: { id: walletId }
@@ -83,9 +84,9 @@ const AddNewMemberContent = ({
 
     const createProposal = async () => {
 
-        const newMembers = []
+        const newMembers: Member[] = []
         selectFromAddressBook ?
-            members?.map((newMember) => {
+            members?.forEach((newMember) => {
                 newMembers.push({
                     address: newMember.address,
                     weight: DEFAULT_VOTING_WEIGHT,
@@ -101,7 +102,6 @@ const AddNewMemberContent = ({
             })
 
         const updatedWalletMembers = [
-            ...oldWalletMembers,
             ...newMembers
         ]
 
@@ -149,7 +149,7 @@ const AddNewMemberContent = ({
                             style={styles.addressInput}
                             type="text"
                             placeholder="e.g James Bond"
-                            onChange={(e) => setNewMemberName(e.target.value)}
+                            onChange={event => setNewMemberName(event.target.value)}
                         />
                     </Box>
                     <Box>
@@ -160,7 +160,7 @@ const AddNewMemberContent = ({
                             type="text"
                             value={newMemberAddress}
                             placeholder="e.g cudos1nkf0flyugd2ut40cg4tn48sp70p2e65wse8abc"
-                            onChange={(e) => setNewMemberAddress(e.target.value)}
+                            onChange={event => setNewMemberAddress(event.target.value)}
                         />
                     </Box>
                 </Box>

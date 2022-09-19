@@ -3,7 +3,7 @@ import { RootState } from 'store'
 import { styles } from './styles'
 import MembersIcon from 'assets/vectors/members-icon.svg'
 import { useNavigate } from 'react-router-dom'
-import { updatedSelectedWallet } from 'store/user'
+import { updateSelectedWallet } from 'store/user'
 import { findOneWallet, formatAddress } from 'utils/helpers'
 
 import { 
@@ -51,7 +51,7 @@ const WalletsView = () => {
 
     const openDashboard = (walletAddress: string) => {
         const wallet = findOneWallet(wallets!, walletAddress)
-        dispatch(updatedSelectedWallet(wallet))
+        dispatch(updateSelectedWallet(wallet))
         navigate(`/dashboard`)
     }
 

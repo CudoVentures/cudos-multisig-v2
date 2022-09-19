@@ -33,8 +33,8 @@ const AccountBalance = (): JSX.Element => {
           addressBook
         }))
 
-      } catch (error: any) {
-        console.debug(error.message)
+      } catch (error) {
+        console.error((error as Error).message)
       }
     }
     const timer = setInterval(async () => {

@@ -6,6 +6,7 @@ import { Tooltip, Button } from '@mui/material'
 
 import DownloadToCsv from 'assets/vectors/csv-download.svg'
 import addressBookIcon from 'assets/vectors/small-address-book-icon.svg'
+import { TableData } from './tableSortingHelper'
 
 export const ComingSoonWrapper = ({ children }: {children: ReactNode}): JSX.Element => {
     return (
@@ -26,17 +27,15 @@ export const AddressBookBtn = ({ onClickProp }: {onClickProp: Function}): JSX.El
     )
 }
 
-export const DownloadToCsvBtn = ({ CsvData }: {CsvData: any[]}): JSX.Element => {
+export const DownloadToCsvBtn = ({ csvData }: {csvData: TableData[]}): JSX.Element => {
     return (
         <Button 
             disableRipple 
             style={styles.csvBtn}
         >
             <CSVLink
-                data={CsvData}
-                onClick={() => {
-                    if (CsvData.length < 1) { return false}
-                  }}
+                data={csvData}
+                onClick={() => csvData.length}
                 filename={"MultiSig-export.csv"}
                 className="btn btn-primary"
                 target="_blank"

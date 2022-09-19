@@ -15,6 +15,7 @@ import {
     Input,
     Tooltip
 } from '@mui/material'
+import { MsgSpecificData } from '..'
 
 const UpdateWalletSettings = ({
     propose,
@@ -23,7 +24,7 @@ const UpdateWalletSettings = ({
     propose: (
         msgs: EncodeObject[],
         fee: StdFee,
-        msgSpecificData: any) => void,
+        msgSpecificData: MsgSpecificData) => void,
     close: () => void,
 }) => {
 
@@ -31,7 +32,7 @@ const UpdateWalletSettings = ({
     const [walletInfo, setWalletInfo] = useState<string>('')
     const [oldData, setOldData] = useState<FetchedWalletMetadata>(emptyFetchedWalletMetadata)
     const { address, selectedWallet, connectedLedger } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletSettingsQuery({
         variables: { id: walletId }
     })
@@ -39,8 +40,7 @@ const UpdateWalletSettings = ({
     useEffect(() => {
         if (data) {
             const fetchedWallet = data.group_with_policy_by_pk!
-            const metaData: FetchedWalletMetadata = JSON.parse(fetchedWallet.group_metadata!)
-
+            const metaData = JSON.parse(fetchedWallet.group_metadata!)
             setWalletName(metaData.walletName)
             setWalletInfo(metaData.generalInfo)
             setOldData({
@@ -78,10 +78,8 @@ const UpdateWalletSettings = ({
     const createProposal = async () => {
 
         const updatedGroupMetadata = {
-            groupMetadata: {
-                walletName: walletName,
-                generalInfo: walletInfo
-            }
+            walletName: walletName,
+            generalInfo: walletInfo
         }
 
         const { msg, fee } = await getWalletMetadataUpdateMsgAndFees(
@@ -119,7 +117,7 @@ const UpdateWalletSettings = ({
                     name="walletName"
                     value={walletName}
                     placeholder="e.g Cudos Wallet"
-                    onChange={(e) => setWalletName(e.target.value)}
+                    onChange={event => setWalletName(event.target.value)}
                 />
 
                 <Box marginBottom={1} marginTop={2}>General Info</Box>
@@ -128,7 +126,7 @@ const UpdateWalletSettings = ({
                     value={walletInfo}
                     placeholder={!walletInfo ? "Your wallet have no general info" : ""}
                     style={styles.textArea}
-                    onChange={(e) => setWalletInfo(e.target.value)}
+                    onChange={event => setWalletInfo(event.target.value)}
                 />
             </Box>
 

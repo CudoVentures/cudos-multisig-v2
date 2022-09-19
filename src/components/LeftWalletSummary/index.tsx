@@ -9,7 +9,7 @@ import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints'
-import { emptyWallet, updatedSelectedWallet, updateUser } from 'store/user'
+import { emptyWallet, updateSelectedWallet, updateUser } from 'store/user'
 import { useNavigate } from 'react-router-dom'
 import SlidingSwitchMenu from '../SlidingMenu/SlidingSwitchMenu'
 import { setDecimalPrecisionTo } from 'utils/regexFormatting'
@@ -43,18 +43,17 @@ const LeftWalletSummary = ({
             const updatedWallets = await updatedWalletsBalances(wallets!)
             dispatch(updateUser({ wallets: updatedWallets }))
 
-        } catch (error: any) {
-            console.debug(error.message)
+        } catch (error) {
+            console.error((error as Error).message)
         }
     }
 
-    const updateSelectedWallet = async () => {
+    const updateSelectedWalletState = async () => {
         try {
             const updatedWallet = await updateWalletBalances(selectedWallet!)
-            dispatch(updatedSelectedWallet(updatedWallet))
-
-        } catch (error: any) {
-            console.debug(error.message)
+            dispatch(updateSelectedWallet(updatedWallet))
+        } catch (error) {
+            console.error((error as Error).message)
         }
     }
 
@@ -75,7 +74,7 @@ const LeftWalletSummary = ({
         getCurrencies()
 
         const timer = setInterval(async () => {
-            await updateSelectedWallet()
+            await updateSelectedWalletState()
         }, 15000)
 
         return () => {
@@ -91,12 +90,12 @@ const LeftWalletSummary = ({
         setTimeout(() => unlockBackround(), 600)
         setTimeout(() => setToggled(false), 600)
         slidingHolder.current.parentElement.previousSibling.style.pointerEvents = 'auto'
-        updateSelectedWallet()
+        updateSelectedWalletState()
     }, [selectedWallet?.walletAddress])
 
 
     const backToWallets = () => {
-        dispatch(updatedSelectedWallet(emptyWallet))
+        dispatch(updateSelectedWallet(emptyWallet))
         navigate("/welcome")
     }
 

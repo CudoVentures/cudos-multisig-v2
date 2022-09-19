@@ -38,13 +38,13 @@ const ConnectWallet = () => {
       dispatch(updateUser(connectedUser))
       navigate('/welcome')
 
-    } catch (error: any) {
+    } catch (error) {
       dispatch(updateModalState({
         failure: true,
         title: LOGIN_FAIL_TITLE,
         message: DEFAULT_LOGIN_FAILURE_MSG
       }))
-      console.debug(error.message)
+      console.error((error as Error).message)
 
     } finally {
       setLoading(new Map())

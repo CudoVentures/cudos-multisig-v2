@@ -80,8 +80,8 @@ const VotingModal = () => {
         )
     }
 
-    const handleChange = (e: any) => {
-        setTextArea(e.target.value)
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setTextArea(event.target.value)
     }
 
     const closeVotingModal = () => {
@@ -90,7 +90,7 @@ const VotingModal = () => {
         }))
     }
 
-    const closeModal = (ev: any, reason: string) => {
+    const closeModal = (event: {}, reason: string) => {
         if (reason !== 'backdropClick') {
             closeVotingModal()
         }
@@ -143,7 +143,7 @@ const VotingModal = () => {
                             PROPOSAL_VOTING_SUCCESS_MSG
                 }))
 
-            } catch (e: any) {
+            } catch (error) {
                 dispatch(updateModalState({
                     loading: false,
                     failure: true,
@@ -151,17 +151,17 @@ const VotingModal = () => {
                     msgType: PROPOSAL_VOTING_ERROR_TYPE,
                     message: GENERAL_FAILURE_MSG
                 }))
-                console.debug(e.message)
+                console.error((error as Error).message)
             }
 
-        } catch (error: any) {
+        } catch (error) {
             dispatch(updateModalState({
                 failure: true,
                 title: GENERAL_FAILURE_TITLE,
                 msgType: PROPOSAL_VOTING_ERROR_TYPE,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(error.message)
+            console.error((error as Error).message)
         }
     }
 

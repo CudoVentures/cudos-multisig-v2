@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { ProposalMsg, MsgSend, MsgUpdateMember } from 'components/Dialog/ProposalDetails'
 
 import {
     UNDEFINED,
@@ -28,22 +29,25 @@ const chainTxType = {
     [UNDEFINED]: UNDEFINED_TYPE
 }
 
-export const determineType = (proposal: any): string => {
-    const proposalMessage = proposal?.messages[0] ? proposal?.messages[0] : null
-    const msgType: string = proposalMessage["@type"]
-
-    if (msgType === MEMBERS_UPDATE_TYPE_URL) {
-        const proposalMessage = proposal?.messages[0] ? proposal?.messages[0] : null
-        const updatedMembers = proposalMessage.member_updates
-        const zeroWeight = updatedMembers.find((m: { weight: string }) => m.weight === '0')
-
-        if (zeroWeight) {
-            return DELETE_MEMBER_TYPE_URL
-        }
-        return ADD_MEMBER_TYPE_URL
+export const determineType = (msgs: ProposalMsg[] | undefined): string => {
+    const msg = msgs![0]!
+    if ('from_address' in msg) {
+        return SINGLE_SEND_TYPE_URL
+    }
+    if ('inputs' in msg) {
+        return MULTI_SEND_TYPE_URL
+    }
+    if ('decision_policy' in msg) {
+        return GROUP_UPDATE_DECISION_POLICY_TYPE_URL
+    }
+    if ('metadata' in msg) {
+        return GROUP_UPDATE_METADATA_TYPE_URL
+    }
+    if ((msg as MsgUpdateMember).member_updates.some(m => m.weight === 0)) {
+        return DELETE_MEMBER_TYPE_URL
     }
 
-    return msgType
+    return ADD_MEMBER_TYPE_URL
 }
 
 export const TxTypeComponent = ({ type }: { type: string }): JSX.Element => {

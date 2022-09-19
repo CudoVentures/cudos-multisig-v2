@@ -7,19 +7,19 @@ export interface AddressBook {
   [key: string]: string;
 }
 
-export interface wallet {
+export interface Wallet {
   walletAddress: string;
   members?: Member[];
   walletName?: string;
   generalInfo?: string;
   isAdmin?: boolean;
   proposals?: [];
-  walletID?: string;
+  walletID?: number;
   executionPeriod?: number;
   threshold?: number;
   votingPeriod?: number;
   memberCount?: number;
-  walletBalances?: Coin[];
+  walletBalances?: readonly Coin[];
   nativeBalance?: string;
   chosenBalance?: Coin;
 }
@@ -30,22 +30,22 @@ export interface userState {
   address?: string
   lastLoggedAddress?: string
   nativeBalance?: string
-  balances?: Coin[]
-  wallets?: wallet[]
-  selectedWallet?: wallet
+  balances?: readonly Coin[]
+  wallets?: Wallet[]
+  selectedWallet?: Wallet
   addressBook?: AddressBook
   chosenBalance?: Coin
   connectedLedger?: string
 }
 
-export const emptyWallet: wallet = {
+export const emptyWallet: Wallet = {
   walletAddress: '',
   members: [],
   walletName: '',
   generalInfo: '',
   isAdmin: false,
   proposals: [],
-  walletID: '',
+  walletID: 0,
   executionPeriod: 0,
   threshold: 0,
   votingPeriod: 0,
@@ -76,7 +76,7 @@ export const userStateSlice = createSlice({
     updateUser: (state, action: PayloadAction<userState>) => {
       return { ...state, ...action.payload }
     },
-    updatedSelectedWallet: (state, action) => {
+    updateSelectedWallet: (state, action) => {
       state.selectedWallet = action.payload
       return state
     },
@@ -88,6 +88,6 @@ export const userStateSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { updateUser, updatedSelectedWallet, updateUserWallets } = userStateSlice.actions
+export const { updateUser, updateSelectedWallet, updateUserWallets } = userStateSlice.actions
 
 export default userStateSlice.reducer

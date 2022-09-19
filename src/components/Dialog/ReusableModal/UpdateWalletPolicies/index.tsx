@@ -18,6 +18,8 @@ import {
     Select,
     Tooltip
 } from '@mui/material'
+import { MsgSpecificData } from '..'
+import { handleKeyDown } from 'utils/keyHandler'
 
 const UpdateWalletPolicies = ({
     propose,
@@ -26,7 +28,7 @@ const UpdateWalletPolicies = ({
     propose: (
         msgs: EncodeObject[],
         fee: StdFee,
-        msgSpecificData: any) => void,
+        msgSpecificData: MsgSpecificData) => void,
     close: () => void,
 }) => {
 
@@ -34,7 +36,7 @@ const UpdateWalletPolicies = ({
     const [threshold, setThreshold] = useState<number>(0)
     const [oldData, setOldData] = useState<FetchedWalletPolicies>(emptyFetchedWalletPolicies)
     const { address, selectedWallet, connectedLedger } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletSettingsQuery({
         variables: { id: walletId }
     })
@@ -102,7 +104,7 @@ const UpdateWalletPolicies = ({
             msgSpecificData
         )
     }
-
+    
     return (
         <Box style={{ width: '100%' }}>
             {/* CONTENT */}
@@ -116,7 +118,7 @@ const UpdateWalletPolicies = ({
                                 variant='standard'
                                 disableUnderline
                                 value={threshold}
-                                onChange={(e) => setThreshold(e.target.value as number)}
+                                onChange={event => setThreshold(event.target.value as number)}
                             >
                                 {[...Array(selectedWallet?.memberCount)].map((e, i) => {
                                     return <MenuItem value={i + 1}>{i + 1}</MenuItem>
@@ -133,13 +135,9 @@ const UpdateWalletPolicies = ({
                             type="number"
                             value={votingPeriod}
                             placeholder="in days"
-                            onKeyDown={event => {
-                                if (['e', 'E', '+', "-", ".", ","].includes(event.key)) {
-                                    event.preventDefault()
-                                }
-                            }}
-                            onPaste={(e) => { e.preventDefault() }}
-                            onChange={(e) => setVotingPeriod(parseInt(e.target.value))}
+                            onKeyDown={handleKeyDown}
+                            onPaste={event => { event.preventDefault() }}
+                            onChange={event => setVotingPeriod(parseInt(event.target.value))}
                             className="form-control"
                         />
                     </Box>

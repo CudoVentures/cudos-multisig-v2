@@ -37,7 +37,7 @@ interface TableData {
 const TxsSummaryTable = () => {
 
     const { address, selectedWallet } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
 
     const { loading, error, data } = useGetWalletProposalsMainSummarySubscription({
         variables: { id: walletId }
@@ -47,7 +47,7 @@ const TxsSummaryTable = () => {
     if (data) {
         for (const proposal of data.group_with_policy_by_pk!.group_proposals) {
             const txHash = proposal.transaction_hash ? proposal.transaction_hash : NO_TX_HASH_MSG
-            const msgType = determineType(proposal)
+            const msgType = determineType(proposal!.messages)
             const status = determineStatus(address!, proposal)
 
             tableData.push({

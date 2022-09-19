@@ -39,6 +39,7 @@ import {
      WALLET_FUNDING_SUCCESS_MSG, 
      WALLET_FUNDING_SUCCESS_TYPE 
 } from 'utils/constants'
+import { handleKeyDown } from 'utils/keyHandler'
 
 const FundWallet = () => {
 
@@ -96,7 +97,7 @@ const FundWallet = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
       
-    const closeModal = (ev: any, reason: string) => {
+    const closeModal = (event: {}, reason: string) => {
         if (reason !== 'backdropClick') {
           handleModalClose()
         }
@@ -108,14 +109,14 @@ const FundWallet = () => {
             setMsg(msg)
             setFees(fee)
 
-        } catch (error: any) {
+        } catch (error) {
             dispatch(updateModalState({
                 failure: true, 
                 title: GENERAL_FAILURE_TITLE,
                 msgType: FEE_ESTIMATION_ERROR,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(error.message)
+            console.error((error as Error).message)
         }
     }
 
@@ -134,9 +135,9 @@ const FundWallet = () => {
         setTimeout(() => detailsDropdown.current.style.display = 'none', 650)
     }
 
-    const handleChange = (event: any) => {
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         if (toggled) { clean() }
-        setAmountToSend(event.target.value as number)
+        setAmountToSend(parseInt(event.target.value))
     }
 
     const validInput = () => {
@@ -208,14 +209,14 @@ const FundWallet = () => {
                 message: WALLET_FUNDING_SUCCESS_MSG
             }))
 
-        } catch (e: any){
+        } catch (error){
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
                 title: WALLET_FUNDING_FAILURE_TITLE, 
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(e.message)
+            console.error((error as Error).message)
         }
     }
 
@@ -288,7 +289,7 @@ const FundWallet = () => {
             DEFAULT_MEMO
          )
      }
-
+    
     return (
         <MuiDialog
         BackdropProps={defaultStyles.defaultBackDrop}
@@ -397,14 +398,8 @@ const FundWallet = () => {
                                 type="number"
                                 ref={input}
                                 value={amountToSend?amountToSend:""}
-                                onKeyDown={event => {
-                                    const forbiddenSymbols = 
-                                        chosenBalance!.denom === 'cudosAdmin'?
-                                        ['e', 'E', '+', "-", ",", "."]:
-                                        ['e', 'E', '+', "-"]
-                                    if (forbiddenSymbols.includes(event.key)) {event!.preventDefault()}
-                                }}
-                                onPaste={(e: any)=>{e.preventDefault()}} 
+                                onKeyDown={event => handleKeyDown(event, chosenBalance?.denom)}
+                                onPaste={event=>{event.preventDefault()}} 
                                 onChange={handleChange}
                             />
                             <Box style={{width: '90%'}}>

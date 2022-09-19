@@ -14,7 +14,7 @@ const Members = () => {
 
     const dispatch = useDispatch()
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletMembersQuery({
         variables: { id: walletId }
     })
@@ -41,7 +41,7 @@ const Members = () => {
                 <Card style={styles.cardHolder}>
                     <Box style={{ float: 'right' }}>
                         <AddressBookBtn onClickProp={handleAddressBookOpen} />
-                        <DownloadToCsvBtn CsvData={walletMembers} />
+                        <DownloadToCsvBtn csvData={walletMembers} />
                     </Box>
                     <Box style={styles.adressCounterHolder}>
                         <Typography

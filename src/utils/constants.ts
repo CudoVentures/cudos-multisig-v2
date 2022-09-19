@@ -130,3 +130,6 @@ export const VOTE_OPTIONS_MAPPING = {
 
 //Proposal Options
 export const PROPOSAL_OPTION_EXECUTE = 'PROPOSAL_OPTION_EXECUTE'
+
+export const FORBIDDEN_SYMBOLS = ['e', 'E', '+', '-']
+export const FORBIDDEN_SYMBOLS_CUDOS_ADMIN = ['e', 'E', '+', '-', ',', '.']

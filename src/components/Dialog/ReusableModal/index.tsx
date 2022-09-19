@@ -25,6 +25,17 @@ import {
     GROUP_UPDATE_METADATA_TYPE_URL,
     PROPOSAL_CREATION_SUCCESS_MSG,
 } from 'utils/constants'
+import { Member } from 'store/walletObject'
+
+export interface MsgSpecificData {
+    proposedWalletSettings?: {
+        walletName?: string;
+        walletInfo?: string;
+        votingPeriod?: number;
+        threshold?: number;
+    },
+    members?: Member[]
+}
 
 const ReusableModal = () => {
 
@@ -38,7 +49,7 @@ const ReusableModal = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const closeModal = (ev?: any, reason?: string) => {
+    const closeModal = (event?: {}, reason?: string) => {
         if (reason !== 'backdropClick') {
             closeReusableModal()
         }
@@ -65,7 +76,7 @@ const ReusableModal = () => {
     const propose = async (
         msgs: EncodeObject[],
         fees: StdFee,
-        msgSpecificData: any
+        msgSpecificData: MsgSpecificData
     ) => {
         try {
             dispatch(updateModalState({
@@ -95,7 +106,7 @@ const ReusableModal = () => {
                 message: PROPOSAL_CREATION_SUCCESS_MSG
             }))
 
-        } catch (e: any) {
+        } catch (error) {
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
@@ -103,7 +114,7 @@ const ReusableModal = () => {
                 msgType: msgType,
                 message: GENERAL_FAILURE_MSG
             }))
-            console.debug(e.message)
+            console.error((error as Error).message)
         }
     }
 

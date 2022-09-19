@@ -32,12 +32,14 @@ import {
     Input,
     MenuItem,
     Select,
+    SelectChangeEvent,
     Table,
     TableContainer,
     TableRow,
     Tooltip,
     Typography
 } from "@mui/material"
+import { handleKeyDown } from "utils/keyHandler"
 
 export const Preview = ({ displayWorthyFee }: { displayWorthyFee: string }): JSX.Element => {
 
@@ -148,14 +150,14 @@ export const SingleUserInput = (): JSX.Element => {
 
     }, [openAssetsTable])
 
-    const handleChange = (event: any) => {
+    const handleChange = (event: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
         if (event.target.name === 'recipientAddress') {
             setRecipientAddress(event.target.value)
             return
         }
 
-        setAmountToSend(event.target.value as number)
+        setAmountToSend(parseInt(event.target.value))
     }
 
     const validInput = () => {
@@ -192,6 +194,7 @@ export const SingleUserInput = (): JSX.Element => {
             walletRelated: true
         }))
     }
+
 
     useEffect(() => {
         setRecipientAddress('')
@@ -260,14 +263,8 @@ export const SingleUserInput = (): JSX.Element => {
                         placeholder='enter amount'
                         type="number"
                         value={amountToSend ? amountToSend : ""}
-                        onKeyDown={event => {
-                            const forbiddenSymbols =
-                                chosenBalance!.denom === 'cudosAdmin' ?
-                                    ['e', 'E', '+', "-", ",", "."] :
-                                    ['e', 'E', '+', "-"]
-                            if (forbiddenSymbols.includes(event.key)) { event!.preventDefault() }
-                        }}
-                        onPaste={(e: any) => { e.preventDefault() }}
+                        onKeyDown={event => handleKeyDown(event, chosenBalance?.denom)}
+                        onPaste={event => { event.preventDefault() }}
                         onChange={handleChange}
                     />
                     <Box>
@@ -341,7 +338,7 @@ export const SelectFromAddrBookDropDown = ({
     onChangeProp,
     componentWidth
 }: {
-    onChangeProp: (event: any) => void,
+    onChangeProp: (event: SelectChangeEvent<string>) => void,
     componentWidth: string
 }): JSX.Element => {
 
@@ -353,9 +350,9 @@ export const SelectFromAddrBookDropDown = ({
         setSelected('')
     }, [multisendRows])
 
-    const handleChange = (e: any) => {
-        onChangeProp(e)
-        setSelected(e.target.value)
+    const handleChange = (event: SelectChangeEvent<string>) => {
+        onChangeProp(event)
+        setSelected(event.target.value)
     }
 
     return (

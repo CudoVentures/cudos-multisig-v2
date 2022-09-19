@@ -13,7 +13,7 @@ import { EditBtn } from 'components/Dialog/ReusableModal/helpers'
 const Settings = () => {
 
     const { selectedWallet } = useSelector((state: RootState) => state.userState)
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     let fetchedSettings: FetchedWalletSettings = emptyFetchedWalletSettings
     const { loading, error, data } = useGetWalletSettingsQuery({
         variables: { id: walletId }
@@ -21,8 +21,7 @@ const Settings = () => {
 
     if (data) {
         const fetchedWallet = data.group_with_policy_by_pk!
-        const metaData: FetchedWalletMetadata = JSON.parse(fetchedWallet.group_metadata!)
-
+        const metaData = JSON.parse(fetchedWallet.group_metadata!)
         fetchedSettings = {
             metaData: {
                 walletName: metaData.walletName,

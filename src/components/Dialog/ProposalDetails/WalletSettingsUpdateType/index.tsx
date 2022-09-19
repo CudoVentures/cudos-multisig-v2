@@ -1,5 +1,5 @@
 import { styles } from './styles'
-import { FetchedProposalDetailsData } from '..'
+import { FetchedProposalDetailsData, MsgUpdateDecisionPolicy, MsgUpdateGroupMetadata } from '..'
 import { Box, Typography } from '@mui/material'
 import { GROUP_UPDATE_METADATA_TYPE_URL } from 'utils/constants'
 import { convertSecondsToDisplay } from 'utils/helpers'
@@ -18,10 +18,10 @@ export const WalletSettingsUpdateType = ({ proposalDetails }: {
     }
 
     const PolicyContent = (): JSX.Element => {
-
+        const msg = proposalDetails.message as MsgUpdateDecisionPolicy
         const proposalData: FetchedWalletPolicies = {
-            votingPeriod: parseInt(proposalDetails.message.decision_policy.windows.voting_period),
-            threshold: parseInt(proposalDetails.message.decision_policy.threshold)
+            votingPeriod: parseInt(msg.decision_policy.windows.voting_period),
+            threshold: parseInt(msg.decision_policy.threshold)
         }
 
         return (
@@ -61,10 +61,11 @@ export const WalletSettingsUpdateType = ({ proposalDetails }: {
     }
 
     const DetailsContent = (): JSX.Element => {
-
+        const msg = proposalDetails.message as MsgUpdateGroupMetadata
+        const metadata = JSON.parse(msg.metadata)
         const proposalData: FetchedWalletMetadata = {
-            walletName: JSON.parse(proposalDetails.message.metadata).groupMetadata.walletName,
-            generalInfo: JSON.parse(proposalDetails.message.metadata).groupMetadata.generalInfo
+            walletName: metadata.walletName,
+            generalInfo: metadata.generalInfo
         }
 
         return (

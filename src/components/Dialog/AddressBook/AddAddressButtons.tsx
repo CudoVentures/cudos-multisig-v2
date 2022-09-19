@@ -41,15 +41,15 @@ const AddAddressButtons = () => {
     const { currentStep } = useSelector((state: RootState) => state.walletCreationState)
     const dataFromObject: DataObject = new Object(dataObject) as DataObject
 
-    let fileReader: any
+    let fileReader: FileReader
     let invdalidData: boolean = false
 
     const handleModalClose = () => {
         dispatch(updateModalState({ ...initialModalState }))
     }
 
-    const handleFileRead = async (e: any) => {
-        const content = fileReader.result.split('\n')
+    const handleFileRead = async (event: ProgressEvent<FileReader>) => {
+        const content = (fileReader.result as string).split('\n')
 
         let txBatch = {}
         for (let line of content) {
@@ -90,12 +90,12 @@ const AddAddressButtons = () => {
         }
     }
 
-    const handleFileChosen = (e: any) => {
-        let file = e.target.files[0]
+    const handleFileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let file = event.target.files![0]
         fileReader = new FileReader()
         fileReader.onloadend = handleFileRead
         fileReader.readAsText(file)
-        e.target.value = ''
+        event.target.value = ''
     }
 
     const handleCsvClick = () => {
@@ -211,10 +211,10 @@ const AddAddressButtons = () => {
         }
     }, [])
 
-    const CsvData: any[] = []
+    const csvData: string[][] = []
     if (addressBook) {
         Object.entries(addressBook!).forEach(
-            ([address, name]) => CsvData.push([
+            ([address, name]) => csvData.push([
                 name,
                 address
             ])
@@ -323,7 +323,7 @@ const AddAddressButtons = () => {
                                 style={{ marginTop: '10px', ...styles.csvBtn }}
                             >
                                 <CSVLink
-                                    data={CsvData}
+                                    data={csvData}
                                     filename={"MultiSig-address-book.csv"}
                                     className="btn btn-primary"
                                     target="_blank"
@@ -337,7 +337,7 @@ const AddAddressButtons = () => {
                             type='file'
                             id='csv-file'
                             accept='.csv'
-                            onChange={e => handleFileChosen(e)}
+                            onChange={handleFileChosen}
                             hidden
                         />
                     </div>}

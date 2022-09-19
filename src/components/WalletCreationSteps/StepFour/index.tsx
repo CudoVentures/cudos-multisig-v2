@@ -12,8 +12,10 @@ import {
     Input,
     MenuItem,
     Select,
+    SelectChangeEvent,
     Typography
 } from '@mui/material'
+import { handleKeyDown } from 'utils/keyHandler'
 
 const StepFour = () => {
 
@@ -21,15 +23,15 @@ const StepFour = () => {
     const [threshold, setThreshold] = useState('')
     const { members } = useSelector((state: RootState) => state.walletObject)
 
-    const handleChange = (e: any) => {
+    const handleChange = (event: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
-        if (e.target.name === "threshold") {
-            setThreshold(e.target.value)
-            dispatch(updateWalletObjectState({ threshold: e.target.value }))
+        if (event.target.name === "threshold") {
+            setThreshold(event.target.value)
+            dispatch(updateWalletObjectState({ threshold: parseInt(event.target.value) }))
             return
         }
 
-        const walletCompatibleTime = convertVotingPeriodToSeconds(e.target.value)
+        const walletCompatibleTime = convertVotingPeriodToSeconds(parseInt(event.target.value))
         dispatch(updateWalletObjectState({ votingPeriod: walletCompatibleTime }))
     }
 
@@ -83,8 +85,8 @@ const StepFour = () => {
                         name="selectedVotingPeriod"
                         id='selectedVotingPeriod'
                         placeholder="30 days"
-                        onKeyDown={event => { if (['e', 'E', '+', "-", ".", ","].includes(event.key)) { event.preventDefault() } }}
-                        onPaste={(e) => { e.preventDefault() }}
+                        onKeyDown={handleKeyDown}
+                        onPaste={event => { event.preventDefault() }}
                         onChange={handleChange}
                         className="form-control"
                     />

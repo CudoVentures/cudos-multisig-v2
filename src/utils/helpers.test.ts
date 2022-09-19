@@ -21,8 +21,8 @@ describe("Testing getAcountBalance", () => {
     it('should be chain rejected on query with wrong format address', async () => {
         try {
             await getAccountBalances(invalidAddress)
-        } catch (e: any) {
-            expect(e.message).toContain("invalid request");
+        } catch (error) {
+            expect((error as Error).message).toContain("invalid request");
         }
     })
 })

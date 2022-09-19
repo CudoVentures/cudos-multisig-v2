@@ -55,7 +55,7 @@ const SelectFromAddressBook = () => {
     const oldWalletMembers: AddressBook = {}
     const [orderBy, setOrderBy] = useState<keyof TableData>('name')
     const [selected, setSelected] = useState<readonly string[]>([])
-    const walletId: number = parseInt(selectedWallet!.walletID!)
+    const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletMembersQuery({
         variables: { id: walletId }
     })

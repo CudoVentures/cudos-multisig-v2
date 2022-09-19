@@ -2667,6 +2667,170 @@ export enum Delegation_Select_Column {
   ValidatorAddress = 'validator_address'
 }
 
+/** columns and relationships of "distinct_message" */
+export type Distinct_Message = {
+  __typename?: 'distinct_message';
+  height?: Maybe<Scalars['bigint']>;
+  index?: Maybe<Scalars['bigint']>;
+  involved_accounts_addresses?: Maybe<Scalars['_text']>;
+  /** An object relationship */
+  transaction: Transaction;
+  transaction_hash: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['jsonb']>;
+};
+
+
+/** columns and relationships of "distinct_message" */
+export type Distinct_MessageValueArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "distinct_message" */
+export type Distinct_Message_Aggregate = {
+  __typename?: 'distinct_message_aggregate';
+  aggregate?: Maybe<Distinct_Message_Aggregate_Fields>;
+  nodes: Array<Distinct_Message>;
+};
+
+/** aggregate fields of "distinct_message" */
+export type Distinct_Message_Aggregate_Fields = {
+  __typename?: 'distinct_message_aggregate_fields';
+  avg?: Maybe<Distinct_Message_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Distinct_Message_Max_Fields>;
+  min?: Maybe<Distinct_Message_Min_Fields>;
+  stddev?: Maybe<Distinct_Message_Stddev_Fields>;
+  stddev_pop?: Maybe<Distinct_Message_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Distinct_Message_Stddev_Samp_Fields>;
+  sum?: Maybe<Distinct_Message_Sum_Fields>;
+  var_pop?: Maybe<Distinct_Message_Var_Pop_Fields>;
+  var_samp?: Maybe<Distinct_Message_Var_Samp_Fields>;
+  variance?: Maybe<Distinct_Message_Variance_Fields>;
+};
+
+
+/** aggregate fields of "distinct_message" */
+export type Distinct_Message_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Distinct_Message_Avg_Fields = {
+  __typename?: 'distinct_message_avg_fields';
+  height?: Maybe<Scalars['Float']>;
+  index?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "distinct_message". All fields are combined with a logical 'AND'. */
+export type Distinct_Message_Bool_Exp = {
+  _and?: InputMaybe<Array<Distinct_Message_Bool_Exp>>;
+  _not?: InputMaybe<Distinct_Message_Bool_Exp>;
+  _or?: InputMaybe<Array<Distinct_Message_Bool_Exp>>;
+  height?: InputMaybe<Bigint_Comparison_Exp>;
+  index?: InputMaybe<Bigint_Comparison_Exp>;
+  involved_accounts_addresses?: InputMaybe<_Text_Comparison_Exp>;
+  transaction?: InputMaybe<Transaction_Bool_Exp>;
+  transaction_hash?: InputMaybe<String_Comparison_Exp>;
+  type?: InputMaybe<String_Comparison_Exp>;
+  value?: InputMaybe<Jsonb_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type Distinct_Message_Max_Fields = {
+  __typename?: 'distinct_message_max_fields';
+  height?: Maybe<Scalars['bigint']>;
+  index?: Maybe<Scalars['bigint']>;
+  transaction_hash?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Distinct_Message_Min_Fields = {
+  __typename?: 'distinct_message_min_fields';
+  height?: Maybe<Scalars['bigint']>;
+  index?: Maybe<Scalars['bigint']>;
+  transaction_hash?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+/** Ordering options when selecting data from "distinct_message". */
+export type Distinct_Message_Order_By = {
+  height?: InputMaybe<Order_By>;
+  index?: InputMaybe<Order_By>;
+  involved_accounts_addresses?: InputMaybe<Order_By>;
+  transaction?: InputMaybe<Transaction_Order_By>;
+  transaction_hash?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
+  value?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "distinct_message" */
+export enum Distinct_Message_Select_Column {
+  /** column name */
+  Height = 'height',
+  /** column name */
+  Index = 'index',
+  /** column name */
+  InvolvedAccountsAddresses = 'involved_accounts_addresses',
+  /** column name */
+  TransactionHash = 'transaction_hash',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  Value = 'value'
+}
+
+/** aggregate stddev on columns */
+export type Distinct_Message_Stddev_Fields = {
+  __typename?: 'distinct_message_stddev_fields';
+  height?: Maybe<Scalars['Float']>;
+  index?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Distinct_Message_Stddev_Pop_Fields = {
+  __typename?: 'distinct_message_stddev_pop_fields';
+  height?: Maybe<Scalars['Float']>;
+  index?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Distinct_Message_Stddev_Samp_Fields = {
+  __typename?: 'distinct_message_stddev_samp_fields';
+  height?: Maybe<Scalars['Float']>;
+  index?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Distinct_Message_Sum_Fields = {
+  __typename?: 'distinct_message_sum_fields';
+  height?: Maybe<Scalars['bigint']>;
+  index?: Maybe<Scalars['bigint']>;
+};
+
+/** aggregate var_pop on columns */
+export type Distinct_Message_Var_Pop_Fields = {
+  __typename?: 'distinct_message_var_pop_fields';
+  height?: Maybe<Scalars['Float']>;
+  index?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Distinct_Message_Var_Samp_Fields = {
+  __typename?: 'distinct_message_var_samp_fields';
+  height?: Maybe<Scalars['Float']>;
+  index?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Distinct_Message_Variance_Fields = {
+  __typename?: 'distinct_message_variance_fields';
+  height?: Maybe<Scalars['Float']>;
+  index?: Maybe<Scalars['Float']>;
+};
+
 /** columns and relationships of "distribution_params" */
 export type Distribution_Params = {
   __typename?: 'distribution_params';
@@ -5350,6 +5514,13 @@ export type Messages_By_Address_Args = {
   types?: InputMaybe<Scalars['_text']>;
 };
 
+export type Messages_By_Address_Distinct_On_Tx_Hash_Args = {
+  addresses?: InputMaybe<Scalars['_text']>;
+  limit?: InputMaybe<Scalars['bigint']>;
+  offset?: InputMaybe<Scalars['bigint']>;
+  types?: InputMaybe<Scalars['_text']>;
+};
+
 /** columns and relationships of "mint_params" */
 export type Mint_Params = {
   __typename?: 'mint_params';
@@ -5540,207 +5711,316 @@ export enum Modules_Select_Column {
   ModuleName = 'module_name'
 }
 
-/** columns and relationships of "nft_issue_denom" */
-export type Nft_Issue_Denom = {
-  __typename?: 'nft_issue_denom';
-  denom_id: Scalars['String'];
+/** columns and relationships of "nft_denom" */
+export type Nft_Denom = {
+  __typename?: 'nft_denom';
+  contract_address_signer: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  owner: Scalars['String'];
+  schema: Scalars['String'];
+  symbol: Scalars['String'];
   /** An object relationship */
   transaction: Transaction;
   transaction_hash: Scalars['String'];
 };
 
-/** aggregated selection of "nft_issue_denom" */
-export type Nft_Issue_Denom_Aggregate = {
-  __typename?: 'nft_issue_denom_aggregate';
-  aggregate?: Maybe<Nft_Issue_Denom_Aggregate_Fields>;
-  nodes: Array<Nft_Issue_Denom>;
+/** aggregated selection of "nft_denom" */
+export type Nft_Denom_Aggregate = {
+  __typename?: 'nft_denom_aggregate';
+  aggregate?: Maybe<Nft_Denom_Aggregate_Fields>;
+  nodes: Array<Nft_Denom>;
 };
 
-/** aggregate fields of "nft_issue_denom" */
-export type Nft_Issue_Denom_Aggregate_Fields = {
-  __typename?: 'nft_issue_denom_aggregate_fields';
+/** aggregate fields of "nft_denom" */
+export type Nft_Denom_Aggregate_Fields = {
+  __typename?: 'nft_denom_aggregate_fields';
   count: Scalars['Int'];
-  max?: Maybe<Nft_Issue_Denom_Max_Fields>;
-  min?: Maybe<Nft_Issue_Denom_Min_Fields>;
+  max?: Maybe<Nft_Denom_Max_Fields>;
+  min?: Maybe<Nft_Denom_Min_Fields>;
 };
 
 
-/** aggregate fields of "nft_issue_denom" */
-export type Nft_Issue_Denom_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Nft_Issue_Denom_Select_Column>>;
+/** aggregate fields of "nft_denom" */
+export type Nft_Denom_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Nft_Denom_Select_Column>>;
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
-/** Boolean expression to filter rows from the table "nft_issue_denom". All fields are combined with a logical 'AND'. */
-export type Nft_Issue_Denom_Bool_Exp = {
-  _and?: InputMaybe<Array<Nft_Issue_Denom_Bool_Exp>>;
-  _not?: InputMaybe<Nft_Issue_Denom_Bool_Exp>;
-  _or?: InputMaybe<Array<Nft_Issue_Denom_Bool_Exp>>;
-  denom_id?: InputMaybe<String_Comparison_Exp>;
+/** Boolean expression to filter rows from the table "nft_denom". All fields are combined with a logical 'AND'. */
+export type Nft_Denom_Bool_Exp = {
+  _and?: InputMaybe<Array<Nft_Denom_Bool_Exp>>;
+  _not?: InputMaybe<Nft_Denom_Bool_Exp>;
+  _or?: InputMaybe<Array<Nft_Denom_Bool_Exp>>;
+  contract_address_signer?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  owner?: InputMaybe<String_Comparison_Exp>;
+  schema?: InputMaybe<String_Comparison_Exp>;
+  symbol?: InputMaybe<String_Comparison_Exp>;
   transaction?: InputMaybe<Transaction_Bool_Exp>;
   transaction_hash?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** aggregate max on columns */
-export type Nft_Issue_Denom_Max_Fields = {
-  __typename?: 'nft_issue_denom_max_fields';
-  denom_id?: Maybe<Scalars['String']>;
+export type Nft_Denom_Max_Fields = {
+  __typename?: 'nft_denom_max_fields';
+  contract_address_signer?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  owner?: Maybe<Scalars['String']>;
+  schema?: Maybe<Scalars['String']>;
+  symbol?: Maybe<Scalars['String']>;
   transaction_hash?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
-export type Nft_Issue_Denom_Min_Fields = {
-  __typename?: 'nft_issue_denom_min_fields';
-  denom_id?: Maybe<Scalars['String']>;
+export type Nft_Denom_Min_Fields = {
+  __typename?: 'nft_denom_min_fields';
+  contract_address_signer?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  owner?: Maybe<Scalars['String']>;
+  schema?: Maybe<Scalars['String']>;
+  symbol?: Maybe<Scalars['String']>;
   transaction_hash?: Maybe<Scalars['String']>;
 };
 
-/** Ordering options when selecting data from "nft_issue_denom". */
-export type Nft_Issue_Denom_Order_By = {
-  denom_id?: InputMaybe<Order_By>;
+/** Ordering options when selecting data from "nft_denom". */
+export type Nft_Denom_Order_By = {
+  contract_address_signer?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  owner?: InputMaybe<Order_By>;
+  schema?: InputMaybe<Order_By>;
+  symbol?: InputMaybe<Order_By>;
   transaction?: InputMaybe<Transaction_Order_By>;
   transaction_hash?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "nft_issue_denom" */
-export enum Nft_Issue_Denom_Select_Column {
+/** select columns of table "nft_denom" */
+export enum Nft_Denom_Select_Column {
   /** column name */
-  DenomId = 'denom_id',
+  ContractAddressSigner = 'contract_address_signer',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Owner = 'owner',
+  /** column name */
+  Schema = 'schema',
+  /** column name */
+  Symbol = 'symbol',
   /** column name */
   TransactionHash = 'transaction_hash'
 }
 
-/** columns and relationships of "nft_mint" */
-export type Nft_Mint = {
-  __typename?: 'nft_mint';
+/** columns and relationships of "nft_nft" */
+export type Nft_Nft = {
+  __typename?: 'nft_nft';
+  burned?: Maybe<Scalars['Boolean']>;
+  contract_address_signer: Scalars['String'];
+  data_json: Scalars['jsonb'];
+  data_text: Scalars['String'];
   denom_id: Scalars['String'];
-  token_id: Scalars['bigint'];
+  id: Scalars['bigint'];
+  name: Scalars['String'];
+  /** An object relationship */
+  nft_denom: Nft_Denom;
+  owner: Scalars['String'];
+  sender: Scalars['String'];
   /** An object relationship */
   transaction: Transaction;
   transaction_hash: Scalars['String'];
+  uri: Scalars['String'];
 };
 
-/** aggregated selection of "nft_mint" */
-export type Nft_Mint_Aggregate = {
-  __typename?: 'nft_mint_aggregate';
-  aggregate?: Maybe<Nft_Mint_Aggregate_Fields>;
-  nodes: Array<Nft_Mint>;
+
+/** columns and relationships of "nft_nft" */
+export type Nft_NftData_JsonArgs = {
+  path?: InputMaybe<Scalars['String']>;
 };
 
-/** aggregate fields of "nft_mint" */
-export type Nft_Mint_Aggregate_Fields = {
-  __typename?: 'nft_mint_aggregate_fields';
-  avg?: Maybe<Nft_Mint_Avg_Fields>;
+/** aggregated selection of "nft_nft" */
+export type Nft_Nft_Aggregate = {
+  __typename?: 'nft_nft_aggregate';
+  aggregate?: Maybe<Nft_Nft_Aggregate_Fields>;
+  nodes: Array<Nft_Nft>;
+};
+
+/** aggregate fields of "nft_nft" */
+export type Nft_Nft_Aggregate_Fields = {
+  __typename?: 'nft_nft_aggregate_fields';
+  avg?: Maybe<Nft_Nft_Avg_Fields>;
   count: Scalars['Int'];
-  max?: Maybe<Nft_Mint_Max_Fields>;
-  min?: Maybe<Nft_Mint_Min_Fields>;
-  stddev?: Maybe<Nft_Mint_Stddev_Fields>;
-  stddev_pop?: Maybe<Nft_Mint_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Nft_Mint_Stddev_Samp_Fields>;
-  sum?: Maybe<Nft_Mint_Sum_Fields>;
-  var_pop?: Maybe<Nft_Mint_Var_Pop_Fields>;
-  var_samp?: Maybe<Nft_Mint_Var_Samp_Fields>;
-  variance?: Maybe<Nft_Mint_Variance_Fields>;
+  max?: Maybe<Nft_Nft_Max_Fields>;
+  min?: Maybe<Nft_Nft_Min_Fields>;
+  stddev?: Maybe<Nft_Nft_Stddev_Fields>;
+  stddev_pop?: Maybe<Nft_Nft_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Nft_Nft_Stddev_Samp_Fields>;
+  sum?: Maybe<Nft_Nft_Sum_Fields>;
+  var_pop?: Maybe<Nft_Nft_Var_Pop_Fields>;
+  var_samp?: Maybe<Nft_Nft_Var_Samp_Fields>;
+  variance?: Maybe<Nft_Nft_Variance_Fields>;
 };
 
 
-/** aggregate fields of "nft_mint" */
-export type Nft_Mint_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Nft_Mint_Select_Column>>;
+/** aggregate fields of "nft_nft" */
+export type Nft_Nft_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Nft_Nft_Select_Column>>;
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** aggregate avg on columns */
-export type Nft_Mint_Avg_Fields = {
-  __typename?: 'nft_mint_avg_fields';
-  token_id?: Maybe<Scalars['Float']>;
+export type Nft_Nft_Avg_Fields = {
+  __typename?: 'nft_nft_avg_fields';
+  id?: Maybe<Scalars['Float']>;
 };
 
-/** Boolean expression to filter rows from the table "nft_mint". All fields are combined with a logical 'AND'. */
-export type Nft_Mint_Bool_Exp = {
-  _and?: InputMaybe<Array<Nft_Mint_Bool_Exp>>;
-  _not?: InputMaybe<Nft_Mint_Bool_Exp>;
-  _or?: InputMaybe<Array<Nft_Mint_Bool_Exp>>;
+/** Boolean expression to filter rows from the table "nft_nft". All fields are combined with a logical 'AND'. */
+export type Nft_Nft_Bool_Exp = {
+  _and?: InputMaybe<Array<Nft_Nft_Bool_Exp>>;
+  _not?: InputMaybe<Nft_Nft_Bool_Exp>;
+  _or?: InputMaybe<Array<Nft_Nft_Bool_Exp>>;
+  burned?: InputMaybe<Boolean_Comparison_Exp>;
+  contract_address_signer?: InputMaybe<String_Comparison_Exp>;
+  data_json?: InputMaybe<Jsonb_Comparison_Exp>;
+  data_text?: InputMaybe<String_Comparison_Exp>;
   denom_id?: InputMaybe<String_Comparison_Exp>;
-  token_id?: InputMaybe<Bigint_Comparison_Exp>;
+  id?: InputMaybe<Bigint_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  nft_denom?: InputMaybe<Nft_Denom_Bool_Exp>;
+  owner?: InputMaybe<String_Comparison_Exp>;
+  sender?: InputMaybe<String_Comparison_Exp>;
   transaction?: InputMaybe<Transaction_Bool_Exp>;
   transaction_hash?: InputMaybe<String_Comparison_Exp>;
+  uri?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** aggregate max on columns */
-export type Nft_Mint_Max_Fields = {
-  __typename?: 'nft_mint_max_fields';
+export type Nft_Nft_Max_Fields = {
+  __typename?: 'nft_nft_max_fields';
+  contract_address_signer?: Maybe<Scalars['String']>;
+  data_text?: Maybe<Scalars['String']>;
   denom_id?: Maybe<Scalars['String']>;
-  token_id?: Maybe<Scalars['bigint']>;
+  id?: Maybe<Scalars['bigint']>;
+  name?: Maybe<Scalars['String']>;
+  owner?: Maybe<Scalars['String']>;
+  sender?: Maybe<Scalars['String']>;
   transaction_hash?: Maybe<Scalars['String']>;
+  uri?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
-export type Nft_Mint_Min_Fields = {
-  __typename?: 'nft_mint_min_fields';
+export type Nft_Nft_Min_Fields = {
+  __typename?: 'nft_nft_min_fields';
+  contract_address_signer?: Maybe<Scalars['String']>;
+  data_text?: Maybe<Scalars['String']>;
   denom_id?: Maybe<Scalars['String']>;
-  token_id?: Maybe<Scalars['bigint']>;
+  id?: Maybe<Scalars['bigint']>;
+  name?: Maybe<Scalars['String']>;
+  owner?: Maybe<Scalars['String']>;
+  sender?: Maybe<Scalars['String']>;
   transaction_hash?: Maybe<Scalars['String']>;
+  uri?: Maybe<Scalars['String']>;
 };
 
-/** Ordering options when selecting data from "nft_mint". */
-export type Nft_Mint_Order_By = {
+/** Ordering options when selecting data from "nft_nft". */
+export type Nft_Nft_Order_By = {
+  burned?: InputMaybe<Order_By>;
+  contract_address_signer?: InputMaybe<Order_By>;
+  data_json?: InputMaybe<Order_By>;
+  data_text?: InputMaybe<Order_By>;
   denom_id?: InputMaybe<Order_By>;
-  token_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  nft_denom?: InputMaybe<Nft_Denom_Order_By>;
+  owner?: InputMaybe<Order_By>;
+  sender?: InputMaybe<Order_By>;
   transaction?: InputMaybe<Transaction_Order_By>;
   transaction_hash?: InputMaybe<Order_By>;
+  uri?: InputMaybe<Order_By>;
 };
 
-/** select columns of table "nft_mint" */
-export enum Nft_Mint_Select_Column {
+/** select columns of table "nft_nft" */
+export enum Nft_Nft_Select_Column {
+  /** column name */
+  Burned = 'burned',
+  /** column name */
+  ContractAddressSigner = 'contract_address_signer',
+  /** column name */
+  DataJson = 'data_json',
+  /** column name */
+  DataText = 'data_text',
   /** column name */
   DenomId = 'denom_id',
   /** column name */
-  TokenId = 'token_id',
+  Id = 'id',
   /** column name */
-  TransactionHash = 'transaction_hash'
+  Name = 'name',
+  /** column name */
+  Owner = 'owner',
+  /** column name */
+  Sender = 'sender',
+  /** column name */
+  TransactionHash = 'transaction_hash',
+  /** column name */
+  Uri = 'uri'
 }
 
 /** aggregate stddev on columns */
-export type Nft_Mint_Stddev_Fields = {
-  __typename?: 'nft_mint_stddev_fields';
-  token_id?: Maybe<Scalars['Float']>;
+export type Nft_Nft_Stddev_Fields = {
+  __typename?: 'nft_nft_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_pop on columns */
-export type Nft_Mint_Stddev_Pop_Fields = {
-  __typename?: 'nft_mint_stddev_pop_fields';
-  token_id?: Maybe<Scalars['Float']>;
+export type Nft_Nft_Stddev_Pop_Fields = {
+  __typename?: 'nft_nft_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_samp on columns */
-export type Nft_Mint_Stddev_Samp_Fields = {
-  __typename?: 'nft_mint_stddev_samp_fields';
-  token_id?: Maybe<Scalars['Float']>;
+export type Nft_Nft_Stddev_Samp_Fields = {
+  __typename?: 'nft_nft_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate sum on columns */
-export type Nft_Mint_Sum_Fields = {
-  __typename?: 'nft_mint_sum_fields';
-  token_id?: Maybe<Scalars['bigint']>;
+export type Nft_Nft_Sum_Fields = {
+  __typename?: 'nft_nft_sum_fields';
+  id?: Maybe<Scalars['bigint']>;
 };
 
 /** aggregate var_pop on columns */
-export type Nft_Mint_Var_Pop_Fields = {
-  __typename?: 'nft_mint_var_pop_fields';
-  token_id?: Maybe<Scalars['Float']>;
+export type Nft_Nft_Var_Pop_Fields = {
+  __typename?: 'nft_nft_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate var_samp on columns */
-export type Nft_Mint_Var_Samp_Fields = {
-  __typename?: 'nft_mint_var_samp_fields';
-  token_id?: Maybe<Scalars['Float']>;
+export type Nft_Nft_Var_Samp_Fields = {
+  __typename?: 'nft_nft_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate variance on columns */
-export type Nft_Mint_Variance_Fields = {
-  __typename?: 'nft_mint_variance_fields';
-  token_id?: Maybe<Scalars['Float']>;
+export type Nft_Nft_Variance_Fields = {
+  __typename?: 'nft_nft_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+export type Nfts_By_Data_Property_Args = {
+  limit?: InputMaybe<Scalars['bigint']>;
+  offset?: InputMaybe<Scalars['bigint']>;
+  property_name?: InputMaybe<Scalars['String']>;
+};
+
+export type Nfts_By_Expiration_Date_Args = {
+  expiration_date?: InputMaybe<Scalars['bigint']>;
+  limit?: InputMaybe<Scalars['bigint']>;
+  offset?: InputMaybe<Scalars['bigint']>;
 };
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -7873,6 +8153,10 @@ export type Query_Root = {
   delegation: Array<Delegation>;
   /** fetch aggregated fields from the table: "delegation" */
   delegation_aggregate: Delegation_Aggregate;
+  /** fetch data from the table: "distinct_message" */
+  distinct_message: Array<Distinct_Message>;
+  /** fetch aggregated fields from the table: "distinct_message" */
+  distinct_message_aggregate: Distinct_Message_Aggregate;
   /** fetch data from the table: "distribution_params" */
   distribution_params: Array<Distribution_Params>;
   /** fetch aggregated fields from the table: "distribution_params" */
@@ -7945,6 +8229,10 @@ export type Query_Root = {
   messages_by_address: Array<Message>;
   /** execute function "messages_by_address" and query aggregates on result of table type "message" */
   messages_by_address_aggregate: Message_Aggregate;
+  /** execute function "messages_by_address_distinct_on_tx_hash" which returns "distinct_message" */
+  messages_by_address_distinct_on_tx_hash: Array<Distinct_Message>;
+  /** execute function "messages_by_address_distinct_on_tx_hash" and query aggregates on result of table type "distinct_message" */
+  messages_by_address_distinct_on_tx_hash_aggregate: Distinct_Message_Aggregate;
   /** fetch data from the table: "mint_params" */
   mint_params: Array<Mint_Params>;
   /** fetch aggregated fields from the table: "mint_params" */
@@ -7957,18 +8245,26 @@ export type Query_Root = {
   modules_aggregate: Modules_Aggregate;
   /** fetch data from the table: "modules" using primary key columns */
   modules_by_pk?: Maybe<Modules>;
-  /** fetch data from the table: "nft_issue_denom" */
-  nft_issue_denom: Array<Nft_Issue_Denom>;
-  /** fetch aggregated fields from the table: "nft_issue_denom" */
-  nft_issue_denom_aggregate: Nft_Issue_Denom_Aggregate;
-  /** fetch data from the table: "nft_issue_denom" using primary key columns */
-  nft_issue_denom_by_pk?: Maybe<Nft_Issue_Denom>;
-  /** fetch data from the table: "nft_mint" */
-  nft_mint: Array<Nft_Mint>;
-  /** fetch aggregated fields from the table: "nft_mint" */
-  nft_mint_aggregate: Nft_Mint_Aggregate;
-  /** fetch data from the table: "nft_mint" using primary key columns */
-  nft_mint_by_pk?: Maybe<Nft_Mint>;
+  /** fetch data from the table: "nft_denom" */
+  nft_denom: Array<Nft_Denom>;
+  /** fetch aggregated fields from the table: "nft_denom" */
+  nft_denom_aggregate: Nft_Denom_Aggregate;
+  /** fetch data from the table: "nft_denom" using primary key columns */
+  nft_denom_by_pk?: Maybe<Nft_Denom>;
+  /** fetch data from the table: "nft_nft" */
+  nft_nft: Array<Nft_Nft>;
+  /** fetch aggregated fields from the table: "nft_nft" */
+  nft_nft_aggregate: Nft_Nft_Aggregate;
+  /** fetch data from the table: "nft_nft" using primary key columns */
+  nft_nft_by_pk?: Maybe<Nft_Nft>;
+  /** execute function "nfts_by_data_property" which returns "nft_nft" */
+  nfts_by_data_property: Array<Nft_Nft>;
+  /** execute function "nfts_by_data_property" and query aggregates on result of table type "nft_nft" */
+  nfts_by_data_property_aggregate: Nft_Nft_Aggregate;
+  /** execute function "nfts_by_expiration_date" which returns "nft_nft" */
+  nfts_by_expiration_date: Array<Nft_Nft>;
+  /** execute function "nfts_by_expiration_date" and query aggregates on result of table type "nft_nft" */
+  nfts_by_expiration_date_aggregate: Nft_Nft_Aggregate;
   /** fetch data from the table: "pre_commit" */
   pre_commit: Array<Pre_Commit>;
   /** fetch aggregated fields from the table: "pre_commit" */
@@ -8528,6 +8824,24 @@ export type Query_RootDelegation_AggregateArgs = {
 };
 
 
+export type Query_RootDistinct_MessageArgs = {
+  distinct_on?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Distinct_Message_Order_By>>;
+  where?: InputMaybe<Distinct_Message_Bool_Exp>;
+};
+
+
+export type Query_RootDistinct_Message_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Distinct_Message_Order_By>>;
+  where?: InputMaybe<Distinct_Message_Bool_Exp>;
+};
+
+
 export type Query_RootDistribution_ParamsArgs = {
   distinct_on?: InputMaybe<Array<Distribution_Params_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -8826,6 +9140,26 @@ export type Query_RootMessages_By_Address_AggregateArgs = {
 };
 
 
+export type Query_RootMessages_By_Address_Distinct_On_Tx_HashArgs = {
+  args: Messages_By_Address_Distinct_On_Tx_Hash_Args;
+  distinct_on?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Distinct_Message_Order_By>>;
+  where?: InputMaybe<Distinct_Message_Bool_Exp>;
+};
+
+
+export type Query_RootMessages_By_Address_Distinct_On_Tx_Hash_AggregateArgs = {
+  args: Messages_By_Address_Distinct_On_Tx_Hash_Args;
+  distinct_on?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Distinct_Message_Order_By>>;
+  where?: InputMaybe<Distinct_Message_Bool_Exp>;
+};
+
+
 export type Query_RootMint_ParamsArgs = {
   distinct_on?: InputMaybe<Array<Mint_Params_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -8872,50 +9206,90 @@ export type Query_RootModules_By_PkArgs = {
 };
 
 
-export type Query_RootNft_Issue_DenomArgs = {
-  distinct_on?: InputMaybe<Array<Nft_Issue_Denom_Select_Column>>;
+export type Query_RootNft_DenomArgs = {
+  distinct_on?: InputMaybe<Array<Nft_Denom_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Nft_Issue_Denom_Order_By>>;
-  where?: InputMaybe<Nft_Issue_Denom_Bool_Exp>;
+  order_by?: InputMaybe<Array<Nft_Denom_Order_By>>;
+  where?: InputMaybe<Nft_Denom_Bool_Exp>;
 };
 
 
-export type Query_RootNft_Issue_Denom_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Nft_Issue_Denom_Select_Column>>;
+export type Query_RootNft_Denom_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Nft_Denom_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Nft_Issue_Denom_Order_By>>;
-  where?: InputMaybe<Nft_Issue_Denom_Bool_Exp>;
+  order_by?: InputMaybe<Array<Nft_Denom_Order_By>>;
+  where?: InputMaybe<Nft_Denom_Bool_Exp>;
 };
 
 
-export type Query_RootNft_Issue_Denom_By_PkArgs = {
+export type Query_RootNft_Denom_By_PkArgs = {
+  id: Scalars['String'];
+};
+
+
+export type Query_RootNft_NftArgs = {
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
+};
+
+
+export type Query_RootNft_Nft_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
+};
+
+
+export type Query_RootNft_Nft_By_PkArgs = {
   denom_id: Scalars['String'];
+  id: Scalars['bigint'];
 };
 
 
-export type Query_RootNft_MintArgs = {
-  distinct_on?: InputMaybe<Array<Nft_Mint_Select_Column>>;
+export type Query_RootNfts_By_Data_PropertyArgs = {
+  args: Nfts_By_Data_Property_Args;
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Nft_Mint_Order_By>>;
-  where?: InputMaybe<Nft_Mint_Bool_Exp>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
 };
 
 
-export type Query_RootNft_Mint_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Nft_Mint_Select_Column>>;
+export type Query_RootNfts_By_Data_Property_AggregateArgs = {
+  args: Nfts_By_Data_Property_Args;
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Nft_Mint_Order_By>>;
-  where?: InputMaybe<Nft_Mint_Bool_Exp>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
 };
 
 
-export type Query_RootNft_Mint_By_PkArgs = {
-  denom_id: Scalars['String'];
-  token_id: Scalars['bigint'];
+export type Query_RootNfts_By_Expiration_DateArgs = {
+  args: Nfts_By_Expiration_Date_Args;
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
+};
+
+
+export type Query_RootNfts_By_Expiration_Date_AggregateArgs = {
+  args: Nfts_By_Expiration_Date_Args;
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
 };
 
 
@@ -9968,6 +10342,10 @@ export type Subscription_Root = {
   delegation: Array<Delegation>;
   /** fetch aggregated fields from the table: "delegation" */
   delegation_aggregate: Delegation_Aggregate;
+  /** fetch data from the table: "distinct_message" */
+  distinct_message: Array<Distinct_Message>;
+  /** fetch aggregated fields from the table: "distinct_message" */
+  distinct_message_aggregate: Distinct_Message_Aggregate;
   /** fetch data from the table: "distribution_params" */
   distribution_params: Array<Distribution_Params>;
   /** fetch aggregated fields from the table: "distribution_params" */
@@ -10040,6 +10418,10 @@ export type Subscription_Root = {
   messages_by_address: Array<Message>;
   /** execute function "messages_by_address" and query aggregates on result of table type "message" */
   messages_by_address_aggregate: Message_Aggregate;
+  /** execute function "messages_by_address_distinct_on_tx_hash" which returns "distinct_message" */
+  messages_by_address_distinct_on_tx_hash: Array<Distinct_Message>;
+  /** execute function "messages_by_address_distinct_on_tx_hash" and query aggregates on result of table type "distinct_message" */
+  messages_by_address_distinct_on_tx_hash_aggregate: Distinct_Message_Aggregate;
   /** fetch data from the table: "mint_params" */
   mint_params: Array<Mint_Params>;
   /** fetch aggregated fields from the table: "mint_params" */
@@ -10052,18 +10434,26 @@ export type Subscription_Root = {
   modules_aggregate: Modules_Aggregate;
   /** fetch data from the table: "modules" using primary key columns */
   modules_by_pk?: Maybe<Modules>;
-  /** fetch data from the table: "nft_issue_denom" */
-  nft_issue_denom: Array<Nft_Issue_Denom>;
-  /** fetch aggregated fields from the table: "nft_issue_denom" */
-  nft_issue_denom_aggregate: Nft_Issue_Denom_Aggregate;
-  /** fetch data from the table: "nft_issue_denom" using primary key columns */
-  nft_issue_denom_by_pk?: Maybe<Nft_Issue_Denom>;
-  /** fetch data from the table: "nft_mint" */
-  nft_mint: Array<Nft_Mint>;
-  /** fetch aggregated fields from the table: "nft_mint" */
-  nft_mint_aggregate: Nft_Mint_Aggregate;
-  /** fetch data from the table: "nft_mint" using primary key columns */
-  nft_mint_by_pk?: Maybe<Nft_Mint>;
+  /** fetch data from the table: "nft_denom" */
+  nft_denom: Array<Nft_Denom>;
+  /** fetch aggregated fields from the table: "nft_denom" */
+  nft_denom_aggregate: Nft_Denom_Aggregate;
+  /** fetch data from the table: "nft_denom" using primary key columns */
+  nft_denom_by_pk?: Maybe<Nft_Denom>;
+  /** fetch data from the table: "nft_nft" */
+  nft_nft: Array<Nft_Nft>;
+  /** fetch aggregated fields from the table: "nft_nft" */
+  nft_nft_aggregate: Nft_Nft_Aggregate;
+  /** fetch data from the table: "nft_nft" using primary key columns */
+  nft_nft_by_pk?: Maybe<Nft_Nft>;
+  /** execute function "nfts_by_data_property" which returns "nft_nft" */
+  nfts_by_data_property: Array<Nft_Nft>;
+  /** execute function "nfts_by_data_property" and query aggregates on result of table type "nft_nft" */
+  nfts_by_data_property_aggregate: Nft_Nft_Aggregate;
+  /** execute function "nfts_by_expiration_date" which returns "nft_nft" */
+  nfts_by_expiration_date: Array<Nft_Nft>;
+  /** execute function "nfts_by_expiration_date" and query aggregates on result of table type "nft_nft" */
+  nfts_by_expiration_date_aggregate: Nft_Nft_Aggregate;
   /** fetch data from the table: "pre_commit" */
   pre_commit: Array<Pre_Commit>;
   /** fetch aggregated fields from the table: "pre_commit" */
@@ -10537,6 +10927,24 @@ export type Subscription_RootDelegation_AggregateArgs = {
 };
 
 
+export type Subscription_RootDistinct_MessageArgs = {
+  distinct_on?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Distinct_Message_Order_By>>;
+  where?: InputMaybe<Distinct_Message_Bool_Exp>;
+};
+
+
+export type Subscription_RootDistinct_Message_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Distinct_Message_Order_By>>;
+  where?: InputMaybe<Distinct_Message_Bool_Exp>;
+};
+
+
 export type Subscription_RootDistribution_ParamsArgs = {
   distinct_on?: InputMaybe<Array<Distribution_Params_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -10835,6 +11243,26 @@ export type Subscription_RootMessages_By_Address_AggregateArgs = {
 };
 
 
+export type Subscription_RootMessages_By_Address_Distinct_On_Tx_HashArgs = {
+  args: Messages_By_Address_Distinct_On_Tx_Hash_Args;
+  distinct_on?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Distinct_Message_Order_By>>;
+  where?: InputMaybe<Distinct_Message_Bool_Exp>;
+};
+
+
+export type Subscription_RootMessages_By_Address_Distinct_On_Tx_Hash_AggregateArgs = {
+  args: Messages_By_Address_Distinct_On_Tx_Hash_Args;
+  distinct_on?: InputMaybe<Array<Distinct_Message_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Distinct_Message_Order_By>>;
+  where?: InputMaybe<Distinct_Message_Bool_Exp>;
+};
+
+
 export type Subscription_RootMint_ParamsArgs = {
   distinct_on?: InputMaybe<Array<Mint_Params_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -10881,50 +11309,90 @@ export type Subscription_RootModules_By_PkArgs = {
 };
 
 
-export type Subscription_RootNft_Issue_DenomArgs = {
-  distinct_on?: InputMaybe<Array<Nft_Issue_Denom_Select_Column>>;
+export type Subscription_RootNft_DenomArgs = {
+  distinct_on?: InputMaybe<Array<Nft_Denom_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Nft_Issue_Denom_Order_By>>;
-  where?: InputMaybe<Nft_Issue_Denom_Bool_Exp>;
+  order_by?: InputMaybe<Array<Nft_Denom_Order_By>>;
+  where?: InputMaybe<Nft_Denom_Bool_Exp>;
 };
 
 
-export type Subscription_RootNft_Issue_Denom_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Nft_Issue_Denom_Select_Column>>;
+export type Subscription_RootNft_Denom_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Nft_Denom_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Nft_Issue_Denom_Order_By>>;
-  where?: InputMaybe<Nft_Issue_Denom_Bool_Exp>;
+  order_by?: InputMaybe<Array<Nft_Denom_Order_By>>;
+  where?: InputMaybe<Nft_Denom_Bool_Exp>;
 };
 
 
-export type Subscription_RootNft_Issue_Denom_By_PkArgs = {
+export type Subscription_RootNft_Denom_By_PkArgs = {
+  id: Scalars['String'];
+};
+
+
+export type Subscription_RootNft_NftArgs = {
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
+};
+
+
+export type Subscription_RootNft_Nft_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
+};
+
+
+export type Subscription_RootNft_Nft_By_PkArgs = {
   denom_id: Scalars['String'];
+  id: Scalars['bigint'];
 };
 
 
-export type Subscription_RootNft_MintArgs = {
-  distinct_on?: InputMaybe<Array<Nft_Mint_Select_Column>>;
+export type Subscription_RootNfts_By_Data_PropertyArgs = {
+  args: Nfts_By_Data_Property_Args;
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Nft_Mint_Order_By>>;
-  where?: InputMaybe<Nft_Mint_Bool_Exp>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
 };
 
 
-export type Subscription_RootNft_Mint_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Nft_Mint_Select_Column>>;
+export type Subscription_RootNfts_By_Data_Property_AggregateArgs = {
+  args: Nfts_By_Data_Property_Args;
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Nft_Mint_Order_By>>;
-  where?: InputMaybe<Nft_Mint_Bool_Exp>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
 };
 
 
-export type Subscription_RootNft_Mint_By_PkArgs = {
-  denom_id: Scalars['String'];
-  token_id: Scalars['bigint'];
+export type Subscription_RootNfts_By_Expiration_DateArgs = {
+  args: Nfts_By_Expiration_Date_Args;
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
+};
+
+
+export type Subscription_RootNfts_By_Expiration_Date_AggregateArgs = {
+  args: Nfts_By_Expiration_Date_Args;
+  distinct_on?: InputMaybe<Array<Nft_Nft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Nft_Nft_Order_By>>;
+  where?: InputMaybe<Nft_Nft_Bool_Exp>;
 };
 
 
@@ -14919,7 +15387,7 @@ export type GetWalletsQueryVariables = Exact<{
 }>;
 
 
-export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null }> } }> };
+export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null, weight: number }> } }> };
 
 
 export const GetWalletMembersDocument = gql`
@@ -15169,6 +15637,7 @@ export const GetWalletsDocument = gql`
       group_members(where: {weight: {_gt: 0}}) {
         address
         metadata
+        weight
       }
     }
   }
