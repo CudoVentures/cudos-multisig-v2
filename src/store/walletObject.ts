@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { StdFee } from 'cudosjs'
 
-export interface member {
+export interface Member {
     address: string;
     weight: number;
     metadata: string;
@@ -19,7 +19,7 @@ export interface votingPeriod {
 
 export interface walletObjectState {
   admin?: string
-  members?: member[]
+  members?: Member[]
   groupMetadata?: groupMetadata
   threshold?: number
   votingPeriod?: votingPeriod

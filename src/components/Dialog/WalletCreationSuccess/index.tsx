@@ -82,7 +82,7 @@ const WalletCreationSuccess = () => {
                 letterSpacing={1}
                 sx={{ marginLeft: 'auto' }}
               >
-                {successData.txFee} CUDOS
+                {successData.txFee}
               </Typography>
             </Box>
             <Divider />

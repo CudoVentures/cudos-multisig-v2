@@ -1,17 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Typography,
-  Avatar,
-  Box,
-  Collapse,
-  Button,
-  Tooltip
-} from '@mui/material'
 import { RootState } from '../../store'
 import { StyledUser, styles } from './styles'
 import WalletIcon from 'assets/vectors/wallet-icon.svg'
+import KeplrLogo from 'assets/vectors/keplr-logo.svg'
+import CosmostationLogo from 'assets/vectors/cosmostation-logo.svg'
 import LinkIcon from 'assets/vectors/link-icon.svg'
 import CopyIcon from 'assets/vectors/copy-icon.svg'
 import CudosLogo from 'assets/vectors/cudos-logo.svg'
@@ -22,14 +16,26 @@ import { EXPLORER_ADDRESS_DETAILS } from '../../api/endpoints'
 import AccountBalance from 'utils/subscriptions/accountBalance'
 import { updateUser } from 'store/user'
 import { initialState as initialUserState } from 'store/user'
+import { initialState as initialSendFundsState } from 'store/sendFunds'
 import { initialState as initialWalletObject, updateWalletObjectState } from 'store/walletObject'
 import { initialState as initialModalState, updateModalState } from 'store/modals'
-import { updateSteps } from 'store/steps'
+import { initialState as initialWalletCreationState, updateWalletCreationState } from 'store/walletCreation'
+import { updateSendFunds } from 'store/sendFunds'
+import { COSMOSTATION_LEDGER, KEPLR_LEDGER } from 'utils/constants'
+
+import {
+  Typography,
+  Avatar,
+  Box,
+  Collapse,
+  Button,
+  Tooltip
+} from '@mui/material'
 
 const UserInfo = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { address, isAdmin } = useSelector((state: RootState) => state.userState)
+  const { address, isAdmin, accountName, connectedLedger } = useSelector((state: RootState) => state.userState)
 
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState<boolean>(false)
@@ -53,7 +59,8 @@ const UserInfo = () => {
     dispatch(updateUser({ ...initialUserState }))
     dispatch(updateWalletObjectState({ ...initialWalletObject }))
     dispatch(updateModalState({ ...initialModalState }))
-    dispatch(updateSteps({ currentStep: ''}))
+    dispatch(updateWalletCreationState({...initialWalletCreationState}))
+    dispatch(updateSendFunds({ ...initialSendFundsState }))
     navigate("/")
   }
 
@@ -64,18 +71,27 @@ const UserInfo = () => {
           <img src={CudosLogo} alt="Cudos logo" />
           <AccountBalance />
           <hr style={styles.fancyLine}></hr>
-          <Box
-            sx={{
-              marginRight: '10px'
-            }}
-          >
-            <Avatar
-              style={styles.avatarStyling}
-              src={WalletIcon}
-              alt="Wallet Logo"
-            />
-          </Box>
-          <Typography>{formatAddress(address!, 10)}</Typography>
+          <div style={{display: 'contents'}}>
+            <Box
+              sx={{
+                marginRight: '10px'
+              }}
+            >
+              <Avatar
+                style={styles.avatarStyling}
+                src={
+                  connectedLedger === KEPLR_LEDGER ? KeplrLogo :
+                  connectedLedger === COSMOSTATION_LEDGER ? CosmostationLogo :
+                  WalletIcon
+                }
+                alt="Wallet Logo"
+              />
+            </Box>
+            <Typography>
+              {`Hi, ${accountName}`}
+              {/* {formatAddress(address!, 10)} */}
+            </Typography>
+          </div>
           <Box style={{ marginLeft: '15px' }}>
             <img
               style={{
@@ -90,11 +106,10 @@ const UserInfo = () => {
       </Box>
       <Collapse
         onMouseLeave={() => setOpen(false)}
-        style={{ marginTop: '-28px', zIndex: '-1' }}
+        style={{marginTop: '-28px', zIndex: '-1' }}
         in={open}
       >
         <Box style={styles.dropdownMenuContainer}>
-
           <Box style={{ marginTop: '40px' }}>
             <Box style={{ display: 'flex' }}>
               <Box

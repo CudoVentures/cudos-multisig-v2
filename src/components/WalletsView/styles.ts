@@ -7,10 +7,30 @@ export const styles = {
     fontSize: "14px", 
     fontWeight: "600"
   },
+  textContainer: {
+    display: "block",
+    width: "180px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
+  },
+  summaryTableCell: {
+    fontWeight: '600', 
+    padding: '0px 10px 0px 35px', 
+    width: '190px'
+  },
+  summaryTableRow: {
+    backgroundColor: '#28314E',
+    width: '100%',
+    borderRadius: '20px',
+    boxShadow: 5,
+    padding: '5px 20px 5px 5px',
+    margin: '8px 10px'
+  },
   summaryTableBody: {
     overflowY: 'scroll', 
     overflowX: 'clip', 
-    height: '415px',
+    height: '420px',
     width: "100%",
     display: 'flex',
     flexDirection: 'column',
@@ -23,8 +43,8 @@ export const styles = {
       },
     contentDissapear: {
       opacity: '1', 
-      transition: 'opacity 0.5s', 
-      WebkitTransition: 'opacity 0.5s'
+      transition: 'all 0.5s', 
+      WebkitTransition: 'all 0.5s'
     },
     btnLogo: {
       marginRight: '10px'

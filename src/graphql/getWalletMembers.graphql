@@ -1,0 +1,8 @@
+query GetWalletMembers($id: Int = 0) {
+  group_with_policy_by_pk(id: $id) {
+    group_members(where: {weight: {_gt: 0}}) {
+      address
+      metadata
+    }
+  }
+}

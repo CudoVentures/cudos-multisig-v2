@@ -1,5 +1,6 @@
 import { darkScrollbar } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
+
 import { COLORS_DARK_THEME } from './colors'
 
 const dark = createTheme({
@@ -102,15 +103,15 @@ const dark = createTheme({
       styleOverrides: {
         root: {
           '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button':
-            {
-              display: 'none'
-            },
-            '& input:-internal-autofill-selected':
-            {
-              '-webkit-box-shadow': '0 0 0 30px rgb(40, 49, 78) inset !important',
-              '-webkit-text-fill-color': 'white !important',
-              'caret-color': 'white !important'
-            },
+          {
+            display: 'none'
+          },
+          '& input:-internal-autofill-selected':
+          {
+            WebkitBoxShadow: '0 0 0 30px rgb(40, 49, 78) inset !important',
+            WebkitTextFillColor: 'white !important',
+            caretColor: 'white !important'
+          },
           '& input[type=number]': {
             MozAppearance: 'textfield'
           }
@@ -132,6 +133,13 @@ const dark = createTheme({
             background: COLORS_DARK_THEME.SECONDARY_TEXT,
             borderRadius: '2px'
           }
+        }
+      }
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          minWidth: 'max-content',
         }
       }
     },

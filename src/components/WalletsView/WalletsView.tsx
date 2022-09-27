@@ -1,73 +1,83 @@
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { styles } from './styles'
-import { formatAddress } from 'utils/helpers'
 import MembersIcon from 'assets/vectors/members-icon.svg'
+import { useNavigate } from 'react-router-dom'
+import { updateSelectedWallet } from 'store/user'
+import { findOneWallet, formatAddress } from 'utils/helpers'
 
-interface Data {
+import { 
+    Box, 
+    Button, 
+    Table, 
+    TableBody, 
+    TableCell, 
+    TableContainer, 
+    TableRow, 
+    Tooltip, 
+    Typography 
+} from '@mui/material'
+interface tableData {
     walletName: string;
     walletAddress: string;
     membersCount: number;
   }
 
 const WalletsView = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const { wallets } = useSelector((state: RootState) => state.userState)
     
-    function createData(
+    function createTableData(
         walletName: string,
         walletAddress: string,
         membersCount: number
-        ): Data {
+        ): tableData {
         return {
             walletName,
             walletAddress,
             membersCount
-        };
+        }
     }
-      
-    const rows: Data[] = [];
-      wallets!.forEach((wallet) =>
-        rows.push(createData(
-            wallet.walletName, 
-            wallet.walletAddress,
-            wallet.memberCount
+
+    const rows: tableData[] = []
+    wallets!.forEach((wallet) =>
+        rows.push(createTableData(
+            wallet.walletName!, 
+            wallet.walletAddress!,
+            wallet.memberCount!
         ))
     )
 
     const openDashboard = (walletAddress: string) => {
-        alert("COMING SOON")
+        const wallet = findOneWallet(wallets!, walletAddress)
+        dispatch(updateSelectedWallet(wallet))
+        navigate(`/dashboard`)
     }
 
     return (
         <TableContainer style={{width:'100%'}}>
             <Table style={{width:'100%'}} aria-label="simple table">
                 <TableBody style={styles.summaryTableBody}>
-                {rows.map((row) => (
-                    <TableRow sx={() => ({
-                        backgroundColor: '#28314E',
-                        width: '100%',
-                        borderRadius: '20px',
-                        boxShadow: 5,
-                        padding: '5px 25px 5px 5px',
-                        margin: '8px 10px'
-                      })}>
-                        <TableCell style={{ fontWeight: '600', padding: '0px 10px 0px 40px', width: '220px'}} align='left'>
-                            {row.walletName.length > 20?
-                                <Tooltip title={row.walletName}>
+                {rows.map((row, index) => (
+                    <TableRow key={index} sx={() => (styles.summaryTableRow)}>
+                        <TableCell style={styles.summaryTableCell} align='left'>
+                            <Tooltip title={row.walletName}>
+                                <div style={styles.textContainer}>
+                                    {row.walletName}
+                                </div>
+                            </Tooltip>
+                        </TableCell>
+                        <TableCell style={{width: '580px'}} align="left">
+                            <Typography style={{fontWeight:'600'}} variant="subtitle2" color="text.secondary">
+                                <Tooltip title={row.walletAddress}>
                                     <div>
-                                        {formatAddress(row.walletName, 15)}
+                                        {formatAddress(row.walletAddress, 55)}
                                     </div>
                                 </Tooltip>
-                                :row.walletName
-                            }
-                        </TableCell>
-                        <TableCell style={{width: '600px'}} align="left">
-                            <Typography style={{fontWeight:'600'}} variant="subtitle2" color="text.secondary">
-                                {row.walletAddress}
                             </Typography>
                         </TableCell>
-                        <TableCell style={{width: '200px'}} align="left">
+                        <TableCell style={{width: '150px'}} align="left">
                             <Box style={{fontWeight: '600', display: 'flex', alignItems: 'center'}}>
                                 <img src={MembersIcon} alt="Members Icon" />
                                 <Typography style={{margin: '0 10px'}} variant="inherit" color="text.secondary">

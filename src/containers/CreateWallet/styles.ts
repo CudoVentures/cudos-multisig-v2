@@ -21,15 +21,15 @@ export const styles = {
     },
     contentDissapear: {
       opacity: '1', 
-      transition: 'opacity 0.5s', 
-      WebkitTransition: 'opacity 0.5s'
+      transition: 'all 0.5s', 
+      WebkitTransition: 'all 0.5s'
     },
     Card: {
       textAlign: "center",
       width: '0',
       height: '580px',
       marginLeft: '0',
-      transition: "all 1s",
+      transition: "all 0.5s",
       padding: '60px'
     },
     leftSteps: {
@@ -43,7 +43,7 @@ export const styles = {
         justifyContent: "center",
         alignItems: 'center',
         paddingBottom: '50px',
-        transition: "all 1s",
+        transition: "all 0.5s",
     },
     holder: {
         display: 'flex', 
@@ -53,8 +53,8 @@ export const styles = {
       },
     contentAppear: {
       opacity: '0', 
-      transition: 'opacity 0.5s', 
-      WebkitTransition: 'opacity 0.5s'
+      transition: 'all 0.5s', 
+      WebkitTransition: 'all 0.5s'
     },
     informativeBlock: {
       display: "flex",

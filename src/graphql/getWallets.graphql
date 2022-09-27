@@ -1,0 +1,16 @@
+query GetWallets($_eq: String = "") {
+  group_member(where: {address: {_eq: $_eq}}) {
+    group_with_policy {
+      address
+      group_metadata
+      threshold
+      voting_period
+      id
+      group_members(where: {weight: {_gt: 0}}) {
+        address
+        metadata
+        weight
+      }
+    }
+  }
+}
