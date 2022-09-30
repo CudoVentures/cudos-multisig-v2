@@ -4,6 +4,15 @@ import MembersIcon from 'assets/vectors/members-icon.svg'
 import ActiveSettingsIcon from 'assets/vectors/dashboard/active-settings.svg'
 import YesIcon from 'assets/vectors/yes-vote-icon.svg'
 import NoIcon from 'assets/vectors/no-vote-icon.svg'
+import moment from 'moment'
+import { ReactComponent as TwitterIcon } from 'assets/vectors/twitter.svg'
+import { ReactComponent as TelegramIcon } from 'assets/vectors/telegram.svg'
+import { ReactComponent as DiscordIcon } from 'assets/vectors/discord.svg'
+import { ReactComponent as LinkedInIcon } from 'assets/vectors/linkedin.svg'
+import { ReactComponent as MediumIcon } from 'assets/vectors/medium.svg'
+import { ReactComponent as YouTubeIcon } from 'assets/vectors/youtube.svg'
+import { ReactComponent as FacebookIcon } from 'assets/vectors/facebook.svg'
+import { ReactComponent as SpotifyIcon } from 'assets/vectors/spotify.svg'
 
 // ENV
 export const RPC_ADDRESS = import.meta.env.VITE_APP_RPC || process.env.VITE_APP_RPC || ""
@@ -32,6 +41,24 @@ export const DEFAULT_VOTING_WEIGHT = 1
 export const DEFAULT_MULTIPLIER = 1.3
 export const KEPLR_LEDGER = 'Keplr'
 export const COSMOSTATION_LEDGER = 'Cosmostation'
+export const FOOTER = {
+    LEFT_LINKS: [
+        { text: 'Terms & Conditions', url: 'https://www.cudos.org/terms-and-conditions/' },
+        { text: 'Privacy Policy', url: 'https://www.cudos.org/privacy-policy' },
+        { text: 'cudos.org', url: 'https://www.cudos.org/' },
+        { text: `License © 2018 - ${moment().year()}`, url: 'https://www.cudos.org/' }
+    ],
+    RIGHT_LINKS: [
+        { icon: <TwitterIcon />, url: 'https://twitter.com/CUDOS_' },
+        { icon: <TelegramIcon />, url: 'https://t.me/cudostelegram' },
+        { icon: <DiscordIcon />, url: 'https://discord.com/invite/t397SKqf4u' },
+        { icon: <LinkedInIcon />, url: 'https://www.linkedin.com/company/cudos1' },
+        { icon: <MediumIcon />, url: 'https://medium.com/cudos' },
+        { icon: <YouTubeIcon />, url: 'https://www.youtube.com/c/CUDOS' },
+        { icon: <FacebookIcon />, url: 'https://www.facebook.com/cudos.org' },
+        { icon: <SpotifyIcon />, url: 'https://open.spotify.com/show/2lZuBXJ270g7taK06tnK35' },
+    ]
+}
 
 // Modal Msg Titles
 export const FILE_ERROR_TITLE = 'File Error'
