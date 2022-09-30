@@ -1,18 +1,13 @@
 import { Box, Grid, Typography } from '@mui/material'
 import { COLORS_DARK_THEME } from 'theme/colors'
+import { FOOTER } from 'utils/constants'
 import { styles } from './styles'
-
-const centerLinks = [
-  { text: 'All rights reserved 2022', url: 'https://www.cudos.org/' },
-  { text: 'cudos.org', url: 'https://www.cudos.org/' },
-  { text: 'v.02.00', url: 'https://github.com/CudoVentures/cudos-multisig-v2' },
-]
 
 const Footer = () => {
   return (
     <Box sx={styles.footerContainer} gap={6}>
-      <Box display="flex" alignItems="center">
-        {centerLinks.map((link) => (
+      <Box display="flex">
+        {FOOTER.LEFT_LINKS.map((link) => (
           <Grid
             item
             key={link.text}
@@ -37,6 +32,28 @@ const Footer = () => {
             >
               {link.text}
             </Typography>
+          </Grid>
+        ))}
+      </Box>
+      <Box
+        alignItems="center"
+        display="flex"
+        gap={3}
+        sx={{ marginLeft: 'auto' }}
+      >
+        {FOOTER.RIGHT_LINKS.map((link) => (
+          <Grid
+            key={link.url}
+            onClick={() => window.open(link.url, '_blank')?.focus()}
+            sx={({ palette }) => ({
+              cursor: 'pointer',
+              color: palette.text.secondary,
+              '&:hover': {
+                color: palette.primary.main
+              }
+            })}
+          >
+            {link.icon}
           </Grid>
         ))}
       </Box>
