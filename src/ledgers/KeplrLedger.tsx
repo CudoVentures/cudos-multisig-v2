@@ -6,12 +6,7 @@ import {
     RPC_ADDRESS, 
     STAKING_URL 
 } from "utils/constants"
-import { Window as KeplrWindow } from "@keplr-wallet/types"
 import { KeplrWallet } from 'cudosjs'
-
-declare global {
-    interface Window extends KeplrWindow { }
-}
 
 export const connectKeplrLedger = async (): Promise<{ address: string; accountName: string; }> => {
     if (!window.keplr) {
