@@ -3,6 +3,12 @@ import { styled, Box } from '@mui/material'
 import theme from '../../theme'
 
 export const styles = {
+  layoutHolder: {
+    height: '96.5vh',
+    width: '99.7vw',
+    display: 'grid',
+    alignContent: 'space-between'
+  },
   anchorStyle: {
     alignItems: 'center',
     textDecoration: 'none',
