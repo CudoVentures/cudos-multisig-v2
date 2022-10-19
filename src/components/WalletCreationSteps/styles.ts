@@ -123,11 +123,12 @@ stepFourHolder: {
   justifyContent: 'center'
 },
   textArea: {
+    fontFamily: "inherit",
     width: '830px', 
     height: '100px',
     resize: 'none',
     backgroundColor: '#28314E', 
-    fontSize: '15px', 
+    fontSize: "inherit",
     paddingLeft: '20px',
     borderRadius: '5px',
     border: 'none',

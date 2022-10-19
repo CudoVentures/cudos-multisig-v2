@@ -59,7 +59,7 @@ export const styles = {
     float: 'right',
     fontSize: '14px',
     height: '224px',
-    minWidth: '224px',
+    width: '100%',
     fontWeight: '500',
     display: 'flex',
     borderRadius: '0px 0px 20px 20px',
