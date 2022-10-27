@@ -1,5 +1,8 @@
 // Makes token amounts human readable (by adding decimals) while keeps precision
 // For instance: if we have 990099.000364464662179907 denoms on the chain =>
+
+import { Coin } from "cudosjs";
+
 // The human readable form will be 990,099.000364464662179907
 export const separateDecimals = (amount: string) => {
     return amount.replace(/\d{1,3}(?=(\d{3})+(?=\.))/gm, "$&,");
@@ -43,4 +46,12 @@ export const handleFullBalanceToPrecision = (amount: string, precision: number, 
     const tempAmount = isAdmin?amount:separateDecimals(separateFractions(amount))
     const formatedAmount = isAdmin?tempAmount:setDecimalPrecisionTo(tempAmount, precision)
     return tempDenom?`${formatedAmount} ${tempDenom.toUpperCase()}`:formatedAmount
+}
+
+export const formatSendAmount = (sendAmount: Coin): number => {
+    if (sendAmount?.denom === 'cudosAdmin') {
+        return parseFloat(sendAmount!.amount!)
+    }
+    
+    return parseFloat(setDecimalPrecisionTo(separateFractions(sendAmount!.amount!), 2))
 }

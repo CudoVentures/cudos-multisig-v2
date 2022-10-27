@@ -18,7 +18,7 @@ import AssetsTable from 'components/AssetsTable/AssetsTable'
 import { CancelRoundedIcon, ModalContainer } from '../styles'
 import { initialState as initialModalState } from 'store/modals'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
-import { handleFullBalanceToPrecision, separateFractions, setDecimalPrecisionTo } from 'utils/regexFormatting'
+import { formatSendAmount, handleFullBalanceToPrecision, separateFractions, setDecimalPrecisionTo } from 'utils/regexFormatting'
 import { executeMsgs, getSingleSendMsgAndFees } from '../ReusableModal/helpers'
 import { isValidCudosAddress } from 'utils/validation'
 import { SelectFromAddrBookBtn, SelectFromAddrBookDropDown } from '../MultiSend/helperComponents'
@@ -234,11 +234,7 @@ const SingleSend = () => {
             return
         }
 
-        let amount = parseFloat(chosenBalance!.amount!)
-        if (!isAdminTransfer()) {
-            amount = parseFloat(setDecimalPrecisionTo(separateFractions(chosenBalance!.amount!), 2))
-        }
-        
+        const amount = formatSendAmount(chosenBalance!)
         setAmountToSend(amount)
         setMaxOut(true)
     }

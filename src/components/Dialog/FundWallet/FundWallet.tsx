@@ -19,7 +19,7 @@ import AssetsTable from 'components/AssetsTable/AssetsTable'
 import { CancelRoundedIcon, ModalContainer } from '../styles'
 import { initialState as initialModalState } from 'store/modals'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
-import { handleFullBalanceToPrecision, separateFractions, setDecimalPrecisionTo } from 'utils/regexFormatting'
+import { formatSendAmount, handleFullBalanceToPrecision, separateFractions, setDecimalPrecisionTo } from 'utils/regexFormatting'
 import { getSigningClient } from 'utils/config'
 import { MultiSendUser } from 'utils/multiSendTableHelper'
 import { chainIDToAlias } from 'components/Layout/Networkinfo'
@@ -226,11 +226,7 @@ const FundWallet = () => {
             return
         }
 
-        let amount = parseFloat(chosenBalance!.amount!)
-        if (!isAdminTransfer()) {
-            amount = parseFloat(setDecimalPrecisionTo(separateFractions(chosenBalance!.amount!), 2))
-        }
-        
+        const amount = formatSendAmount(chosenBalance!)
         setAmountToSend(amount)
         setMaxOut(true)
     }
