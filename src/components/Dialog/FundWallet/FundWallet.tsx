@@ -301,8 +301,11 @@ const FundWallet = () => {
         const fee = estimate.fee.amount[0].amount
         const sendAmount = new BigNumber(amountToAcudos(amountToSend))
         if (currentBalance.isLessThan(sendAmount.plus(fee))) {
-            const sendAmountAfterFee = setDecimalPrecisionTo(separateFractions(sendAmount.minus(fee).toString(10)), 2)
-            setAmountToSend(parseFloat(sendAmountAfterFee))
+            const sendAmountAfterFee = formatSendAmount({
+                amount: sendAmount.minus(fee).toString(10),
+                denom: chosenBalance!.denom!
+            })
+            setAmountToSend(sendAmountAfterFee)
         }
     }
 
