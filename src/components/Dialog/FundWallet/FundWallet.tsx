@@ -33,6 +33,7 @@ import {
     GENERAL_FAILURE_MSG, 
     GENERAL_FAILURE_TITLE, 
     INSUFFICIENT_BALANCE, 
+    MINIMUM_GAS_FEE, 
     NATIVE_TOKEN_DENOM, 
     WALLET_FUNDING_FAILURE_TITLE, 
     WALLET_FUNDING_LOADING_TITLE,
@@ -222,7 +223,7 @@ const FundWallet = () => {
     }
 
     const maxingOut = () => {
-        if (new BigNumber(chosenBalance!.amount!).isLessThan(amountToAcudos(0.5))) {
+        if (new BigNumber(chosenBalance!.amount!).isLessThan(amountToAcudos(MINIMUM_GAS_FEE))) {
             return
         }
 
@@ -293,7 +294,7 @@ const FundWallet = () => {
     
     const estimateFee = async () => {
         const currentBalance = new BigNumber(chosenBalance!.amount!)
-        if (isAdminTransfer() || currentBalance.isLessThan(amountToAcudos(0.5))) {
+        if (isAdminTransfer() || currentBalance.isLessThan(amountToAcudos(MINIMUM_GAS_FEE))) {
             return
         }
         

@@ -32,6 +32,7 @@ import {
     GENERAL_FAILURE_TITLE,
     INSUFFICIENT_BALANCE,
     INVALID_DATA_PROMPT_MSG,
+    MINIMUM_GAS_FEE,
     NATIVE_TOKEN_DENOM,
     PROPOSAL_CREATION_FAILURE_TITLE,
     PROPOSAL_CREATION_LOADING_TITLE,
@@ -230,7 +231,7 @@ const SingleSend = () => {
     }
 
     const maxingOut = () => {
-        if (new BigNumber(chosenBalance!.amount!).isLessThan(amountToAcudos(0.5))) {
+        if (new BigNumber(chosenBalance!.amount!).isLessThan(amountToAcudos(MINIMUM_GAS_FEE))) {
             return
         }
 
