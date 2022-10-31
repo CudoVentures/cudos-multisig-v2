@@ -39,6 +39,7 @@ export const DEFAULT_META_DATA = 'default-metadata'
 export const DEFAULT_MEMO = 'Created with CUDOS MultiSig'
 export const DEFAULT_VOTING_WEIGHT = 1
 export const DEFAULT_MULTIPLIER = 1.3
+export const MINIMUM_GAS_FEE = 0.5
 export const KEPLR_LEDGER = 'Keplr'
 export const COSMOSTATION_LEDGER = 'Cosmostation'
 export const FOOTER = {
