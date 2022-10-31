@@ -1,20 +1,28 @@
 import { FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_AUTH_EMAIL, FIREBASE_AUTH_PASSWORD, FIREBASE_COLLECTION_NAME, FIREBASE_PROJECT_ID } from "./constants";
 import { initializeApp } from 'firebase/app';
-import { getAuth,signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, Firestore, doc, getDoc, setDoc } from 'firebase/firestore/lite';
 import { AddressBook } from "store/user";
 
 export class Firebase {
     static saveAddressBook = async (address: string, addressBook: AddressBook): Promise<void> => {
-        const db = await useFirestore();
-        const addressBookDoc = doc(db, FIREBASE_COLLECTION_NAME, address);
-        return setDoc(addressBookDoc, { addressBook });
+        try {
+            const db = await useFirestore();
+            const addressBookDoc = doc(db, FIREBASE_COLLECTION_NAME, address);
+            return setDoc(addressBookDoc, { addressBook });
+        } catch {
+            throw new Error("Error while saving address book to Firebase")
+        }
     };
 
     static getAddressBook = async (address: string): Promise<AddressBook> => {
-        const db = await useFirestore();
-        const addressBookDoc = await getDoc(doc(db, FIREBASE_COLLECTION_NAME, address));
-        return addressBookDoc.data()?.addressBook ?? {};
+        try {
+            const db = await useFirestore();
+            const addressBookDoc = await getDoc(doc(db, FIREBASE_COLLECTION_NAME, address));
+            return addressBookDoc.data()?.addressBook ?? {};
+        } catch {
+            throw new Error("Error while getting address book from Firebase")
+        }
     };
 }
 
