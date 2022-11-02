@@ -51,18 +51,22 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("keplr_keystorechange",
-      async () => {
-        await connectAccount(KEPLR_LEDGER)
-        return
-      });
 
-    //@ts-ignore
-    window.cosmostation.cosmos.on("accountChanged",
-      async () => {
-        await connectAccount(COSMOSTATION_LEDGER)
-        return
-      });
+    if (window.keplr) {
+      window.addEventListener("keplr_keystorechange",
+        async () => {
+          await connectAccount(KEPLR_LEDGER)
+          return
+        });
+    }
+
+    if (window.cosmostation) {
+      window.cosmostation.cosmos.on("accountChanged",
+        async () => {
+          await connectAccount(COSMOSTATION_LEDGER)
+          return
+        });
+    }
 
   }, [connectAccount])
 

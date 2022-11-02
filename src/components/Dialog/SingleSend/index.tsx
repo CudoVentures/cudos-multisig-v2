@@ -18,7 +18,7 @@ import AssetsTable from 'components/AssetsTable/AssetsTable'
 import { CancelRoundedIcon, ModalContainer } from '../styles'
 import { initialState as initialModalState } from 'store/modals'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
-import { handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
+import { formatSendAmount, handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
 import { executeMsgs, getSingleSendMsgAndFees } from '../ReusableModal/helpers'
 import { isValidCudosAddress } from 'utils/validation'
 import { SelectFromAddrBookBtn, SelectFromAddrBookDropDown } from '../MultiSend/helperComponents'
@@ -32,6 +32,7 @@ import {
     GENERAL_FAILURE_TITLE,
     INSUFFICIENT_BALANCE,
     INVALID_DATA_PROMPT_MSG,
+    MINIMUM_GAS_FEE,
     NATIVE_TOKEN_DENOM,
     PROPOSAL_CREATION_FAILURE_TITLE,
     PROPOSAL_CREATION_LOADING_TITLE,
@@ -230,13 +231,13 @@ const SingleSend = () => {
     }
 
     const maxingOut = () => {
+        if (new BigNumber(chosenBalance!.amount!).isLessThan(amountToAcudos(MINIMUM_GAS_FEE))) {
+            return
+        }
+
+        const amount = formatSendAmount(chosenBalance!)
+        setAmountToSend(amount)
         setMaxOut(true)
-        const tempAmount = parseFloat(handleFullBalanceToPrecision(
-            chosenBalance!.amount!,
-            2,
-            chosenBalance!.denom!
-        ))
-        setAmountToSend(tempAmount)
     }
 
     const isAdminTransfer = () => {
@@ -258,7 +259,7 @@ const SingleSend = () => {
                 neededFees.isLessThanOrEqualTo(cudosBalance)
         }
 
-        return new BigNumber(transferAmount).plus(neededFees).isLessThanOrEqualTo(accountBalance)
+        return new BigNumber(transferAmount).isLessThanOrEqualTo(accountBalance)
     }
 
     const getTooltip = (): string => {

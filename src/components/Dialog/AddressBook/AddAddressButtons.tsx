@@ -116,7 +116,8 @@ const AddAddressButtons = () => {
             if (!fail) {
                 const newAddressBook = { ...addressBook, [userAddress]: userName }
                 dispatch(updateUser({
-                    addressBook: newAddressBook
+                    addressBook: newAddressBook,
+                    newAddedAddress: userAddress
                 }))
 
                 const { address } = await getConnectedUserAddressAndName(connectedLedger!)

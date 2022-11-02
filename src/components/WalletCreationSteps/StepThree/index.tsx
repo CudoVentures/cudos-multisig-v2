@@ -40,6 +40,7 @@ import {
   getComparator, 
   EnhancedTableProps
 } from 'utils/tableSortingHelper'
+import { updateUser } from 'store/user'
 
 const headCells: readonly HeadCell[] = [
   {
@@ -139,7 +140,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 const StepThree = () => {
 
   const dispatch = useDispatch()
-  const { addressBook } = useSelector((state: RootState) => state.userState)
+  const { addressBook, newAddedAddress } = useSelector((state: RootState) => state.userState)
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TableData>('name');
   const [copied, setCopied] = useState<boolean>(false)
@@ -225,6 +226,26 @@ const StepThree = () => {
   const handleAddressBookOpen = () => {
     dispatch(updateModalState({ addNewAddress: true, openAddressBook: true }))
   }
+
+  const checkForNewAddedAddress = () => {
+    if (!newAddedAddress || newAddedAddress == '') {
+      return
+    }
+
+    const newSelected = selected
+    newSelected.push(newAddedAddress)
+
+    addSelectedMembersToWalletObject(newSelected)
+    setSelected(newSelected);
+
+    dispatch(updateUser({
+      newAddedAddress: ''
+    }))
+  }
+
+  useEffect(() => {
+    checkForNewAddedAddress()
+  }, [newAddedAddress])
 
   useEffect(() => {
     addSelectedMembersToWalletObject([])

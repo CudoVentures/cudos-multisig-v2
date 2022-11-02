@@ -19,7 +19,7 @@ import AssetsTable from 'components/AssetsTable/AssetsTable'
 import { CancelRoundedIcon, ModalContainer } from '../styles'
 import { initialState as initialModalState } from 'store/modals'
 import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
-import { handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
+import { formatSendAmount, handleFullBalanceToPrecision, separateFractions } from 'utils/regexFormatting'
 import { getSigningClient } from 'utils/config'
 import { MultiSendUser } from 'utils/multiSendTableHelper'
 import { chainIDToAlias } from 'components/Layout/Networkinfo'
@@ -33,6 +33,7 @@ import {
     GENERAL_FAILURE_MSG, 
     GENERAL_FAILURE_TITLE, 
     INSUFFICIENT_BALANCE, 
+    MINIMUM_GAS_FEE, 
     NATIVE_TOKEN_DENOM, 
     WALLET_FUNDING_FAILURE_TITLE, 
     WALLET_FUNDING_LOADING_TITLE,
@@ -105,6 +106,7 @@ const FundWallet = () => {
 
     const generateFundWalletMsg = async () => {
         try {
+            await estimateFee()
             const { msg, fee } = await getFundWalletMsgAndFees()
             setMsg(msg)
             setFees(fee)
@@ -221,13 +223,13 @@ const FundWallet = () => {
     }
 
     const maxingOut = () => {
+        if (new BigNumber(chosenBalance!.amount!).isLessThan(amountToAcudos(MINIMUM_GAS_FEE))) {
+            return
+        }
+
+        const amount = formatSendAmount(chosenBalance!)
+        setAmountToSend(amount)
         setMaxOut(true)
-        const tempAmount = parseFloat(handleFullBalanceToPrecision(
-            chosenBalance!.amount!, 
-            2, 
-            chosenBalance!.denom!
-        ))
-        setAmountToSend(tempAmount)
     }
 
     const isAdminTransfer = () => {
@@ -290,6 +292,24 @@ const FundWallet = () => {
          )
      }
     
+    const estimateFee = async () => {
+        const currentBalance = new BigNumber(chosenBalance!.amount!)
+        if (isAdminTransfer() || currentBalance.isLessThan(amountToAcudos(MINIMUM_GAS_FEE))) {
+            return
+        }
+        
+        let estimate = await getFundWalletMsgAndFees()
+        const fee = estimate.fee.amount[0].amount
+        const sendAmount = new BigNumber(amountToAcudos(amountToSend))
+        if (currentBalance.isLessThan(sendAmount.plus(fee))) {
+            const sendAmountAfterFee = formatSendAmount({
+                amount: sendAmount.minus(fee).toString(10),
+                denom: chosenBalance!.denom!
+            })
+            setAmountToSend(sendAmountAfterFee)
+        }
+    }
+
     return (
         <MuiDialog
         BackdropProps={defaultStyles.defaultBackDrop}

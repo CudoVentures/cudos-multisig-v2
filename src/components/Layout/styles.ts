@@ -3,20 +3,26 @@ import { styled, Box } from '@mui/material'
 import theme from '../../theme'
 
 export const styles = {
+  layoutHolder: {
+    height: '96.5vh',
+    width: '99.7vw',
+    display: 'grid',
+    alignContent: 'space-between'
+  },
   anchorStyle: {
-    alignItems: 'center', 
-    textDecoration: 'none', 
+    alignItems: 'center',
+    textDecoration: 'none',
     display: 'flex'
   },
   networkInfoHolder: {
-    width: 'max-content', 
-    marginRight: '20px', 
-    display: 'flex', 
+    width: 'max-content',
+    marginRight: '20px',
+    display: 'flex',
     alignItems: 'center'
   },
   avatarStyling: {
-    borderRadius: "0px", 
-    width: '18px', 
+    borderRadius: "0px",
+    width: '18px',
     height: '18px'
   },
   menuContainer: {
@@ -53,7 +59,7 @@ export const styles = {
     float: 'right',
     fontSize: '14px',
     height: '224px',
-    minWidth: '224px',
+    width: '100%',
     fontWeight: '500',
     display: 'flex',
     borderRadius: '0px 0px 20px 20px',
@@ -75,12 +81,13 @@ export const styles = {
   footerContainer: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     bottom: 0,
     right: 0,
     left: 0,
     width: 'inherit',
-    padding: '20px 0 10px 0'
+    padding: '1rem 1rem 0 1rem',
+    marginBottom: '-20px'
   }
 } as const
 

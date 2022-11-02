@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 import '@mui/material/styles'
 import { SxProps, Theme } from '@mui/material'
+import { Window as KeplrWindow } from "@keplr-wallet/types"
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -25,6 +26,10 @@ declare module '@mui/material/styles' {
 }
 
 declare global {
+  interface Window extends KeplrWindow {
+    cosmostation: any
+  }
+
   type Override<T1, T2> = Omit<T1, keyof T2> & T2
 
   type ComponentDefault = {
