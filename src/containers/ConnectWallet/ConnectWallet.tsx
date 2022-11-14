@@ -11,19 +11,16 @@ import Dialog from 'components/Dialog'
 import { updateUser } from 'store/user'
 import { RootState } from 'store'
 import Header from 'components/Layout/Header'
-import { connectUser, getSigningClient } from 'utils/config'
+import { connectUser } from 'utils/config'
 import { useState } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 
 import {
   COSMOSTATION_LEDGER,
   DEFAULT_LOGIN_FAILURE_MSG,
-  FIREBASE_AUTH_NONCE_URL,
-  FIREBASE_AUTH_VERIFY_URL,
   KEPLR_LEDGER,
   LOGIN_FAIL_TITLE
 } from 'utils/constants'
-import axios from 'axios'
 import { authenticate } from 'utils/firebase'
 
 const ConnectWallet = () => {
