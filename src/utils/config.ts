@@ -5,7 +5,6 @@ import { CHAIN_ID, COSMOSTATION_LEDGER, KEPLR_LEDGER, RPC_ADDRESS } from "./cons
 import { userState } from "store/user";
 import { connectKeplrLedger } from "ledgers/KeplrLedger";
 import { connectCosmostationLedger } from "ledgers/CosmostationLedger";
-import { Firebase } from "./firebase";
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from "./helpers";
 import { isValidCudosAddress } from "./validation";
 
@@ -76,7 +75,6 @@ export const connectUser = async (ledgerType: string): Promise<userState> => {
     const currentBalances = await getAccountBalances(address)
     const admin = checkForAdminToken(currentBalances)
     const userBalance = getNativeBalance(currentBalances)
-    const addressBook = await Firebase.getAddressBook(address)
 
     const connectedUser: userState = {
         accountName: accountName,
@@ -85,7 +83,6 @@ export const connectUser = async (ledgerType: string): Promise<userState> => {
         balances: currentBalances,
         nativeBalance: userBalance,
         isAdmin: admin,
-        addressBook: addressBook,
         connectedLedger: ledgerType,
     }
 

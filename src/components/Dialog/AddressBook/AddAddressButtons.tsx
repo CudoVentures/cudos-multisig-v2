@@ -12,7 +12,7 @@ import { RootState } from 'store'
 import { initialState as initialModalState } from 'store/modals'
 import { CSVLink } from "react-csv"
 import { HtmlTooltip } from 'utils/multiSendTableHelper'
-import { Firebase } from 'utils/firebase'
+import { saveAddressBook } from 'utils/firebase'
 import { getConnectedUserAddressAndName } from 'utils/config'
 
 import {
@@ -83,10 +83,9 @@ const AddAddressButtons = () => {
                 message: FILE_ERROR_MSG
             }))
         } else {
-            dispatch(updateUser({ addressBook: txBatch }))
-
             const { address } = await getConnectedUserAddressAndName(connectedLedger!)
-            await Firebase.saveAddressBook(address, txBatch);
+            await saveAddressBook(address, txBatch);
+            dispatch(updateUser({ addressBook: txBatch }));
         }
     }
 
@@ -114,14 +113,15 @@ const AddAddressButtons = () => {
             }
 
             if (!fail) {
-                const newAddressBook = { ...addressBook, [userAddress]: userName }
+                const newAddressBook = { ...addressBook, [userAddress]: userName };
+                const { address } = await getConnectedUserAddressAndName(connectedLedger!)
+
+                await saveAddressBook(address, newAddressBook);
+
                 dispatch(updateUser({
                     addressBook: newAddressBook,
                     newAddedAddress: userAddress
                 }))
-
-                const { address } = await getConnectedUserAddressAndName(connectedLedger!)
-                await Firebase.saveAddressBook(address, newAddressBook);
 
                 localStorage.removeItem('addressBookAccountName')
                 localStorage.removeItem('addressBookAccountAddress')
@@ -164,13 +164,13 @@ const AddAddressButtons = () => {
                     ...updatedAddressBook,
                     [newRecord.address]: newRecord.name
                 }
-                dispatch(updateUser({
-                    addressBook: newAddressBook
-                }))
-                dispatch(updateModalState({ editAddressBookRecord: false }))
 
                 const { address } = await getConnectedUserAddressAndName(connectedLedger!)
-                await Firebase.saveAddressBook(address, newAddressBook);
+                await saveAddressBook(address, newAddressBook);
+
+                dispatch(updateUser({ addressBook: newAddressBook }))
+
+                dispatch(updateModalState({ editAddressBookRecord: false }))
 
                 return
             }

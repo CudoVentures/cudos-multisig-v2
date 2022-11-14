@@ -22,11 +22,14 @@ import { COSMOSTATION_LEDGER, KEPLR_LEDGER } from 'utils/constants'
 import { connectUser } from 'utils/config'
 import { initialState as initialUserState } from 'store/user'
 import { updateModalState } from 'store/modals'
+import { auth, getAddressBook } from 'utils/firebase'
+import { signInWithCustomToken } from 'firebase/auth'
 
 const App = () => {
   const location = useLocation()
   const apolloClient = useApollo(null)
   const themeColor = useSelector((state: RootState) => state.settings.theme)
+  const { firebaseToken, address } = useSelector((state: RootState) => state.userState);
   const dispatch = useDispatch()
 
   const connectAccount = useCallback(async (ledgerType: string) => {
@@ -69,6 +72,23 @@ const App = () => {
     }
 
   }, [connectAccount])
+
+  useEffect(() => {
+    if (firebaseToken) {
+      signInWithCustomToken(auth, firebaseToken!).catch(e => console.error(e));
+    }
+  }, [firebaseToken])
+  
+  useEffect(() => {
+    if (firebaseToken) {
+      const fetchAddressBook = async () => {
+        const addressBook = await getAddressBook(address!);
+        dispatch(updateUser({ addressBook }));
+      };
+
+      fetchAddressBook().catch(e => console.error(e));
+    }
+  }, [firebaseToken])
 
   return (
     <Container maxWidth='xl' style={{ display: 'contents', height: '100vh', width: '100vw', overflow: 'auto' }}>
