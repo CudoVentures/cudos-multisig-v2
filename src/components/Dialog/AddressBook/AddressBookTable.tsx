@@ -15,7 +15,7 @@ import copy from 'copy-to-clipboard'
 import { formatAddress } from 'utils/helpers';
 import { updateUser } from 'store/user';
 import { updateModalState } from 'store/modals';
-import { Firebase } from 'utils/firebase'
+import { saveAddressBook } from 'utils/firebase'
 import { getConnectedUserAddressAndName } from 'utils/config'
 
 import { 
@@ -166,7 +166,7 @@ export default function AddressBookTable() {
     }
 
     const { address } = await getConnectedUserAddressAndName(connectedLedger!)
-    await Firebase.saveAddressBook(address, newAddressBook);
+    await saveAddressBook(address, newAddressBook);
     dispatch(updateUser({
       addressBook: newAddressBook
     }))

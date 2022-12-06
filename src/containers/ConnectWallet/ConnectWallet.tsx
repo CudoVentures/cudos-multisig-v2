@@ -21,6 +21,7 @@ import {
   KEPLR_LEDGER,
   LOGIN_FAIL_TITLE
 } from 'utils/constants'
+import { authenticate } from 'utils/firebase'
 
 const ConnectWallet = () => {
 
@@ -36,6 +37,10 @@ const ConnectWallet = () => {
       setLoading(new Map(loading.set(ledgerType, true)))
       const connectedUser = await connectUser(ledgerType)
       dispatch(updateUser(connectedUser))
+
+      const firebaseToken = await authenticate(connectedUser.address!, ledgerType);
+      dispatch(updateUser({firebaseToken: firebaseToken}));
+
       navigate('/welcome')
 
     } catch (error) {
