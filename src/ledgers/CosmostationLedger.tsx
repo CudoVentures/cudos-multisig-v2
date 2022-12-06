@@ -1,12 +1,12 @@
 import { cosmos, InstallError } from "@cosmostation/extension-client"
 
-import { 
-  API_ADDRESS, 
-  CHAIN_ID, 
-  CHAIN_NAME, 
-  CURRENCY_DISPLAY_NAME, 
-  GAS_PRICE, 
-  NATIVE_TOKEN_DENOM 
+import {
+  API_ADDRESS,
+  CHAIN_ID,
+  CHAIN_NAME,
+  CURRENCY_DISPLAY_NAME,
+  GAS_PRICE,
+  NATIVE_TOKEN_DENOM
 } from "utils/constants"
 
 export const connectCosmostationLedger = async (): Promise<{ address: string; accountName: string; }> => {
@@ -16,9 +16,9 @@ export const connectCosmostationLedger = async (): Promise<{ address: string; ac
 
   try {
     const provider = await cosmos()
-    const activatedChains = await provider.getActivatedChains()
+    const activatedChains = await provider.getActivatedChainIds()
 
-    if (!activatedChains.includes(CHAIN_NAME.toLowerCase())) {
+    if (!activatedChains.includes(CHAIN_ID.toLowerCase())) {
       await provider.addChain({
         chainId: CHAIN_ID,
         chainName: CHAIN_NAME,
@@ -36,7 +36,8 @@ export const connectCosmostationLedger = async (): Promise<{ address: string; ac
       })
     }
 
-    const acccount = await provider.requestAccount(CHAIN_NAME)
+     // Although the method suggests CHAIN_NAME as parameter only, it can work with CHAIN_ID too!
+    const acccount = await provider.requestAccount(CHAIN_ID)
     userAccountAddress = acccount.address
     userAccountName = acccount.name
 
