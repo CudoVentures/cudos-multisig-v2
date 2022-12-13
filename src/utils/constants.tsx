@@ -13,6 +13,10 @@ import { ReactComponent as MediumIcon } from 'assets/vectors/medium.svg'
 import { ReactComponent as YouTubeIcon } from 'assets/vectors/youtube.svg'
 import { ReactComponent as FacebookIcon } from 'assets/vectors/facebook.svg'
 import { ReactComponent as SpotifyIcon } from 'assets/vectors/spotify.svg'
+import KeplrLogo from 'assets/vectors/keplr-logo.svg'
+import CosmostationLogo from 'assets/vectors/cosmostation-logo.svg'
+import { SUPPORTED_WALLET } from 'cudosjs'
+import { styles } from './styles'
 
 // ENV
 export const RPC_ADDRESS = import.meta.env.VITE_APP_RPC || process.env.VITE_APP_RPC || ""
@@ -40,8 +44,12 @@ export const DEFAULT_MEMO = 'Created with CUDOS MultiSig'
 export const DEFAULT_VOTING_WEIGHT = 1
 export const DEFAULT_MULTIPLIER = 1.3
 export const MINIMUM_GAS_FEE = 0.5
-export const KEPLR_LEDGER = 'Keplr'
-export const COSMOSTATION_LEDGER = 'Cosmostation'
+
+export const SUPPORTED_WALLET_LOGOS = {
+    [SUPPORTED_WALLET.Keplr]: <img style={styles.keplrLogo} src={KeplrLogo} alt="Keplr Logo" />,
+    [SUPPORTED_WALLET.Cosmostation]: <img style={styles.cosmostationLogo} src={CosmostationLogo} alt="Cosmostation Logo" />
+}
+
 export const FOOTER = {
     LEFT_LINKS: [
         { text: 'Terms & Conditions', url: 'https://www.cudos.org/terms-and-conditions/' },

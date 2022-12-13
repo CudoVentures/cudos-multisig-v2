@@ -27,6 +27,7 @@ declare module '@mui/material/styles' {
 
 declare global {
   interface Window extends KeplrWindow {
+    keplr: any,
     cosmostation: any
   }
 

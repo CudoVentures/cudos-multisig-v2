@@ -1,7 +1,7 @@
-import { OfflineSigner, StargateClient } from "cudosjs";
+import { isExtensionEnabled, OfflineSigner, StargateClient, SUPPORTED_WALLET } from "cudosjs";
 import { SigningStargateClient } from "cudosjs";
 import { getOfflineSigner as cosmostationSigner } from "@cosmostation/cosmos-client";
-import { CHAIN_ID, COSMOSTATION_LEDGER, KEPLR_LEDGER, RPC_ADDRESS } from "./constants";
+import { CHAIN_ID, RPC_ADDRESS } from "./constants";
 import { userState } from "store/user";
 import { connectKeplrLedger } from "ledgers/KeplrLedger";
 import { connectCosmostationLedger } from "ledgers/CosmostationLedger";
@@ -14,24 +14,24 @@ export const queryClient = (async (): Promise<StargateClient> => {
     return client
 })()
 
-const getOfflineSignerByType = async (ledgerType: string): Promise<OfflineSigner | undefined> => {
+const getOfflineSignerByType = async (walletName: SUPPORTED_WALLET): Promise<OfflineSigner | undefined> => {
 
-    if (ledgerType === KEPLR_LEDGER) {
+    if (walletName === SUPPORTED_WALLET.Keplr) {
         return window.getOfflineSigner!(CHAIN_ID)
     }
 
-    if (ledgerType === COSMOSTATION_LEDGER) {
+    if (walletName === SUPPORTED_WALLET.Cosmostation) {
         return cosmostationSigner(CHAIN_ID)
     }
 
     return undefined
 }
 
-export const getSigningClient = async (ledgerType: string): Promise<SigningStargateClient> => {
+export const getSigningClient = async (walletName: SUPPORTED_WALLET): Promise<SigningStargateClient> => {
 
-    const offlineSigner = await getOfflineSignerByType(ledgerType)
+    const offlineSigner = await getOfflineSignerByType(walletName)
 
-    if (window.keplr) {
+    if (isExtensionEnabled(walletName)) {
         window.keplr.defaultOptions = {
             sign: {
                 preferNoSetFee: true,
@@ -46,22 +46,22 @@ export const getSigningClient = async (ledgerType: string): Promise<SigningStarg
     return SigningStargateClient.connectWithSigner(RPC_ADDRESS, offlineSigner)
 }
 
-const connectLedgerByType = async (ledgerType: string) => {
+const connectLedgerByType = async (walletName: SUPPORTED_WALLET) => {
 
-    if (ledgerType === KEPLR_LEDGER) {
+    if (walletName === SUPPORTED_WALLET.Keplr) {
         return connectKeplrLedger()
     }
 
-    if (ledgerType === COSMOSTATION_LEDGER) {
+    if (walletName === SUPPORTED_WALLET.Cosmostation) {
         return connectCosmostationLedger()
     }
 
     return { address: '', accountName: '' }
 }
 
-export const getConnectedUserAddressAndName = async (ledgerType: string): Promise<{ address: string; accountName: string; }> => {
+export const getConnectedUserAddressAndName = async (walletName: SUPPORTED_WALLET): Promise<{ address: string; accountName: string; }> => {
 
-    const { address, accountName } = await connectLedgerByType(ledgerType)
+    const { address, accountName } = await connectLedgerByType(walletName)
 
     if (!isValidCudosAddress(address)) {
         throw new Error("Invalid ledger");
@@ -70,9 +70,9 @@ export const getConnectedUserAddressAndName = async (ledgerType: string): Promis
     return { address: address, accountName: accountName }
 }
 
-export const connectUser = async (ledgerType: string): Promise<userState> => {
+export const connectUser = async (walletName: SUPPORTED_WALLET): Promise<userState> => {
 
-    const { address, accountName } = await getConnectedUserAddressAndName(ledgerType)
+    const { address, accountName } = await getConnectedUserAddressAndName(walletName)
     const currentBalances = await getAccountBalances(address)
     const admin = checkForAdminToken(currentBalances)
     const userBalance = getNativeBalance(currentBalances)
@@ -86,7 +86,7 @@ export const connectUser = async (ledgerType: string): Promise<userState> => {
         nativeBalance: userBalance,
         isAdmin: admin,
         addressBook: addressBook,
-        connectedLedger: ledgerType,
+        connectedLedger: walletName,
     }
 
     return connectedUser
