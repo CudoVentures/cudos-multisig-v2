@@ -11,7 +11,6 @@ import copy from "copy-to-clipboard"
 import EditIcon from 'assets/vectors/blue-edit-icon.svg'
 import ToolTipIcon from 'assets/vectors/tooltip-icon.svg'
 import { getSigningClient } from "utils/config"
-import { Coin, DeliverTxResponse, EncodeObject, GasPrice, StdFee } from "cudosjs"
 import { convertVotingPeriodToSeconds, formatAddress } from "utils/helpers"
 import { createArrayOfCoinsFromMapper, createArrayOfRecipients, HtmlTooltip, multisendRow, MultiSendUser, totalAmountDue } from "utils/multiSendTableHelper"
 import { Fragment, useState } from "react"
@@ -30,11 +29,20 @@ import {
     NATIVE_TOKEN_DENOM
 } from "utils/constants"
 
+import {
+    Coin,
+    DeliverTxResponse,
+    EncodeObject,
+    GasPrice,
+    StdFee,
+    SUPPORTED_WALLET
+} from "cudosjs"
+
 export const executeMsgs = async (
     signer: string,
     msgs: EncodeObject[],
     fee: StdFee,
-    connectedLedger: string
+    connectedLedger: SUPPORTED_WALLET
 ):
     Promise<DeliverTxResponse> => {
 
@@ -51,7 +59,7 @@ export const getMultiSendMsgAndFees = async (
     multisendRows: multisendRow[],
     walletAddress: string,
     signerAddress: string,
-    connectedLedger: string
+    connectedLedger: SUPPORTED_WALLET
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
@@ -81,7 +89,7 @@ export const getSingleSendMsgAndFees = async (
     amount: Coin[],
     walletAddress: string,
     signerAddress: string,
-    connectedLedger: string
+    connectedLedger: SUPPORTED_WALLET
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
@@ -104,7 +112,7 @@ export const getMembersUpdateMsgAndFees = async (
     walletId: number,
     walletAddress: string,
     signerAddress: string,
-    connectedLedger: string
+    connectedLedger: SUPPORTED_WALLET
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
@@ -127,7 +135,7 @@ export const getWalletDecisionPolicyUpdateMsgAndFees = async (
     votingPeriod: number,
     walletAddress: string,
     signerAddress: string,
-    connectedLedger: string
+    connectedLedger: SUPPORTED_WALLET
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
@@ -155,7 +163,7 @@ export const getWalletMetadataUpdateMsgAndFees = async (
     walletId: number,
     walletAddress: string,
     signerAddress: string,
-    connectedLedger: string
+    connectedLedger: SUPPORTED_WALLET
 ): Promise<{
     msg: EncodeObject;
     fee: StdFee;
