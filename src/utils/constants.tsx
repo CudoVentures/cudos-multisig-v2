@@ -34,6 +34,7 @@ export const FIREBASE_PROJECT_ID = import.meta.env.VITE_APP_FIREBASE_PROJECT_ID 
 export const FIREBASE_AUTH_EMAIL = import.meta.env.VITE_APP_FIREBASE_AUTH_EMAIL || process.env.VITE_APP_FIREBASE_AUTH_EMAIL || ""
 export const FIREBASE_AUTH_PASSWORD = import.meta.env.VITE_APP_FIREBASE_AUTH_PASSWORD || process.env.VITE_APP_FIREBASE_AUTH_PASSWORD || ""
 export const FIREBASE_COLLECTION_NAME = import.meta.env.VITE_APP_FIREBASE_COLLECTION_NAME || process.env.VITE_APP_FIREBASE_COLLECTION_NAME || ""
+export const DEPLOYMENT_VERSION = import.meta.env.VITE_APP_DEPLOYMENT_VERSION || process.env.VITE_APP_DEPLOYMENT_VERSION || ""
 
 // General config
 export const ADMIN_TOKEN_DENOM = 'cudosAdmin'
@@ -55,7 +56,8 @@ export const FOOTER = {
         { text: 'Terms & Conditions', url: 'https://www.cudos.org/terms-and-conditions/' },
         { text: 'Privacy Policy', url: 'https://www.cudos.org/privacy-policy' },
         { text: 'cudos.org', url: 'https://www.cudos.org/' },
-        { text: `License © 2018 - ${moment().year()}`, url: 'https://www.cudos.org/' }
+        { text: `License © 2018 - ${moment().year()}`, url: 'https://www.cudos.org/' },
+        { text: `${DEPLOYMENT_VERSION}`, url: `https://github.com/CudoVentures/cudos-multisig-v2/releases/tag/${DEPLOYMENT_VERSION}` }
     ],
     RIGHT_LINKS: [
         { icon: <TwitterIcon />, url: 'https://twitter.com/CUDOS_' },
