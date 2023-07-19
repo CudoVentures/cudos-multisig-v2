@@ -37,6 +37,7 @@ export interface userState {
   chosenBalance?: Coin
   connectedLedger?: SUPPORTED_WALLET | undefined
   newAddedAddress?: string
+  firebaseToken?: string
 }
 
 export const emptyWallet: Wallet = {
@@ -67,8 +68,9 @@ export const initialState: userState = {
   selectedWallet: emptyWallet,
   addressBook: {},
   chosenBalance: { denom: '', amount: '' },
-  connectedLedger: undefined,
-  newAddedAddress: ''
+  connectedLedger: '',
+  newAddedAddress: '',
+  firebaseToken: ''
 }
 
 export const userStateSlice = createSlice({

@@ -20,6 +20,7 @@ import {
   LOGIN_FAIL_TITLE,
   SUPPORTED_WALLET_LOGOS
 } from 'utils/constants'
+import { authenticate } from 'utils/firebase'
 
 import {
   detectUserBrowser,
@@ -54,6 +55,10 @@ const ConnectWallet = () => {
       setLoading(new Map(loading.set(walletName, true)))
       const connectedUser = await connectUser(walletName)
       dispatch(updateUser(connectedUser))
+
+      const firebaseToken = await authenticate(connectedUser.address!, ledgerType);
+      dispatch(updateUser({firebaseToken: firebaseToken}));
+
       navigate('/welcome')
 
     } catch (error) {

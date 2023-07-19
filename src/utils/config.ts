@@ -5,7 +5,6 @@ import { CHAIN_ID, RPC_ADDRESS } from "./constants";
 import { userState } from "store/user";
 import { connectKeplrLedger } from "ledgers/KeplrLedger";
 import { connectCosmostationLedger } from "ledgers/CosmostationLedger";
-import { Firebase } from "./firebase";
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from "./helpers";
 import { isValidCudosAddress } from "./validation";
 
@@ -76,7 +75,6 @@ export const connectUser = async (walletName: SUPPORTED_WALLET): Promise<userSta
     const currentBalances = await getAccountBalances(address)
     const admin = checkForAdminToken(currentBalances)
     const userBalance = getNativeBalance(currentBalances)
-    const addressBook = await Firebase.getAddressBook(address)
 
     const connectedUser: userState = {
         accountName: accountName,
