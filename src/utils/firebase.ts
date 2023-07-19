@@ -27,11 +27,11 @@ export const authenticate = async (address: string, collection: string, connecte
     }
 }
 
-export const getAddressBook = async (address): Promise<AddressBook> => {
+export const getAddressBook = async (address: string): Promise<AddressBook> => {
     try {
         const addressBookDoc = await getDoc(doc(firestore, FIREBASE_ADDRESS_BOOK_COLLECTION, address));
         return addressBookDoc.data()?.addressBook ?? {};
-    } catch {
+    } catch (error) {
         throw new Error("Error while getting address book from Firebase")
     }
 };
@@ -39,7 +39,7 @@ export const getAddressBook = async (address): Promise<AddressBook> => {
 export const saveAddressBook = async (address: string, addressBook: AddressBook): Promise<void> => {
     try {
         const addressBookDoc = doc(firestore, FIREBASE_ADDRESS_BOOK_COLLECTION, address);
-        return setDoc(addressBookDoc, { addressBook });
+        return setDoc(addressBookDoc, { addressBook }, { merge: true });
     } catch {
         throw new Error("Error while saving address book to Firebase")
     }
