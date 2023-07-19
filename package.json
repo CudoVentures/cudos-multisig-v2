@@ -23,6 +23,7 @@
     "appollo": "^0.1.13",
     "axios": "^0.27.2",
     "bignumber.js": "^9.0.2",
+    "buffer": "^6.0.3",
     "csstype": "^3.0.10",
     "cudosjs": "^1.2.1",
     "firebase": "^9.9.1",
