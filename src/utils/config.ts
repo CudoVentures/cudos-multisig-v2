@@ -7,6 +7,7 @@ import { connectKeplrLedger } from "ledgers/KeplrLedger";
 import { connectCosmostationLedger } from "ledgers/CosmostationLedger";
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from "./helpers";
 import { isValidCudosAddress } from "./validation";
+import { authenticate } from "./firebase";
 
 export const queryClient = (async (): Promise<StargateClient> => {
     const client = await StargateClient.connect(RPC_ADDRESS)
@@ -73,6 +74,7 @@ export const connectUser = async (walletName: SUPPORTED_WALLET): Promise<userSta
 
     const { address, accountName } = await getConnectedUserAddressAndName(walletName)
     const currentBalances = await getAccountBalances(address)
+    const firebaseToken = await authenticate(address, walletName)
     const admin = checkForAdminToken(currentBalances)
     const userBalance = getNativeBalance(currentBalances)
 
@@ -83,7 +85,7 @@ export const connectUser = async (walletName: SUPPORTED_WALLET): Promise<userSta
         balances: currentBalances,
         nativeBalance: userBalance,
         isAdmin: admin,
-        addressBook: addressBook,
+        firebaseToken: firebaseToken,
         connectedLedger: walletName,
     }
 

@@ -55,10 +55,6 @@ const ConnectWallet = () => {
       setLoading(new Map(loading.set(walletName, true)))
       const connectedUser = await connectUser(walletName)
       dispatch(updateUser(connectedUser))
-
-      const firebaseToken = await authenticate(connectedUser.address!, ledgerType);
-      dispatch(updateUser({firebaseToken: firebaseToken}));
-
       navigate('/welcome')
 
     } catch (error) {
