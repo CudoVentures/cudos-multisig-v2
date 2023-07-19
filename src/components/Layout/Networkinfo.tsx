@@ -71,12 +71,12 @@ const NetworkInfo = () => {
       >
         <Box gap={3} style={styles.networkSelectionMenuContainer}>
           {
-            networksToDisplayInMenu.map((network) => {
+            networksToDisplayInMenu.map((network, idx) => {
               const [hovered, setHovered] = useState<boolean>(false)
 
               return (
                 CHAIN_ID !== network ?
-                  <Box onMouseOver={() => setHovered(true)} onMouseOut={() => setHovered(false)}>
+                  <Box key={network + idx.toString()} onMouseOver={() => setHovered(true)} onMouseOut={() => setHovered(false)}>
                     <a style={styles.anchorStyle} href={chainDetails.LINKS[network]}>
                       <img
                         style={{ marginRight: '10px' }}
