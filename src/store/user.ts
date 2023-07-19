@@ -1,4 +1,4 @@
-import { Coin } from 'cudosjs'
+import { Coin, SUPPORTED_WALLET } from 'cudosjs'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Member } from './walletObject'
@@ -35,7 +35,7 @@ export interface userState {
   selectedWallet?: Wallet
   addressBook?: AddressBook
   chosenBalance?: Coin
-  connectedLedger?: string
+  connectedLedger?: SUPPORTED_WALLET | undefined
   newAddedAddress?: string
   firebaseToken?: string
 }

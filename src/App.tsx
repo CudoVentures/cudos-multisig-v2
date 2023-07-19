@@ -2,7 +2,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { CssBaseline, Container } from '@mui/material'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
-
 import Layout from 'components/Layout'
 import RequireLedger from 'components/RequireLedger/RequireLedger'
 import ConnectWallet from 'containers/ConnectWallet/ConnectWallet'
@@ -13,17 +12,16 @@ import { RootState } from 'store'
 import { useCallback, useEffect } from 'react'
 import { ApolloProvider } from '@apollo/client'
 import { useApollo } from './graphql/client'
-
-import '@fontsource/poppins'
 import { updateUser } from 'store/user'
 import WalletDetails from 'containers/WalletDetails'
 import RequireWallet from 'components/RequireWallet/RequireWallet'
-import { COSMOSTATION_LEDGER, KEPLR_LEDGER } from 'utils/constants'
 import { connectUser } from 'utils/config'
 import { initialState as initialUserState } from 'store/user'
 import { updateModalState } from 'store/modals'
 import { auth, getAddressBook } from 'utils/firebase'
 import { signInWithCustomToken } from 'firebase/auth'
+import { isExtensionEnabled, SUPPORTED_WALLET } from 'cudosjs'
+import '@fontsource/poppins'
 
 const App = () => {
   const location = useLocation()
@@ -32,7 +30,7 @@ const App = () => {
   const { firebaseToken, address } = useSelector((state: RootState) => state.userState);
   const dispatch = useDispatch()
 
-  const connectAccount = useCallback(async (ledgerType: string) => {
+  const connectAccount = useCallback(async (walletName: SUPPORTED_WALLET) => {
 
     try {
       dispatch(updateModalState({
@@ -40,7 +38,7 @@ const App = () => {
         loadingType: true
       }))
       dispatch(updateUser(initialUserState))
-      const connectedUser = await connectUser(ledgerType)
+      const connectedUser = await connectUser(walletName)
       dispatch(updateUser(connectedUser))
 
     } catch (error) {
@@ -55,18 +53,18 @@ const App = () => {
 
   useEffect(() => {
 
-    if (window.keplr) {
+    if (isExtensionEnabled(SUPPORTED_WALLET.Keplr)) {
       window.addEventListener("keplr_keystorechange",
         async () => {
-          await connectAccount(KEPLR_LEDGER)
+          await connectAccount(SUPPORTED_WALLET.Keplr)
           return
         });
     }
 
-    if (window.cosmostation) {
+    if (isExtensionEnabled(SUPPORTED_WALLET.Cosmostation)) {
       window.cosmostation.cosmos.on("accountChanged",
         async () => {
-          await connectAccount(COSMOSTATION_LEDGER)
+          await connectAccount(SUPPORTED_WALLET.Cosmostation)
           return
         });
     }

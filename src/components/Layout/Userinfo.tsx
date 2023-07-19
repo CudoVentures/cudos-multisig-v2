@@ -21,7 +21,7 @@ import { initialState as initialWalletObject, updateWalletObjectState } from 'st
 import { initialState as initialModalState, updateModalState } from 'store/modals'
 import { initialState as initialWalletCreationState, updateWalletCreationState } from 'store/walletCreation'
 import { updateSendFunds } from 'store/sendFunds'
-import { COSMOSTATION_LEDGER, KEPLR_LEDGER } from 'utils/constants'
+import { SUPPORTED_WALLET } from 'cudosjs'
 
 import {
   Typography,
@@ -59,7 +59,7 @@ const UserInfo = () => {
     dispatch(updateUser({ ...initialUserState }))
     dispatch(updateWalletObjectState({ ...initialWalletObject }))
     dispatch(updateModalState({ ...initialModalState }))
-    dispatch(updateWalletCreationState({...initialWalletCreationState}))
+    dispatch(updateWalletCreationState({ ...initialWalletCreationState }))
     dispatch(updateSendFunds({ ...initialSendFundsState }))
     navigate("/")
   }
@@ -71,7 +71,7 @@ const UserInfo = () => {
           <img src={CudosLogo} alt="Cudos logo" />
           <AccountBalance />
           <hr style={styles.fancyLine}></hr>
-          <div style={{display: 'contents'}}>
+          <div style={{ display: 'contents' }}>
             <Box
               sx={{
                 marginRight: '10px'
@@ -80,9 +80,9 @@ const UserInfo = () => {
               <Avatar
                 style={styles.avatarStyling}
                 src={
-                  connectedLedger === KEPLR_LEDGER ? KeplrLogo :
-                  connectedLedger === COSMOSTATION_LEDGER ? CosmostationLogo :
-                  WalletIcon
+                  connectedLedger === SUPPORTED_WALLET.Keplr ? KeplrLogo :
+                    connectedLedger === SUPPORTED_WALLET.Cosmostation ? CosmostationLogo :
+                      WalletIcon
                 }
                 alt="Wallet Logo"
               />
@@ -106,7 +106,7 @@ const UserInfo = () => {
       </Box>
       <Collapse
         onMouseLeave={() => setOpen(false)}
-        style={{marginTop: '-28px', zIndex: '-1' }}
+        style={{ marginTop: '-28px', zIndex: '-1' }}
         in={open}
       >
         <Box style={styles.dropdownMenuContainer}>
@@ -120,17 +120,17 @@ const UserInfo = () => {
                   flexDirection: 'column'
                 }}
               >
-                {isAdmin?
+                {isAdmin ?
                   <Typography
-                  sx={{ color: 'chocolate', fontSize: '12px', marginBottom: '10px' }}
-                >
-                  CUDOS NETWORK ADMIN
-                </Typography>
-                :null}
+                    sx={{ color: 'chocolate', fontSize: '12px', marginBottom: '10px' }}
+                  >
+                    CUDOS NETWORK ADMIN
+                  </Typography>
+                  : null}
                 <Typography
                   color="text.secondary"
                   sx={{ fontSize: '13px', marginBottom: '10px' }}
-                  
+
                 >
                   {formatAddress(address!, 20)}
                 </Typography>
@@ -164,7 +164,7 @@ const UserInfo = () => {
                 marginTop: '30px'
               }}
             >
-              <Button 
+              <Button
                 variant="contained"
                 color="primary"
                 onClick={() => handleDisconnect()}>Disconnect</Button>
