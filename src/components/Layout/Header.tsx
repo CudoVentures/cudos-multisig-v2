@@ -8,10 +8,10 @@ const Header = () => {
   const location = useLocation()
 
   return (
-    <Box sx= {location.pathname === '/' ? {padding: '1.45rem 1rem 1rem 1rem'}:{ padding: '1rem 1rem 1rem 1rem'}}>
-      <Box sx={{marginBottom: '10px', alignItems: 'center', display: 'flex', flex: '1' }}>
-        <a href={window.location.origin}>
-          <img src={LogoHeader} alt="logo"/>
+    <Box sx={location.pathname === '/' ? { padding: '1.45rem 1rem 1rem 1rem' } : { padding: '1rem 1rem 1rem 1rem' }}>
+      <Box sx={{ marginBottom: '10px', alignItems: 'center', display: 'flex', flex: '1' }}>
+        <a style={{ pointerEvents: location.pathname === '/' || location.pathname === '/welcome' ? 'none' : 'auto' }} href={window.location.origin}>
+          <img src={LogoHeader} alt="logo" />
         </a>
         {location.pathname === '/' ? null : (
           <Box

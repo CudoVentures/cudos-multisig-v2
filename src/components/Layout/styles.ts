@@ -99,8 +99,7 @@ export const StyledNetwork = styled(Box)(({ theme }) => ({
   height: '35px',
   marginRight: '20px',
   backgroundColor: theme.custom.backgrounds.primary,
-  zIndex: '10',
-  cursor: 'pointer'
+  zIndex: '10'
 }))
 
 export const StyledUser = styled(Box)(({ theme }) => ({

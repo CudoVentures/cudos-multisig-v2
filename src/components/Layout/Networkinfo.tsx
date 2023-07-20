@@ -8,62 +8,60 @@ import grayGlobusIcon from 'assets/vectors/gray-globus-icon.svg'
 import { OpenInNewRounded as OpenInNewRoundedIcon } from '@mui/icons-material'
 import { Typography, Box, Collapse } from '@mui/material'
 
+enum CHAIN_IDS {
+  local = 'cudos-local-network',
+  dev = 'cudos-dev-test-network',
+  private = 'cudos-testnet-private-3',
+  public = 'cudos-testnet-public-3',
+  mainnet = 'cudos-1'
+}
+
 const chainDetails = {
-  local: { aliasName: 'CUDOS Local Testnet' },
-  private: { aliasName: 'CUDOS Private Testnet' },
-  public: {
-    aliasName: 'CUDOS Public Testnet',
-    link: 'http://multisig.testnet.cudos.org'
+  CHAIN_IDS: {
+    [CHAIN_IDS.local]: { aliasName: 'CUDOS Local Testnet' },
+    [CHAIN_IDS.dev]: { aliasName: 'CUDOS Dev Environment' },
+    [CHAIN_IDS.private]: { aliasName: 'CUDOS Private Testnet' },
+    [CHAIN_IDS.public]: { aliasName: 'CUDOS Public Testnet' },
+    [CHAIN_IDS.mainnet]: { aliasName: 'CUDOS Main Network' },
   },
-  mainnet: {
-    aliasName: 'CUDOS Main Network',
-    link: 'http://multisig.cudos.org'
-  },
+  LINKS: {
+    [CHAIN_IDS.public]: 'http://multisig.testnet.cudos.org',
+    [CHAIN_IDS.mainnet]: 'http://multisig.cudos.org'
+  }
 }
 
 export const chainIDToAlias = (chainID: string): string => {
-
-  if (chainID.toLowerCase().includes('local')) {
-    return chainDetails.local.aliasName
-  }
-
-  if (chainID.toLowerCase().includes('private')) {
-    return chainDetails.private.aliasName
-  }
-
-  if (chainID.toLowerCase().includes('public')) {
-    return chainDetails.public.aliasName
-  }
-
-  if (chainID.toLowerCase() === 'cudos-1' || chainID.toLowerCase().includes('mainnet')) {
-    return chainDetails.mainnet.aliasName
-  }
-
-  return "Unidentified Network"
+  return chainDetails.CHAIN_IDS[chainID].aliasName || "Unidentified Network"
 }
 
 const NetworkInfo = () => {
-  const networksToDisplayInMenu = [chainDetails.public, chainDetails.mainnet]
+  const networksToDisplayInMenu = [CHAIN_IDS.public, CHAIN_IDS.mainnet]
   const [open, setOpen] = useState(false)
 
+  // Disabling network selection menu
+  const collapsable = false
+
   return (
-    <StyledNetwork>
-      <Box onClick={() => setOpen(!open)} style={styles.userContainer}>
+    <StyledNetwork sx={
+      !collapsable ? {} : { cursor: 'pointer' }}
+    >
+      <Box onClick={!collapsable ? () => { } : () => setOpen(true)} style={styles.userContainer}>
         <Box style={styles.userInnerContainer}>
           <img style={{ marginRight: '10px' }} src={globusIcon} alt="globus-icon" />
           <Typography>
             {chainIDToAlias(CHAIN_ID)}
           </Typography>
-          <Box style={{ marginLeft: '15px' }}>
-            <img
-              style={{
-                cursor: 'pointer',
-                transform: open ? 'rotate(180deg)' : 'rotate(360deg)'
-              }}
-              src={ArrowIcon}
-              alt="Arrow Icon"
-            />
-          </Box>
+          {collapsable ?
+            <Box style={{ marginLeft: '15px' }}>
+              <img
+                style={{
+                  cursor: 'pointer',
+                  transform: open ? 'rotate(180deg)' : 'rotate(360deg)'
+                }}
+                src={ArrowIcon}
+                alt="Arrow Icon"
+              />
+            </Box> : null}
         </Box>
       </Box>
       <Collapse
@@ -73,13 +71,13 @@ const NetworkInfo = () => {
       >
         <Box gap={3} style={styles.networkSelectionMenuContainer}>
           {
-            networksToDisplayInMenu.map((network) => {
+            networksToDisplayInMenu.map((network, idx) => {
               const [hovered, setHovered] = useState<boolean>(false)
 
               return (
-                chainIDToAlias(CHAIN_ID) !== network.aliasName ?
-                  <Box onMouseOver={() => setHovered(true)} onMouseOut={() => setHovered(false)}>
-                    <a style={styles.anchorStyle} href={network.link}>
+                CHAIN_ID !== network ?
+                  <Box key={network + idx.toString()} onMouseOver={() => setHovered(true)} onMouseOut={() => setHovered(false)}>
+                    <a style={styles.anchorStyle} href={chainDetails.LINKS[network]}>
                       <img
                         style={{ marginRight: '10px' }}
                         src={hovered ? globusIcon : grayGlobusIcon}
@@ -87,7 +85,7 @@ const NetworkInfo = () => {
                       />
                       <Typography
                         color={hovered ? COLORS_DARK_THEME.PRIMARY_BLUE : COLORS_DARK_THEME.SECONDARY_TEXT}>
-                        {network.aliasName}
+                        {chainDetails.CHAIN_IDS[network].aliasName}
                       </Typography>
                       <OpenInNewRoundedIcon
                         style={{ marginLeft: '5px' }}
@@ -102,7 +100,7 @@ const NetworkInfo = () => {
           }
         </Box>
       </Collapse>
-    </StyledNetwork>
+    </StyledNetwork >
   )
 }
 

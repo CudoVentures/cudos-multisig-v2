@@ -5,12 +5,12 @@ import { queryClient } from "./config"
 import { getCurrencyRate } from "api/calls"
 import { emptyWallet, Wallet } from "store/user"
 import { handleFullBalanceToPrecision, separateDecimals, separateFractions } from "./regexFormatting"
-import { ADMIN_TOKEN_DENOM, GAS_PRICE, NATIVE_TOKEN_DENOM } from "./constants"
+import { ADMIN_TOKEN_DENOM, CHAIN_ID, GAS_PRICE, NATIVE_TOKEN_DENOM } from "./constants"
 
 import cudosLogo from 'assets/vectors/balances/cudos.svg'
 import cudosAdminLogo from 'assets/vectors/balances/cudos-admin.svg'
 import { votingPeriod } from "store/walletObject"
-import { Coin, StdFee } from "cudosjs"
+import { Coin, StdFee, StdSignature, SUPPORTED_WALLET } from "cudosjs"
 
 export const formatDateTime = (dateTimeString: string): string => {
     const localTimeString: string = moment(dateTimeString).parseZone().toLocaleString()
@@ -165,3 +165,24 @@ export const denomToAlias = {
     'acudos': "CUDOS",
     'cudosAdmin': 'ADMIN TOKENS'
 }
+
+export const signArbitrary = async (
+    walletType: SUPPORTED_WALLET,
+    signingAddress: string,
+    message: string
+  ):
+    Promise<{ signature: StdSignature }> => {
+    let signature: StdSignature = {
+      pub_key: { type: '', value: '' },
+      signature: ""
+    }
+    if (walletType === SUPPORTED_WALLET.Keplr) {
+      signature = await window.keplr!.signArbitrary(CHAIN_ID, signingAddress, message)
+    }
+  
+    if (walletType === SUPPORTED_WALLET.Cosmostation) {
+      signature = await window.cosmostation.providers.keplr.signArbitrary(CHAIN_ID, signingAddress, message)
+    }
+    return { signature }
+  }
+  
