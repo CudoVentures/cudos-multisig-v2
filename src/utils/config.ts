@@ -1,6 +1,5 @@
-import { isExtensionEnabled, OfflineSigner, StargateClient, SUPPORTED_WALLET } from "cudosjs";
+import { getOfflineSignerByType, isExtensionEnabled, OfflineSigner, StargateClient, SUPPORTED_WALLET } from "cudosjs";
 import { SigningStargateClient } from "cudosjs";
-import { getOfflineSigner as cosmostationSigner } from "@cosmostation/cosmos-client";
 import { CHAIN_ID, FIREBASE_ADDRESS_BOOK_COLLECTION, RPC_ADDRESS } from "./constants";
 import { userState } from "store/user";
 import { connectKeplrLedger } from "ledgers/KeplrLedger";
@@ -14,22 +13,9 @@ export const queryClient = (async (): Promise<StargateClient> => {
     return client
 })()
 
-const getOfflineSignerByType = async (walletName: SUPPORTED_WALLET): Promise<OfflineSigner | undefined> => {
-
-    if (walletName === SUPPORTED_WALLET.Keplr) {
-        return window.getOfflineSigner!(CHAIN_ID)
-    }
-
-    if (walletName === SUPPORTED_WALLET.Cosmostation) {
-        return cosmostationSigner(CHAIN_ID)
-    }
-
-    return undefined
-}
-
 export const getSigningClient = async (walletName: SUPPORTED_WALLET): Promise<SigningStargateClient> => {
 
-    const offlineSigner = await getOfflineSignerByType(walletName)
+    const offlineSigner = await getOfflineSignerByType(walletName, CHAIN_ID)
 
     if (isExtensionEnabled(walletName)) {
         window.keplr.defaultOptions = {
