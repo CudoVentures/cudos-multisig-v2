@@ -68,7 +68,7 @@ export const initialState: userState = {
   selectedWallet: emptyWallet,
   addressBook: {},
   chosenBalance: { denom: '', amount: '' },
-  connectedLedger: '',
+  connectedLedger: undefined,
   newAddedAddress: '',
   firebaseToken: ''
 }
