@@ -24,21 +24,21 @@ import { getSigningClient } from 'utils/config'
 import { MultiSendUser } from 'utils/multiSendTableHelper'
 import { chainIDToAlias } from 'components/Layout/Networkinfo'
 
-import { 
+import {
     CHAIN_ID,
-    DEFAULT_LOADING_MODAL_MSG, 
-    DEFAULT_MEMO, DEFAULT_MULTIPLIER, 
-    FEE_ESTIMATION_ERROR, 
-    GAS_PRICE, 
-    GENERAL_FAILURE_MSG, 
-    GENERAL_FAILURE_TITLE, 
-    INSUFFICIENT_BALANCE, 
-    MINIMUM_GAS_FEE, 
-    NATIVE_TOKEN_DENOM, 
-    WALLET_FUNDING_FAILURE_TITLE, 
+    DEFAULT_LOADING_MODAL_MSG,
+    DEFAULT_MEMO, DEFAULT_MULTIPLIER,
+    FEE_ESTIMATION_ERROR,
+    GAS_PRICE,
+    GENERAL_FAILURE_MSG,
+    GENERAL_FAILURE_TITLE,
+    INSUFFICIENT_BALANCE,
+    MINIMUM_GAS_FEE,
+    NATIVE_TOKEN_DENOM,
+    WALLET_FUNDING_FAILURE_TITLE,
     WALLET_FUNDING_LOADING_TITLE,
-     WALLET_FUNDING_SUCCESS_MSG, 
-     WALLET_FUNDING_SUCCESS_TYPE 
+    WALLET_FUNDING_SUCCESS_MSG,
+    WALLET_FUNDING_SUCCESS_TYPE
 } from 'utils/constants'
 import { handleKeyDown } from 'utils/keyHandler'
 
@@ -48,22 +48,22 @@ const FundWallet = () => {
     const [amountToSend, setAmountToSend] = useState<number>(0)
     const [maxOut, setMaxOut] = useState<boolean>(false)
     const [toggled, setToggled] = useState<boolean>(false)
-    const [msg, setMsg] = useState<EncodeObject>({typeUrl: '', value: ''})
-    const [fees, setFees] = useState<StdFee>({gas: '', amount: []})
+    const [msg, setMsg] = useState<EncodeObject>({ typeUrl: '', value: '' })
+    const [fees, setFees] = useState<StdFee>({ gas: '', amount: [] })
     const defaultElement = document.createElement('div') as HTMLInputElement
     const detailsDropdown = useRef<HTMLInputElement>(defaultElement)
     const dialog = useRef<HTMLInputElement>(defaultElement)
     const input = useRef<HTMLInputElement>(defaultElement)
     const contentToAppear = useRef<HTMLInputElement>(defaultElement)
-    const { openFundWallet, openAssetsTable} = useSelector((state: RootState) => state.modalState)
-    const { 
-        selectedWallet, 
-        address, 
-        nativeBalance, 
-        chosenBalance, 
-        connectedLedger 
+    const { openFundWallet, openAssetsTable } = useSelector((state: RootState) => state.modalState)
+    const {
+        selectedWallet,
+        address,
+        nativeBalance,
+        chosenBalance,
+        connectedLedger
     } = useSelector((state: RootState) => state.userState)
-    
+
     const defaultBalance: Coin = {
         denom: NATIVE_TOKEN_DENOM,
         amount: nativeBalance!
@@ -75,7 +75,7 @@ const FundWallet = () => {
     }, [openAssetsTable])
 
     useEffect(() => {
-        dispatch(updateUser({chosenBalance: defaultBalance}))
+        dispatch(updateUser({ chosenBalance: defaultBalance }))
 
     }, [])
 
@@ -87,20 +87,22 @@ const FundWallet = () => {
 
     const clean = () => {
         setAmountToSend(0)
-        hideDropdownDetails()
-        setToggled(false)
+        if (toggled) {
+            hideDropdownDetails()
+            setToggled(false)
+        }
         setMaxOut(false)
-        setFees({gas: '', amount: []})
+        setFees({ gas: '', amount: [] })
     }
 
     const handleModalClose = () => {
         clean()
         dispatch(updateModalState({ ...initialModalState }))
     }
-      
+
     const closeModal = (event: {}, reason: string) => {
         if (reason !== 'backdropClick') {
-          handleModalClose()
+            handleModalClose()
         }
     }
 
@@ -113,7 +115,7 @@ const FundWallet = () => {
 
         } catch (error) {
             dispatch(updateModalState({
-                failure: true, 
+                failure: true,
                 title: GENERAL_FAILURE_TITLE,
                 msgType: FEE_ESTIMATION_ERROR,
                 message: GENERAL_FAILURE_MSG
@@ -123,18 +125,28 @@ const FundWallet = () => {
     }
 
     const showDropdownDetails = async () => {
-        setToggled(true)
-        detailsDropdown.current.style.display = 'block'
-        setTimeout(() => detailsDropdown.current.style.height = '230px', 50)
-        setTimeout(() => detailsDropdown.current.style.backgroundColor = COLORS_DARK_THEME.LIGHT_BACKGROUND, 500)
-        setTimeout(() => contentToAppear.current.style.opacity = '1', 550)
+        if (!toggled) {
+            setToggled(true)
+        }
+        if (detailsDropdown.current) {
+            detailsDropdown.current.style.display = 'block'
+            setTimeout(() => detailsDropdown.current.style.height = '230px', 50)
+            setTimeout(() => detailsDropdown.current.style.backgroundColor = COLORS_DARK_THEME.LIGHT_BACKGROUND, 500)
+        }
+        if (contentToAppear.current) {
+            setTimeout(() => contentToAppear.current.style.opacity = '1', 550)
+        }
     }
 
     const hideDropdownDetails = () => {
-        contentToAppear.current.style.opacity = '0'
-        detailsDropdown.current.style.backgroundColor = '#7d87aa21'
-        setTimeout(() => detailsDropdown.current.style.height = '0px', 350)
-        setTimeout(() => detailsDropdown.current.style.display = 'none', 650)
+        if (contentToAppear.current) {
+            contentToAppear.current.style.opacity = '0';
+        }
+        if (detailsDropdown.current) {
+            detailsDropdown.current.style.backgroundColor = '#7d87aa21'
+            setTimeout(() => detailsDropdown.current.style.height = '0px', 350)
+            setTimeout(() => detailsDropdown.current.style.display = 'none', 650)
+        }
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -147,21 +159,21 @@ const FundWallet = () => {
             amountToSend != null &&
             amountToSend > 0 &&
             new BigNumber(amountToSend).isLessThanOrEqualTo(
-                chosenBalance!.denom==='cudosAdmin'?
-                chosenBalance!.amount:
-                separateFractions(chosenBalance!.amount))
+                chosenBalance!.denom === 'cudosAdmin' ?
+                    chosenBalance!.amount :
+                    separateFractions(chosenBalance!.amount))
     }
 
     const showFee = (): string => {
-        const feesAmount = fees.gas?fees.amount[0].amount:'0'
+        const feesAmount = fees.gas ? fees.amount[0].amount : '0'
         const displayWorthyFee = handleFullBalanceToPrecision(feesAmount, 4, 'CUDOS')
         return displayWorthyFee
     }
 
     const clearState = async () => {
         clean()
-        dispatch(updateUser({chosenBalance: defaultBalance}))
-      }
+        dispatch(updateUser({ chosenBalance: defaultBalance }))
+    }
 
     const handleChangeAsset = () => {
         detailsDropdown.current.style.display = 'none'
@@ -172,7 +184,7 @@ const FundWallet = () => {
     }
 
     const signAndBroadcast = async () => {
-        
+
         dispatch(updateModalState({
             openFundWallet: false,
             loading: true,
@@ -183,9 +195,9 @@ const FundWallet = () => {
         try {
             const client = await getSigningClient(connectedLedger!);
             const result = await client.signAndBroadcast(
-                address!, 
-                [msg], 
-                fees, 
+                address!,
+                [msg],
+                fees,
                 DEFAULT_MEMO
             )
             assertIsDeliverTxSuccess(result)
@@ -211,11 +223,11 @@ const FundWallet = () => {
                 message: WALLET_FUNDING_SUCCESS_MSG
             }))
 
-        } catch (error){
+        } catch (error) {
             dispatch(updateModalState({
                 loading: false,
                 failure: true,
-                title: WALLET_FUNDING_FAILURE_TITLE, 
+                title: WALLET_FUNDING_FAILURE_TITLE,
                 message: GENERAL_FAILURE_MSG
             }))
             console.error((error as Error).message)
@@ -233,7 +245,7 @@ const FundWallet = () => {
     }
 
     const isAdminTransfer = () => {
-       return chosenBalance?.denom === 'cudosAdmin'
+        return chosenBalance?.denom === 'cudosAdmin'
     }
 
     const enoughBalance = (): boolean => {
@@ -241,14 +253,14 @@ const FundWallet = () => {
         const neededFees = new BigNumber(fees.amount[0].amount)
         const cudosBalance = new BigNumber(nativeBalance!)
 
-        const transferAmount = 
-            isAdminTransfer()?
-            amountToSend.toString():
-            amountToAcudos(amountToSend)
+        const transferAmount =
+            isAdminTransfer() ?
+                amountToSend.toString() :
+                amountToAcudos(amountToSend)
 
         if (isAdminTransfer()) {
             return new BigNumber(transferAmount).isLessThanOrEqualTo(accountBalance) &&
-            neededFees.isLessThanOrEqualTo(cudosBalance)
+                neededFees.isLessThanOrEqualTo(cudosBalance)
         }
 
         return new BigNumber(transferAmount).plus(neededFees).isLessThanOrEqualTo(accountBalance)
@@ -256,10 +268,10 @@ const FundWallet = () => {
 
     const handleIsAdminTransfer = (): string => {
         const isAdminTransfer = chosenBalance?.denom === 'cudosAdmin'
-        const transferAmount = 
-            isAdminTransfer?
-            amountToSend.toString():
-            amountToAcudos(amountToSend)
+        const transferAmount =
+            isAdminTransfer ?
+                amountToSend.toString() :
+                amountToAcudos(amountToSend)
         return transferAmount
     }
 
@@ -286,18 +298,18 @@ const FundWallet = () => {
         return client.msgMultisend(
             sender,
             recipient,
-            GasPrice.fromString(GAS_PRICE+NATIVE_TOKEN_DENOM),
+            GasPrice.fromString(GAS_PRICE + NATIVE_TOKEN_DENOM),
             DEFAULT_MULTIPLIER,
             DEFAULT_MEMO
-         )
-     }
-    
+        )
+    }
+
     const estimateFee = async () => {
         const currentBalance = new BigNumber(chosenBalance!.amount!)
         if (isAdminTransfer() || currentBalance.isLessThan(amountToAcudos(MINIMUM_GAS_FEE))) {
             return
         }
-        
+
         let estimate = await getFundWalletMsgAndFees()
         const fee = estimate.fee.amount[0].amount
         const sendAmount = new BigNumber(amountToAcudos(amountToSend))
@@ -312,214 +324,214 @@ const FundWallet = () => {
 
     return (
         <MuiDialog
-        BackdropProps={defaultStyles.defaultBackDrop}
+            BackdropProps={defaultStyles.defaultBackDrop}
             ref={dialog}
             open={openFundWallet!}
             onClose={closeModal}
             PaperProps={defaultStyles.defaultPaperProps}
         >
-            <ModalContainer sx={{padding: '30px' }}>
-                {openAssetsTable?<AssetsTable />:
-                <div>
-                    <CancelRoundedIcon onClick={handleModalClose} />
-                    <Typography 
-                        style={styles.multiSigTitle} 
-                        variant="h5" 
-                        fontWeight={900} 
-                        letterSpacing={2}>
-                        
-                        Fund MultiSig Wallet
-                    </Typography>
-                            
-        
-                    <Box
-                        width='100%'
-                        height='100%'
-                        display="block"
-                        flexDirection="column"
-                        alignItems="center"
-                        textAlign="center"
-                        gap={1}
-                    >
-                        <Box style={styles.connectedAddress}>
-                            <Typography marginRight={10} fontWeight={600}>
-                                Connected account address
-                            </Typography>
-                            <Box style={{display: 'flex'}}>
-                                <Typography 
-                                    marginRight={1} 
-                                    fontWeight={600} 
-                                    variant='subtitle2' 
-                                    color='text.secondary'>
-                                    
-                                    Network
+            <ModalContainer sx={{ padding: '30px' }}>
+                {openAssetsTable ? <AssetsTable /> :
+                    <div>
+                        <CancelRoundedIcon onClick={handleModalClose} />
+                        <Typography
+                            style={styles.multiSigTitle}
+                            variant="h5"
+                            fontWeight={900}
+                            letterSpacing={2}>
+
+                            Fund MultiSig Wallet
+                        </Typography>
+
+
+                        <Box
+                            width='100%'
+                            height='100%'
+                            display="block"
+                            flexDirection="column"
+                            alignItems="center"
+                            textAlign="center"
+                            gap={1}
+                        >
+                            <Box style={styles.connectedAddress}>
+                                <Typography marginRight={10} fontWeight={600}>
+                                    Connected account address
                                 </Typography>
-                                
-                                <Typography 
-                                    fontWeight={600} 
-                                    variant='subtitle2' 
-                                    color={COLORS_DARK_THEME.PRIMARY_BLUE}>
-                                    
-                                    {chainIDToAlias(CHAIN_ID)}
+                                <Box style={{ display: 'flex' }}>
+                                    <Typography
+                                        marginRight={1}
+                                        fontWeight={600}
+                                        variant='subtitle2'
+                                        color='text.secondary'>
+
+                                        Network
+                                    </Typography>
+
+                                    <Typography
+                                        fontWeight={600}
+                                        variant='subtitle2'
+                                        color={COLORS_DARK_THEME.PRIMARY_BLUE}>
+
+                                        {chainIDToAlias(CHAIN_ID)}
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            <Box style={styles.formattedSenderAddressHolder}>
+                                <img style={{ margin: '0 10px' }} src={WalletIcon} alt="wallet-icon" />
+                                {address}
+                            </Box>
+
+                            <Box style={styles.walletAddress}>
+                                <Typography marginRight={10} fontWeight={600}>
+                                    MultiSig wallet address
                                 </Typography>
                             </Box>
-                        </Box>
-                        <Box style={styles.formattedSenderAddressHolder}>
-                            <img style={{margin: '0 10px'}} src={WalletIcon} alt="wallet-icon" />
-                            {address}
-                        </Box>
+                            <Box style={styles.formattedRecipientAddressHolder}>
+                                <Tooltip title={selectedWallet?.walletAddress!}>
+                                    <div style={{ marginLeft: '10px' }}>
+                                        {formatAddress(selectedWallet?.walletAddress!, 40)}
+                                    </div>
+                                </Tooltip>
+                            </Box>
 
-                        <Box style={styles.walletAddress}>
-                            <Typography marginRight={10} fontWeight={600}>
-                                MultiSig wallet address
-                            </Typography>
+                            <Box style={styles.walletAddress}>
+                                <Typography marginRight={10} fontWeight={600}>
+                                    Amount
+                                </Typography>
+                                <Box style={{ display: 'flex' }}>
+                                    <Typography
+                                        marginRight={1}
+                                        fontWeight={600}
+                                        variant='subtitle2'
+                                        color='text.secondary'>
+
+                                        Balance
+                                    </Typography>
+                                    <Typography
+                                        fontWeight={600}
+                                        variant='subtitle2'
+                                        color={COLORS_DARK_THEME.PRIMARY_BLUE}>
+
+                                        {handleFullBalanceToPrecision(
+                                            chosenBalance!.amount! || '0', 2,
+                                            denomToAlias[chosenBalance!.denom as keyof typeof denomToAlias]
+                                        )}
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            <Box style={styles.formattedBalanceHolder}>
+                                <img
+                                    style={{ margin: '0 10px' }}
+                                    src={denomToIcon[chosenBalance!.denom as keyof typeof denomToIcon]}
+                                    alt={`${chosenBalance!.denom}-icon`} />
+                                <Input
+                                    disableUnderline
+                                    placeholder='enter amount'
+                                    type="number"
+                                    ref={input}
+                                    value={amountToSend ? amountToSend : ""}
+                                    onKeyDown={event => handleKeyDown(event, chosenBalance?.denom)}
+                                    onPaste={event => { event.preventDefault() }}
+                                    onChange={handleChange}
+                                />
+                                <Box style={{ width: '90%' }}>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        style={{ float: 'left' }}
+                                        sx={styles.innerBtns}
+                                        onClick={handleChangeAsset}
+                                    >
+                                        Change Asset
+                                    </Button>
+
+                                    <Button
+                                        disabled={maxOut || new BigNumber(chosenBalance!.amount!).isZero()}
+                                        variant="contained"
+                                        color="primary"
+                                        style={{ float: 'right' }}
+                                        sx={styles.innerBtns}
+                                        onClick={maxingOut}
+                                    >
+                                        MAX
+                                    </Button>
+                                </Box>
+                            </Box>
                         </Box>
-                        <Box style={styles.formattedRecipientAddressHolder}>
-                            <Tooltip title={selectedWallet?.walletAddress!}>
-                                <div style={{marginLeft: '10px'}}>
-                                    {formatAddress(selectedWallet?.walletAddress!, 40)}
+                        <Box style={styles.mainBtnsHolder}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                sx={styles.mainBtns}
+                                onClick={toggled ? clean : handleModalClose}
+                            >
+                                {toggled ? "Back" : "Cancel"}
+                            </Button>
+                            <Tooltip title={toggled ? !enoughBalance() ? INSUFFICIENT_BALANCE : '' : ''}>
+                                <div>
+                                    <Button
+                                        disabled={toggled ? !enoughBalance() : !validInput()}
+                                        variant="contained"
+                                        color="primary"
+                                        sx={styles.mainBtns}
+                                        onClick={toggled ? signAndBroadcast : generateFundWalletMsg}
+                                    >
+                                        {toggled ? !enoughBalance() ? 'Insufficient balance' : "Fund" : "Preview"}
+                                    </Button>
                                 </div>
                             </Tooltip>
                         </Box>
-
-                        <Box style={styles.walletAddress}>
-                            <Typography marginRight={10} fontWeight={600}>
-                                Amount
-                            </Typography>
-                            <Box style={{display: 'flex'}}>
-                                <Typography 
-                                    marginRight={1} 
-                                    fontWeight={600} 
-                                    variant='subtitle2' 
-                                    color='text.secondary'>
-                                    
-                                    Balance
-                                </Typography>
-                                <Typography 
-                                    fontWeight={600} 
-                                    variant='subtitle2' 
-                                    color={COLORS_DARK_THEME.PRIMARY_BLUE}>
-                                    
-                                    {handleFullBalanceToPrecision(
-                                        chosenBalance!.amount! || '0', 2, 
-                                        denomToAlias[chosenBalance!.denom as keyof typeof denomToAlias]
-                                    )}
-                                </Typography>
-                            </Box>
-                        </Box>
-                        <Box style={styles.formattedBalanceHolder}>
-                            <img 
-                                style={{margin: '0 10px'}} 
-                                src={denomToIcon[chosenBalance!.denom as keyof typeof denomToIcon]} 
-                                alt={`${chosenBalance!.denom}-icon`} />
-                            <Input
-                                disableUnderline
-                                placeholder='enter amount'
-                                type="number"
-                                ref={input}
-                                value={amountToSend?amountToSend:""}
-                                onKeyDown={event => handleKeyDown(event, chosenBalance?.denom)}
-                                onPaste={event=>{event.preventDefault()}} 
-                                onChange={handleChange}
-                            />
-                            <Box style={{width: '90%'}}>
-                                <Button
-                                variant="contained"
-                                color="secondary"
-                                style={{float: 'left'}}
-                                sx={styles.innerBtns}
-                                onClick={handleChangeAsset}
-                            >
-                                    Change Asset
-                                </Button>
-
-                                <Button
-                                disabled={maxOut || new BigNumber(chosenBalance!.amount!).isZero()}
-                                variant="contained"
-                                color="primary"
-                                style={{float: 'right'}}
-                                sx={styles.innerBtns}
-                                onClick={maxingOut}
-                            >
-                                    MAX
-                                </Button>
-                            </Box>
-                        </Box>
-                    </Box>
-                    <Box style={styles.mainBtnsHolder}>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            sx={styles.mainBtns}
-                            onClick={toggled?clean:handleModalClose}
-                        >
-                            {toggled?"Back":"Cancel"}
-                        </Button>
-                        <Tooltip title={toggled?!enoughBalance()?INSUFFICIENT_BALANCE:'':''}>
-                        <div>
-                            <Button
-                                disabled={toggled?!enoughBalance():!validInput()}
-                                variant="contained"
-                                color="primary"
-                                sx={styles.mainBtns}
-                                onClick={toggled?signAndBroadcast:generateFundWalletMsg}
-                            >
-                                {toggled?!enoughBalance()?'Insufficient balance':"Fund":"Preview"}
-                            </Button>
-                        </div>
-                        </Tooltip>
-                    </Box>
-                </div>}
+                    </div>}
             </ModalContainer>
             <Box style={styles.dropDownHolder}>
-                    <Card ref={detailsDropdown} style={styles.initialDropDownState}>
-                        <Box ref={contentToAppear} style={styles.TxSummaryHolder}>
-                            <Typography variant='subtitle1'>
-                                    Transaction summary
-                            </Typography>
-                            <Box style={styles.TxSummaryAddressesHolder}>
-                                <Box style={styles.TxSummaryAddrBoxStyle}>
-                                    <Typography variant='subtitle2' color={"text.secondary"}>
-                                        Current address
-                                    </Typography>
-                                    <Typography variant='subtitle2' color={"text.primary"}>
+                <Card ref={detailsDropdown} style={styles.initialDropDownState}>
+                    <Box ref={contentToAppear} style={styles.TxSummaryHolder}>
+                        <Typography variant='subtitle1'>
+                            Transaction summary
+                        </Typography>
+                        <Box style={styles.TxSummaryAddressesHolder}>
+                            <Box style={styles.TxSummaryAddrBoxStyle}>
+                                <Typography variant='subtitle2' color={"text.secondary"}>
+                                    Current address
+                                </Typography>
+                                <Typography variant='subtitle2' color={"text.primary"}>
                                     {formatAddress(address!, 20)}
-                                    </Typography>
-                                </Box>
-                                <img src={ArrowIcon} alt="arrow-icon" />
-                                <Box style={styles.TxSummaryAddrBoxStyle}>
-                                    <Typography variant='subtitle2' color={"text.secondary"}>
-                                        Recipient address
-                                    </Typography>
-                                    <Typography variant='subtitle2' color={"text.primary"}>
-                                    {formatAddress(selectedWallet?.walletAddress!, 20)}
-                                    </Typography>
-                                </Box>
+                                </Typography>
                             </Box>
-                            <Box style={{padding: '10px 15px', display: 'flex', width: '100%'}}>
-                                <Box style={styles.TxSummaryAddrBoxStyle}>
-                                    <Typography variant='subtitle2' color={"text.secondary"}>
-                                        Amount
-                                    </Typography>
-                                    <Typography variant='subtitle2' color={"text.primary"}>
-                                        {`${amountToSend} ${denomToAlias[chosenBalance!.denom as keyof typeof denomToAlias]}`}
-                                    </Typography>
-                                </Box>
-                                <Box style={{margin: '0 100px', ...styles.TxSummaryAddrBoxStyle}}>
-                                    <Typography variant='subtitle2' color={"text.secondary"}>
-                                        Transaction fees
-                                        <Tooltip title={"This is approximate calculation"}>
-                                            {<img style={{marginLeft: '5px', height: '15px'}} src={InfoIcon} alt="winfo-icon" />}
-                                        </Tooltip>
-                                    </Typography>
-                                    <Typography variant='subtitle2' color={"text.primary"}>
-                                        {toggled?showFee():null}
-                                    </Typography>
-                                </Box>
+                            <img src={ArrowIcon} alt="arrow-icon" />
+                            <Box style={styles.TxSummaryAddrBoxStyle}>
+                                <Typography variant='subtitle2' color={"text.secondary"}>
+                                    Recipient address
+                                </Typography>
+                                <Typography variant='subtitle2' color={"text.primary"}>
+                                    {formatAddress(selectedWallet?.walletAddress!, 20)}
+                                </Typography>
                             </Box>
                         </Box>
-                    </Card>
-                </Box>
+                        <Box style={{ padding: '10px 15px', display: 'flex', width: '100%' }}>
+                            <Box style={styles.TxSummaryAddrBoxStyle}>
+                                <Typography variant='subtitle2' color={"text.secondary"}>
+                                    Amount
+                                </Typography>
+                                <Typography variant='subtitle2' color={"text.primary"}>
+                                    {`${amountToSend} ${denomToAlias[chosenBalance!.denom as keyof typeof denomToAlias]}`}
+                                </Typography>
+                            </Box>
+                            <Box style={{ margin: '0 100px', ...styles.TxSummaryAddrBoxStyle }}>
+                                <Typography variant='subtitle2' color={"text.secondary"}>
+                                    Transaction fees
+                                    <Tooltip title={"This is approximate calculation"}>
+                                        {<img style={{ marginLeft: '5px', height: '15px' }} src={InfoIcon} alt="winfo-icon" />}
+                                    </Tooltip>
+                                </Typography>
+                                <Typography variant='subtitle2' color={"text.primary"}>
+                                    {toggled ? showFee() : null}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+                </Card>
+            </Box>
         </MuiDialog>
     )
 }

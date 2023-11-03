@@ -86,8 +86,8 @@ const SingleSend = () => {
         setRecipientAddress('')
         if (toggled) {
             hideDropdownDetails()
+            setToggled(false)
         }
-        setToggled(false)
         setMaxOut(false)
         setFees({ gas: '', amount: [] })
     }
@@ -131,18 +131,28 @@ const SingleSend = () => {
     }
 
     const showDropdownDetails = async () => {
-        setToggled(true)
-        detailsDropdown.current.style.display = 'block'
-        setTimeout(() => detailsDropdown.current.style.height = '230px', 50)
-        setTimeout(() => detailsDropdown.current.style.backgroundColor = COLORS_DARK_THEME.LIGHT_BACKGROUND, 500)
-        setTimeout(() => contentToAppear.current.style.opacity = '1', 550)
+        if (!toggled) {
+            setToggled(true)
+        }
+        if (detailsDropdown.current) {
+            detailsDropdown.current.style.display = 'block'
+            setTimeout(() => detailsDropdown.current.style.height = '230px', 50)
+            setTimeout(() => detailsDropdown.current.style.backgroundColor = COLORS_DARK_THEME.LIGHT_BACKGROUND, 500)
+        }
+        if (contentToAppear.current) {
+            setTimeout(() => contentToAppear.current.style.opacity = '1', 550)
+        }
     }
 
     const hideDropdownDetails = () => {
-        contentToAppear.current.style.opacity = '0'
-        detailsDropdown.current.style.backgroundColor = '#7d87aa21'
-        setTimeout(() => detailsDropdown.current.style.height = '0px', 350)
-        setTimeout(() => detailsDropdown.current.style.display = 'none', 650)
+        if (contentToAppear.current) {
+            contentToAppear.current.style.opacity = '0';
+        }
+        if (detailsDropdown.current) {
+            detailsDropdown.current.style.backgroundColor = '#7d87aa21'
+            setTimeout(() => detailsDropdown.current.style.height = '0px', 350)
+            setTimeout(() => detailsDropdown.current.style.display = 'none', 650)
+        }
     }
 
     const handleChange = (event: SelectChangeEvent<string> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {

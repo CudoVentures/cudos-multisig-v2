@@ -17,7 +17,7 @@ export const styles = {
   },
   connectButton: {
     height: '50px',
-    width: '255px',
+    width: '290px',
     marginBottom: '40px'
   },
   pluginWarning: {
