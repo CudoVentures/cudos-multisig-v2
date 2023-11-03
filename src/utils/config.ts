@@ -1,12 +1,13 @@
-import { getOfflineSignerByType, isExtensionEnabled, OfflineSigner, StargateClient, SUPPORTED_WALLET } from "cudosjs";
+import { getOfflineSignerByType, isExtensionEnabled, StargateClient, SUPPORTED_WALLET } from "cudosjs";
 import { SigningStargateClient } from "cudosjs";
 import { CHAIN_ID, FIREBASE_ADDRESS_BOOK_COLLECTION, RPC_ADDRESS } from "./constants";
-import { userState } from "store/user";
+import { AddressBook, userState } from "store/user";
 import { connectKeplrLedger } from "ledgers/KeplrLedger";
 import { connectCosmostationLedger } from "ledgers/CosmostationLedger";
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from "./helpers";
 import { isValidCudosAddress } from "./validation";
-import { authenticate } from "./firebase";
+import { auth, authenticate, getAddressBook } from "./firebase";
+import { signInWithCustomToken } from "firebase/auth";
 
 export const queryClient = (async (): Promise<StargateClient> => {
     const client = await StargateClient.connect(RPC_ADDRESS)
@@ -57,12 +58,15 @@ export const getConnectedUserAddressAndName = async (walletName: SUPPORTED_WALLE
 }
 
 export const connectUser = async (walletName: SUPPORTED_WALLET): Promise<userState> => {
-
     const { address, accountName } = await getConnectedUserAddressAndName(walletName)
     const currentBalances = await getAccountBalances(address)
-    const firebaseToken = await authenticate(address, FIREBASE_ADDRESS_BOOK_COLLECTION, walletName)
     const admin = checkForAdminToken(currentBalances)
     const userBalance = getNativeBalance(currentBalances)
+    let addressBook: AddressBook = {}
+
+    const firebaseToken = await authenticate(address, FIREBASE_ADDRESS_BOOK_COLLECTION, walletName)
+    await signInWithCustomToken(auth, firebaseToken!)
+    addressBook = await getAddressBook(address!)
 
     const connectedUser: userState = {
         accountName: accountName,
@@ -73,6 +77,7 @@ export const connectUser = async (walletName: SUPPORTED_WALLET): Promise<userSta
         isAdmin: admin,
         firebaseToken: firebaseToken,
         connectedLedger: walletName,
+        addressBook: addressBook
     }
 
     return connectedUser
