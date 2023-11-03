@@ -118,9 +118,14 @@ export const getAccountBalances = async (accountAddress: string): Promise<readon
 }
 
 // This will take acudos and return the USD value
-export const getCudosBalanceInUSD = async (balance: string): Promise<string> => {
-    const response = await getCurrencyRate('USD')
-    const rate = response.data.cudos.usd
+export const getCudosBalanceInUSD = async (balance: string, tokenRate?: string): Promise<string> => {
+    let rate = '0'
+    if (tokenRate) {
+        rate = tokenRate
+    } else {
+        const fetchedRateFromCoinGecko = await getCurrencyRate('USD')
+        rate = fetchedRateFromCoinGecko.data.cudos.usd
+    }
     const rawResult: string = new BigNumber(balance).multipliedBy(rate).toString(10).replace(/\.[0-9]+/gm, "")
     const fullUsdBalance: string = separateDecimals(separateFractions(rawResult))
     return fullUsdBalance
@@ -170,19 +175,18 @@ export const signArbitrary = async (
     walletType: SUPPORTED_WALLET,
     signingAddress: string,
     message: string
-  ):
+):
     Promise<{ signature: StdSignature }> => {
     let signature: StdSignature = {
-      pub_key: { type: '', value: '' },
-      signature: ""
+        pub_key: { type: '', value: '' },
+        signature: ""
     }
     if (walletType === SUPPORTED_WALLET.Keplr) {
-      signature = await window.keplr!.signArbitrary(CHAIN_ID, signingAddress, message)
+        signature = await window.keplr!.signArbitrary(CHAIN_ID, signingAddress, message)
     }
-  
+
     if (walletType === SUPPORTED_WALLET.Cosmostation) {
-      signature = await window.cosmostation.providers.keplr.signArbitrary(CHAIN_ID, signingAddress, message)
+        signature = await window.cosmostation.providers.keplr.signArbitrary(CHAIN_ID, signingAddress, message)
     }
     return { signature }
-  }
-  
+}

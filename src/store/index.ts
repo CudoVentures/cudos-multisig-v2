@@ -1,7 +1,7 @@
 import storage from 'redux-persist/lib/storage'
 
 import { persistReducer } from 'redux-persist'
-import { combineReducers,configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import userStateReducer from './user'
 import modalStateReducer from './modals'
@@ -10,15 +10,17 @@ import settingsReducer from './settings'
 import sendFundsReducer from './sendFunds'
 import walletObjectReducer from './walletObject'
 import walletCreationStateReducer from './walletCreation'
+import tokenRateReducer from './tokenRate'
 
 const rootReducer = combineReducers({
-    settings: settingsReducer,
-    modalState: modalStateReducer,
-    userState: userStateReducer,
-    walletCreationState: walletCreationStateReducer,
-    walletObject: walletObjectReducer,
-    menu: menuSelectionReducer,
-    sendFunds: sendFundsReducer,
+  settings: settingsReducer,
+  modalState: modalStateReducer,
+  userState: userStateReducer,
+  walletCreationState: walletCreationStateReducer,
+  walletObject: walletObjectReducer,
+  menu: menuSelectionReducer,
+  sendFunds: sendFundsReducer,
+  tokenRate: tokenRateReducer,
 })
 
 const persistConfig = {

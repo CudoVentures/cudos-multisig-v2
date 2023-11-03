@@ -22,12 +22,30 @@ import { auth, getAddressBook } from 'utils/firebase'
 import { signInWithCustomToken } from 'firebase/auth'
 import { isExtensionEnabled, SUPPORTED_WALLET } from 'cudosjs'
 import '@fontsource/poppins'
+import { useGetTokenPriceSubscription } from 'graphql/types'
+import { updateTokenRateState } from 'store/tokenRate'
+
+const TokenPriceSubscriptionHandler = () => {
+  const { data, loading, error } = useGetTokenPriceSubscription()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (data && !loading && !error) {
+      dispatch(updateTokenRateState({
+        rate: (data.token_price[0].price as number).toString()
+      }));
+    }
+  }, [data, loading, error, dispatch])
+
+  return null
+}
 
 const App = () => {
   const location = useLocation()
   const apolloClient = useApollo(null)
   const themeColor = useSelector((state: RootState) => state.settings.theme)
-  const { firebaseToken, address } = useSelector((state: RootState) => state.userState);
+  const { firebaseToken, address } = useSelector((state: RootState) => state.userState)
+
   const dispatch = useDispatch()
 
   const connectAccount = useCallback(async (walletName: SUPPORTED_WALLET) => {
@@ -76,7 +94,7 @@ const App = () => {
       signInWithCustomToken(auth, firebaseToken!).catch(e => console.error(e));
     }
   }, [firebaseToken])
-  
+
   useEffect(() => {
     if (firebaseToken) {
       const fetchAddressBook = async () => {
@@ -93,6 +111,7 @@ const App = () => {
       <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme[themeColor]}>
           <CssBaseline />
+          <TokenPriceSubscriptionHandler />
           {location.pathname !== '/' ? null : (
             <Routes>
               <Route path="/" element={<ConnectWallet />} />

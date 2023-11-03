@@ -34,6 +34,7 @@ const LeftWalletSummary = ({
     const [toggled, setToggled] = useState<boolean>(false)
     const [disableButton, setDisableButton] = useState<boolean>(false)
     const { selectedWallet, wallets } = useSelector((state: RootState) => state.userState)
+    const { rate: tokenRate } = useSelector((state: RootState) => state.tokenRate)
     const defaultElement = document.createElement('div') as HTMLInputElement
     const slidingHolder = useRef<HTMLInputElement>(defaultElement)
 
@@ -67,11 +68,15 @@ const LeftWalletSummary = ({
     }
 
     useEffect(() => {
+
         const getCurrencies = async () => {
-            const usdValue = await getCudosBalanceInUSD(selectedWallet?.nativeBalance!)
+            const usdValue = await getCudosBalanceInUSD(selectedWallet?.nativeBalance, tokenRate)
             setUsdValue(usdValue)
         }
-        getCurrencies()
+
+        if (selectedWallet?.nativeBalance && selectedWallet?.nativeBalance !== '0') {
+            getCurrencies()
+        }
 
         const timer = setInterval(async () => {
             await updateSelectedWalletState()
@@ -81,7 +86,7 @@ const LeftWalletSummary = ({
             clearInterval(timer)
         }
 
-    }, [selectedWallet?.walletBalances])
+    }, [selectedWallet?.walletBalances, tokenRate])
 
     useEffect(() => {
         setTimeout(() => slidingHolder.current!.children[0].firstChild.style.opacity = '0', 400)
