@@ -43,7 +43,7 @@ export const CURRENCY_DISPLAY_NAME = 'CUDOS'
 export const DEFAULT_META_DATA = 'default-metadata'
 export const DEFAULT_MEMO = 'Created with CUDOS MultiSig'
 export const DEFAULT_VOTING_WEIGHT = 1
-export const DEFAULT_MULTIPLIER = 1.3
+export const DEFAULT_MULTIPLIER = 1.5
 export const MINIMUM_GAS_FEE = 0.5
 
 export const SUPPORTED_WALLET_LOGOS = {
