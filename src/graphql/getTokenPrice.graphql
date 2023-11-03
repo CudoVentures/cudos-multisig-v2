@@ -1,0 +1,5 @@
+subscription getTokenPrice {
+  token_price {
+    price
+  }
+}
