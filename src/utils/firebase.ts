@@ -1,4 +1,4 @@
-import { FIREBASE_DOMAIN, FIREBASE_ADDRESS_BOOK_COLLECTION, FIREBASE_PROJECT_ID, FIREBASE_AUTH_NONCE_URL, FIREBASE_AUTH_VERIFY_URL, FIREBASE_API_KEY } from "./constants";
+import { FIREBASE_DOMAIN, FIREBASE_ADDRESS_BOOK_COLLECTION, FIREBASE_PROJECT_ID, FIREBASE_AUTH_NONCE_URL, FIREBASE_AUTH_VERIFY_URL, FIREBASE_API_KEY, MY_OWN_ADDRESS_NAME } from "./constants";
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore/lite';
@@ -27,18 +27,28 @@ export const authenticate = async (address: string, collection: string, connecte
     }
 }
 
-export const getAddressBook = async (address: string): Promise<AddressBook> => {
+export const getAddressBook = async (addressBookOwnerAddress: string): Promise<AddressBook> => {
     try {
-        const addressBookDoc = await getDoc(doc(firestore, FIREBASE_ADDRESS_BOOK_COLLECTION, address));
-        return addressBookDoc.data()?.addressBook ?? {};
+        const addressBookDoc = await getDoc(doc(firestore, FIREBASE_ADDRESS_BOOK_COLLECTION, addressBookOwnerAddress));
+        let addressBook = addressBookDoc.data()?.addressBook ?? {};
+        // Check if owner is already inside the addressbook
+        if (
+            !addressBook[addressBookOwnerAddress] ||
+            addressBook[addressBookOwnerAddress] !== MY_OWN_ADDRESS_NAME
+        ) {
+            //And automatically add it if not
+            addressBook[addressBookOwnerAddress] = MY_OWN_ADDRESS_NAME
+            await saveAddressBook(addressBookOwnerAddress, addressBook)
+        }
+        return addressBook
     } catch (error) {
         throw new Error("Error while getting address book from Firebase")
     }
 };
 
-export const saveAddressBook = async (address: string, addressBook: AddressBook): Promise<void> => {
+export const saveAddressBook = async (addressBookOwnerAddress: string, addressBook: AddressBook): Promise<void> => {
     try {
-        const addressBookDoc = doc(firestore, FIREBASE_ADDRESS_BOOK_COLLECTION, address);
+        const addressBookDoc = doc(firestore, FIREBASE_ADDRESS_BOOK_COLLECTION, addressBookOwnerAddress);
         return setDoc(addressBookDoc, { addressBook }, { merge: true });
     } catch {
         throw new Error("Error while saving address book to Firebase")

@@ -31,13 +31,13 @@ import {
   Toolbar, Tooltip,
   Typography
 } from '@mui/material'
-import { 
-  HeadCell, 
-  TableData, 
-  Order, 
-  createData, 
-  stableSort, 
-  getComparator, 
+import {
+  HeadCell,
+  TableData,
+  Order,
+  createData,
+  stableSort,
+  getComparator,
   EnhancedTableProps
 } from 'utils/tableSortingHelper'
 import { updateUser } from 'store/user'
@@ -140,7 +140,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 const StepThree = () => {
 
   const dispatch = useDispatch()
-  const { addressBook, newAddedAddress } = useSelector((state: RootState) => state.userState)
+  const { addressBook, newAddedAddress, address: logedInUserAddr } = useSelector((state: RootState) => state.userState)
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TableData>('name');
   const [copied, setCopied] = useState<boolean>(false)
@@ -249,6 +249,8 @@ const StepThree = () => {
 
   useEffect(() => {
     addSelectedMembersToWalletObject([])
+    // Make sure owner address is auto selected on component load
+    handleClick(null, logedInUserAddr)
   }, [])
 
   return (

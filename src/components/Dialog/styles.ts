@@ -57,6 +57,12 @@ export const styles = {
     marginLeft: '10px',
     cursor: 'pointer'
   },
+  disabledIcons: {
+    visibility: 'hidden',
+    opacity: '0',
+    marginLeft: '10px',
+    pointerEvents: 'none'
+  },
   alertInfo: {
     display: 'flex',
     justifyContent: "flex-start",

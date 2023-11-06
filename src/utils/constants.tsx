@@ -37,6 +37,7 @@ export const FIREBASE_ADDRESS_BOOK_COLLECTION = import.meta.env.VITE_APP_FIREBAS
 export const DEPLOYMENT_VERSION = import.meta.env.VITE_APP_DEPLOYMENT_VERSION || process.env.VITE_APP_DEPLOYMENT_VERSION || ""
 
 // General config
+export const MY_OWN_ADDRESS_NAME = "My Own Address"
 export const ADMIN_TOKEN_DENOM = 'cudosAdmin'
 export const NATIVE_TOKEN_DENOM = 'acudos'
 export const CURRENCY_DISPLAY_NAME = 'CUDOS'

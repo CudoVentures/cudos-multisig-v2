@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import trashbinIcon from 'assets/vectors/trashbin-icon.svg'
 import editIcon from 'assets/vectors/edit-icon.svg'
+import HomeIcon from '@mui/icons-material/Home';
 
 import { styles } from '../styles';
 import { EXPLORER_ADDRESS_DETAILS } from 'api/endpoints';
@@ -18,14 +19,14 @@ import { updateModalState } from 'store/modals';
 import { saveAddressBook } from 'utils/firebase'
 import { getConnectedUserAddressAndName } from 'utils/config'
 
-import { 
-  Order, 
-  stableSort, 
-  getComparator, 
-  HeadCell, 
-  createData, 
-  TableData, 
-  EnhancedTableProps 
+import {
+  Order,
+  stableSort,
+  getComparator,
+  HeadCell,
+  createData,
+  TableData,
+  EnhancedTableProps
 } from 'utils/tableSortingHelper';
 
 import {
@@ -74,7 +75,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
+            checked={rowCount > 1 && numSelected === rowCount - 1}
             onChange={onSelectAllClick}
             inputProps={{
               'aria-label': 'select all desserts',
@@ -152,7 +153,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 export default function AddressBookTable() {
-  const { addressBook, connectedLedger } = useSelector((state: RootState) => state.userState)
+  const { addressBook, connectedLedger, address: logedInUserAddr } = useSelector((state: RootState) => state.userState)
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('name');
   const [copied, setCopied] = React.useState<boolean>(false)
@@ -191,7 +192,9 @@ export default function AddressBookTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.address);
+      const newSelecteds = rows
+        .filter((n) => n.address !== logedInUserAddr)
+        .map((n) => n.address);
       setSelected(newSelecteds);
       return;
     }
@@ -253,13 +256,16 @@ export default function AddressBookTable() {
             rowCount={rows.length}
           />
           <TableBody style={{ display: 'block', height: '185px', overflow: 'scroll' }}>
-            {stableSort(rows, getComparator(order, orderBy))
+            {stableSort(rows, getComparator(order, orderBy), logedInUserAddr)
               .map((row, index) => {
-                const isItemSelected = isSelected(row.address.toString());
-                const labelId = `enhanced-table-checkbox-${index}`;
+                const rowAddress = row.address.toString()
+                const isItemSelected = isSelected(rowAddress)
+                const labelId = `enhanced-table-checkbox-${index}`
+                const isOwnAddress = rowAddress === logedInUserAddr
 
                 return (
                   <TableRow
+                    sx={{ pointerEvents: isOwnAddress ? 'none' : 'auto' }}
                     hover
                     role="checkbox"
                     aria-checked={isItemSelected}
@@ -270,13 +276,25 @@ export default function AddressBookTable() {
                     <TableCell
                       padding="checkbox"
                       onClick={(event) => handleClick(event, row.address.toString())}>
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          'aria-labelledby': labelId,
-                        }}
-                      />
+                      {
+                        isOwnAddress ?
+                          <Checkbox
+                            checkedIcon={<HomeIcon />}
+                            color="success"
+                            checked={true}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                          :
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                      }
                     </TableCell>
                     <TableCell
                       style={{ width: "155px" }}
@@ -300,13 +318,12 @@ export default function AddressBookTable() {
                       {formatAddress(row.address.toString(), 20)}
                     </TableCell>
                     <TableCell>
-                      <Box style={{ display: 'flex', justifyContent: 'center' }}>
+                      <Box style={{ pointerEvents: 'all', display: 'flex', justifyContent: 'center' }}>
                         <Tooltip
                           onClick={() => editSelected(row, index)}
                           title={`Edit record`}>
-
                           <img
-                            style={styles.icons}
+                            style={isOwnAddress ? styles.disabledIcons : styles.icons}
                             src={editIcon}
                             alt="Edit icon" />
                         </Tooltip>

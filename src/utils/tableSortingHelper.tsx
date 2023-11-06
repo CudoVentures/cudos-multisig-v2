@@ -79,17 +79,32 @@ export function getComparator<Key extends keyof any>(
     order: Order,
     orderBy: Key,
 ): (
-        a: { [key in Key]: number | string },
-        b: { [key in Key]: number | string },
-    ) => number {
+    a: { [key in Key]: number | string },
+    b: { [key in Key]: number | string },
+) => number {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
+export function stableSort<T>(
+    array: readonly T[],
+    comparator: (a: T, b: T) => number,
+    loggedInUserAddress?: string
+) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
+
+        if (loggedInUserAddress) {
+            if ((a[0] as any).address === loggedInUserAddress) {
+                return -1;
+            }
+
+            if ((b[0] as any).address === loggedInUserAddress) {
+                return 1;
+            }
+        }
+
         const order = comparator(a[0], b[0]);
         if (order !== 0) {
             return order;

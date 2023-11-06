@@ -45,13 +45,21 @@ const CreateWallet = () => {
     const { address, connectedLedger } = useSelector((state: RootState) => state.userState)
     const { currentStep } = useSelector((state: RootState) => state.walletCreationState)
     const [msg, setMsg] = useState<EncodeObject>({ typeUrl: '', value: '' })
+    const [missingOwnerAcknowledgment, setMissingOwnerAcknowledgment] = useState<boolean>(false)
+
+    const isOwnerInMembers = (): boolean => {
+        if (!members || !address) {
+            return false
+        }
+        return members.some(member => member.address === address);
+    };
 
     const stepComponents = new Map<number, JSX.Element>([
         [FIRST_STEP, <StepOne />],
         [SECOND_STEP, <StepTwo />],
         [THIRD_STEP, <StepThree />],
         [FOURTH_STEP, <StepFour />],
-        [LAST_STEP, <StepFive />]
+        [LAST_STEP, <StepFive displayWarning={!isOwnerInMembers() && !missingOwnerAcknowledgment} />]
     ]);
 
     const stepDataValidations = new Map<number, boolean | string | number | undefined>([
@@ -75,11 +83,14 @@ const CreateWallet = () => {
 
         const previousStep = currentStep - 1
         dispatch(updateWalletCreationState({ currentStep: previousStep }))
+        setMissingOwnerAcknowledgment(false)
     }
 
     const handleOnClickNextButton = async () => {
         if (currentStep === LAST_STEP) {
-            return broadcastCreateWalletMsg()
+            return missingOwnerAcknowledgment ?
+                broadcastCreateWalletMsg() :
+                setMissingOwnerAcknowledgment(true)
         }
 
         if (currentStep === FOURTH_STEP) {
@@ -230,7 +241,7 @@ const CreateWallet = () => {
                             })}
                             onClick={handleOnClickNextButton}
                         >
-                            {currentStep === LAST_STEP ? "Create" : "Next Step"}
+                            {currentStep === LAST_STEP ? missingOwnerAcknowledgment || isOwnerInMembers() ? "Create" : "Confirm" : "Next Step"}
                         </Button>
                     </Box>
                 </div>
