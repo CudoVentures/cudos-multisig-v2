@@ -266,7 +266,7 @@ export default function AddressBookTable() {
                 return (
                   <TableRow
                     sx={{ pointerEvents: isOwnAddress ? 'none' : 'auto' }}
-                    hover
+                    hover={isOwnAddress ? false : true}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
