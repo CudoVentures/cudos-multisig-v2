@@ -70,7 +70,7 @@ const StepFour = () => {
                             onChange={handleChange}
                         >
                             {members!.map((currentMember: Member, idx) => (
-                                <MenuItem value={idx + 1}>{idx + 1}</MenuItem>
+                                <MenuItem key={currentMember.address} value={idx + 1}>{idx + 1}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>

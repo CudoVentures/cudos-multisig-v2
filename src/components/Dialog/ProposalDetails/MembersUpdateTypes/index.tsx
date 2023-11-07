@@ -27,7 +27,7 @@ export const MembersUpdateTypes = ({ proposalDetails }: {
                                     style={{ width: 'max-content' }}
                                     color='text.primary'
                                 >
-                                    {JSON.parse(item.metadata).memberName}
+                                    {JSON.parse(item.metadata!).memberName}
                                 </Typography>
                                 <Box style={{ width: '100%', display: 'flex' }}>
                                     <Typography
@@ -35,9 +35,9 @@ export const MembersUpdateTypes = ({ proposalDetails }: {
                                         variant='subtitle1'
                                         color='text.secondary'
                                     >
-                                        {formatAddress(item.address, 20)}
+                                        {formatAddress(item.address!, 20)}
                                     </Typography>
-                                    <CopyAndFollowComponent address={item.address} />
+                                    <CopyAndFollowComponent address={item.address!} />
                                 </Box>
                             </Box>
                         ))}
@@ -96,7 +96,7 @@ export const MembersUpdateTypes = ({ proposalDetails }: {
                                 fontWeight={600}
                                 color={coloring}
                             >
-                                {JSON.parse(members[0].metadata).memberName}
+                                {JSON.parse(members[0].metadata!).memberName}
                             </Typography>
 
                         </Box>
@@ -114,10 +114,10 @@ export const MembersUpdateTypes = ({ proposalDetails }: {
                             >
                                 <a
                                     style={{ ...styles.link, color: coloring }}
-                                    href={EXPLORER_ADDRESS_DETAILS(members[0].address)}
+                                    href={EXPLORER_ADDRESS_DETAILS(members[0].address!)}
                                     target='_blank'
                                 >
-                                    {formatAddress(members[0].address, 30)}
+                                    {formatAddress(members[0].address!, 30)}
                                 </a>
                             </Typography>
                         </Box>

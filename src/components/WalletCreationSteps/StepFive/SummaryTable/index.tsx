@@ -33,7 +33,7 @@ const SummaryTable = ({ displayWarning }: { displayWarning: boolean }) => {
 
     const rows: Data[] = [];
     Object.entries(members!).forEach(([index, member]) =>
-        rows.push(createData(addressBook![member.address], member.address))
+        rows.push(createData(addressBook![member.address!], member.address!))
     )
 
     const handleCopy = (value: string) => {

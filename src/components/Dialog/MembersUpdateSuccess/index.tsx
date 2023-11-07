@@ -40,7 +40,7 @@ const MembersUpdateSuccess = () => {
                             Name
                         </Typography>
                         <Typography variant='subtitle1' color={"primary.main"}>
-                            {JSON.parse(successData.msgSpecificData.members[0].metadata).memberName}
+                            {JSON.parse(successData.msgSpecificData.members[0].metadata!).memberName}
                         </Typography>
                     </Box>
                     <Box style={{ justifyContent: 'space-between', display: 'flex' }}>
@@ -48,7 +48,7 @@ const MembersUpdateSuccess = () => {
                             Address
                         </Typography>
                         <Tooltip title="Open in Explorer">
-                            <a href={EXPLORER_ADDRESS_DETAILS(successData.msgSpecificData.members[0].address)} target='_blank'>
+                            <a href={EXPLORER_ADDRESS_DETAILS(successData.msgSpecificData.members[0].address!)} target='_blank'>
                                 <Stack
                                     marginBottom='20px'
                                     direction="row"
@@ -61,7 +61,7 @@ const MembersUpdateSuccess = () => {
                                         color="primary.main"
                                         sx={{ textDecoration: 'underline' }}
                                     >
-                                        {formatAddress(successData.msgSpecificData.members[0].address, 25)}
+                                        {formatAddress(successData.msgSpecificData.members[0].address!, 25)}
                                     </Typography>
 
                                 </Stack>

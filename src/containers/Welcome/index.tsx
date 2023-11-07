@@ -32,15 +32,26 @@ const Welcome = () => {
     onCompleted: async (data) => {
       const fetchedWallets: Wallet[] = []
 
+
       data.group_member.forEach(async (obj, idx) => {
         const defaultWallet: Wallet = emptyWallet
         const walletObject = obj.group_with_policy
+
+        const members: Member[] = []
+        walletObject.group_members.forEach((m) => {
+          const member: Member = {
+            address: m.address,
+            metadata: m.metadata!,
+            weight: m.weight.toString(),
+          }
+          members.push(member)
+        })
 
         const fetchedWallet: Wallet = {
           ...defaultWallet,
           walletAddress: walletObject.address,
           walletName: JSON.parse(walletObject.group_metadata!).walletName,
-          members: walletObject.group_members.map(m => ({ address: m.address, metadata: m.metadata!, weight: m.weight })),
+          members: members,
           memberCount: walletObject.group_members.length,
           threshold: walletObject.threshold,
           votingPeriod: walletObject.voting_period,
@@ -79,21 +90,21 @@ const Welcome = () => {
       loadingType: true
     }))
 
-    setTimeout(() => 
-        document.getElementById("entire-welcome-page-dissapear")!.style.opacity = '1', 
-        500
+    setTimeout(() =>
+      document.getElementById("entire-welcome-page-dissapear")!.style.opacity = '1',
+      500
     )
-    setTimeout(() => 
-        document.getElementById("welcome-no-wallet-main-info-dissapear")!.style.opacity = '1', 
-        500
+    setTimeout(() =>
+      document.getElementById("welcome-no-wallet-main-info-dissapear")!.style.opacity = '1',
+      500
     )
-    setTimeout(() => 
-      document.getElementById("welcome-address-book-dissapear")!.style.opacity = '1', 
+    setTimeout(() =>
+      document.getElementById("welcome-address-book-dissapear")!.style.opacity = '1',
       500
     )
 
-    setTimeout(() => clearState(),500 )
-    
+    setTimeout(() => clearState(), 500)
+
   }, [])
 
   return (
