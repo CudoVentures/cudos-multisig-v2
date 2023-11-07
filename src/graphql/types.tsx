@@ -16900,7 +16900,7 @@ export type GetWalletsQueryVariables = Exact<{
 }>;
 
 
-export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null, weight: number }> } }> };
+export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, waiting_to_vote: { __typename?: 'group_proposal_aggregate', proposals?: { __typename?: 'group_proposal_aggregate_fields', count: number } | null }, group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null, weight: number }> } }> };
 
 
 export const GetTokenPriceDocument = gql`
@@ -17171,6 +17171,13 @@ export const GetWalletsDocument = gql`
     query GetWallets($_eq: String = "") {
   group_member(where: {address: {_eq: $_eq}}) {
     group_with_policy {
+      waiting_to_vote: group_proposals_aggregate(
+        where: {status: {_eq: PROPOSAL_STATUS_SUBMITTED}, _not: {group_proposal_votes: {voter: {_eq: $_eq}}}}
+      ) {
+        proposals: aggregate {
+          count
+        }
+      }
       address
       group_metadata
       threshold

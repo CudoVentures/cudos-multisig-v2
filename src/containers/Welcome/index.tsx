@@ -56,6 +56,7 @@ const Welcome = () => {
           threshold: walletObject.threshold,
           votingPeriod: walletObject.voting_period,
           walletID: walletObject.id,
+          waitingToVote: walletObject.waiting_to_vote.proposals?.count
         }
 
         fetchedWallets.push(fetchedWallet)

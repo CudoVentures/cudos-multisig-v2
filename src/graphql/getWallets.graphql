@@ -1,6 +1,15 @@
 query GetWallets($_eq: String = "") {
   group_member(where: {address: {_eq: $_eq}}) {
     group_with_policy {
+      waiting_to_vote: group_proposals_aggregate(where: {
+        status: {_eq: PROPOSAL_STATUS_SUBMITTED}, 
+        _not: {group_proposal_votes: {voter: {_eq: $_eq}}
+        }
+      }) {
+        proposals: aggregate {
+          count
+        }
+      }
       address
       group_metadata
       threshold

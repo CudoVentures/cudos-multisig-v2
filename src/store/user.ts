@@ -22,6 +22,7 @@ export interface Wallet {
   walletBalances?: readonly Coin[];
   nativeBalance?: string;
   chosenBalance?: Coin;
+  waitingToVote?: number;
 }
 
 export interface userState {
