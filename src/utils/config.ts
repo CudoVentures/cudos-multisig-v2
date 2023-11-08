@@ -1,7 +1,7 @@
 import { getOfflineSignerByType, isExtensionEnabled, StargateClient, SUPPORTED_WALLET } from "cudosjs";
 import { SigningStargateClient } from "cudosjs";
 import { CHAIN_ID, FIREBASE_ADDRESS_BOOK_COLLECTION, RPC_ADDRESS } from "./constants";
-import { AddressBook, userState } from "store/user";
+import { AddressBook, initialState, userState } from "store/user";
 import { connectKeplrLedger } from "ledgers/KeplrLedger";
 import { connectCosmostationLedger } from "ledgers/CosmostationLedger";
 import { checkForAdminToken, getAccountBalances, getNativeBalance } from "./helpers";
@@ -69,6 +69,7 @@ export const connectUser = async (walletName: SUPPORTED_WALLET): Promise<userSta
     addressBook = await getAddressBook(address!)
 
     const connectedUser: userState = {
+        ...initialState,
         accountName: accountName,
         address: address,
         lastLoggedAddress: address,

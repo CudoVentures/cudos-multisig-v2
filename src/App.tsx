@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@mui/material/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { CssBaseline, Container } from '@mui/material'
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom'
 import Layout from 'components/Layout'
 import RequireLedger from 'components/RequireLedger/RequireLedger'
 import ConnectWallet from 'containers/ConnectWallet/ConnectWallet'
@@ -43,6 +43,7 @@ const App = () => {
   const themeColor = useSelector((state: RootState) => state.settings.theme)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const connectAccount = useCallback(async (walletName: SUPPORTED_WALLET) => {
     try {
@@ -57,6 +58,7 @@ const App = () => {
       console.error((e as Error).message)
 
     } finally {
+      navigate("/welcome")
       dispatch(updateModalState({
         loading: false,
         loadingType: false
