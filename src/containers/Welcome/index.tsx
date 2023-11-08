@@ -27,13 +27,17 @@ const Welcome = () => {
 
   useGetWalletsQuery({
     variables: {
-      _eq: address
+      userAddress: address
     },
     onCompleted: async (data) => {
       const fetchedWallets: Wallet[] = []
 
 
       data.group_member.forEach(async (obj, idx) => {
+        const isActiveMember = !!obj.group_with_policy.activeMembershipCheck.isActiveMember?.result
+        if (!isActiveMember) {
+          return
+        }
         const defaultWallet: Wallet = emptyWallet
         const walletObject = obj.group_with_policy
 
@@ -47,13 +51,16 @@ const Welcome = () => {
           members.push(member)
         })
 
+        const memberCount = walletObject.group_members.length
+        let updatedthreshold = Math.min(walletObject.threshold, memberCount)
+
         const fetchedWallet: Wallet = {
           ...defaultWallet,
           walletAddress: walletObject.address,
           walletName: JSON.parse(walletObject.group_metadata!).walletName,
           members: members,
-          memberCount: walletObject.group_members.length,
-          threshold: walletObject.threshold,
+          memberCount,
+          threshold: updatedthreshold,
           votingPeriod: walletObject.voting_period,
           walletID: walletObject.id,
           waitingToVote: walletObject.waiting_to_vote.proposals?.count

@@ -10,6 +10,8 @@ export interface FetchedWalletPolicies {
 
 export interface FetchedWalletSettings extends FetchedWalletPolicies {
     metaData: FetchedWalletMetadata;
+    thresholdDiscrepancy: boolean;
+    updatedThreshold: number;
 }
 
 export const emptyFetchedWalletMetadata: FetchedWalletMetadata = {
@@ -24,5 +26,7 @@ export const emptyFetchedWalletPolicies: FetchedWalletPolicies = {
 
 export const emptyFetchedWalletSettings: FetchedWalletSettings = {
     metaData: emptyFetchedWalletMetadata,
+    thresholdDiscrepancy: false,
+    updatedThreshold: 0,
     ...emptyFetchedWalletPolicies
 }

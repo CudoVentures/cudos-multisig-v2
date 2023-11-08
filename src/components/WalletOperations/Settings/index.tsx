@@ -5,10 +5,12 @@ import { Box, CircularProgress, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useGetWalletSettingsQuery } from 'graphql/types'
 import { styles } from './styles'
-import { convertSecondsToDisplay } from 'utils/helpers'
-import { emptyFetchedWalletSettings, FetchedWalletMetadata, FetchedWalletSettings } from 'graphql/helpers'
+import { convertSecondsToDisplay, isThresholdDiscrepancy } from 'utils/helpers'
+import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
+import { emptyFetchedWalletSettings, FetchedWalletSettings } from 'graphql/helpers'
 import { GROUP_UPDATE_DECISION_POLICY_TYPE_URL, GROUP_UPDATE_METADATA_TYPE_URL } from 'utils/constants'
 import { EditBtn } from 'components/Dialog/ReusableModal/helpers'
+import { HtmlTooltip } from 'utils/multiSendTableHelper'
 
 const Settings = () => {
 
@@ -22,13 +24,17 @@ const Settings = () => {
     if (data) {
         const fetchedWallet = data.group_with_policy_by_pk!
         const metaData = JSON.parse(fetchedWallet.group_metadata!)
+        const thresholdDiscrepancy = isThresholdDiscrepancy(fetchedWallet.threshold, fetchedWallet.activeMembers.count?.result!)
+        const updatedThreshold = thresholdDiscrepancy ? fetchedWallet.activeMembers.count?.result! : 0
         fetchedSettings = {
             metaData: {
                 walletName: metaData.walletName,
                 generalInfo: metaData.generalInfo
             },
             votingPeriod: fetchedWallet.voting_period,
-            threshold: fetchedWallet.threshold
+            threshold: fetchedWallet.threshold,
+            thresholdDiscrepancy,
+            updatedThreshold
         }
     }
 
@@ -72,12 +78,30 @@ const Settings = () => {
                             Threshold and voting time of this wallet.
                         </Typography>
                         <Box style={{ width: '100%', display: 'inline-flex' }}>
-                            <Box style={styles.infoHolder}>
-                                <Typography fontWeight={500}>Number of Approvals</Typography>
-                                <Typography style={styles.defaultInfoBox}>
-                                    {fetchedSettings.threshold}
-                                </Typography>
-                            </Box>
+                            {fetchedSettings.thresholdDiscrepancy ?
+                                <Box style={styles.infoHolder}>
+                                    <Typography fontWeight={500}>Threshold</Typography>
+                                    <Typography style={styles.defaultInfoBox}>
+                                        {fetchedSettings.threshold}
+                                    </Typography>
+                                    <Typography fontWeight={500}>Required Approvals</Typography>
+                                    <Typography style={styles.defaultInfoBox}>
+                                        {fetchedSettings.updatedThreshold}
+                                        <HtmlTooltip
+                                            title={<div>It seems you have a discrepancy of wallet threshold exceeding the count of the active wallet members. <br/> Until you change this, any proposal can pass when all active members approve it</div>}
+                                        >
+                                            <img src={ExclamationMark} alt="Exclamation-mark-icon" />
+                                        </HtmlTooltip>
+                                    </Typography>
+                                </Box>
+                                :
+                                <Box style={styles.infoHolder}>
+                                    <Typography fontWeight={500}>Number of Approvals</Typography>
+                                    <Typography style={styles.defaultInfoBox}>
+                                        {fetchedSettings.threshold}
+                                    </Typography>
+                                </Box>
+                            }
                             <Box margin={1}></Box>
                             <Box style={styles.infoHolder}>
                                 <Typography fontWeight={500}>Voting Period</Typography>

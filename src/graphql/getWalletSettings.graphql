@@ -3,5 +3,10 @@ query getWalletSettings($id: Int = 1) {
     group_metadata
     voting_period
     threshold
+    activeMembers: group_members_aggregate (where: { weight: {_gt: 0}}) {
+      count: aggregate {
+        result: count
+      }
+    }
   }
 }

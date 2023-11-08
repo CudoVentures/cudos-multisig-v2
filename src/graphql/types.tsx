@@ -16893,14 +16893,14 @@ export type GetWalletSettingsQueryVariables = Exact<{
 }>;
 
 
-export type GetWalletSettingsQuery = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_metadata?: string | null, voting_period: any, threshold: number } | null };
+export type GetWalletSettingsQuery = { group_with_policy_by_pk?: { __typename?: 'group_with_policy', group_metadata?: string | null, voting_period: any, threshold: number, activeMembers: { __typename?: 'group_member_aggregate', count?: { __typename?: 'group_member_aggregate_fields', result: number } | null } } | null };
 
 export type GetWalletsQueryVariables = Exact<{
-  _eq?: InputMaybe<Scalars['String']>;
+  userAddress?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, waiting_to_vote: { __typename?: 'group_proposal_aggregate', proposals?: { __typename?: 'group_proposal_aggregate_fields', count: number } | null }, group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null, weight: number }> } }> };
+export type GetWalletsQuery = { group_member: Array<{ __typename?: 'group_member', group_with_policy: { __typename?: 'group_with_policy', address: string, group_metadata?: string | null, threshold: number, voting_period: any, id: number, waiting_to_vote: { __typename?: 'group_proposal_aggregate', proposals?: { __typename?: 'group_proposal_aggregate_fields', count: number } | null }, activeMembershipCheck: { __typename?: 'group_member_aggregate', isActiveMember?: { __typename?: 'group_member_aggregate_fields', result: number } | null }, group_members: Array<{ __typename?: 'group_member', address: string, metadata?: string | null, weight: number }> } }> };
 
 
 export const GetTokenPriceDocument = gql`
@@ -17136,6 +17136,11 @@ export const GetWalletSettingsDocument = gql`
     group_metadata
     voting_period
     threshold
+    activeMembers: group_members_aggregate(where: {weight: {_gt: 0}}) {
+      count: aggregate {
+        result: count
+      }
+    }
   }
 }
     `;
@@ -17168,11 +17173,11 @@ export type GetWalletSettingsQueryHookResult = ReturnType<typeof useGetWalletSet
 export type GetWalletSettingsLazyQueryHookResult = ReturnType<typeof useGetWalletSettingsLazyQuery>;
 export type GetWalletSettingsQueryResult = Apollo.QueryResult<GetWalletSettingsQuery, GetWalletSettingsQueryVariables>;
 export const GetWalletsDocument = gql`
-    query GetWallets($_eq: String = "") {
-  group_member(where: {address: {_eq: $_eq}}) {
+    query GetWallets($userAddress: String = "") {
+  group_member(where: {address: {_eq: $userAddress}}) {
     group_with_policy {
       waiting_to_vote: group_proposals_aggregate(
-        where: {status: {_eq: PROPOSAL_STATUS_SUBMITTED}, _not: {group_proposal_votes: {voter: {_eq: $_eq}}}}
+        where: {status: {_eq: PROPOSAL_STATUS_SUBMITTED}, _not: {group_proposal_votes: {voter: {_eq: $userAddress}}}}
       ) {
         proposals: aggregate {
           count
@@ -17183,6 +17188,13 @@ export const GetWalletsDocument = gql`
       threshold
       voting_period
       id
+      activeMembershipCheck: group_members_aggregate(
+        where: {address: {_eq: $userAddress}, weight: {_gt: 0}}
+      ) {
+        isActiveMember: aggregate {
+          result: count
+        }
+      }
       group_members(where: {weight: {_gt: 0}}) {
         address
         metadata
@@ -17205,7 +17217,7 @@ export const GetWalletsDocument = gql`
  * @example
  * const { data, loading, error } = useGetWalletsQuery({
  *   variables: {
- *      _eq: // value for '_eq'
+ *      userAddress: // value for 'userAddress'
  *   },
  * });
  */

@@ -33,6 +33,8 @@ export const styles = {
         textAlign: 'left',
     },
     defaultInfoBox: {
+        justifyContent: 'space-between',
+        display: 'flex',
         overflow: 'scroll',
         maxHeight: '280px',
         wordBreak: "break-word",

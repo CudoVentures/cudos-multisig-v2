@@ -104,7 +104,7 @@ const UpdateWalletPolicies = ({
             msgSpecificData
         )
     }
-    
+
     return (
         <Box style={{ width: '100%' }}>
             {/* CONTENT */}
@@ -120,7 +120,7 @@ const UpdateWalletPolicies = ({
                                 value={threshold}
                                 onChange={event => setThreshold(event.target.value as number)}
                             >
-                                {[...Array(selectedWallet?.memberCount)].map((e, i) => {
+                                {[...Array(oldData?.threshold)].map((e, i) => {
                                     return <MenuItem value={i + 1}>{i + 1}</MenuItem>
                                 })}
                             </Select>

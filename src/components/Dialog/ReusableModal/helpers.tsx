@@ -285,12 +285,12 @@ export const EditBtn = ({ msgType }: { msgType: string }): JSX.Element => {
 export const ApprovalsTitleWithTooltip = (): JSX.Element => {
     return (
         <Box style={{ margin: '10px 0px' }}>
-            <span>Approvals</span>
+            <span>Threshold</span>
             <HtmlTooltip
                 placement="top"
                 title={
                     <Fragment>
-                        <Typography>Approvals</Typography>
+                        <Typography>Threshold</Typography>
                         <div>
                             <span>This will be the minimum count of approvals gathered from the wallet members in order for a transaction to be executed.</span>
                         </div>

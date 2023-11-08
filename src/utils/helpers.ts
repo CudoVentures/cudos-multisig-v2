@@ -36,6 +36,10 @@ export const convertVotingPeriodToSeconds = (selectedVotingPeriod: number): voti
     }
 }
 
+export const isThresholdDiscrepancy = (threshold: number, currentMembersCount: number): boolean => {
+    return threshold > currentMembersCount
+}
+
 export const convertSecondsToDisplay = (seconds: number, desiredFormat: string): string => {
     let result: number = seconds
     switch (desiredFormat.toLowerCase()) {

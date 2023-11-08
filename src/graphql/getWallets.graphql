@@ -1,11 +1,7 @@
-query GetWallets($_eq: String = "") {
-  group_member(where: {address: {_eq: $_eq}}) {
+query GetWallets($userAddress: String = "") {
+  group_member(where: {address: {_eq: $userAddress}}) {
     group_with_policy {
-      waiting_to_vote: group_proposals_aggregate(where: {
-        status: {_eq: PROPOSAL_STATUS_SUBMITTED}, 
-        _not: {group_proposal_votes: {voter: {_eq: $_eq}}
-        }
-      }) {
+      waiting_to_vote: group_proposals_aggregate(where: {status: {_eq: PROPOSAL_STATUS_SUBMITTED}, _not: {group_proposal_votes: {voter: {_eq: $userAddress}}}}) {
         proposals: aggregate {
           count
         }
@@ -15,6 +11,11 @@ query GetWallets($_eq: String = "") {
       threshold
       voting_period
       id
+      activeMembershipCheck: group_members_aggregate (where: {address: {_eq: $userAddress}, weight: {_gt: 0}}) {
+        isActiveMember: aggregate {
+          result: count
+        }
+      }
       group_members(where: {weight: {_gt: 0}}) {
         address
         metadata
