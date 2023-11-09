@@ -23,7 +23,15 @@ import {
     PROPOSAL_STATUS_REJECTED
 } from 'utils/constants'
 
-const Transactions = () => {
+const findProposalInTableData = (data: TableData[], toSearchForID: number): boolean => {
+    if (data) {
+        const proposal = data.find(p => p.proposalID === toSearchForID);
+        return !!proposal
+    }
+    return false
+};
+
+const Transactions = ({ preSelectProposalID }: { preSelectProposalID: number }) => {
 
     const [toggleOption, setToggleOption] = useState<number>(0)
     const { selectedWallet, address } = useSelector((state: RootState) => state.userState)
@@ -47,16 +55,17 @@ const Transactions = () => {
             const txHash = proposal.transaction_hash ? proposal.transaction_hash : NO_TX_HASH_MSG
             const msgType = determineType(proposal!.messages)
             const status = determineStatus(address!, proposal)
+            const proposalID = proposal.id
 
             const tableObject: TableData = {
                 blockHeight: parseInt(proposal.block.height).toLocaleString(),
                 type: msgType,
-                txHash: txHash,
+                txHash,
                 date: moment(formatDateTime(proposal.submit_time)).toDate(),
-                status: status,
+                status,
                 votesCount: proposal.group_proposal_votes.length,
                 membersCount: proposal.member_count,
-                proposalID: proposal.id
+                proposalID
             }
 
             if (finalStatuses.includes(status)) {
@@ -88,12 +97,20 @@ const Transactions = () => {
     const totalProposals = completedProposals.length + onGoingProposals.length
 
     useEffect(() => {
-        if (!loading && onGoingProposals.length === 0 && completedProposals.length > 0) {
+        if (!loading && !preSelectProposalID && onGoingProposals.length === 0 && completedProposals.length > 0) {
             setToggleOption(1)
             return
         }
+
+        if (preSelectProposalID && !loading && (onGoingProposals.length || completedProposals.length)) {
+            if (findProposalInTableData(completedProposals, preSelectProposalID)) {
+                setToggleOption(1)
+                return
+            }
+        }
+
         setToggleOption(0)
-    }, [loading])
+    }, [loading, preSelectProposalID])
 
     return (
         <Box style={styles.boxHolder}>
@@ -124,6 +141,7 @@ const Transactions = () => {
                     {loading ? <CircularProgress style={{ position: 'absolute', top: '250px' }} /> :
                         <TransactionsTable
                             fetchedData={toggleOption ? completedProposals : onGoingProposals}
+                            preSelectProposalID={preSelectProposalID}
                         />
                     }
                 </Box>

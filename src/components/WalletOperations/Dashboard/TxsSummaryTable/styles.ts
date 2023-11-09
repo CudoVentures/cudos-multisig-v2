@@ -1,23 +1,40 @@
 import { COLORS_DARK_THEME } from "theme/colors";
 
 export const styles = {
+  selectableBox: {
+    backgroundColor: COLORS_DARK_THEME.LIGHT_BACKGROUND,
+    margin: '12px 0px 5px 0px',
+    paddingLeft: '10px',
+    position: 'relative',
+    borderRadius: '10px',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    boxShadow: '0 2px 2px -2px black',
+    "&:hover": {
+      cursor: 'pointer',
+      backgroundColor: 'rgba(82, 166, 248, 0.1)'
+    },
+  },
   proposalStatusBox: {
-    width: "100%", 
-    display: 'flex', 
+    float: 'right',
+    cursor: 'pointer',
+    width: "fit-content",
+    display: 'flex',
     justifyContent: 'flex-end'
   },
   clockIcon: {
-    marginRight: '5px', 
-    width: '18px', 
+    marginRight: '5px',
+    width: '18px',
     height: '18px'
   },
   summaryTable: {
-    marginTop: '-10px', 
+    marginTop: '-10px',
     backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND
   },
   summaryTableHead: {
-    marginBottom: '5px', 
-    display: 'block', 
+    marginBottom: '5px',
+    display: 'block',
     backgroundColor: 'transparent'
   },
   summaryTableBody: {
@@ -29,23 +46,16 @@ export const styles = {
     flexDirection: 'column'
   },
   summaryTHRow: {
-    height: '30px', 
-    paddingLeft: '10px', 
-    display:"flex", 
+    height: '30px',
+    paddingLeft: '10px',
+    display: "flex",
     justifyContent: 'space-between'
   },
-  summaryTBRow: {
-    paddingLeft: '10px', 
-    background: COLORS_DARK_THEME.LIGHT_BACKGROUND, 
-    borderRadius: '10px', 
-    margin: '12px 0px 5px 0px'
-  },
   defaultSummaryTableCell: {
-    width: '120px', 
-    backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND, 
-    padding:'10px', 
-    borderRadius:'10px'
+    width: '120px',
+    backgroundColor: COLORS_DARK_THEME.PRIMARY_BACKGROUND,
+    padding: '10px',
+    borderRadius: '10px'
   }
 
 } as const
-    

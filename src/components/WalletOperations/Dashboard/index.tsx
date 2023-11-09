@@ -16,7 +16,7 @@ import { chainIDToAlias } from 'components/Layout/Networkinfo'
 const Dashboard = ({
     setSelection
 }: {
-    setSelection: (index: number) => void;
+    setSelection: (index: number, preSelectProposalID?: number) => void;
 }) => {
 
     const { selectedWallet, balances } = useSelector((state: RootState) => state.userState)
@@ -135,7 +135,7 @@ const Dashboard = ({
                         <span>{"See all"}</span>
                     </Button>
                 </Box>
-                <TxsSummaryTable />
+                <TxsSummaryTable setSelection={setSelection} />
             </Card>
         </Box>
     )

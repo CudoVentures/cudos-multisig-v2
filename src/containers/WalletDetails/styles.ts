@@ -23,7 +23,7 @@ export const styles = {
   Card: {
     textAlign: "center",
     width: '1000px',
-    height: '100%',
+    height: '90%',
     marginLeft: '40px',
     transition: "all 0.5s",
     backgroundColor: 'transparent'

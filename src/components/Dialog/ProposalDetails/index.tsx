@@ -59,7 +59,7 @@ export interface MsgMultisend {
     outputs: { address: string, coins: Coin[] }[];
 }
 
-export interface MsgUpdateMember { 
+export interface MsgUpdateMember {
     member_updates: Member[]
 }
 
@@ -165,6 +165,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
             votes.push(currentVote)
         }
 
+        const haveThresholdDiscrepancy = totalMembers < threshold
         proposalDetails = {
             message: proposalMessage,
             votes: votes,
@@ -176,7 +177,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
             expirationDate: expirationTime,
             haveComments: isHavingComments,
             submissionTime: proposalTimeStamp,
-            threshold: threshold,
+            threshold: haveThresholdDiscrepancy ? totalMembers : threshold,
             groupMembers: groupMembers,
             totalMembers: totalMembers,
             executor: proposal?.executor!,

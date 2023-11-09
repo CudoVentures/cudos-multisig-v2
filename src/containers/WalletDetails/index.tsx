@@ -2,7 +2,7 @@ import { Box, Button, Tooltip } from '@mui/material'
 import Card from 'components/Card/Card'
 import { styles } from './styles'
 import Dialog from 'components/Dialog'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import LeftMenu, { MenuItems } from 'components/LeftMenu'
 import LeftWalletSummary from 'components/LeftWalletSummary'
 import { MenuSelectionInfo } from 'components/WalletOperations'
@@ -29,8 +29,10 @@ const WalletDetails = () => {
     const rightStepsContent = useRef<HTMLInputElement>(defaultElement)
     const entireDashboardPage = useRef<HTMLInputElement>(defaultElement)
     const { menuSelection } = useSelector((state: RootState) => state.menu)
+    const [preSelectProposalID, setPreSelectProposalID] = useState<number>(0)
 
-    const setSelection = (index: number) => {
+    const setSelection = (index: number, preSelectProposalID?: number) => {
+        setPreSelectProposalID(preSelectProposalID || 0)
         if (index !== menuSelection) {
             rightStepsContent.current.style.opacity = '0'
             setTimeout(() => dispatch(updateMenuSelectionState({ menuSelection: index })), 300)
@@ -71,7 +73,7 @@ const WalletDetails = () => {
                 case 0:
                     return <Dashboard setSelection={setSelection} />
                 case 1:
-                    return <Transactions />
+                    return <Transactions preSelectProposalID={preSelectProposalID} />
                 case 2:
                     return <Members />
                 case 3:

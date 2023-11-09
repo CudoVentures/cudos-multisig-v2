@@ -24,6 +24,7 @@ import {
     Tooltip,
     Typography
 } from '@mui/material'
+import { useState } from 'react'
 
 
 interface TableData {
@@ -32,9 +33,68 @@ interface TableData {
     txHash: string;
     date: string;
     status: string;
+    proposalID: number;
 }
 
-const TxsSummaryTable = () => {
+const TxsSummaryTableRow = ({ row, setSelection }: { row: TableData, setSelection: (index: number, preSelectProposalID?: number) => void }): JSX.Element => {
+
+    const [txHashClick, setTxHashClick] = useState<boolean>(false)
+    const handleStatusClick = (proposalID: number) => {
+        setSelection(1, proposalID)
+    }
+
+    const noHash = row.txHash === NO_TX_HASH_MSG
+
+    return (
+        <TableRow key={row.txHash} sx={styles.selectableBox} onClick={txHashClick ? () => { } : () => handleStatusClick(row.proposalID)}>
+            <TableCell width={100} align="left">
+                {row.blockHeight}
+            </TableCell>
+            <TableCell width={200} align="left">
+                <TxTypeComponent type={row.type} />
+            </TableCell>
+            <TableCell
+                onMouseOver={noHash ? () => { } : () => setTxHashClick(true)}
+                onMouseLeave={noHash ? () => { } : () => setTxHashClick(false)}
+                style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }}
+                width={230} align="left"
+            >
+                {noHash ? row.txHash :
+                    <a
+                        style={{ textDecoration: 'none' }}
+                        href={TX_HASH_DETAILS(row.txHash)}
+                        target='_blank'
+                    >
+                        <Tooltip title={row.txHash}>
+                            <div style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
+                                {formatAddress(row.txHash, 9)}
+                            </div>
+                        </Tooltip>
+                    </a>
+                }
+            </TableCell>
+            <TableCell width={285} align="left">
+                <Box style={{ display: 'flex', alignItems: 'center' }}>
+                    <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
+                    <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
+                        {row.date}
+                    </Typography>
+                </Box>
+            </TableCell>
+            <TableCell width={200}>
+                <Box style={styles.proposalStatusBox}>
+                    <ProposalStatusComponent status={row.status} />
+                </Box>
+            </TableCell>
+        </TableRow>
+    )
+}
+
+const TxsSummaryTable = ({
+    setSelection
+}: {
+    setSelection: (index: number) => void;
+}) => {
 
     const { address, selectedWallet } = useSelector((state: RootState) => state.userState)
     const walletId: number = selectedWallet!.walletID!
@@ -55,7 +115,8 @@ const TxsSummaryTable = () => {
                 type: msgType,
                 txHash: txHash,
                 date: formatDateTime(proposal.submit_time),
-                status: status
+                status: status,
+                proposalID: proposal.id
             })
         }
     }
@@ -129,43 +190,8 @@ const TxsSummaryTable = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody style={styles.summaryTableBody}>
-                            {tableData.map((row, index) => (
-                                <TableRow key={index} style={styles.summaryTBRow}>
-                                    <TableCell width={100} align="left">
-                                        {row.blockHeight}
-                                    </TableCell>
-                                    <TableCell width={200} align="left">
-                                        <TxTypeComponent type={row.type} />
-                                    </TableCell>
-                                    <TableCell style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} width={230} align="left">
-                                        {row.txHash === NO_TX_HASH_MSG ? row.txHash :
-                                            <a
-                                                style={{ textDecoration: 'none' }}
-                                                href={TX_HASH_DETAILS(row.txHash)}
-                                                target='_blank'
-                                            >
-                                                <Tooltip title={row.txHash}>
-                                                    <div style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
-                                                        {formatAddress(row.txHash, 9)}
-                                                    </div>
-                                                </Tooltip>
-                                            </a>
-                                        }
-                                    </TableCell>
-                                    <TableCell width={285} align="left">
-                                        <Box style={{ display: 'flex', alignItems: 'center' }}>
-                                            <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
-                                            <Typography variant='subtitle2' color="text.secondary" fontWeight={600}>
-                                                {row.date}
-                                            </Typography>
-                                        </Box>
-                                    </TableCell>
-                                    <TableCell width={200}>
-                                        <Box style={styles.proposalStatusBox}>
-                                            <ProposalStatusComponent status={row.status} />
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
+                            {tableData.map((row) => (
+                                < TxsSummaryTableRow row={row} setSelection={setSelection} />
                             ))}
                         </TableBody>
                     </Table>

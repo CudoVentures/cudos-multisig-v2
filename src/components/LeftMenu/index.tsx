@@ -22,7 +22,7 @@ export const MenuItems = [
 const LeftMenu = ({
   setSelection,
 }: {
-  setSelection: (index: number) => void;
+  setSelection: (index: number, preSelectProposalID?: number) => void;
 }) => {
 
   const { menuSelection } = useSelector((state: RootState) => state.menu)

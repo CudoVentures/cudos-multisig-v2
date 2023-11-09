@@ -155,15 +155,20 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 function Row(props: { row: ReturnType<typeof createData> }) {
-  const { row } = props
-  const [open, setOpen] = React.useState(false)
+  const { row, collapsed } = props
+  const [open, setOpen] = React.useState(collapsed)
+  const [rowLoading, setRowLoading] = React.useState(open)
   const rowRef = React.useRef(row.proposalID)
   const toolTipMsg = row.txHash === NO_TX_HASH_MSG ? '' : row.txHash
 
-  //TODO: Do we need this?
-  const autoCenterTheCollapsedRow = () => {
-    // setTimeout(() => rowRef.current.scrollIntoView({ behavior: "smooth" }), 350)
-  }
+  React.useEffect(() => {
+    if (rowLoading) {
+      setTimeout(() => {
+        setRowLoading(false)
+        rowRef.current.scrollIntoView({ behavior: "smooth" })
+      }, 500)
+    }
+  }, [rowLoading])
 
   return (
     <TableRow style={{ display: 'flex', flexDirection: 'column', scrollMarginTop: "10px" }} ref={rowRef}>
@@ -173,15 +178,15 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         key={row.date}
         sx={styles.selectableBox}
       >
-        <TableCell component={'span'} style={{width: '70px'}}>
+        <TableCell component={'span'} style={{ width: '70px' }}>
           {row.blockHeight}
         </TableCell>
 
-        <TableCell component={'span'} style={{width: '170px'}}>
+        <TableCell component={'span'} style={{ width: '170px' }}>
           <TxTypeComponent type={row.type!.toString()} />
         </TableCell>
 
-        <TableCell component={'span'}  style={{width: '150px'}}>
+        <TableCell component={'span'} style={{ width: '150px' }}>
           <Tooltip title={toolTipMsg}>
             <Typography style={{ fontSize: '14px', color: COLORS_DARK_THEME.PRIMARY_BLUE }} >
               {row.txHash === NO_TX_HASH_MSG ? NO_TX_HASH_MSG : formatAddress(row.txHash!.toString(), 8)}
@@ -189,23 +194,23 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           </Tooltip>
         </TableCell>
 
-        <TableCell component={'span'}  style={styles.dateHolderCell}>
+        <TableCell component={'span'} style={styles.dateHolderCell}>
           <img style={styles.clockIcon} src={ClockIcon} alt={`Clock logo`} />
           {formatDateTime(row.date?.toString()!)}
         </TableCell>
 
-        <TableCell component={'span'}  style={styles.votesCountHolder}>
+        <TableCell component={'span'} style={styles.votesCountHolder}>
           <img style={{ width: '20px', marginRight: '10px' }} src={MembersIcon} alt="Members Icon" />
           {`${row.votesCount} of ${row.membersCount}`}
         </TableCell>
 
-        <TableCell component={'span'}  style={{width: '175px'}}>
+        <TableCell component={'span'} style={{ width: '175px' }}>
           <Box style={styles.proposalStatusBox}>
             <ProposalStatusComponent status={row.status!.toString()} />
           </Box>
         </TableCell>
 
-        <TableCell component={'span'}  style={{width: '50px'}}>
+        <TableCell component={'span'} style={{ width: '50px' }}>
           <IconButton
             size="small"
           >
@@ -216,7 +221,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
       </Box>
 
       <Box component={'td'}>
-        <Collapse in={open} timeout='auto' addEndListener={open ? autoCenterTheCollapsedRow : null}>
+        <Collapse in={open} timeout='auto' addEndListener={() => setRowLoading(true)}>
           <ProposalDetails proposalID={row.proposalID!} />
         </Collapse>
       </Box>
@@ -225,7 +230,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
   )
 }
 
-export default function TransactionsTable({ fetchedData }: { fetchedData: TableData[] }) {
+export default function TransactionsTable({ fetchedData, preSelectProposalID }: { fetchedData: TableData[], preSelectProposalID: number }) {
   const [order, setOrder] = React.useState<Order>('desc');
   const [orderBy, setOrderBy] = React.useState<keyof TableData>('date');
   const [page, setPage] = React.useState<number>(0)
@@ -280,8 +285,9 @@ export default function TransactionsTable({ fetchedData }: { fetchedData: TableD
               stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
+                  const preCollapsedRow = !!preSelectProposalID && preSelectProposalID === row.proposalID
                   return (
-                    <Row key={row.proposalID} row={row} />
+                    <Row key={row.proposalID} row={row} collapsed={preCollapsedRow} />
                   )
                 })}
           </TableBody>
