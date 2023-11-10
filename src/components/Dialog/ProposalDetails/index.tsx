@@ -97,7 +97,7 @@ export interface FetchedProposalDetailsData {
 
 interface Voter {
     address: string;
-    name: string
+    name: string;
 }
 
 interface Vote {
@@ -110,7 +110,7 @@ interface Vote {
 const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
 
     const dispatch = useDispatch()
-    const { address } = useSelector((state: RootState) => state.userState)
+    const { address, addressBook } = useSelector((state: RootState) => state.userState)
     const { loading, error, data } = useGetWalletProposalDetailsSubscription({
         variables: { id: proposalID }
     })
@@ -150,13 +150,18 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
         let isHavingComments: boolean = false
 
         for (const vote of proposal?.group_proposal_votes!) {
+            const voterAddress = vote.group_member?.address!
+            let voterName = ''
+            if (addressBook) {
+                voterName = addressBook[voterAddress]
+            }
             const currentVote: Vote = {
                 comments: vote.vote_metadata!,
                 voteOption: vote.vote_option,
                 submitTime: vote.submit_time,
                 voter: {
-                    address: vote.group_member?.address!,
-                    name: JSON.parse(vote.group_member?.metadata!).memberName
+                    address: voterAddress,
+                    name: voterName
                 }
             }
             if (currentVote.comments !== '') {
@@ -311,7 +316,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                                                     }}
                                                                         href={EXPLORER_ADDRESS_DETAILS(proposalDetails.proposer)}
                                                                         target='_blank'>
-                                                                        {`${formatAddress(vote.voter.address, 15)} (${vote.voter.name})`}
+                                                                        {`${formatAddress(vote.voter.address, 15)} ${vote.voter.name ? `(${vote.voter.name})` : null}`}
                                                                     </a>
                                                                 </Typography>
                                                                 <Typography variant='subtitle1'>
@@ -418,8 +423,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                                 return (
                                                     <Box style={{ margin: '5px 0', display: 'flex', justifyContent: 'space-between' }}>
                                                         <Typography color={VOTE_OPTIONS_MAPPING[vote.voteOption as keyof typeof VOTE_OPTIONS_MAPPING].color}>
-                                                            {`${formatAddress(vote.voter.address, 10)} (${vote.voter.name})`}
-
+                                                            {`${formatAddress(vote.voter.address, 15)} ${vote.voter.name ? `(${vote.voter.name})` : ''}`}
                                                         </Typography>
                                                         <img src={VOTE_OPTIONS_MAPPING[vote.voteOption as keyof typeof VOTE_OPTIONS_MAPPING].icon} />
                                                     </Box>

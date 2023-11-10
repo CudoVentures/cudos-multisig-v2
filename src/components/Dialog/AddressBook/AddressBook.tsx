@@ -19,7 +19,8 @@ const AddressBook = () => {
     const {
         openAddressBook,
         addNewAddress,
-        editAddressBookRecord
+        editAddressBookRecord,
+        predefinedAddr
     } = useSelector((state: RootState) => state.modalState)
 
     const { addressBook } = useSelector((state: RootState) => state.userState)
@@ -80,7 +81,7 @@ const AddressBook = () => {
                     textAlign="center"
                     gap={1}>
                     <div>
-                        {addNewAddress ? <AddressInput />
+                        {addNewAddress ? <AddressInput predefinedAddr={predefinedAddr} />
                             : editAddressBookRecord ? <AddressEdit />
                                 : userHaveAddressBook ? <AddressBookTable />
                                     : <NoAddress />}

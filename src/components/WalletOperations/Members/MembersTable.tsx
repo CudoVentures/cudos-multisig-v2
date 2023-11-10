@@ -23,6 +23,7 @@ import {
 } from 'utils/tableSortingHelper'
 
 import {
+  Button,
   Box,
   Table,
   TableBody,
@@ -148,6 +149,41 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
     }))
   }
 
+  const handleAddPredefinedAddress = (predefinedAddr: string) => {
+    dispatch(updateModalState({
+      openAddressBook: true,
+      addNewAddress: true,
+      predefinedAddr: predefinedAddr
+    }))
+  }
+
+  const userNameHandler = (userName: string, predefinedAddr?: string) => {
+    if (!userName && predefinedAddr) {
+      return (
+        <Button
+          variant="outlined"
+          color="primary"
+          sx={styles.addToWalletBtn}
+          onClick={() => handleAddPredefinedAddress(predefinedAddr)}
+        >
+          Add to Wallet
+        </Button>
+      )
+    }
+
+    if (userName.length > 24) {
+      return (
+        <Tooltip title={userName}>
+          <div>
+            {formatAddress(userName, 12)}
+          </div>
+        </Tooltip>
+      )
+    }
+
+    return userName
+  }
+
   return (
     <Box>
       <Dialog />
@@ -168,19 +204,11 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
           />
           <TableBody style={styles.tableBody}>
             {stableSort(rows, getComparator(order, orderBy))
-              .map((row, index) => {
-
+              .map((row) => {
                 return (
                   <TableRow style={styles.bodyRow} key={row.address}>
-                    <TableCell width={170}>
-                      {row.name.toString().length > 24 ?
-                        <Tooltip title={row.name}>
-                          <div>
-                            {formatAddress(row.name.toString(), 12)}
-                          </div>
-                        </Tooltip>
-                        : row.name
-                      }
+                    <TableCell width={170} align='center'>
+                      {userNameHandler(row.name, row.address)}
                     </TableCell>
                     <TableCell style={styles.addressHolderCell} align="left">
                       {row.address}

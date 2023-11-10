@@ -13,7 +13,7 @@ import { TableData } from 'utils/tableSortingHelper'
 const Members = () => {
 
     const dispatch = useDispatch()
-    const { selectedWallet } = useSelector((state: RootState) => state.userState)
+    const { selectedWallet, addressBook } = useSelector((state: RootState) => state.userState)
     const walletId: number = selectedWallet!.walletID!
     const { loading, error, data } = useGetWalletMembersQuery({
         variables: { id: walletId }
@@ -22,10 +22,17 @@ const Members = () => {
 
     if (data) {
         for (const member of data.group_with_policy_by_pk!.group_members) {
-            const metaData = JSON.parse(member.metadata!)
+
+            const memberAddress = member.address
+            let existingName = ''
+
+            if (!!addressBook) {
+                existingName = addressBook[memberAddress]
+            }
+
             walletMembers.push({
-                name: metaData.memberName,
-                address: member.address
+                name: existingName,
+                address: memberAddress
             })
         }
     }

@@ -1,49 +1,51 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface modalState {
-    title?: string
-    message?: string
-    msgType?: string
-    loading?: boolean
-    loadingType?: boolean
-    success?: boolean
-    failure?: boolean
-    openAddressBook?: boolean
-    openAssetsTable?: boolean
-    transactionSelector?: boolean
-    walletRelated?: boolean
-    openFundWallet?: boolean
-    addNewAddress?: boolean
-    editAddressBookRecord?: boolean
-    selectFromAddressBook?: boolean
-    openVotingModal?: boolean
-    openReusableModal?: boolean
-    openSingleSendModal?: boolean
-    openMultiSendModal?: boolean
-    dataObject?: Record<string, unknown>
+  title?: string
+  message?: string
+  msgType?: string
+  predefinedAddr?: string
+  loading?: boolean
+  loadingType?: boolean
+  success?: boolean
+  failure?: boolean
+  openAddressBook?: boolean
+  openAssetsTable?: boolean
+  transactionSelector?: boolean
+  walletRelated?: boolean
+  openFundWallet?: boolean
+  addNewAddress?: boolean
+  editAddressBookRecord?: boolean
+  selectFromAddressBook?: boolean
+  openVotingModal?: boolean
+  openReusableModal?: boolean
+  openSingleSendModal?: boolean
+  openMultiSendModal?: boolean
+  dataObject?: Record<string, unknown>
 }
 
 export const initialState: modalState = {
-    title: '',
-    message: '',
-    msgType: '',
-    loading: false,
-    success: false,
-    loadingType: false,
-    failure: false,
-    addNewAddress: false,
-    editAddressBookRecord: false,
-    selectFromAddressBook: false,
-    transactionSelector: false,
-    walletRelated: false,
-    openAddressBook: false,
-    openFundWallet: false,
-    openAssetsTable: false,
-    openVotingModal: false,
-    openReusableModal: false,
-    openSingleSendModal: false,
-    openMultiSendModal: false,
-    dataObject: {}
+  title: '',
+  message: '',
+  msgType: '',
+  predefinedAddr: '',
+  loading: false,
+  success: false,
+  loadingType: false,
+  failure: false,
+  addNewAddress: false,
+  editAddressBookRecord: false,
+  selectFromAddressBook: false,
+  transactionSelector: false,
+  walletRelated: false,
+  openAddressBook: false,
+  openFundWallet: false,
+  openAssetsTable: false,
+  openVotingModal: false,
+  openReusableModal: false,
+  openSingleSendModal: false,
+  openMultiSendModal: false,
+  dataObject: {}
 }
 
 export const modalStateSlice = createSlice({

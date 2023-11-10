@@ -1,6 +1,10 @@
 import { COLORS_DARK_THEME } from "theme/colors";
 
 export const styles = {
+    addToWalletBtn: {
+        alignSelf: 'left',
+        height: '25px',
+    },
     tableHead: {
         padding: '0 40px',
         borderRadius: '10px',
