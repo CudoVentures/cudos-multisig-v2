@@ -14,12 +14,11 @@ import { BigNumber } from "bignumber.js"
 import { updateSendFunds } from "store/sendFunds"
 import { updateModalState } from "store/modals"
 import ToolTipIcon from 'assets/vectors/tooltip-icon.svg'
-import ExclamationMark from 'assets/vectors/yellow-exclamation-mark.svg'
 import AccountBalance from "utils/subscriptions/accountBalance"
 import { chainIDToAlias } from "components/Layout/Networkinfo"
 
 import {
-    displayTooltipDueBalances,
+    displayDueBalances,
     HtmlTooltip,
     mergeData,
     TableRecipients,
@@ -63,7 +62,7 @@ export const Preview = ({ displayWorthyFee }: { displayWorthyFee: string }): JSX
                         <span style={{ float: 'right', marginRight: '8px' }}>{multisendRows?.length!}</span>
                     </TableRow>
                     <TableRow style={{ display: 'inline' }}>
-                        <Tooltip title={"The wallet amounts required at execution time"}>
+                        <Tooltip title={"The wallet balance required at execution time"}>
                             <div>
                                 <Typography
                                     style={{ float: 'left' }}
@@ -76,11 +75,7 @@ export const Preview = ({ displayWorthyFee }: { displayWorthyFee: string }): JSX
                             </div>
                         </Tooltip>
                         <span style={{ float: 'right' }}>
-                            <HtmlTooltip
-                                title={<div>{displayTooltipDueBalances(totalAmountDue(multisendRows!))}</div>}
-                            >
-                                <img src={ExclamationMark} alt="Exclamation-mark-icon" />
-                            </HtmlTooltip>
+                            <div>{displayDueBalances(totalAmountDue(multisendRows!))}</div>
                         </span>
                     </TableRow>
                 </Table>
