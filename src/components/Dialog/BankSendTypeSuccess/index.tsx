@@ -8,7 +8,7 @@ import { formatAddress } from 'utils/helpers'
 import ArrowIcon from 'assets/vectors/arrow-right.svg'
 import { styles } from './styles'
 import { MULTI_SEND_TYPE_URL } from 'utils/constants'
-import { displayTooltipDueBalances, HtmlTooltip, RecipientBalances } from 'utils/multiSendTableHelper'
+import { displayDueBalances, HtmlTooltip, RecipientBalances } from 'utils/multiSendTableHelper'
 
 interface SuccessData {
   from: string,
@@ -74,7 +74,7 @@ const BankSendTypeSuccess = () => {
           multiTx ?
             <HtmlTooltip
               title={<div>{
-                displayTooltipDueBalances(
+                displayDueBalances(
                   successData.amount as RecipientBalances
                 )
               }</div>}
