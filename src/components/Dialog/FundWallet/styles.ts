@@ -19,7 +19,7 @@ export const styles = {
     },
     TxSummaryHolder: {
         transition: 'all 0.5s', 
-        paddingTop: '60px', 
+        paddingTop: '70px', 
         opacity: '0', 
         width: '100%', 
         display: 'flex', 

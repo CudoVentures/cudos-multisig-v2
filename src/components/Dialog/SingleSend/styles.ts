@@ -28,7 +28,7 @@ export const styles = {
     },
     TxSummaryHolder: {
         transition: 'all 0.5s',
-        paddingTop: '60px',
+        paddingTop: '70px',
         opacity: '0',
         width: '100%',
         display: 'flex',
@@ -73,7 +73,7 @@ export const styles = {
         backgroundColor: '#7d87aa21',
         display: 'none',
         position: 'absolute',
-        top: '400px',
+        top: '410px',
         transition: 'all 0.5s',
         margin: '0 20px 0 28px',
         width: '550px',
