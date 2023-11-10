@@ -46,6 +46,7 @@ export const DEFAULT_MEMO = 'Created with CUDOS MultiSig'
 export const DEFAULT_VOTING_WEIGHT = "1"
 export const DEFAULT_MULTIPLIER = 1.5
 export const MINIMUM_GAS_FEE = 0.5
+export const COMMENTS_CHAR_LIMIT = 240
 
 export const SUPPORTED_WALLET_LOGOS = {
     [SUPPORTED_WALLET.Keplr]: <img style={styles.keplrLogo} src={KeplrLogo} alt="Keplr Logo" />,

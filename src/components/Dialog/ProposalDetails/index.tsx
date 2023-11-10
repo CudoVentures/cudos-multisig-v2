@@ -308,7 +308,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                                 if (vote.comments !== '') {
                                                     return (
                                                         <SwiperSlide>
-                                                            <Box style={{ ...styles.displayFlexStart, marginTop: '15px' }}>
+                                                            <Box style={{ ...styles.displayFlexStart, ...styles.swiperSlide }}>
                                                                 <Typography>
                                                                     <a style={{
                                                                         color: COLORS_DARK_THEME.PRIMARY_BLUE,
@@ -319,7 +319,7 @@ const ProposalDetails = ({ proposalID }: { proposalID: number }) => {
                                                                         {`${formatAddress(vote.voter.address, 15)} ${vote.voter.name ? `(${vote.voter.name})` : null}`}
                                                                     </a>
                                                                 </Typography>
-                                                                <Typography variant='subtitle1'>
+                                                                <Typography variant='subtitle1' sx={styles.commentHolder}>
                                                                     {vote.comments}
                                                                 </Typography>
                                                             </Box>

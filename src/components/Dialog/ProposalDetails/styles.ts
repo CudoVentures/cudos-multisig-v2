@@ -2,6 +2,17 @@ import { COLORS_DARK_THEME } from "theme/colors";
 import { EXPIRED } from "utils/constants";
 
 export const styles = {
+    swiperSlide: {
+        marginTop: '15px',
+        overflow: 'scroll',
+        height: '100%'
+    },
+    commentHolder: {
+        width: '100%',
+        wordWrap: "break-word",
+        overflow: "scroll",
+
+    },
     backDrop: {
         style: {
             backgroundColor: 'transparent',

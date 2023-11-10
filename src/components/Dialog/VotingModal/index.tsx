@@ -12,9 +12,10 @@ import { Exec } from 'cudosjs/build/stargate/modules/group/proto-types/tx.pb'
 import { calculateFeeFromGas } from 'utils/helpers'
 import { assertIsDeliverTxSuccess, EncodeObject, GasPrice, StdFee } from 'cudosjs'
 import { VoteOption } from 'cudosjs/build/stargate/modules/group/proto-types/types.pb'
-import { Box, Button, Typography, Collapse, Dialog as MuiDialog, Paper } from '@mui/material'
+import { Box, Button, Typography, Collapse, Dialog as MuiDialog, Paper, Tooltip } from '@mui/material'
 
 import {
+    COMMENTS_CHAR_LIMIT,
     DEFAULT_LOADING_MODAL_MSG,
     DEFAULT_MEMO,
     DEFAULT_MULTIPLIER,
@@ -37,6 +38,7 @@ const VotingModal = () => {
     const { openVotingModal, dataObject } = useSelector((state: RootState) => state.modalState)
     const { address, connectedLedger } = useSelector((state: RootState) => state.userState)
     const [textArea, setTextArea] = useState<string>('')
+    const [isValidComment, setIsValidComment] = useState<boolean>(false)
     const [collapsed, setCollapsed] = useState<boolean>(false)
     const proposalID: number = parseInt(dataObject!.proposalID as string)
     const chosenOption: string = dataObject!.option as string
@@ -82,6 +84,7 @@ const VotingModal = () => {
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextArea(event.target.value)
+        setIsValidComment(event.target.value.length <= COMMENTS_CHAR_LIMIT)
     }
 
     const closeVotingModal = () => {
@@ -231,14 +234,19 @@ const VotingModal = () => {
                         >
                             No, Go Back
                         </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            sx={styles.confirmationBtns}
-                            onClick={vote}
-                        >
-                            {`Yes, ${option}`}
-                        </Button>
+                        <Tooltip title={!isValidComment ? `Your comment exceeds the max.characters limit of ${COMMENTS_CHAR_LIMIT} with ${Math.abs(COMMENTS_CHAR_LIMIT - textArea.length)} characters` : ''}>
+                            <div>
+                                <Button
+                                    disabled={!isValidComment}
+                                    variant="contained"
+                                    color="primary"
+                                    sx={styles.confirmationBtns}
+                                    onClick={vote}
+                                >
+                                    {`Yes, ${option}`}
+                                </Button>
+                            </div>
+                        </Tooltip>
                     </Box>
                 </Box>
             </ModalContainer>
