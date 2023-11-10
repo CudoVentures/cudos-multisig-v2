@@ -157,9 +157,6 @@ const StepThree = () => {
       newMembers.push({
         address: address,
         weight: DEFAULT_VOTING_WEIGHT,
-        metadata: JSON.stringify({
-          memberName: addressBook![address]
-        })
       })
     })
     dispatch(updateWalletObjectState({ members: newMembers }))

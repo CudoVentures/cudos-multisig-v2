@@ -183,6 +183,7 @@ export const getWalletMetadataUpdateMsgAndFees = async (
 
 export const TitleAndSubtitle = (): JSX.Element => {
 
+    const { addressBook } = useSelector((state: RootState) => state.userState)
     const { dataObject, selectFromAddressBook } = useSelector((state: RootState) => state.modalState)
     const msgType: string = dataObject!.msgType as string
 
@@ -210,14 +211,18 @@ export const TitleAndSubtitle = (): JSX.Element => {
     }
 
     if (msgType === DELETE_MEMBER_TYPE_URL) {
-        const memberName: string = dataObject!.memberName as string
+
+        let member: string = dataObject!.memberAddress as string
+        if (addressBook && addressBook[member]) {
+            member = addressBook[member]
+        }
 
         title = 'Do you want to delete?'
         subTitle = (
             <span>
                 {"Are you sure you want to delete"}
                 <span style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE, margin: '0 5px' }}>
-                    {memberName}
+                    {member}
                 </span>
                 {"from the wallet? You cannot undo this action."}
             </span>

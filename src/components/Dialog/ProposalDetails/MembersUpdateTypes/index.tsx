@@ -7,40 +7,54 @@ import { formatAddress } from 'utils/helpers'
 import { useCallback, useState } from 'react'
 import { Member } from 'store/walletObject'
 import { CopyAndFollowComponent } from 'components/Dialog/ReusableModal/helpers'
+import { RootState } from 'store'
+import { useSelector } from 'react-redux'
 
 export const MembersUpdateTypes = ({ proposalDetails }: {
     proposalDetails: FetchedProposalDetailsData
 }) => {
+    const { addressBook } = useSelector((state: RootState) => state.userState)
     const members: Member[] = (proposalDetails.message as MsgUpdateMember).member_updates
     const coloring: string = proposalDetails.msgType === ADD_MEMBER_TYPE_URL ? SUCCESS.color : FAIL.color
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
     const open = Boolean(anchorEl)
-    
+
     const ShowMultipleMembers = useCallback(() => {
+
         return (
             <Box style={styles.componentHolderBox}>
                 <Typography sx={{ p: 2 }}>
                     <Box style={styles.scrollablePopOver}>
-                        {members.map((item, userIndex) => (
-                            <Box margin={2}>
-                                <Typography
-                                    style={{ width: 'max-content' }}
-                                    color='text.primary'
-                                >
-                                    {JSON.parse(item.metadata!).memberName}
-                                </Typography>
-                                <Box style={{ width: '100%', display: 'flex' }}>
-                                    <Typography
-                                        fontWeight={600}
-                                        variant='subtitle1'
-                                        color='text.secondary'
-                                    >
-                                        {formatAddress(item.address!, 20)}
-                                    </Typography>
-                                    <CopyAndFollowComponent address={item.address!} />
+                        {members.map((item) => {
+
+                            const userAddress = item.address!
+                            let userName = ''
+
+                            if (!!addressBook) {
+                                userName = addressBook[userAddress]
+                            }
+                            return (
+                                <Box key={userAddress} margin={2}>
+                                    {userName ?
+                                        <Typography
+                                            style={{ width: 'max-content' }}
+                                            color='text.primary'
+                                        >
+                                            {userName}
+                                        </Typography> : null}
+                                    <Box style={{ width: '100%', display: 'flex' }}>
+                                        <Typography
+                                            fontWeight={600}
+                                            variant='subtitle1'
+                                            color='text.secondary'
+                                        >
+                                            {formatAddress(userAddress, 20)}
+                                        </Typography>
+                                        <CopyAndFollowComponent address={userAddress} />
+                                    </Box>
                                 </Box>
-                            </Box>
-                        ))}
+                            )
+                        })}
                     </Box>
                 </Typography>
             </Box>
@@ -84,22 +98,23 @@ export const MembersUpdateTypes = ({ proposalDetails }: {
                     </Box>
                     :
                     <Box>
-                        <Box style={styles.typoHolder}>
-                            <Typography
-                                marginRight={5}
-                                fontWeight={600}
-                                color='text.secondary'
-                            >
-                                Name:
-                            </Typography>
-                            <Typography
-                                fontWeight={600}
-                                color={coloring}
-                            >
-                                {JSON.parse(members[0].metadata!).memberName}
-                            </Typography>
+                        {!!addressBook && !!members[0].address && addressBook[members[0].address] ?
+                            <Box style={styles.typoHolder}>
+                                <Typography
+                                    marginRight={5}
+                                    fontWeight={600}
+                                    color='text.secondary'
+                                >
+                                    Name:
+                                </Typography>
+                                <Typography
+                                    fontWeight={600}
+                                    color={coloring}
+                                >
+                                    {addressBook[members[0].address]}
+                                </Typography>
 
-                        </Box>
+                            </Box> : null}
                         <Box style={styles.typoHolder}>
                             <Typography
                                 marginRight={3}

@@ -28,9 +28,6 @@ const DeleteMemberContent = ({
     const membersForDeletion: Member[] = walletMembers.filter(m => m.address === memberAddress).map(m => ({
         address: m.address!,
         weight: "0",
-        metadata: JSON.stringify({
-            memberName: m.name
-        })
     }))
 
     const createProposal = async () => {

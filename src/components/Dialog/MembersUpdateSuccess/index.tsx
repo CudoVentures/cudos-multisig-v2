@@ -18,9 +18,15 @@ interface SuccessData {
 const MembersUpdateSuccess = () => {
 
     const { dataObject, msgType } = useSelector((state: RootState) => state.modalState)
+    const { addressBook } = useSelector((state: RootState) => state.userState)
     const successData: SuccessData = new Object(dataObject) as SuccessData
     const multiMembers: boolean = successData.msgSpecificData.members.length > 1
 
+    let singleMemberAddress = successData.msgSpecificData.members[0].address!
+    let singleMemberName = ''
+    if (!!addressBook) {
+        singleMemberName = addressBook[singleMemberAddress]
+    }
     return (
         <Box
             padding='20px 10px 0 10px'
@@ -35,20 +41,21 @@ const MembersUpdateSuccess = () => {
             </Typography>
             {multiMembers ? null :
                 <Box>
-                    <Box style={{ width: '100%', justifyContent: 'space-between', display: 'flex' }}>
-                        <Typography variant='subtitle1' color='text.secondary'>
-                            Name
-                        </Typography>
-                        <Typography variant='subtitle1' color={"primary.main"}>
-                            {JSON.parse(successData.msgSpecificData.members[0].metadata!).memberName}
-                        </Typography>
-                    </Box>
+                    {singleMemberName ?
+                        <Box style={{ width: '100%', justifyContent: 'space-between', display: 'flex' }}>
+                            <Typography variant='subtitle1' color='text.secondary'>
+                                Name
+                            </Typography>
+                            <Typography variant='subtitle1' color={"primary.main"}>
+                                {singleMemberName}
+                            </Typography>
+                        </Box> : null}
                     <Box style={{ justifyContent: 'space-between', display: 'flex' }}>
                         <Typography variant='subtitle1' color='text.secondary'>
                             Address
                         </Typography>
                         <Tooltip title="Open in Explorer">
-                            <a href={EXPLORER_ADDRESS_DETAILS(successData.msgSpecificData.members[0].address!)} target='_blank'>
+                            <a href={EXPLORER_ADDRESS_DETAILS(singleMemberAddress)} target='_blank'>
                                 <Stack
                                     marginBottom='20px'
                                     direction="row"
@@ -61,7 +68,7 @@ const MembersUpdateSuccess = () => {
                                         color="primary.main"
                                         sx={{ textDecoration: 'underline' }}
                                     >
-                                        {formatAddress(successData.msgSpecificData.members[0].address!, 25)}
+                                        {formatAddress(singleMemberAddress, 25)}
                                     </Typography>
 
                                 </Stack>

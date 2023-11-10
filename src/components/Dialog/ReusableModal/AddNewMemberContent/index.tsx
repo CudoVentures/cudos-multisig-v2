@@ -96,9 +96,6 @@ const AddNewMemberContent = ({
             newMembers.push({
                 address: newMemberAddress,
                 weight: DEFAULT_VOTING_WEIGHT,
-                metadata: JSON.stringify({
-                    memberName: newMemberName
-                })
             })
 
         const updatedWalletMembers = [

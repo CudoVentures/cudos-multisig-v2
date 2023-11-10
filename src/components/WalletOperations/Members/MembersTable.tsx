@@ -137,12 +137,11 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
     }, 3000)
   }
 
-  const startDeleteMemberProposal = (address: string, name: string) => {
+  const startDeleteMemberProposal = (address: string) => {
     dispatch(updateModalState({
       openReusableModal: true,
       dataObject: {
         memberAddress: address,
-        memberName: name,
         msgType: DELETE_MEMBER_TYPE_URL,
         walletMembers: fetchedData
       }
@@ -228,7 +227,7 @@ export default function MembersTable({ fetchedData }: { fetchedData: TableData[]
                         <img
                           style={{ ...styles.icons, marginRight: '5px' }}
                           src={trashbinIcon}
-                          onClick={() => startDeleteMemberProposal(row.address.toString(), row.name.toString())}
+                          onClick={() => startDeleteMemberProposal(row.address.toString())}
                           alt="Trashbin icon" />
                       </Tooltip>
                     </TableCell>
