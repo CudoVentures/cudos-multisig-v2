@@ -26,6 +26,8 @@ import {
     PROPOSAL_CREATION_SUCCESS_MSG,
 } from 'utils/constants'
 import { Member } from 'store/walletObject'
+import { saveAddressBook } from 'utils/firebase'
+import { updateUser } from 'store/user'
 
 export interface MsgSpecificData {
     proposedWalletSettings?: {
@@ -35,12 +37,13 @@ export interface MsgSpecificData {
         threshold?: number;
     },
     members?: Member[]
+    addNewMember?: boolean
 }
 
 const ReusableModal = () => {
 
     const dispatch = useDispatch()
-    const { address, connectedLedger } = useSelector((state: RootState) => state.userState)
+    const { address, connectedLedger, addressBook } = useSelector((state: RootState) => state.userState)
     const { openReusableModal, dataObject } = useSelector((state: RootState) => state.modalState)
     const msgType: string = dataObject!.msgType as string
 
@@ -88,6 +91,26 @@ const ReusableModal = () => {
             const result = await executeMsgs(address!, msgs, fees, connectedLedger!)
 
             assertIsDeliverTxSuccess(result)
+
+            // Make sure to add to the user address-book any new addresses suggested by him
+            // that are not already part of his address-book.
+            if (
+                !!msgSpecificData.addNewMember &&
+                !!msgSpecificData.members?.length &&
+                !!addressBook &&
+                !!address
+            ) {
+                msgSpecificData.members.forEach(async (member) => {
+                    const memberAddress = member.address!
+                    if (!addressBook[memberAddress] && !!member.metadata) {
+                        const newAddressBook = { ...addressBook, [memberAddress]: member.metadata };
+                        await saveAddressBook(address, newAddressBook);
+                        dispatch(updateUser({
+                            addressBook: newAddressBook
+                        }))
+                    }
+                })
+            }
 
             const tempFee = calculateFeeFromGas(result.gasUsed)
             const displayWorthyFee = handleFullBalanceToPrecision(tempFee, 4, 'CUDOS')

@@ -96,6 +96,7 @@ const AddNewMemberContent = ({
             newMembers.push({
                 address: newMemberAddress,
                 weight: DEFAULT_VOTING_WEIGHT,
+                metadata: newMemberName
             })
 
         const updatedWalletMembers = [
@@ -111,7 +112,8 @@ const AddNewMemberContent = ({
         )
 
         const msgSpecificData = {
-            members: newMembers
+            members: newMembers,
+            addNewMember: selectFromAddressBook ? false : true
         }
 
         propose(
